@@ -1,120 +1,142 @@
 
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import AnimatedContainer from '@/components/ui/AnimatedContainer';
-import BlurContainer from '@/components/ui/BlurContainer';
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import AnimatedContainer from "@/components/ui/AnimatedContainer";
+import BlurContainer from "@/components/ui/BlurContainer";
 
 const Hero = () => {
   return (
-    <div className="relative w-full min-h-screen bg-gradient-to-b from-accent/30 to-background flex items-center overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-28 -right-28 w-96 h-96 rounded-full bg-primary/10 blur-3xl"></div>
-        <div className="absolute top-[30%] -left-28 w-72 h-72 rounded-full bg-primary/5 blur-3xl"></div>
-        <div className="absolute -bottom-20 right-[20%] w-64 h-64 rounded-full bg-primary/10 blur-3xl"></div>
-      </div>
+    <section className="py-20 px-6 bg-accent/10">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <AnimatedContainer animation="slide-right" className="space-y-6">
+          <span className="inline-block px-3 py-1 text-xs font-medium bg-primary/10 text-primary rounded-full">
+            Plataforma de Suporte Técnico
+          </span>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+            Conectando <span className="text-primary">Especialistas</span> e <span className="text-primary">Clientes</span>
+          </h1>
+          <p className="text-xl text-muted-foreground">
+            Encontre técnicos qualificados para resolver seus problemas ou ofereça seus serviços técnicos em nossa plataforma.
+          </p>
+          <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 pt-4">
+            <Link to="/register">
+              <Button size="lg" className="rounded-full w-full sm:w-auto text-base">
+                Comece Agora
+              </Button>
+            </Link>
+            <Link to="/services">
+              <Button size="lg" variant="outline" className="rounded-full w-full sm:w-auto text-base">
+                Explorar Serviços
+              </Button>
+            </Link>
+          </div>
+        </AnimatedContainer>
 
-      <div className="container mx-auto px-6 py-20 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Hero Text */}
-          <AnimatedContainer animation="slide-up" className="flex flex-col space-y-6">
-            <div className="space-y-2">
-              <AnimatedContainer animation="fade" delay={300} className="inline-block">
-                <span className="inline-flex items-center px-3 py-1 text-xs font-medium bg-primary/10 text-primary rounded-full">
-                  Technical Support Made Simple
-                </span>
-              </AnimatedContainer>
-              <AnimatedContainer animation="slide-up" delay={500}>
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
-                  Expert Technical<br />
-                  <span className="text-primary">Support</span> At Your Fingertips
-                </h1>
-              </AnimatedContainer>
-              <AnimatedContainer animation="slide-up" delay={700}>
-                <p className="text-lg text-muted-foreground max-w-xl mt-4">
-                  Connect with skilled technicians instantly, schedule services, and get the support you need, when you need it. One platform to solve all your technical problems.
-                </p>
-              </AnimatedContainer>
-            </div>
-
-            <AnimatedContainer animation="fade" delay={900} className="flex flex-wrap gap-4">
-              <Link to="/register">
-                <Button size="lg" className="rounded-full text-base">
-                  Get Started
-                </Button>
-              </Link>
-              <Link to="/services">
-                <Button size="lg" variant="outline" className="rounded-full text-base">
-                  Browse Services
-                </Button>
-              </Link>
-            </AnimatedContainer>
-
-            <AnimatedContainer animation="fade" delay={1100}>
-              <div className="flex items-center space-x-4 pt-4">
-                <div className="flex -space-x-2">
-                  {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="w-8 h-8 rounded-full bg-muted border-2 border-background"></div>
-                  ))}
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  <span className="font-semibold text-foreground">500+</span> technicians ready to help
-                </p>
-              </div>
-            </AnimatedContainer>
-          </AnimatedContainer>
-
-          {/* Hero Image */}
-          <AnimatedContainer animation="slide-left" delay={700} className="relative">
-            <BlurContainer className="p-1 md:p-2 overflow-hidden rounded-2xl" intensity="light">
-              <div className="rounded-xl overflow-hidden bg-gradient-to-tr from-primary/5 to-primary/20 relative">
-                <div className="aspect-[4/3] relative">
-                  {/* Placeholder for real image - replace this with your actual image */}
-                  <div className="absolute inset-0 flex justify-center items-center bg-gradient-to-r from-primary/10 to-transparent">
-                    <div className="text-6xl text-primary/20">
-                      {/* Insert an actual image here */}
-                      <div className="w-full h-full bg-muted/50 flex items-center justify-center">
-                        <span className="text-primary/60">Technical Support Illustration</span>
-                      </div>
-                    </div>
+        <AnimatedContainer animation="slide-left" delay={300}>
+          <BlurContainer className="p-6 lg:p-8 relative overflow-hidden">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {[
+                {
+                  icon: (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                      />
+                    </svg>
+                  ),
+                  title: "Serviços de Reparo",
+                  description: "Encontre especialistas para consertar seus equipamentos.",
+                },
+                {
+                  icon: (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                      />
+                    </svg>
+                  ),
+                  title: "Técnicos Verificados",
+                  description: "Todos os técnicos são verificados e avaliados.",
+                },
+                {
+                  icon: (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                  ),
+                  title: "Pagamentos Seguros",
+                  description: "Transações seguras e garantia de satisfação.",
+                },
+                {
+                  icon: (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"
+                      />
+                    </svg>
+                  ),
+                  title: "Suporte 24/7",
+                  description: "Ajuda disponível a qualquer hora do dia.",
+                },
+              ].map((feature, index) => (
+                <BlurContainer
+                  key={index}
+                  className="p-5 hover-scale transition-all duration-300 hover:shadow-md"
+                  intensity="light"
+                >
+                  <div className="flex flex-col space-y-2">
+                    <div className="text-primary">{feature.icon}</div>
+                    <h3 className="font-semibold text-base">{feature.title}</h3>
+                    <p className="text-sm text-muted-foreground">
+                      {feature.description}
+                    </p>
                   </div>
-                </div>
-              </div>
-            </BlurContainer>
-
-            {/* Floating card elements */}
-            <BlurContainer className="absolute -top-8 -right-4 md:right-8 shadow-lg p-4 max-w-[200px]" intensity="medium">
-              <div className="flex items-start space-x-3">
-                <div className="h-10 w-10 rounded-full bg-green-500 flex items-center justify-center text-white">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-sm">Instant Support</h3>
-                  <p className="text-xs text-muted-foreground mt-1">Connect with experts in minutes</p>
-                </div>
-              </div>
-            </BlurContainer>
-
-            <BlurContainer className="absolute -bottom-6 -left-6 md:left-12 shadow-lg p-4 max-w-[220px]" intensity="medium">
-              <div className="flex items-start space-x-3">
-                <div className="h-10 w-10 rounded-full bg-primary flex items-center justify-center text-white">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-sm">Trusted Experts</h3>
-                  <p className="text-xs text-muted-foreground mt-1">Verified technicians with top ratings</p>
-                </div>
-              </div>
-            </BlurContainer>
-          </AnimatedContainer>
-        </div>
+                </BlurContainer>
+              ))}
+            </div>
+          </BlurContainer>
+        </AnimatedContainer>
       </div>
-    </div>
+    </section>
   );
 };
 

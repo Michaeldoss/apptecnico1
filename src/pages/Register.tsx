@@ -20,10 +20,10 @@ const Register = () => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Simulate API call
+    // Simular chamada de API
     setTimeout(() => {
       setIsLoading(false);
-      // Handle registration logic
+      // Lógica de registro
     }, 1500);
   };
 
@@ -34,26 +34,26 @@ const Register = () => {
       <main className="flex-grow flex items-center justify-center px-6 py-20">
         <div className="w-full max-w-2xl">
           <AnimatedContainer animation="scale" className="text-center mb-8">
-            <h1 className="text-3xl font-bold">Create an Account</h1>
-            <p className="text-muted-foreground mt-2">Join our platform to access expert technical services</p>
+            <h1 className="text-3xl font-bold">Criar uma Conta</h1>
+            <p className="text-muted-foreground mt-2">Junte-se à nossa plataforma para acessar serviços técnicos especializados</p>
           </AnimatedContainer>
           
           <BlurContainer className="p-8">
             <Tabs defaultValue="client" className="mb-6" onValueChange={setAccountType}>
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="client">Client Account</TabsTrigger>
-                <TabsTrigger value="technician">Technician Account</TabsTrigger>
+                <TabsTrigger value="client">Conta de Cliente</TabsTrigger>
+                <TabsTrigger value="technician">Conta de Técnico</TabsTrigger>
               </TabsList>
               
               <TabsContent value="client" className="mt-6">
                 <p className="text-sm text-muted-foreground mb-4">
-                  Create a client account to request technical services, buy parts, and get support.
+                  Crie uma conta de cliente para solicitar serviços técnicos, comprar peças e obter suporte.
                 </p>
               </TabsContent>
               
               <TabsContent value="technician" className="mt-6">
                 <p className="text-sm text-muted-foreground mb-4">
-                  Create a technician account to offer your services, sell parts, and grow your business.
+                  Crie uma conta de técnico para oferecer seus serviços, vender peças e fazer crescer seu negócio.
                 </p>
               </TabsContent>
             </Tabs>
@@ -61,20 +61,20 @@ const Register = () => {
             <form onSubmit={handleRegister} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="first-name">First Name</Label>
+                  <Label htmlFor="first-name">Nome</Label>
                   <Input 
                     id="first-name"
-                    placeholder="John" 
+                    placeholder="João" 
                     required 
                     className="rounded-lg"
                   />
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="last-name">Last Name</Label>
+                  <Label htmlFor="last-name">Sobrenome</Label>
                   <Input 
                     id="last-name"
-                    placeholder="Doe" 
+                    placeholder="Silva" 
                     required 
                     className="rounded-lg"
                   />
@@ -86,7 +86,7 @@ const Register = () => {
                 <Input 
                   id="email"
                   type="email" 
-                  placeholder="name@example.com" 
+                  placeholder="nome@exemplo.com" 
                   required 
                   className="rounded-lg"
                 />
@@ -94,11 +94,11 @@ const Register = () => {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="phone">Phone Number</Label>
+                  <Label htmlFor="phone">Telefone</Label>
                   <Input 
                     id="phone"
                     type="tel" 
-                    placeholder="(123) 456-7890" 
+                    placeholder="(11) 98765-4321" 
                     required 
                     className="rounded-lg"
                   />
@@ -119,32 +119,32 @@ const Register = () => {
               
               {accountType === 'technician' && (
                 <div className="space-y-2">
-                  <Label>Specialties</Label>
+                  <Label>Especialidades</Label>
                   <RadioGroup defaultValue="general">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="general" id="general" />
-                        <Label htmlFor="general">General Repairs</Label>
+                        <Label htmlFor="general">Reparos Gerais</Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="computers" id="computers" />
-                        <Label htmlFor="computers">Computers</Label>
+                        <Label htmlFor="computers">Computadores</Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="appliances" id="appliances" />
-                        <Label htmlFor="appliances">Appliances</Label>
+                        <Label htmlFor="appliances">Eletrodomésticos</Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="electronics" id="electronics" />
-                        <Label htmlFor="electronics">Electronics</Label>
+                        <Label htmlFor="electronics">Eletrônicos</Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="networking" id="networking" />
-                        <Label htmlFor="networking">Networking</Label>
+                        <Label htmlFor="networking">Redes</Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="other" id="other" />
-                        <Label htmlFor="other">Other</Label>
+                        <Label htmlFor="other">Outros</Label>
                       </div>
                     </div>
                   </RadioGroup>
@@ -153,7 +153,7 @@ const Register = () => {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password">Senha</Label>
                   <Input 
                     id="password"
                     type="password" 
@@ -164,7 +164,7 @@ const Register = () => {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="confirm-password">Confirm Password</Label>
+                  <Label htmlFor="confirm-password">Confirmar Senha</Label>
                   <Input 
                     id="confirm-password"
                     type="password" 
@@ -179,13 +179,13 @@ const Register = () => {
                 <Checkbox id="terms" required className="mt-1" />
                 <div>
                   <Label htmlFor="terms" className="text-sm">
-                    I agree to the{' '}
+                    Eu concordo com os{' '}
                     <Link to="/terms" className="text-primary hover:underline">
-                      Terms of Service
+                      Termos de Serviço
                     </Link>{' '}
-                    and{' '}
+                    e{' '}
                     <Link to="/privacy" className="text-primary hover:underline">
-                      Privacy Policy
+                      Política de Privacidade
                     </Link>
                   </Label>
                 </div>
@@ -202,10 +202,10 @@ const Register = () => {
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    Creating account...
+                    Criando conta...
                   </span>
                 ) : (
-                  'Create Account'
+                  'Criar Conta'
                 )}
               </Button>
               
@@ -213,7 +213,7 @@ const Register = () => {
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-border"></div>
                 </div>
-                <div className="relative px-4 bg-card text-sm">Or sign up with</div>
+                <div className="relative px-4 bg-card text-sm">Ou cadastre-se com</div>
               </div>
               
               <div className="grid grid-cols-1 gap-3">
@@ -231,9 +231,9 @@ const Register = () => {
           </BlurContainer>
           
           <p className="text-center text-sm mt-6">
-            Already have an account?{' '}
+            Já tem uma conta?{' '}
             <Link to="/login" className="text-primary font-medium hover:underline">
-              Sign in
+              Entre
             </Link>
           </p>
         </div>

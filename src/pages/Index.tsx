@@ -18,16 +18,16 @@ const Index = () => {
         <Hero />
         <Features />
         
-        {/* How It Works Section */}
+        {/* Seção Como Funciona */}
         <section className="py-20 px-6 bg-accent/30">
           <div className="max-w-7xl mx-auto">
             <AnimatedContainer animation="slide-up" className="text-center mb-16">
               <span className="inline-block px-3 py-1 text-xs font-medium bg-primary/10 text-primary rounded-full mb-3">
-                Simple Process
+                Processo Simples
               </span>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">How It Works</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">Como Funciona</h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
-                Our platform simplifies the process of finding and connecting with technical experts in just a few easy steps.
+                Nossa plataforma simplifica o processo de encontrar e conectar-se com especialistas técnicos em apenas alguns passos simples.
               </p>
             </AnimatedContainer>
 
@@ -35,20 +35,20 @@ const Index = () => {
               {[
                 {
                   step: '01',
-                  title: 'Request Service',
-                  description: 'Select the type of service you need and provide details about your issue.',
+                  title: 'Solicite o Serviço',
+                  description: 'Selecione o tipo de serviço que você precisa e forneça detalhes sobre seu problema.',
                   delay: 300
                 },
                 {
                   step: '02',
-                  title: 'Match with Technician',
-                  description: 'Get matched with qualified technicians in your area ready to help.',
+                  title: 'Encontre um Técnico',
+                  description: 'Seja conectado com técnicos qualificados em sua área prontos para ajudar.',
                   delay: 500
                 },
                 {
                   step: '03',
-                  title: 'Problem Solved',
-                  description: 'Receive the service, make secure payment, and leave a review.',
+                  title: 'Problema Resolvido',
+                  description: 'Receba o serviço, faça o pagamento seguro e deixe uma avaliação.',
                   delay: 700
                 }
               ].map((item) => (
@@ -66,16 +66,16 @@ const Index = () => {
           </div>
         </section>
         
-        {/* Testimonials Section */}
+        {/* Seção Depoimentos */}
         <section className="py-20 px-6 bg-background">
           <div className="max-w-7xl mx-auto">
             <AnimatedContainer animation="slide-up" className="text-center mb-16">
               <span className="inline-block px-3 py-1 text-xs font-medium bg-primary/10 text-primary rounded-full mb-3">
-                Testimonials
+                Depoimentos
               </span>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">What Our Users Say</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">O Que Nossos Usuários Dizem</h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
-                Hear from satisfied customers and skilled technicians who use our platform every day.
+                Ouça o que dizem clientes satisfeitos e técnicos qualificados que usam nossa plataforma todos os dias.
               </p>
             </AnimatedContainer>
 
@@ -83,20 +83,20 @@ const Index = () => {
               {[
                 {
                   name: 'Emma Rodriguez',
-                  role: 'Customer',
-                  quote: 'Found an expert technician within minutes. The service was fast and the problem was fixed on the first visit.',
+                  role: 'Cliente',
+                  quote: 'Encontrei um técnico especialista em minutos. O serviço foi rápido e o problema foi resolvido na primeira visita.',
                   delay: 300
                 },
                 {
                   name: 'Michael Chen',
-                  role: 'Tech Expert',
-                  quote: 'This platform has completely changed how I find new clients. The scheduling and payment systems are seamless.',
+                  role: 'Técnico Especialista',
+                  quote: 'Esta plataforma mudou completamente a forma como encontro novos clientes. Os sistemas de agendamento e pagamento são perfeitos.',
                   delay: 500
                 },
                 {
                   name: 'Sarah Johnson',
-                  role: 'Business Owner',
-                  quote: 'Managing our team of technicians is so much easier now. The tracking and reporting features save us hours every week.',
+                  role: 'Proprietária de Empresa',
+                  quote: 'Gerenciar nossa equipe de técnicos ficou muito mais fácil agora. Os recursos de rastreamento e relatórios nos economizam horas todas as semanas.',
                   delay: 700
                 }
               ].map((testimonial, index) => (
@@ -126,24 +126,24 @@ const Index = () => {
           </div>
         </section>
         
-        {/* CTA Section */}
+        {/* Seção CTA */}
         <section className="py-20 px-6 bg-primary/5">
           <AnimatedContainer animation="scale" className="max-w-5xl mx-auto text-center">
             <BlurContainer className="p-12 md:p-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Get Started?</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">Pronto para Começar?</h2>
               <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Join thousands of satisfied users and technicians on our platform. 
-                Register today and experience hassle-free technical support.
+                Junte-se a milhares de usuários e técnicos satisfeitos em nossa plataforma. 
+                Registre-se hoje e experimente suporte técnico sem complicações.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link to="/register">
                   <Button size="lg" className="rounded-full text-base">
-                    Sign Up Now
+                    Cadastre-se Agora
                   </Button>
                 </Link>
                 <Link to="/contact">
                   <Button size="lg" variant="outline" className="rounded-full text-base">
-                    Contact Sales
+                    Fale com Vendas
                   </Button>
                 </Link>
               </div>

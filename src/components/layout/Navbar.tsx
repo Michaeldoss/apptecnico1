@@ -1,137 +1,141 @@
 
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { cn } from '@/lib/utils';
-import { Menu, X, ChevronDown } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import BlurContainer from '@/components/ui/BlurContainer';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { Menu, X } from "lucide-react";
+import useMobile from "@/hooks/use-mobile";
 
 const Navbar = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const location = useLocation();
+  const isMobile = useMobile();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Detect scroll position for navbar styling
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Close mobile menu when route changes
-  useEffect(() => {
-    setIsMobileMenuOpen(false);
-  }, [location.pathname]);
-
-  const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'Services', path: '/services' },
-    { name: 'Shop', path: '/shop' },
-    { name: 'About', path: '/about' },
-    { name: 'Contact', path: '/contact' },
-  ];
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
 
   return (
-    <header
-      className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-4 px-6 md:px-8',
-        isScrolled ? 'backdrop-blur-md bg-background/90 shadow-md' : 'bg-transparent'
-      )}
-    >
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* Logo */}
-        <Link 
-          to="/" 
-          className="text-2xl font-semibold text-primary flex items-center gap-2"
-          aria-label="Home"
-        >
-          <div className="h-9 w-9 rounded-lg bg-primary text-white flex items-center justify-center font-bold">
-            ST
-          </div>
-          <span className="hidden sm:inline-block">SupportTech</span>
+    <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
+      <div className="container mx-auto px-4 flex items-center justify-between h-16">
+        <Link to="/" className="flex items-center space-x-2">
+          <span className="font-bold text-xl">TechSupport</span>
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-1">
-          {navLinks.map((link) => (
-            <Link
-              key={link.path}
-              to={link.path}
-              className={cn(
-                'px-4 py-2 rounded-md text-sm font-medium transition-colors',
-                'hover:bg-accent hover:text-accent-foreground',
-                location.pathname === link.path
-                  ? 'text-primary'
-                  : 'text-foreground/80'
-              )}
-            >
-              {link.name}
-            </Link>
-          ))}
-        </nav>
-
-        {/* Auth Buttons */}
-        <div className="hidden md:flex items-center space-x-4">
-          <Link to="/login">
-            <Button variant="ghost" className="rounded-full text-sm">
-              Login
-            </Button>
-          </Link>
-          <Link to="/register">
-            <Button className="rounded-full text-sm">Register</Button>
-          </Link>
-        </div>
-
-        {/* Mobile Menu Toggle */}
-        <button
-          className="md:hidden p-2 rounded-md text-foreground/80 hover:text-foreground transition-colors"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
-        >
-          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-      </div>
-
-      {/* Mobile Menu */}
-      <div
-        className={cn(
-          'fixed inset-0 bg-background z-40 md:hidden pt-20 px-6 transition-transform duration-300 ease-in-out',
-          isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+        {/* Navegação para Desktop */}
+        {!isMobile && (
+          <nav className="flex-1 flex justify-center">
+            <ul className="flex space-x-6">
+              <li>
+                <Link to="/" className="px-2 py-1 text-foreground/70 hover:text-foreground transition-colors">
+                  Início
+                </Link>
+              </li>
+              <li>
+                <Link to="/services" className="px-2 py-1 text-foreground/70 hover:text-foreground transition-colors">
+                  Serviços
+                </Link>
+              </li>
+              <li>
+                <Link to="/store" className="px-2 py-1 text-foreground/70 hover:text-foreground transition-colors">
+                  Loja
+                </Link>
+              </li>
+              <li>
+                <Link to="/about" className="px-2 py-1 text-foreground/70 hover:text-foreground transition-colors">
+                  Sobre
+                </Link>
+              </li>
+              <li>
+                <Link to="/contact" className="px-2 py-1 text-foreground/70 hover:text-foreground transition-colors">
+                  Contato
+                </Link>
+              </li>
+            </ul>
+          </nav>
         )}
-      >
-        <nav className="flex flex-col space-y-4">
-          {navLinks.map((link) => (
-            <Link
-              key={link.path}
-              to={link.path}
-              className={cn(
-                'px-4 py-3 rounded-md text-base font-medium transition-colors',
-                'hover:bg-accent',
-                location.pathname === link.path
-                  ? 'text-primary bg-accent/50'
-                  : 'text-foreground/80'
-              )}
-            >
-              {link.name}
-            </Link>
-          ))}
-          <div className="pt-4 border-t border-border mt-4">
-            <Link to="/login" className="block">
-              <Button variant="ghost" className="w-full justify-start rounded-md mb-3 text-base">
-                Login
-              </Button>
-            </Link>
-            <Link to="/register" className="block">
-              <Button className="w-full justify-start rounded-md text-base">
-                Register
-              </Button>
-            </Link>
-          </div>
-        </nav>
+
+        <div className="flex items-center space-x-3">
+          {!isMobile && (
+            <>
+              <Link to="/login">
+                <Button variant="ghost" size="sm">
+                  Entrar
+                </Button>
+              </Link>
+              <Link to="/register">
+                <Button size="sm">Cadastrar</Button>
+              </Link>
+            </>
+          )}
+
+          {isMobile && (
+            <Button variant="ghost" onClick={toggleMenu} className="p-1 w-9 h-9">
+              {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
+            </Button>
+          )}
+        </div>
       </div>
+
+      {/* Menu móvel */}
+      {isMobile && (
+        <div
+          className={cn(
+            "fixed top-16 left-0 right-0 bottom-0 bg-background z-40 transition-transform duration-300 ease-in-out",
+            isMenuOpen ? "translate-x-0" : "translate-x-full"
+          )}
+        >
+          <div className="container mx-auto px-4 py-6">
+            <nav className="flex flex-col space-y-4">
+              <Link
+                to="/"
+                className="px-2 py-3 border-b border-border text-foreground/90 hover:text-foreground transition-colors"
+                onClick={toggleMenu}
+              >
+                Início
+              </Link>
+              <Link
+                to="/services"
+                className="px-2 py-3 border-b border-border text-foreground/90 hover:text-foreground transition-colors"
+                onClick={toggleMenu}
+              >
+                Serviços
+              </Link>
+              <Link
+                to="/store"
+                className="px-2 py-3 border-b border-border text-foreground/90 hover:text-foreground transition-colors"
+                onClick={toggleMenu}
+              >
+                Loja
+              </Link>
+              <Link
+                to="/about"
+                className="px-2 py-3 border-b border-border text-foreground/90 hover:text-foreground transition-colors"
+                onClick={toggleMenu}
+              >
+                Sobre
+              </Link>
+              <Link
+                to="/contact"
+                className="px-2 py-3 border-b border-border text-foreground/90 hover:text-foreground transition-colors"
+                onClick={toggleMenu}
+              >
+                Contato
+              </Link>
+
+              <div className="flex flex-col space-y-3 mt-4">
+                <Link to="/login" onClick={toggleMenu}>
+                  <Button variant="outline" className="w-full">
+                    Entrar
+                  </Button>
+                </Link>
+                <Link to="/register" onClick={toggleMenu}>
+                  <Button className="w-full">Cadastrar</Button>
+                </Link>
+              </div>
+            </nav>
+          </div>
+        </div>
+      )}
     </header>
   );
 };
