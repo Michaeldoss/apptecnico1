@@ -8,6 +8,11 @@ import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
+import TechnicianDashboard from "./pages/technician/Dashboard";
+import TechnicianProfile from "./pages/technician/Profile";
+import TechnicianServices from "./pages/technician/Services";
+import TechnicianParts from "./pages/technician/Parts";
+import TechnicianSchedule from "./pages/technician/Schedule";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +26,14 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          
+          {/* Rotas de Técnico */}
+          <Route path="/tecnico/painel" element={<TechnicianDashboard />} />
+          <Route path="/tecnico/perfil" element={<TechnicianProfile />} />
+          <Route path="/tecnico/servicos" element={<TechnicianServices />} />
+          <Route path="/tecnico/pecas" element={<TechnicianParts />} />
+          <Route path="/tecnico/agenda" element={<TechnicianSchedule />} />
+          
           {/* ADICIONE TODAS AS ROTAS PERSONALIZADAS ACIMA DA ROTA GENÉRICA "*" */}
           <Route path="*" element={<NotFound />} />
         </Routes>

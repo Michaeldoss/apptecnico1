@@ -9,6 +9,10 @@ import { useIsMobile } from "@/hooks/use-mobile"; // Alterando para importação
 const Navbar = () => {
   const isMobile = useIsMobile();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  
+  // Simulando um usuário logado como técnico (isso seria controlado por um contexto de autenticação real)
+  const isLoggedIn = false;
+  const isTechnician = false;
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -57,14 +61,31 @@ const Navbar = () => {
         <div className="flex items-center space-x-3">
           {!isMobile && (
             <>
-              <Link to="/login">
-                <Button variant="ghost" size="sm">
-                  Entrar
-                </Button>
-              </Link>
-              <Link to="/register">
-                <Button size="sm">Cadastrar</Button>
-              </Link>
+              {isLoggedIn ? (
+                <>
+                  {isTechnician && (
+                    <Link to="/tecnico/painel">
+                      <Button variant="outline" size="sm">
+                        Painel do Técnico
+                      </Button>
+                    </Link>
+                  )}
+                  <Button variant="ghost" size="sm">
+                    Minha Conta
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Link to="/login">
+                    <Button variant="ghost" size="sm">
+                      Entrar
+                    </Button>
+                  </Link>
+                  <Link to="/register">
+                    <Button size="sm">Cadastrar</Button>
+                  </Link>
+                </>
+              )}
             </>
           )}
 
@@ -123,14 +144,29 @@ const Navbar = () => {
               </Link>
 
               <div className="flex flex-col space-y-3 mt-4">
-                <Link to="/login" onClick={toggleMenu}>
-                  <Button variant="outline" className="w-full">
-                    Entrar
-                  </Button>
-                </Link>
-                <Link to="/register" onClick={toggleMenu}>
-                  <Button className="w-full">Cadastrar</Button>
-                </Link>
+                {isLoggedIn ? (
+                  <>
+                    {isTechnician && (
+                      <Link to="/tecnico/painel" onClick={toggleMenu}>
+                        <Button variant="outline" className="w-full">
+                          Painel do Técnico
+                        </Button>
+                      </Link>
+                    )}
+                    <Button className="w-full">Minha Conta</Button>
+                  </>
+                ) : (
+                  <>
+                    <Link to="/login" onClick={toggleMenu}>
+                      <Button variant="outline" className="w-full">
+                        Entrar
+                      </Button>
+                    </Link>
+                    <Link to="/register" onClick={toggleMenu}>
+                      <Button className="w-full">Cadastrar</Button>
+                    </Link>
+                  </>
+                )}
               </div>
             </nav>
           </div>
