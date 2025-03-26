@@ -14,6 +14,7 @@ import TechnicianProfile from "./pages/technician/Profile";
 import TechnicianServices from "./pages/technician/Services";
 import TechnicianParts from "./pages/technician/Parts";
 import TechnicianSchedule from "./pages/technician/Schedule";
+import Store from "./pages/Store"; // Import the new Store page
 
 const queryClient = new QueryClient();
 
@@ -35,7 +36,10 @@ const App = () => (
           <Route path="/tecnico/pecas" element={<TechnicianParts />} />
           <Route path="/tecnico/agenda" element={<TechnicianSchedule />} />
           
-          {/* Rota de redirecionamento */}
+          {/* Nova Rota de Loja */}
+          <Route path="/store" element={<Store />} />
+          
+          {/* Rotas de redirecionamento */}
           <Route path="/services" element={<Navigate to="/tecnico/servicos" replace />} />
           
           {/* ADICIONE TODAS AS ROTAS PERSONALIZADAS ACIMA DA ROTA GENÉRICA "*" */}
