@@ -16,6 +16,7 @@ import TechnicianParts from "./pages/technician/Parts";
 import TechnicianSchedule from "./pages/technician/Schedule";
 import Store from "./pages/Store";
 import About from "./pages/About";
+import Contact from "./pages/Contact";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +41,7 @@ const App = () => (
           {/* Páginas Públicas */}
           <Route path="/store" element={<Store />} />
           <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
           
           {/* Rotas de redirecionamento */}
           <Route path="/services" element={<Navigate to="/tecnico/servicos" replace />} />
