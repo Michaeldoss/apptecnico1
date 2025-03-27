@@ -14,7 +14,7 @@ import TechnicianProfile from "./pages/technician/Profile";
 import TechnicianServices from "./pages/technician/Services";
 import TechnicianParts from "./pages/technician/Parts";
 import TechnicianSchedule from "./pages/technician/Schedule";
-import Store from "./pages/Store"; // Import the new Store page
+import Store from "./pages/Store";
 
 const queryClient = new QueryClient();
 
