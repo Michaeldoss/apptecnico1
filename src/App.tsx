@@ -14,6 +14,7 @@ import TechnicianProfile from "./pages/technician/Profile";
 import TechnicianServices from "./pages/technician/Services";
 import TechnicianParts from "./pages/technician/Parts";
 import TechnicianSchedule from "./pages/technician/Schedule";
+import TechnicianLanding from "./pages/technician/Landing";
 import Store from "./pages/Store";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
@@ -32,6 +33,7 @@ const App = () => (
           <Route path="/register" element={<Register />} />
           
           {/* Rotas de Técnico */}
+          <Route path="/technician" element={<TechnicianLanding />} />
           <Route path="/tecnico/painel" element={<TechnicianDashboard />} />
           <Route path="/tecnico/perfil" element={<TechnicianProfile />} />
           <Route path="/tecnico/servicos" element={<TechnicianServices />} />

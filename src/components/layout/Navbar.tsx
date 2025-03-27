@@ -54,6 +54,11 @@ const Navbar = () => {
                   Contato
                 </Link>
               </li>
+              <li>
+                <Link to="/technician" className="px-2 py-1 text-foreground/70 hover:text-foreground transition-colors">
+                  Para Técnicos
+                </Link>
+              </li>
             </ul>
           </nav>
         )}
