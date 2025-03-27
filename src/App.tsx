@@ -15,6 +15,7 @@ import TechnicianServices from "./pages/technician/Services";
 import TechnicianParts from "./pages/technician/Parts";
 import TechnicianSchedule from "./pages/technician/Schedule";
 import Store from "./pages/Store";
+import About from "./pages/About";
 
 const queryClient = new QueryClient();
 
@@ -36,8 +37,9 @@ const App = () => (
           <Route path="/tecnico/pecas" element={<TechnicianParts />} />
           <Route path="/tecnico/agenda" element={<TechnicianSchedule />} />
           
-          {/* Nova Rota de Loja */}
+          {/* Páginas Públicas */}
           <Route path="/store" element={<Store />} />
+          <Route path="/about" element={<About />} />
           
           {/* Rotas de redirecionamento */}
           <Route path="/services" element={<Navigate to="/tecnico/servicos" replace />} />
