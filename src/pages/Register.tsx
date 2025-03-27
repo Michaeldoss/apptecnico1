@@ -19,7 +19,7 @@ import AnimatedContainer from '@/components/ui/AnimatedContainer';
 import BlurContainer from '@/components/ui/BlurContainer';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import { Printer, Scissors, Wrench, Upload, FileText, Clock, MapPin, CreditCard, Briefcase, Key as KeyIcon, ToolIcon } from 'lucide-react';
+import { Printer, Scissors, Wrench, Upload, FileText, Clock, MapPin, CreditCard, Briefcase, Key as KeyIcon } from 'lucide-react';
 
 const equipmentTypes = [
   { id: 'eco-solvent', label: 'Plotter eco solvente' },
@@ -139,7 +139,7 @@ const Register = () => {
               
               <TabsContent value="technician" className="mt-6">
                 <p className="text-sm text-muted-foreground mb-4 flex items-center gap-2">
-                  <ToolIcon className="h-4 w-4" />
+                  <Wrench className="h-4 w-4" />
                   Crie uma conta de técnico para oferecer seus serviços para máquinas industriais.
                 </p>
               </TabsContent>
