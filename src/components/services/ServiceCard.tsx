@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { MapPin, MoreVertical, LogIn, LogOut } from 'lucide-react';
+import { MapPin, MoreVertical, LogIn, LogOut, FileText } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,6 +11,7 @@ import {
 import { Service } from '@/types/service';
 import StatusBadge from './StatusBadge';
 import TrackingStatus from './TrackingStatus';
+import { Link } from 'react-router-dom';
 
 interface ServiceCardProps {
   service: Service;
@@ -71,6 +72,12 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, onShowTrackingDialog
                   )}
                 </>
               )}
+              <DropdownMenuItem asChild>
+                <Link to={`/tecnico/servicos/${service.id}/os`}>
+                  <FileText className="h-4 w-4 mr-2" />
+                  Ordem de Serviço
+                </Link>
+              </DropdownMenuItem>
               <DropdownMenuItem className="text-red-500">Cancelar serviço</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

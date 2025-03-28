@@ -15,6 +15,10 @@ import TechnicianServices from "./pages/technician/Services";
 import TechnicianParts from "./pages/technician/Parts";
 import TechnicianSchedule from "./pages/technician/Schedule";
 import TechnicianLanding from "./pages/technician/Landing";
+import TechnicianServiceOrder from "./pages/technician/ServiceOrder";
+import CustomerDashboard from "./pages/customer/Dashboard";
+import CustomerServices from "./pages/customer/Services";
+import CustomerServiceDetails from "./pages/customer/ServiceDetails";
 import Store from "./pages/Store";
 import CompanyRegister from "./pages/store/CompanyRegister";
 import About from "./pages/About";
@@ -23,8 +27,8 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 
 const queryClient = new QueryClient();
 
-// Componente de proteção para rotas que requerem autenticação
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+// Componente de proteção para rotas que requerem autenticação de técnico
+const ProtectedTechnicianRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, userType } = useAuth();
   
   if (!isAuthenticated) {
@@ -32,6 +36,21 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   }
   
   if (userType !== 'technician') {
+    return <Navigate to="/" replace />;
+  }
+  
+  return <>{children}</>;
+};
+
+// Componente de proteção para rotas que requerem autenticação de cliente
+const ProtectedCustomerRoute = ({ children }: { children: React.ReactNode }) => {
+  const { isAuthenticated, userType } = useAuth();
+  
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+  
+  if (userType !== 'customer') {
     return <Navigate to="/" replace />;
   }
   
@@ -49,29 +68,51 @@ const AppRoutes = () => (
     
     {/* Rotas protegidas de Técnico */}
     <Route path="/tecnico/painel" element={
-      <ProtectedRoute>
+      <ProtectedTechnicianRoute>
         <TechnicianDashboard />
-      </ProtectedRoute>
+      </ProtectedTechnicianRoute>
     } />
     <Route path="/tecnico/perfil" element={
-      <ProtectedRoute>
+      <ProtectedTechnicianRoute>
         <TechnicianProfile />
-      </ProtectedRoute>
+      </ProtectedTechnicianRoute>
     } />
     <Route path="/tecnico/servicos" element={
-      <ProtectedRoute>
+      <ProtectedTechnicianRoute>
         <TechnicianServices />
-      </ProtectedRoute>
+      </ProtectedTechnicianRoute>
+    } />
+    <Route path="/tecnico/servicos/:id/os" element={
+      <ProtectedTechnicianRoute>
+        <TechnicianServiceOrder />
+      </ProtectedTechnicianRoute>
     } />
     <Route path="/tecnico/pecas" element={
-      <ProtectedRoute>
+      <ProtectedTechnicianRoute>
         <TechnicianParts />
-      </ProtectedRoute>
+      </ProtectedTechnicianRoute>
     } />
     <Route path="/tecnico/agenda" element={
-      <ProtectedRoute>
+      <ProtectedTechnicianRoute>
         <TechnicianSchedule />
-      </ProtectedRoute>
+      </ProtectedTechnicianRoute>
+    } />
+    
+    {/* Rotas protegidas de Cliente */}
+    <Route path="/cliente/painel" element={
+      <ProtectedCustomerRoute>
+        <CustomerDashboard />
+      </ProtectedCustomerRoute>
+    } />
+    <Route path="/cliente/servicos" element={
+      <ProtectedCustomerRoute>
+        <CustomerServices />
+      </ProtectedCustomerRoute>
+    } />
+    <Route path="/cliente/servicos/:id" element={
+      <ProtectedCustomerRoute>
+        <CustomerServiceDetails />
+      </ProtectedCustomerRoute>
     } />
     
     {/* Páginas Públicas */}
