@@ -1,21 +1,33 @@
 
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Menu, X } from "lucide-react";
-import { useIsMobile } from "@/hooks/use-mobile"; // Alterando para importação nomeada
+import { Menu, X, User, LogOut } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { useAuth } from "@/context/AuthContext";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
   const isMobile = useIsMobile();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { isAuthenticated, userType, user, logout } = useAuth();
+  const navigate = useNavigate();
   
-  // Simulando um usuário logado como técnico (isso seria controlado por um contexto de autenticação real)
-  const isLoggedIn = false;
-  const isTechnician = false;
-
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
   };
 
   return (
@@ -54,11 +66,13 @@ const Navbar = () => {
                   Contato
                 </Link>
               </li>
-              <li>
-                <Link to="/technician" className="px-2 py-1 text-foreground/70 hover:text-foreground transition-colors">
-                  Para Técnicos
-                </Link>
-              </li>
+              {!isAuthenticated && (
+                <li>
+                  <Link to="/technician" className="px-2 py-1 text-foreground/70 hover:text-foreground transition-colors">
+                    Para Técnicos
+                  </Link>
+                </li>
+              )}
             </ul>
           </nav>
         )}
@@ -66,19 +80,39 @@ const Navbar = () => {
         <div className="flex items-center space-x-3">
           {!isMobile && (
             <>
-              {isLoggedIn ? (
-                <>
-                  {isTechnician && (
-                    <Link to="/tecnico/painel">
-                      <Button variant="outline" size="sm">
-                        Painel do Técnico
-                      </Button>
-                    </Link>
-                  )}
-                  <Button variant="ghost" size="sm">
-                    Minha Conta
-                  </Button>
-                </>
+              {isAuthenticated ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="sm" className="flex items-center gap-2">
+                      <User size={16} />
+                      <span>{user?.name || 'Minha Conta'}</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    
+                    {userType === 'technician' && (
+                      <>
+                        <DropdownMenuItem onClick={() => navigate('/tecnico/painel')}>
+                          Painel do Técnico
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => navigate('/tecnico/perfil')}>
+                          Meu Perfil
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => navigate('/tecnico/servicos')}>
+                          Serviços
+                        </DropdownMenuItem>
+                      </>
+                    )}
+                    
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleLogout} className="text-red-500">
+                      <LogOut size={16} className="mr-2" />
+                      Sair
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               ) : (
                 <>
                   <Link to="/login">
@@ -147,18 +181,31 @@ const Navbar = () => {
               >
                 Contato
               </Link>
+              
+              {!isAuthenticated && (
+                <Link
+                  to="/technician"
+                  className="px-2 py-3 border-b border-border text-foreground/90 hover:text-foreground transition-colors"
+                  onClick={toggleMenu}
+                >
+                  Para Técnicos
+                </Link>
+              )}
 
               <div className="flex flex-col space-y-3 mt-4">
-                {isLoggedIn ? (
+                {isAuthenticated ? (
                   <>
-                    {isTechnician && (
+                    {userType === 'technician' && (
                       <Link to="/tecnico/painel" onClick={toggleMenu}>
                         <Button variant="outline" className="w-full">
                           Painel do Técnico
                         </Button>
                       </Link>
                     )}
-                    <Button className="w-full">Minha Conta</Button>
+                    <Button onClick={handleLogout} variant="destructive" className="w-full">
+                      <LogOut size={16} className="mr-2" />
+                      Sair
+                    </Button>
                   </>
                 ) : (
                   <>

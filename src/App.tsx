@@ -16,43 +16,89 @@ import TechnicianParts from "./pages/technician/Parts";
 import TechnicianSchedule from "./pages/technician/Schedule";
 import TechnicianLanding from "./pages/technician/Landing";
 import Store from "./pages/Store";
+import CompanyRegister from "./pages/store/CompanyRegister";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 
 const queryClient = new QueryClient();
 
+// Componente de proteção para rotas que requerem autenticação
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { isAuthenticated, userType } = useAuth();
+  
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+  
+  if (userType !== 'technician') {
+    return <Navigate to="/" replace />;
+  }
+  
+  return <>{children}</>;
+};
+
+const AppRoutes = () => (
+  <Routes>
+    <Route path="/" element={<Index />} />
+    <Route path="/login" element={<Login />} />
+    <Route path="/register" element={<Register />} />
+    
+    {/* Rota pública de informações sobre serviços técnicos */}
+    <Route path="/technician" element={<TechnicianLanding />} />
+    
+    {/* Rotas protegidas de Técnico */}
+    <Route path="/tecnico/painel" element={
+      <ProtectedRoute>
+        <TechnicianDashboard />
+      </ProtectedRoute>
+    } />
+    <Route path="/tecnico/perfil" element={
+      <ProtectedRoute>
+        <TechnicianProfile />
+      </ProtectedRoute>
+    } />
+    <Route path="/tecnico/servicos" element={
+      <ProtectedRoute>
+        <TechnicianServices />
+      </ProtectedRoute>
+    } />
+    <Route path="/tecnico/pecas" element={
+      <ProtectedRoute>
+        <TechnicianParts />
+      </ProtectedRoute>
+    } />
+    <Route path="/tecnico/agenda" element={
+      <ProtectedRoute>
+        <TechnicianSchedule />
+      </ProtectedRoute>
+    } />
+    
+    {/* Páginas Públicas */}
+    <Route path="/store" element={<Store />} />
+    <Route path="/store/company-register" element={<CompanyRegister />} />
+    <Route path="/about" element={<About />} />
+    <Route path="/contact" element={<Contact />} />
+    
+    {/* Rotas de redirecionamento */}
+    <Route path="/services" element={<Navigate to="/technician" replace />} />
+    
+    {/* ADICIONE TODAS AS ROTAS PERSONALIZADAS ACIMA DA ROTA GENÉRICA "*" */}
+    <Route path="*" element={<NotFound />} />
+  </Routes>
+);
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          
-          {/* Rotas de Técnico */}
-          <Route path="/technician" element={<TechnicianLanding />} />
-          <Route path="/tecnico/painel" element={<TechnicianDashboard />} />
-          <Route path="/tecnico/perfil" element={<TechnicianProfile />} />
-          <Route path="/tecnico/servicos" element={<TechnicianServices />} />
-          <Route path="/tecnico/pecas" element={<TechnicianParts />} />
-          <Route path="/tecnico/agenda" element={<TechnicianSchedule />} />
-          
-          {/* Páginas Públicas */}
-          <Route path="/store" element={<Store />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          
-          {/* Rotas de redirecionamento */}
-          <Route path="/services" element={<Navigate to="/tecnico/servicos" replace />} />
-          
-          {/* ADICIONE TODAS AS ROTAS PERSONALIZADAS ACIMA DA ROTA GENÉRICA "*" */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+    <AuthProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
+      </TooltipProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 

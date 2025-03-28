@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import TechnicianLayout from '@/components/layout/TechnicianLayout';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { 
@@ -12,7 +12,26 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { CheckCircle, Clock, MoreVertical, Search, AlertCircle, XCircle } from 'lucide-react';
+import { 
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { toast } from '@/hooks/use-toast';
+import { 
+  CheckCircle, 
+  Clock, 
+  MoreVertical, 
+  Search, 
+  AlertCircle, 
+  XCircle,
+  MapPin,
+  LogIn,
+  LogOut
+} from 'lucide-react';
 
 type ServiceStatus = 'pendente' | 'em andamento' | 'concluído' | 'cancelado';
 
@@ -25,13 +44,18 @@ type Service = {
   date: string;
   address: string;
   price: string;
+  tracking?: {
+    checkedIn: boolean;
+    checkedOut: boolean;
+    checkinTime?: string;
+    checkoutTime?: string;
+    location?: string;
+  };
 };
 
 const TechnicianServices = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  
-  // Dados de exemplo
-  const services: Service[] = [
+  const [services, setServices] = useState<Service[]>([
     {
       id: 1,
       client: 'João Silva',
@@ -41,6 +65,10 @@ const TechnicianServices = () => {
       date: '24/07/2023',
       address: 'Rua Augusta, 1500, São Paulo - SP',
       price: 'R$ 150,00',
+      tracking: {
+        checkedIn: false,
+        checkedOut: false
+      }
     },
     {
       id: 2,
@@ -51,6 +79,11 @@ const TechnicianServices = () => {
       date: '22/07/2023',
       address: 'Av. Paulista, 900, São Paulo - SP',
       price: 'R$ 200,00',
+      tracking: {
+        checkedIn: true,
+        checkedOut: false,
+        checkinTime: '22/07/2023 14:30'
+      }
     },
     {
       id: 3,
@@ -61,6 +94,12 @@ const TechnicianServices = () => {
       date: '20/07/2023',
       address: 'Rua Consolação, 250, São Paulo - SP',
       price: 'R$ 100,00',
+      tracking: {
+        checkedIn: true,
+        checkedOut: true,
+        checkinTime: '20/07/2023 09:15',
+        checkoutTime: '20/07/2023 10:45'
+      }
     },
     {
       id: 4,
@@ -71,6 +110,12 @@ const TechnicianServices = () => {
       date: '18/07/2023',
       address: 'Av. Brigadeiro Faria Lima, 1200, São Paulo - SP',
       price: 'R$ 180,00',
+      tracking: {
+        checkedIn: true,
+        checkedOut: true,
+        checkinTime: '18/07/2023 13:00',
+        checkoutTime: '18/07/2023 16:30'
+      }
     },
     {
       id: 5,
@@ -81,8 +126,17 @@ const TechnicianServices = () => {
       date: '15/07/2023',
       address: 'Rua Oscar Freire, 500, São Paulo - SP',
       price: 'R$ 250,00',
+      tracking: {
+        checkedIn: false,
+        checkedOut: false
+      }
     },
-  ];
+  ]);
+  
+  // Estados para controle do modal de check-in/check-out
+  const [isTrackingDialogOpen, setIsTrackingDialogOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState<Service | null>(null);
+  const [trackingAction, setTrackingAction] = useState<'checkin' | 'checkout' | null>(null);
   
   const filteredServices = services.filter(service => 
     service.client.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -121,6 +175,83 @@ const TechnicianServices = () => {
         </span>
       </Badge>
     );
+  };
+  
+  const handleShowTrackingDialog = (service: Service, action: 'checkin' | 'checkout') => {
+    setSelectedService(service);
+    setTrackingAction(action);
+    setIsTrackingDialogOpen(true);
+  };
+  
+  const handleTrackingAction = () => {
+    if (!selectedService) return;
+    
+    const now = new Date();
+    const formattedDate = now.toLocaleDateString('pt-BR') + ' ' + 
+                          now.getHours().toString().padStart(2, '0') + ':' + 
+                          now.getMinutes().toString().padStart(2, '0');
+    
+    const updatedServices = services.map(service => {
+      if (service.id === selectedService.id) {
+        if (trackingAction === 'checkin') {
+          return {
+            ...service,
+            status: 'em andamento' as ServiceStatus,
+            tracking: {
+              ...service.tracking,
+              checkedIn: true,
+              checkinTime: formattedDate
+            }
+          };
+        } else if (trackingAction === 'checkout') {
+          return {
+            ...service,
+            status: 'concluído' as ServiceStatus,
+            tracking: {
+              ...service.tracking,
+              checkedOut: true,
+              checkoutTime: formattedDate
+            }
+          };
+        }
+      }
+      return service;
+    });
+    
+    setServices(updatedServices);
+    setIsTrackingDialogOpen(false);
+    
+    // Mostrar notificação de sucesso
+    toast({
+      title: trackingAction === 'checkin' ? "Check-in realizado!" : "Check-out realizado!",
+      description: trackingAction === 'checkin' 
+        ? `Você iniciou o serviço para ${selectedService.client} às ${formattedDate}.`
+        : `Você finalizou o serviço para ${selectedService.client} às ${formattedDate}.`,
+    });
+  };
+  
+  const getTrackingStatus = (service: Service) => {
+    if (!service.tracking) return null;
+    
+    if (service.tracking.checkedIn && service.tracking.checkedOut) {
+      return (
+        <div className="mt-2 text-xs flex items-center text-green-600">
+          <CheckCircle className="h-3 w-3 mr-1" />
+          <span>Serviço finalizado em {service.tracking.checkoutTime}</span>
+        </div>
+      );
+    }
+    
+    if (service.tracking.checkedIn) {
+      return (
+        <div className="mt-2 text-xs flex items-center text-blue-600">
+          <Clock className="h-3 w-3 mr-1" />
+          <span>Em atendimento desde {service.tracking.checkinTime}</span>
+        </div>
+      );
+    }
+    
+    return null;
   };
   
   return (
@@ -166,10 +297,14 @@ const TechnicianServices = () => {
                             <div className="flex items-center gap-3 text-xs text-muted-foreground mt-2">
                               <span>{service.date}</span>
                               <span>•</span>
-                              <span>{service.address}</span>
+                              <div className="flex items-center">
+                                <MapPin className="h-3 w-3 mr-1" />
+                                <span>{service.address}</span>
+                              </div>
                               <span>•</span>
                               <span className="font-medium">{service.price}</span>
                             </div>
+                            {getTrackingStatus(service)}
                           </div>
                           <div>
                             <DropdownMenu>
@@ -182,7 +317,23 @@ const TechnicianServices = () => {
                                 <DropdownMenuItem>Ver detalhes</DropdownMenuItem>
                                 <DropdownMenuItem>Atualizar status</DropdownMenuItem>
                                 <DropdownMenuItem>Contatar cliente</DropdownMenuItem>
-                                <DropdownMenuItem>Cancelar serviço</DropdownMenuItem>
+                                {service.status !== 'cancelado' && service.status !== 'concluído' && (
+                                  <>
+                                    {!service.tracking?.checkedIn && (
+                                      <DropdownMenuItem onClick={() => handleShowTrackingDialog(service, 'checkin')}>
+                                        <LogIn className="h-4 w-4 mr-2" />
+                                        Fazer check-in
+                                      </DropdownMenuItem>
+                                    )}
+                                    {service.tracking?.checkedIn && !service.tracking?.checkedOut && (
+                                      <DropdownMenuItem onClick={() => handleShowTrackingDialog(service, 'checkout')}>
+                                        <LogOut className="h-4 w-4 mr-2" />
+                                        Fazer check-out
+                                      </DropdownMenuItem>
+                                    )}
+                                  </>
+                                )}
+                                <DropdownMenuItem className="text-red-500">Cancelar serviço</DropdownMenuItem>
                               </DropdownMenuContent>
                             </DropdownMenu>
                           </div>
@@ -227,10 +378,14 @@ const TechnicianServices = () => {
                               <div className="flex items-center gap-3 text-xs text-muted-foreground mt-2">
                                 <span>{service.date}</span>
                                 <span>•</span>
-                                <span>{service.address}</span>
+                                <div className="flex items-center">
+                                  <MapPin className="h-3 w-3 mr-1" />
+                                  <span>{service.address}</span>
+                                </div>
                                 <span>•</span>
                                 <span className="font-medium">{service.price}</span>
                               </div>
+                              {getTrackingStatus(service)}
                             </div>
                             <div>
                               <DropdownMenu>
@@ -243,7 +398,23 @@ const TechnicianServices = () => {
                                   <DropdownMenuItem>Ver detalhes</DropdownMenuItem>
                                   <DropdownMenuItem>Atualizar status</DropdownMenuItem>
                                   <DropdownMenuItem>Contatar cliente</DropdownMenuItem>
-                                  <DropdownMenuItem>Cancelar serviço</DropdownMenuItem>
+                                  {service.status !== 'cancelado' && service.status !== 'concluído' && (
+                                    <>
+                                      {!service.tracking?.checkedIn && (
+                                        <DropdownMenuItem onClick={() => handleShowTrackingDialog(service, 'checkin')}>
+                                          <LogIn className="h-4 w-4 mr-2" />
+                                          Fazer check-in
+                                        </DropdownMenuItem>
+                                      )}
+                                      {service.tracking?.checkedIn && !service.tracking?.checkedOut && (
+                                        <DropdownMenuItem onClick={() => handleShowTrackingDialog(service, 'checkout')}>
+                                          <LogOut className="h-4 w-4 mr-2" />
+                                          Fazer check-out
+                                        </DropdownMenuItem>
+                                      )}
+                                    </>
+                                  )}
+                                  <DropdownMenuItem className="text-red-500">Cancelar serviço</DropdownMenuItem>
                                 </DropdownMenuContent>
                               </DropdownMenu>
                             </div>
@@ -257,6 +428,53 @@ const TechnicianServices = () => {
           ))}
         </Tabs>
       </div>
+      
+      {/* Diálogo de Check-in/Check-out */}
+      <Dialog open={isTrackingDialogOpen} onOpenChange={setIsTrackingDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {trackingAction === 'checkin' ? 'Confirmar Check-in' : 'Confirmar Check-out'}
+            </DialogTitle>
+            <DialogDescription>
+              {trackingAction === 'checkin' 
+                ? 'Confirme que você chegou ao local do cliente para iniciar o serviço.'
+                : 'Confirme que você completou o serviço e está deixando o local do cliente.'}
+            </DialogDescription>
+          </DialogHeader>
+          
+          {selectedService && (
+            <div className="py-4">
+              <div className="mb-4">
+                <h3 className="font-medium">{selectedService.client}</h3>
+                <p className="text-sm text-muted-foreground">{selectedService.type}</p>
+              </div>
+              
+              <div className="flex items-center text-sm mb-4">
+                <MapPin className="h-4 w-4 mr-2 text-muted-foreground" />
+                <span>{selectedService.address}</span>
+              </div>
+              
+              <p className="text-sm">
+                {trackingAction === 'checkin' 
+                  ? 'Ao confirmar, você estará registrando seu horário de chegada.' 
+                  : 'Ao confirmar, você estará registrando seu horário de saída e marcando o serviço como concluído.'}
+              </p>
+            </div>
+          )}
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsTrackingDialogOpen(false)}>
+              Cancelar
+            </Button>
+            <Button onClick={handleTrackingAction}>
+              {trackingAction === 'checkin' 
+                ? 'Confirmar Check-in' 
+                : 'Confirmar Check-out'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </TechnicianLayout>
   );
 };

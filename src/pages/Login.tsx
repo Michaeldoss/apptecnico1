@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,19 +9,41 @@ import AnimatedContainer from '@/components/ui/AnimatedContainer';
 import BlurContainer from '@/components/ui/BlurContainer';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import { useAuth } from '@/context/AuthContext';
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const { login, isAuthenticated, userType } = useAuth();
+  const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
+  // Redirecionar se já estiver autenticado
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      if (userType === 'technician') {
+        navigate('/tecnico/painel');
+      } else if (userType === 'customer') {
+        navigate('/');
+      } else if (userType === 'admin') {
+        navigate('/admin');
+      }
+    }
+  }, [isAuthenticated, userType, navigate]);
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Simular chamada de API
-    setTimeout(() => {
+    try {
+      const success = await login(email, password);
+      
+      if (success) {
+        // O redirecionamento será feito pelo useEffect acima
+      }
+    } finally {
       setIsLoading(false);
-      // Lógica de login
-    }, 1500);
+    }
   };
 
   return (
@@ -46,6 +68,8 @@ const Login = () => {
                     placeholder="nome@exemplo.com" 
                     required 
                     className="w-full rounded-lg"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
                 
@@ -65,6 +89,8 @@ const Login = () => {
                     placeholder="••••••••" 
                     required 
                     className="w-full rounded-lg"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
                 
