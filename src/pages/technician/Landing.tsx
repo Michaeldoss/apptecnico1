@@ -17,7 +17,7 @@ const TechnicianLanding = () => {
         {/* Hero Section */}
         <section className="py-16 md:py-24 px-4">
           <div className="container mx-auto text-center">
-            <AnimatedContainer animation="fade-up" className="max-w-3xl mx-auto">
+            <AnimatedContainer animation="fade" className="max-w-3xl mx-auto">
               <h1 className="text-4xl md:text-5xl font-bold mb-6">
                 Conecte-se com Clientes que Precisam dos Seus Serviços
               </h1>

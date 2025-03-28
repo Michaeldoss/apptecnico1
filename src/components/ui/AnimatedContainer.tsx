@@ -58,11 +58,14 @@ const AnimatedContainer = ({
     },
   };
 
+  // Make sure animation is valid before accessing its properties
+  const validAnimation = animationStyles[animation] ? animation : 'fade';
+
   return (
     <div
       className={cn(
         'transition-all',
-        isVisible ? animationStyles[animation].animate : animationStyles[animation].initial,
+        isVisible ? animationStyles[validAnimation].animate : animationStyles[validAnimation].initial,
         className
       )}
       style={{ transitionDuration: `${duration}ms` }}
