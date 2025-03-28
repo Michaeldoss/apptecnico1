@@ -1,162 +1,186 @@
 
 import React, { useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Search, FileText } from 'lucide-react';
-import CustomerLayout from '@/components/layout/CustomerLayout';
-import { Service } from '@/types/service';
-import ServiceCard from '@/components/services/ServiceCard';
-import { useServices } from '@/hooks/useServices';
 import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { 
+  Table, 
+  TableBody, 
+  TableCaption, 
+  TableCell, 
+  TableHead, 
+  TableHeader, 
+  TableRow 
+} from '@/components/ui/table';
+import { 
+  Card, 
+  CardContent, 
+  CardDescription, 
+  CardFooter, 
+  CardHeader, 
+  CardTitle 
+} from '@/components/ui/card';
+import CustomerLayout from '@/components/layout/CustomerLayout';
+import StatusBadge from '@/components/services/StatusBadge';
+import TrackingStatus from '@/components/services/TrackingStatus';
+import TrackingDialog from '@/components/services/TrackingDialog';
+import { useServices } from '@/hooks/useServices';
+import { Service } from '@/types/service';
+import { MapPin, CreditCard } from 'lucide-react';
 
 const CustomerServices = () => {
-  const { services, searchQuery, setSearchQuery } = useServices();
-  
-  // Filter to only show services for the current client
-  // In a real app, this would use the logged-in user's ID
-  const clientServices = services;
-  
+  const { data: services, isLoading, error } = useServices();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [activeService, setActiveService] = useState<Service | null>(null);
+  const [showTrackingDialog, setShowTrackingDialog] = useState(false);
+
+  // Filtrar serviços
+  const filteredServices = services?.filter(service => 
+    service.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    service.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    service.client.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const openTrackingDialog = (service: Service) => {
+    setActiveService(service);
+    setShowTrackingDialog(true);
+  };
+
   return (
     <CustomerLayout title="Meus Serviços">
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div className="relative w-full max-w-sm">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+        <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
+          <div className="max-w-sm flex-1">
             <Input
-              placeholder="Buscar serviços"
-              className="pl-8"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Buscar serviços..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="max-w-sm"
             />
           </div>
-          <Button asChild>
-            <Link to="/cliente/solicitar-servico">Solicitar Novo Serviço</Link>
-          </Button>
+          
+          <div className="flex items-center gap-2">
+            <Button asChild>
+              <Link to="/store">Solicitar Novo Serviço</Link>
+            </Button>
+          </div>
         </div>
-        
-        <Tabs defaultValue="all">
-          <TabsList>
-            <TabsTrigger value="all">Todos</TabsTrigger>
-            <TabsTrigger value="pending">Pendentes</TabsTrigger>
-            <TabsTrigger value="in-progress">Em Andamento</TabsTrigger>
-            <TabsTrigger value="completed">Concluídos</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="all" className="mt-4">
-            <CustomerServicesList services={clientServices} />
-          </TabsContent>
-          
-          {['pending', 'in-progress', 'completed'].map((tab) => (
-            <TabsContent key={tab} value={tab} className="mt-4">
-              <CustomerServicesList
-                services={clientServices}
-                statusFilter={tab}
-              />
-            </TabsContent>
-          ))}
-        </Tabs>
-      </div>
-    </CustomerLayout>
-  );
-};
 
-interface ServiceListProps {
-  services: Service[];
-  statusFilter?: string;
-}
-
-const CustomerServicesList: React.FC<ServiceListProps> = ({ services, statusFilter }) => {
-  const filteredServices = statusFilter && statusFilter !== 'all'
-    ? services.filter(service => {
-        const statusMap: Record<string, string> = {
-          'pending': 'pendente',
-          'in-progress': 'em andamento',
-          'completed': 'concluído',
-          'canceled': 'cancelado'
-        };
-        return service.status === statusMap[statusFilter];
-      })
-    : services;
-
-  return (
-    <Card>
-      <CardContent className="p-0">
-        <div className="divide-y">
-          {filteredServices.length > 0 ? (
-            filteredServices.map((service) => (
-              <div key={service.id} className="p-4">
-                <div className="flex items-start justify-between">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-medium">{service.type}</h3>
-                      <span className={`text-xs px-2 py-0.5 rounded-full ${
-                        service.status === 'pendente' ? 'bg-yellow-100 text-yellow-800' :
-                        service.status === 'em andamento' ? 'bg-blue-100 text-blue-800' :
-                        service.status === 'concluído' ? 'bg-green-100 text-green-800' :
-                        'bg-red-100 text-red-800'
-                      }`}>
-                        {service.status}
-                      </span>
+        {isLoading ? (
+          <div className="flex items-center justify-center h-64">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          </div>
+        ) : error ? (
+          <Card>
+            <CardContent className="pt-6">
+              <div className="text-center text-destructive">
+                Erro ao carregar serviços. Por favor, tente novamente.
+              </div>
+            </CardContent>
+          </Card>
+        ) : filteredServices && filteredServices.length > 0 ? (
+          <div className="grid grid-cols-1 gap-6">
+            {filteredServices.map((service) => (
+              <Card key={service.id} className="overflow-hidden">
+                <CardHeader className="pb-4">
+                  <div className="flex justify-between items-start">
+                    <div className="space-y-1">
+                      <CardTitle className="text-xl">{service.type}</CardTitle>
+                      <CardDescription className="text-sm">{service.description}</CardDescription>
                     </div>
-                    <p className="text-sm">{service.description}</p>
-                    <p className="text-xs text-muted-foreground">
-                      Agendado para: {service.date}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      Endereço: {service.address}
-                    </p>
-                    <p className="text-sm font-medium mt-1">
-                      Valor: {service.price}
-                    </p>
+                    <StatusBadge status={service.status} />
+                  </div>
+                </CardHeader>
+                
+                <CardContent className="pb-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="space-y-1">
+                      <div className="text-sm text-muted-foreground">Data</div>
+                      <div>{service.date}</div>
+                    </div>
                     
-                    {service.serviceOrderId && (
-                      <div className="mt-2">
-                        <Button variant="outline" size="sm" asChild className="flex items-center gap-1">
-                          <Link to={`/cliente/servicos/${service.id}/os`}>
-                            <FileText className="h-3 w-3" />
-                            <span>Ver O.S. #{service.serviceOrderId}</span>
-                          </Link>
-                        </Button>
+                    <div className="space-y-1">
+                      <div className="text-sm text-muted-foreground flex items-center gap-1">
+                        <MapPin className="h-3.5 w-3.5" />
+                        Local
                       </div>
-                    )}
+                      <div>{service.address}</div>
+                    </div>
+                    
+                    <div className="space-y-1">
+                      <div className="text-sm text-muted-foreground flex items-center gap-1">
+                        <CreditCard className="h-3.5 w-3.5" />
+                        Pagamento
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {service.payment?.status === 'pago' ? (
+                          <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                            Pago
+                          </Badge>
+                        ) : service.payment?.status === 'parcial' ? (
+                          <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200">
+                            Parcial
+                          </Badge>
+                        ) : (
+                          <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                            Pendente
+                          </Badge>
+                        )}
+                        {service.price}
+                      </div>
+                    </div>
                   </div>
                   
-                  <div className="flex flex-col gap-2">
-                    <Button variant="outline" size="sm" asChild>
-                      <Link to={`/cliente/servicos/${service.id}`}>Detalhes</Link>
-                    </Button>
-                    
-                    {service.tracking?.checkedIn && !service.tracking?.checkedOut && (
-                      <Button variant="outline" size="sm" asChild>
-                        <Link to={`/cliente/rastreamento/${service.id}`}>
-                          <MapPin className="h-3 w-3 mr-1" />
-                          Rastrear
-                        </Link>
-                      </Button>
-                    )}
-                    
-                    {service.status === 'concluído' && service.payment?.status !== 'pago' && (
-                      <Button variant="outline" size="sm" className="text-green-600 border-green-600 hover:bg-green-50" asChild>
-                        <Link to={`/cliente/pagamentos/${service.id}`}>
-                          <CreditCard className="h-3 w-3 mr-1" />
-                          Pagar
-                        </Link>
-                      </Button>
-                    )}
-                  </div>
-                </div>
+                  {service.tracking && (
+                    <div className="mt-4 pt-4 border-t">
+                      <TrackingStatus tracking={service.tracking} />
+                    </div>
+                  )}
+                </CardContent>
+                
+                <CardFooter className="bg-muted/30 flex justify-between">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => openTrackingDialog(service)}
+                  >
+                    <MapPin className="h-4 w-4 mr-2" />
+                    Rastreamento
+                  </Button>
+                  
+                  <Button 
+                    variant="default" 
+                    size="sm" 
+                    asChild
+                  >
+                    <Link to={`/cliente/servicos/${service.id}`}>
+                      Detalhes
+                    </Link>
+                  </Button>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <Card>
+            <CardContent className="pt-6">
+              <div className="text-center">
+                Nenhum serviço encontrado.
               </div>
-            ))
-          ) : (
-            <div className="p-4 text-center">
-              <p className="text-muted-foreground">Nenhum serviço encontrado.</p>
-            </div>
-          )}
-        </div>
-      </CardContent>
-    </Card>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+
+      {activeService && (
+        <TrackingDialog
+          open={showTrackingDialog}
+          onOpenChange={setShowTrackingDialog}
+          service={activeService}
+        />
+      )}
+    </CustomerLayout>
   );
 };
 

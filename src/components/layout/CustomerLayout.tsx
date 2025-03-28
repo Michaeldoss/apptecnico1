@@ -10,7 +10,8 @@ import {
   MapPin, 
   CreditCard, 
   User,
-  LogOut 
+  LogOut,
+  FileText
 } from 'lucide-react';
 
 type SidebarItemProps = {
@@ -79,6 +80,13 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
               active={path.startsWith('/cliente/pagamentos')}
             >
               Pagamentos
+            </SidebarItem>
+            <SidebarItem 
+              to="/cliente/ordens" 
+              icon={FileText} 
+              active={path.startsWith('/cliente/ordens')}
+            >
+              Ordens de Serviço
             </SidebarItem>
             <SidebarItem 
               to="/cliente/perfil" 

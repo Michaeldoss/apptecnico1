@@ -123,8 +123,9 @@ const AppRoutes = () => (
     
     {/* Rotas de redirecionamento */}
     <Route path="/services" element={<Navigate to="/technician" replace />} />
+    <Route path="/logout" element={<Navigate to="/" replace />} />
     
-    {/* ADICIONE TODAS AS ROTAS PERSONALIZADAS ACIMA DA ROTA GENÉRICA "*" */}
+    {/* Rota genérica "*" */}
     <Route path="*" element={<NotFound />} />
   </Routes>
 );
