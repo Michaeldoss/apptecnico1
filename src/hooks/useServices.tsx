@@ -17,7 +17,9 @@ const mockServices: Service[] = [
     tracking: {
       checkedIn: false,
       checkedOut: false
-    }
+    },
+    clientRating: null,
+    technicianRating: null
   },
   {
     id: 2,
@@ -32,7 +34,9 @@ const mockServices: Service[] = [
       checkedIn: true,
       checkedOut: false,
       checkinTime: '22/07/2023 14:30'
-    }
+    },
+    clientRating: null,
+    technicianRating: null
   },
   {
     id: 3,
@@ -48,7 +52,14 @@ const mockServices: Service[] = [
       checkedOut: true,
       checkinTime: '20/07/2023 09:15',
       checkoutTime: '20/07/2023 10:45'
-    }
+    },
+    payment: {
+      status: 'pago',
+      method: 'cartão de crédito',
+      date: '20/07/2023'
+    },
+    clientRating: 4.5,
+    technicianRating: 5
   },
   {
     id: 4,
@@ -64,7 +75,14 @@ const mockServices: Service[] = [
       checkedOut: true,
       checkinTime: '18/07/2023 13:00',
       checkoutTime: '18/07/2023 16:30'
-    }
+    },
+    payment: {
+      status: 'pago',
+      method: 'transferência bancária',
+      date: '18/07/2023'
+    },
+    clientRating: 5,
+    technicianRating: 4
   },
   {
     id: 5,
@@ -78,13 +96,17 @@ const mockServices: Service[] = [
     tracking: {
       checkedIn: false,
       checkedOut: false
-    }
+    },
+    clientRating: null,
+    technicianRating: null
   },
 ];
 
 export const useServices = () => {
   const [services, setServices] = useState<Service[]>(mockServices);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
   
   // Filter services based on search query
   const filteredServices = services.filter(service => 
@@ -139,11 +161,117 @@ export const useServices = () => {
 
     return formattedDate;
   };
+
+  // Function to rate a technician
+  const rateTechnician = (serviceId: number, rating: number) => {
+    const updatedServices = services.map(s => {
+      if (s.id === serviceId) {
+        return {
+          ...s,
+          technicianRating: rating
+        };
+      }
+      return s;
+    });
+    
+    setServices(updatedServices);
+    
+    toast({
+      title: "Avaliação enviada!",
+      description: `Você avaliou o técnico com ${rating} estrelas.`,
+    });
+  };
+
+  // Function to rate a client
+  const rateClient = (serviceId: number, rating: number) => {
+    const updatedServices = services.map(s => {
+      if (s.id === serviceId) {
+        return {
+          ...s,
+          clientRating: rating
+        };
+      }
+      return s;
+    });
+    
+    setServices(updatedServices);
+    
+    toast({
+      title: "Avaliação enviada!",
+      description: `Você avaliou o cliente com ${rating} estrelas.`,
+    });
+  };
+
+  // Function to request a new service
+  const requestService = (serviceData: Partial<Service>) => {
+    // Generate a new ID by getting the max ID and adding 1
+    const newId = Math.max(...services.map(s => s.id)) + 1;
+    
+    const newService: Service = {
+      id: newId,
+      client: serviceData.client || 'Cliente',
+      type: serviceData.type || 'Serviço não especificado',
+      description: serviceData.description || '',
+      status: 'pendente',
+      date: serviceData.date || new Date().toLocaleDateString('pt-BR'),
+      address: serviceData.address || '',
+      price: serviceData.price || 'A definir',
+      tracking: {
+        checkedIn: false,
+        checkedOut: false
+      },
+      clientRating: null,
+      technicianRating: null
+    };
+    
+    setServices([...services, newService]);
+    
+    toast({
+      title: "Serviço solicitado!",
+      description: "Sua solicitação de serviço foi enviada com sucesso.",
+    });
+    
+    return newService;
+  };
+
+  // Function to process a payment
+  const processPayment = (serviceId: number, method: string) => {
+    const now = new Date();
+    const formattedDate = now.toLocaleDateString('pt-BR');
+    
+    const updatedServices = services.map(s => {
+      if (s.id === serviceId) {
+        return {
+          ...s,
+          payment: {
+            status: 'pago',
+            method,
+            date: formattedDate
+          }
+        };
+      }
+      return s;
+    });
+    
+    setServices(updatedServices);
+    
+    toast({
+      title: "Pagamento realizado!",
+      description: `Pagamento de ${method} processado com sucesso.`,
+    });
+  };
   
   return {
     services: filteredServices,
+    data: filteredServices,
+    isLoading,
+    error,
     searchQuery,
     setSearchQuery,
-    handleTrackingAction
+    handleTrackingAction,
+    rateTechnician,
+    rateClient,
+    requestService,
+    processPayment
   };
 };

@@ -27,6 +27,8 @@ export interface Service {
     method?: string;
     date?: string;
   };
+  clientRating?: number | null;
+  technicianRating?: number | null;
 }
 
 export interface ServiceOrder {
@@ -44,4 +46,11 @@ export interface ServiceOrder {
   laborHours?: number;
   technicalReport?: string;
   clientSignature?: boolean;
+}
+
+export interface ServiceRequest {
+  type: string;
+  description: string;
+  address: string;
+  date: string;
 }

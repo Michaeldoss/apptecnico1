@@ -5,25 +5,29 @@ import { Service } from '@/types/service';
 
 interface TrackingStatusProps {
   service: Service;
+  tracking?: any;
 }
 
-const TrackingStatus: React.FC<TrackingStatusProps> = ({ service }) => {
-  if (!service.tracking) return null;
+const TrackingStatus: React.FC<TrackingStatusProps> = ({ service, tracking }) => {
+  // Use the passed tracking prop if available, otherwise use the service's tracking
+  const trackingData = tracking || service.tracking;
   
-  if (service.tracking.checkedIn && service.tracking.checkedOut) {
+  if (!trackingData) return null;
+  
+  if (trackingData.checkedIn && trackingData.checkedOut) {
     return (
       <div className="mt-2 text-xs flex items-center text-green-600">
         <CheckCircle className="h-3 w-3 mr-1" />
-        <span>Serviço finalizado em {service.tracking.checkoutTime}</span>
+        <span>Serviço finalizado em {trackingData.checkoutTime}</span>
       </div>
     );
   }
   
-  if (service.tracking.checkedIn) {
+  if (trackingData.checkedIn) {
     return (
       <div className="mt-2 text-xs flex items-center text-blue-600">
         <Clock className="h-3 w-3 mr-1" />
-        <span>Em atendimento desde {service.tracking.checkinTime}</span>
+        <span>Em atendimento desde {trackingData.checkinTime}</span>
       </div>
     );
   }

@@ -19,6 +19,11 @@ import TechnicianServiceOrder from "./pages/technician/ServiceOrder";
 import CustomerDashboard from "./pages/customer/Dashboard";
 import CustomerServices from "./pages/customer/Services";
 import CustomerServiceDetails from "./pages/customer/ServiceDetails";
+import CustomerServiceRequest from "./pages/customer/ServiceRequest";
+import CustomerPayments from "./pages/customer/Payments";
+import CustomerPaymentDetails from "./pages/customer/PaymentDetails";
+import CustomerTracking from "./pages/customer/Tracking";
+import CustomerServiceOrders from "./pages/customer/ServiceOrders";
 import Store from "./pages/Store";
 import CompanyRegister from "./pages/store/CompanyRegister";
 import About from "./pages/About";
@@ -112,6 +117,36 @@ const AppRoutes = () => (
     <Route path="/cliente/servicos/:id" element={
       <ProtectedCustomerRoute>
         <CustomerServiceDetails />
+      </ProtectedCustomerRoute>
+    } />
+    <Route path="/cliente/solicitar" element={
+      <ProtectedCustomerRoute>
+        <CustomerServiceRequest />
+      </ProtectedCustomerRoute>
+    } />
+    <Route path="/cliente/rastreamento" element={
+      <ProtectedCustomerRoute>
+        <CustomerTracking />
+      </ProtectedCustomerRoute>
+    } />
+    <Route path="/cliente/rastreamento/:id" element={
+      <ProtectedCustomerRoute>
+        <CustomerTracking />
+      </ProtectedCustomerRoute>
+    } />
+    <Route path="/cliente/pagamentos" element={
+      <ProtectedCustomerRoute>
+        <CustomerPayments />
+      </ProtectedCustomerRoute>
+    } />
+    <Route path="/cliente/pagamentos/:id" element={
+      <ProtectedCustomerRoute>
+        <CustomerPaymentDetails />
+      </ProtectedCustomerRoute>
+    } />
+    <Route path="/cliente/ordens" element={
+      <ProtectedCustomerRoute>
+        <CustomerServiceOrders />
       </ProtectedCustomerRoute>
     } />
     
