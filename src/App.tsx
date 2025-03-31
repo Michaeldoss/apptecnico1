@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -25,6 +24,7 @@ import CustomerPaymentDetails from "./pages/customer/PaymentDetails";
 import CustomerTracking from "./pages/customer/Tracking";
 import CustomerServiceOrders from "./pages/customer/ServiceOrders";
 import CustomerEquipment from "./pages/customer/Equipment";
+import CustomerProfile from "./pages/customer/Profile";
 import Store from "./pages/Store";
 import CompanyRegister from "./pages/store/CompanyRegister";
 import About from "./pages/About";
@@ -139,6 +139,11 @@ const AppRoutes = () => (
     <Route path="/cliente/equipamentos" element={
       <ProtectedCustomerRoute>
         <CustomerEquipment />
+      </ProtectedCustomerRoute>
+    } />
+    <Route path="/cliente/perfil" element={
+      <ProtectedCustomerRoute>
+        <CustomerProfile />
       </ProtectedCustomerRoute>
     } />
     <Route path="/cliente/rastreamento" element={
