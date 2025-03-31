@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Menu, X, User, LogOut } from "lucide-react";
+import { Menu, X, User, LogOut, LayoutDashboard, Wrench, FileText } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuth } from "@/context/AuthContext";
 import {
@@ -95,13 +95,33 @@ const Navbar = () => {
                     {userType === 'technician' && (
                       <>
                         <DropdownMenuItem onClick={() => navigate('/tecnico/painel')}>
+                          <LayoutDashboard size={16} className="mr-2" />
                           Painel do Técnico
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => navigate('/tecnico/perfil')}>
+                          <User size={16} className="mr-2" />
                           Meu Perfil
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => navigate('/tecnico/servicos')}>
+                          <Wrench size={16} className="mr-2" />
                           Serviços
+                        </DropdownMenuItem>
+                      </>
+                    )}
+                    
+                    {userType === 'customer' && (
+                      <>
+                        <DropdownMenuItem onClick={() => navigate('/cliente/painel')}>
+                          <LayoutDashboard size={16} className="mr-2" />
+                          Meu Painel
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => navigate('/cliente/servicos')}>
+                          <Wrench size={16} className="mr-2" />
+                          Meus Serviços
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => navigate('/cliente/ordens')}>
+                          <FileText size={16} className="mr-2" />
+                          Ordens de Serviço
                         </DropdownMenuItem>
                       </>
                     )}
@@ -202,6 +222,15 @@ const Navbar = () => {
                         </Button>
                       </Link>
                     )}
+                    
+                    {userType === 'customer' && (
+                      <Link to="/cliente/painel" onClick={toggleMenu}>
+                        <Button variant="outline" className="w-full">
+                          Painel do Cliente
+                        </Button>
+                      </Link>
+                    )}
+                    
                     <Button onClick={handleLogout} variant="destructive" className="w-full">
                       <LogOut size={16} className="mr-2" />
                       Sair

@@ -26,6 +26,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<any | null>(null);
   const [userType, setUserType] = useState<UserType>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // Verificar se o usuário está logado ao carregar a aplicação
@@ -38,8 +39,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setIsAuthenticated(true);
       } catch (error) {
         console.error('Erro ao carregar dados do usuário:', error);
+        localStorage.removeItem('techSupportUser');
       }
     }
+    setIsLoading(false);
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
@@ -57,6 +60,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       );
 
       if (foundUser) {
+        // Simular um pequeno atraso para dar feedback visual
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
         // Remover senha antes de armazenar
         const { password: _, ...userWithoutPassword } = foundUser;
         
@@ -103,6 +109,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       description: "Você saiu da sua conta.",
     });
   };
+
+  if (isLoading) {
+    return null; // ou um componente de carregamento
+  }
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, userType, user, login, logout }}>

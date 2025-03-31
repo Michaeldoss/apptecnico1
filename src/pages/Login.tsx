@@ -24,7 +24,7 @@ const Login = () => {
       if (userType === 'technician') {
         navigate('/tecnico/painel');
       } else if (userType === 'customer') {
-        navigate('/');
+        navigate('/cliente/painel');
       } else if (userType === 'admin') {
         navigate('/admin');
       }

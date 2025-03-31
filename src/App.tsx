@@ -63,6 +63,17 @@ const ProtectedCustomerRoute = ({ children }: { children: React.ReactNode }) => 
   return <>{children}</>;
 };
 
+// Componente de logout
+const LogoutRoute = () => {
+  const { logout } = useAuth();
+  
+  React.useEffect(() => {
+    logout();
+  }, [logout]);
+  
+  return <Navigate to="/" replace />;
+};
+
 const AppRoutes = () => (
   <Routes>
     <Route path="/" element={<Index />} />
@@ -164,7 +175,7 @@ const AppRoutes = () => (
     
     {/* Rotas de redirecionamento */}
     <Route path="/services" element={<Navigate to="/technician" replace />} />
-    <Route path="/logout" element={<Navigate to="/" replace />} />
+    <Route path="/logout" element={<LogoutRoute />} />
     
     {/* Rota genérica "*" */}
     <Route path="*" element={<NotFound />} />
