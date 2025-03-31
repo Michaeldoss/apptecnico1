@@ -3,7 +3,9 @@ import React from 'react';
 import { Star } from 'lucide-react';
 
 export interface RatingStarsProps {
-  rating: number;
+  rating?: number;
+  initialRating?: number;
+  onChange?: (rating: number) => void;
   onRate?: (rating: number) => void;
   readOnly?: boolean;
   size?: number;
@@ -11,15 +13,24 @@ export interface RatingStarsProps {
 
 const RatingStars: React.FC<RatingStarsProps> = ({ 
   rating = 0, 
+  initialRating,
+  onChange,
   onRate, 
   readOnly = false,
   size = 20
 }) => {
+  // Use initialRating if provided, otherwise fall back to rating
+  const effectiveRating = initialRating !== undefined ? initialRating : rating;
   const stars = Array.from({ length: 5 }, (_, i) => i + 1);
 
   const handleClick = (star: number) => {
-    if (!readOnly && onRate) {
-      onRate(star);
+    if (!readOnly) {
+      if (onChange) {
+        onChange(star);
+      }
+      if (onRate) {
+        onRate(star);
+      }
     }
   };
 
@@ -30,7 +41,7 @@ const RatingStars: React.FC<RatingStarsProps> = ({
           key={star}
           size={size}
           className={`cursor-pointer transition-colors ${
-            star <= rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'
+            star <= effectiveRating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'
           } ${!readOnly ? 'hover:text-yellow-400' : ''}`}
           onClick={() => handleClick(star)}
         />

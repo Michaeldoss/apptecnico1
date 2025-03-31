@@ -39,7 +39,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, onShowTrackingDialog
             <span>•</span>
             <span className="font-medium">{service.price}</span>
           </div>
-          <TrackingStatus service={service} />
+          {service.tracking && <TrackingStatus tracking={service.tracking} />}
         </div>
         <div>
           <DropdownMenu>

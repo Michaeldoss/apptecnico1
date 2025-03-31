@@ -89,7 +89,7 @@ const CustomerServiceDetails = () => {
             {service.tracking && (
               <div>
                 <h4 className="text-sm font-medium mb-1">Status do Atendimento</h4>
-                <TrackingStatus service={service} />
+                <TrackingStatus tracking={service.tracking} />
               </div>
             )}
             

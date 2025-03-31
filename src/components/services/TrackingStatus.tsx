@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Check, Clock, Truck, Tools, ThumbsUp } from 'lucide-react';
+import { Check, Clock, Truck, Wrench, ThumbsUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ServiceTracking } from '@/types/service';
 
@@ -12,17 +12,16 @@ export interface TrackingStatusProps {
 const TrackingStatus: React.FC<TrackingStatusProps> = ({ tracking, service }) => {
   // Status do rastreamento
   const statuses = [
-    { key: 'received', label: 'Recebido', icon: Clock, date: tracking.receivedAt },
-    { key: 'inProgress', label: 'Em Andamento', icon: Tools, date: tracking.inProgressAt },
-    { key: 'shipped', label: 'Enviado', icon: Truck, date: tracking.shippedAt },
-    { key: 'delivered', label: 'Entregue', icon: ThumbsUp, date: tracking.deliveredAt },
+    { key: 'received', label: 'Recebido', icon: Clock, date: tracking.checkinTime },
+    { key: 'inProgress', label: 'Em Andamento', icon: Wrench, date: tracking.checkinTime },
+    { key: 'shipped', label: 'Enviado', icon: Truck, date: tracking.checkoutTime },
+    { key: 'delivered', label: 'Entregue', icon: ThumbsUp, date: tracking.checkoutTime },
   ];
 
   // Encontrar o índice do status atual
   const getCurrentStatusIndex = () => {
-    if (tracking.deliveredAt) return 3;
-    if (tracking.shippedAt) return 2;
-    if (tracking.inProgressAt) return 1;
+    if (tracking.checkedOut) return 3;
+    if (tracking.checkedIn && !tracking.checkedOut) return 1;
     return 0;
   };
 
