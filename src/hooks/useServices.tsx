@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { toast } from '@/hooks/use-toast';
-import { Service, ServiceStatus } from '@/types/service';
+import { Service, ServiceStatus, PaymentStatus } from '@/types/service';
 
 // Mock data - in a real app, this would come from an API
 const mockServices: Service[] = [
@@ -244,7 +244,7 @@ export const useServices = () => {
         return {
           ...s,
           payment: {
-            status: 'pago',
+            status: 'pago' as PaymentStatus,
             method,
             date: formattedDate
           }

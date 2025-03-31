@@ -11,7 +11,8 @@ import {
   CreditCard, 
   User,
   LogOut,
-  FileText
+  FileText,
+  Printer
 } from 'lucide-react';
 
 type SidebarItemProps = {
@@ -66,6 +67,13 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
               active={path.startsWith('/cliente/servicos')}
             >
               Meus Serviços
+            </SidebarItem>
+            <SidebarItem 
+              to="/cliente/equipamentos" 
+              icon={Printer} 
+              active={path.startsWith('/cliente/equipamentos')}
+            >
+              Meus Equipamentos
             </SidebarItem>
             <SidebarItem 
               to="/cliente/rastreamento" 

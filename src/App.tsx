@@ -24,6 +24,7 @@ import CustomerPayments from "./pages/customer/Payments";
 import CustomerPaymentDetails from "./pages/customer/PaymentDetails";
 import CustomerTracking from "./pages/customer/Tracking";
 import CustomerServiceOrders from "./pages/customer/ServiceOrders";
+import CustomerEquipment from "./pages/customer/Equipment";
 import Store from "./pages/Store";
 import CompanyRegister from "./pages/store/CompanyRegister";
 import About from "./pages/About";
@@ -122,6 +123,11 @@ const AppRoutes = () => (
     <Route path="/cliente/solicitar" element={
       <ProtectedCustomerRoute>
         <CustomerServiceRequest />
+      </ProtectedCustomerRoute>
+    } />
+    <Route path="/cliente/equipamentos" element={
+      <ProtectedCustomerRoute>
+        <CustomerEquipment />
       </ProtectedCustomerRoute>
     } />
     <Route path="/cliente/rastreamento" element={
