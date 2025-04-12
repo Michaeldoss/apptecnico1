@@ -10,27 +10,40 @@ import {
   Wrench, 
   Package, 
   Calendar, 
-  LogOut 
+  LogOut,
+  MessageSquare 
 } from 'lucide-react';
+import { useNotifications } from '@/hooks/useNotifications';
+import { Badge } from '@/components/ui/badge';
 
 type SidebarItemProps = {
   to: string;
   icon: React.ElementType;
   children: ReactNode;
   active?: boolean;
+  badge?: number;
 };
 
-const SidebarItem = ({ to, icon: Icon, children, active }: SidebarItemProps) => {
+const SidebarItem = ({ to, icon: Icon, children, active, badge }: SidebarItemProps) => {
   return (
     <Link
       to={to}
       className={cn(
-        "flex items-center gap-3 rounded-lg px-3 py-2 text-base transition-all hover:bg-primary-foreground",
+        "flex items-center gap-3 rounded-lg px-3 py-2 text-base transition-all hover:bg-primary-foreground relative",
         active ? "bg-primary-foreground text-primary font-medium" : "text-muted-foreground"
       )}
     >
       <Icon className="h-5 w-5" />
       <span>{children}</span>
+      
+      {badge && badge > 0 && (
+        <Badge 
+          className="absolute right-2 bg-primary text-primary-foreground" 
+          variant="outline"
+        >
+          {badge}
+        </Badge>
+      )}
     </Link>
   );
 };
@@ -43,6 +56,7 @@ type TechnicianLayoutProps = {
 const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) => {
   const location = useLocation();
   const path = location.pathname;
+  const { unreadCount } = useNotifications();
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -72,6 +86,14 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
               active={path === '/tecnico/servicos'}
             >
               Serviços
+            </SidebarItem>
+            <SidebarItem 
+              to="/tecnico/chat" 
+              icon={MessageSquare} 
+              active={path === '/tecnico/chat'}
+              badge={unreadCount}
+            >
+              Mensagens
             </SidebarItem>
             <SidebarItem 
               to="/tecnico/pecas" 

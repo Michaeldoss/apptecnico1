@@ -15,6 +15,7 @@ import TechnicianParts from "./pages/technician/Parts";
 import TechnicianSchedule from "./pages/technician/Schedule";
 import TechnicianLanding from "./pages/technician/Landing";
 import TechnicianServiceOrder from "./pages/technician/ServiceOrder";
+import TechnicianChat from "./pages/technician/Chat";
 import CustomerDashboard from "./pages/customer/Dashboard";
 import CustomerServices from "./pages/customer/Services";
 import CustomerServiceDetails from "./pages/customer/ServiceDetails";
@@ -93,6 +94,14 @@ const App = () => (
               element={
                 <ProtectedRoute requiredUserType="technician">
                   <TechnicianServices />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/tecnico/chat" 
+              element={
+                <ProtectedRoute requiredUserType="technician">
+                  <TechnicianChat />
                 </ProtectedRoute>
               } 
             />
