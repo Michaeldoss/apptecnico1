@@ -29,6 +29,7 @@ import Store from "./pages/Store";
 import CompanyRegister from "./pages/store/CompanyRegister";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import FindTechnician from "./pages/FindTechnician";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 
 const queryClient = new QueryClient();
@@ -63,6 +64,7 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/technician" element={<TechnicianLanding />} />
+            <Route path="/find-technician" element={<FindTechnician />} />
             <Route path="/store" element={<Store />} />
             <Route path="/store/company-register" element={<CompanyRegister />} />
             <Route path="/about" element={<About />} />
@@ -226,7 +228,6 @@ const App = () => (
   </QueryClientProvider>
 );
 
-// Componente de logout
 const LogoutRoute = () => {
   const { logout } = useAuth();
   
