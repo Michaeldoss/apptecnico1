@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -18,7 +17,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { useTechnicianSearch } from '@/hooks/useTechnicianSearch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BlurContainer } from '@/components/ui/BlurContainer';
+import BlurContainer from '@/components/ui/BlurContainer';
 
 const FindTechnician = () => {
   const { isAuthenticated } = useAuth();
