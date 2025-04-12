@@ -1,154 +1,217 @@
 
 import React from 'react';
-import Hero from '@/components/home/Hero';
-import Features from '@/components/home/Features';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import AnimatedContainer from '@/components/ui/AnimatedContainer';
-import BlurContainer from '@/components/ui/BlurContainer';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { 
+  User, 
+  Wrench, 
+  Search, 
+  MessageSquare, 
+  ShieldCheck, 
+  CreditCard,
+  ArrowRight
+} from 'lucide-react';
+import { Card } from '@/components/ui/card';
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-background to-accent/10">
       <Navbar />
       
       <main className="flex-grow">
-        <Hero />
-        <Features />
+        {/* Hero Section - Simplified & Futuristic */}
+        <section className="relative py-20 overflow-hidden">
+          <div className="container px-4 mx-auto relative z-10">
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <motion.div 
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+                className="space-y-6"
+              >
+                <span className="inline-block px-3 py-1 text-xs font-medium bg-primary/10 text-primary rounded-full">
+                  Suporte Técnico Inteligente
+                </span>
+                <h1 className="text-4xl md:text-5xl font-bold leading-tight">
+                  Conecte-se com <span className="text-primary">especialistas técnicos</span> instantaneamente
+                </h1>
+                <p className="text-lg text-muted-foreground">
+                  Plataforma avançada para conectar técnicos qualificados e clientes para serviços especializados em equipamentos industriais.
+                </p>
+                <div className="flex flex-wrap gap-4 pt-2">
+                  <Link to="/register">
+                    <Button size="lg" className="rounded-full">
+                      Comece Agora
+                    </Button>
+                  </Link>
+                  <Link to="/technician">
+                    <Button size="lg" variant="outline" className="rounded-full">
+                      Para Técnicos
+                    </Button>
+                  </Link>
+                </div>
+              </motion.div>
+              
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="relative"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-3xl blur-3xl"></div>
+                <div className="relative bg-black/5 backdrop-blur-xl rounded-3xl border border-white/10 p-6 shadow-xl">
+                  <div className="grid grid-cols-2 gap-4">
+                    {[
+                      { icon: <Wrench className="h-6 w-6 text-primary" />, title: "Manutenção Especializada" },
+                      { icon: <Search className="h-6 w-6 text-primary" />, title: "Busca Inteligente" },
+                      { icon: <ShieldCheck className="h-6 w-6 text-primary" />, title: "Técnicos Verificados" },
+                      { icon: <CreditCard className="h-6 w-6 text-primary" />, title: "Pagamento Seguro" }
+                    ].map((feature, index) => (
+                      <Card key={index} className="p-4 hover:bg-white/5 transition-all duration-300 backdrop-blur-md border border-white/10">
+                        <div className="flex flex-col items-center text-center gap-2">
+                          <div className="bg-primary/10 p-3 rounded-full">
+                            {feature.icon}
+                          </div>
+                          <h3 className="font-medium text-sm">{feature.title}</h3>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </section>
         
-        {/* Seção Como Funciona */}
-        <section className="py-20 px-6 bg-accent/30">
-          <div className="max-w-7xl mx-auto">
-            <AnimatedContainer animation="slide-up" className="text-center mb-16">
+        {/* Quick Access Section */}
+        <section className="py-16 bg-black/5 backdrop-blur-md">
+          <div className="container px-4 mx-auto">
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
+              className="text-2xl md:text-3xl font-bold text-center mb-12"
+            >
+              Acesso Rápido às Funções
+            </motion.h2>
+            
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
+              {[
+                { icon: <User className="h-6 w-6" />, title: "Perfil", path: "/cliente/perfil" },
+                { icon: <Wrench className="h-6 w-6" />, title: "Serviços", path: "/cliente/servicos" },
+                { icon: <MessageSquare className="h-6 w-6" />, title: "Chat", path: "/cliente/chat" },
+                { icon: <CreditCard className="h-6 w-6" />, title: "Pagamentos", path: "/cliente/pagamentos" },
+                { icon: <Search className="h-6 w-6" />, title: "Encontrar Técnico", path: "/find-technician" },
+                { icon: <ShieldCheck className="h-6 w-6" />, title: "Suporte", path: "/contact" },
+              ].map((item, index) => (
+                <Link to={item.path} key={index}>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                    viewport={{ once: true }}
+                    className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4 flex flex-col items-center justify-center gap-3 text-center hover:bg-primary/5 hover:border-primary/20 transition-all duration-300 h-32"
+                  >
+                    <div className="bg-primary/10 p-3 rounded-full">
+                      {item.icon}
+                    </div>
+                    <span className="font-medium text-sm">{item.title}</span>
+                  </motion.div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+        
+        {/* How It Works - Simplified */}
+        <section className="py-16">
+          <div className="container px-4 mx-auto">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
+              className="text-center mb-12"
+            >
               <span className="inline-block px-3 py-1 text-xs font-medium bg-primary/10 text-primary rounded-full mb-3">
                 Processo Simples
               </span>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">Como Funciona</h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto">
-                Nossa plataforma simplifica o processo de encontrar e conectar-se com especialistas técnicos em apenas alguns passos simples.
-              </p>
-            </AnimatedContainer>
+              <h2 className="text-2xl md:text-3xl font-bold">Como Funciona</h2>
+            </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="flex flex-col md:flex-row gap-6 md:gap-0 justify-between max-w-4xl mx-auto">
               {[
                 {
-                  step: '01',
-                  title: 'Solicite o Serviço',
-                  description: 'Selecione o tipo de serviço que você precisa e forneça detalhes sobre seu problema.',
-                  delay: 300
+                  step: "01",
+                  title: "Solicite o Serviço",
+                  description: "Escolha o tipo de serviço necessário"
                 },
                 {
-                  step: '02',
-                  title: 'Encontre um Técnico',
-                  description: 'Seja conectado com técnicos qualificados em sua área prontos para ajudar.',
-                  delay: 500
+                  step: "02",
+                  title: "Encontre um Técnico",
+                  description: "Conecte-se com especialistas qualificados"
                 },
                 {
-                  step: '03',
-                  title: 'Problema Resolvido',
-                  description: 'Receba o serviço, faça o pagamento seguro e deixe uma avaliação.',
-                  delay: 700
+                  step: "03",
+                  title: "Problema Resolvido",
+                  description: "Receba o serviço e faça o pagamento"
                 }
-              ].map((item) => (
-                <AnimatedContainer key={item.step} animation="slide-up" delay={item.delay} className="relative">
-                  <BlurContainer className="p-8 h-full hover-scale">
-                    <span className="text-5xl font-bold text-primary/20 absolute -top-3 -left-3">
-                      {item.step}
-                    </span>
-                    <h3 className="text-xl font-semibold mb-4 mt-4">{item.title}</h3>
-                    <p className="text-muted-foreground">{item.description}</p>
-                  </BlurContainer>
-                </AnimatedContainer>
+              ].map((item, index) => (
+                <motion.div 
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.2 }}
+                  viewport={{ once: true }}
+                  className="relative flex flex-col items-center text-center"
+                >
+                  <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-xl font-bold mb-4">
+                    {item.step}
+                  </div>
+                  <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
+                  <p className="text-sm text-muted-foreground max-w-xs">{item.description}</p>
+                  
+                  {index < 2 && (
+                    <div className="hidden md:block absolute top-8 left-[calc(100%-1rem)] w-[calc(100%-2rem)] h-[2px] bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
+                  )}
+                </motion.div>
               ))}
             </div>
           </div>
         </section>
         
-        {/* Seção Depoimentos */}
-        <section className="py-20 px-6 bg-background">
-          <div className="max-w-7xl mx-auto">
-            <AnimatedContainer animation="slide-up" className="text-center mb-16">
-              <span className="inline-block px-3 py-1 text-xs font-medium bg-primary/10 text-primary rounded-full mb-3">
-                Depoimentos
-              </span>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">O Que Nossos Usuários Dizem</h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto">
-                Ouça o que dizem clientes satisfeitos e técnicos qualificados que usam nossa plataforma todos os dias.
-              </p>
-            </AnimatedContainer>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[
-                {
-                  name: 'Emma Rodriguez',
-                  role: 'Cliente',
-                  quote: 'Encontrei um técnico especialista em minutos. O serviço foi rápido e o problema foi resolvido na primeira visita.',
-                  delay: 300
-                },
-                {
-                  name: 'Michael Chen',
-                  role: 'Técnico Especialista',
-                  quote: 'Esta plataforma mudou completamente a forma como encontro novos clientes. Os sistemas de agendamento e pagamento são perfeitos.',
-                  delay: 500
-                },
-                {
-                  name: 'Sarah Johnson',
-                  role: 'Proprietária de Empresa',
-                  quote: 'Gerenciar nossa equipe de técnicos ficou muito mais fácil agora. Os recursos de rastreamento e relatórios nos economizam horas todas as semanas.',
-                  delay: 700
-                }
-              ].map((testimonial, index) => (
-                <AnimatedContainer key={index} animation="scale" delay={testimonial.delay}>
-                  <BlurContainer className="p-6 h-full hover-scale">
-                    <div className="flex flex-col h-full">
-                      <div className="mb-4">
-                        <svg className="h-6 w-6 text-primary" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                        </svg>
-                      </div>
-                      <p className="flex-grow text-muted-foreground mb-6">{testimonial.quote}</p>
-                      <div className="flex items-center mt-auto">
-                        <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                          <span className="text-primary font-medium">{testimonial.name.charAt(0)}</span>
-                        </div>
-                        <div className="ml-3">
-                          <h4 className="font-medium">{testimonial.name}</h4>
-                          <p className="text-sm text-muted-foreground">{testimonial.role}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </BlurContainer>
-                </AnimatedContainer>
-              ))}
-            </div>
-          </div>
-        </section>
-        
-        {/* Seção CTA */}
-        <section className="py-20 px-6 bg-primary/5">
-          <AnimatedContainer animation="scale" className="max-w-5xl mx-auto text-center">
-            <BlurContainer className="p-12 md:p-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">Pronto para Começar?</h2>
+        {/* CTA Section */}
+        <section className="py-16">
+          <div className="container px-4 mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
+              className="bg-gradient-to-br from-primary/5 to-secondary/5 backdrop-blur-md border border-white/10 rounded-2xl p-8 md:p-12 text-center max-w-4xl mx-auto"
+            >
+              <h2 className="text-2xl md:text-3xl font-bold mb-4">Pronto para Começar?</h2>
               <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Junte-se a milhares de usuários e técnicos satisfeitos em nossa plataforma. 
-                Registre-se hoje e experimente suporte técnico sem complicações.
+                Conecte-se com técnicos especializados em equipamentos industriais
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex flex-wrap gap-4 justify-center">
                 <Link to="/register">
-                  <Button size="lg" className="rounded-full text-base">
-                    Cadastre-se Agora
+                  <Button className="rounded-full gap-2">
+                    Criar Conta <ArrowRight className="h-4 w-4" />
                   </Button>
                 </Link>
-                <Link to="/contact">
-                  <Button size="lg" variant="outline" className="rounded-full text-base">
-                    Fale com Vendas
+                <Link to="/find-technician">
+                  <Button variant="outline" className="rounded-full">
+                    Encontrar Técnico
                   </Button>
                 </Link>
               </div>
-            </BlurContainer>
-          </AnimatedContainer>
+            </motion.div>
+          </div>
         </section>
       </main>
       
