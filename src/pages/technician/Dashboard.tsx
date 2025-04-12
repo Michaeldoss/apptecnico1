@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { AlertCircle, CheckCircle, Clock, DollarSign, MessageSquare } from 'lucide-react';
 import { useChat } from '@/hooks/useChat';
 import { useNotifications } from '@/hooks/useNotifications';
-import { ChatMessage } from '@/components/chat/ChatMessage';
+import ChatMessage from '@/components/chat/ChatMessage';
 import { useAuth } from '@/context/AuthContext';
 
 const TechnicianDashboard = () => {
