@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -11,13 +12,19 @@ import {
   CardTitle 
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { MapPin, Search, Filter, Star, ArrowRight, AlertCircle } from 'lucide-react';
+import { MapPin, Search, Filter, Star, ArrowRight, AlertCircle, Printer, Scissors } from 'lucide-react';
 import TechnicianMap from '@/components/maps/TechnicianMap';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { useTechnicianSearch } from '@/hooks/useTechnicianSearch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import BlurContainer from '@/components/ui/BlurContainer';
+
+const equipmentCategories = [
+  { id: 'printers', label: 'Plotters', icon: <Printer className="h-4 w-4 mr-2" /> },
+  { id: 'finishing', label: 'Acabamento', icon: <Scissors className="h-4 w-4 mr-2" /> },
+  { id: 'cnc', label: 'Máquinas CNC', icon: <Wrench className="h-4 w-4 mr-2" /> },
+];
 
 const FindTechnician = () => {
   const { isAuthenticated } = useAuth();
@@ -33,6 +40,7 @@ const FindTechnician = () => {
     filterByService,
     setFilterByService
   } = useTechnicianSearch();
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const handleContactRequest = (technicianId: number) => {
     if (!isAuthenticated) {
@@ -47,6 +55,34 @@ const FindTechnician = () => {
     }
   };
 
+  // Filter technicians by category if selected
+  const filteredTechnicians = selectedCategory 
+    ? technicians.filter(tech => {
+        if (selectedCategory === 'printers') {
+          return tech.specialties.some(s => 
+            s.includes('plotter') || 
+            s.includes('impressora') || 
+            s.includes('impressão')
+          );
+        } else if (selectedCategory === 'finishing') {
+          return tech.specialties.some(s => 
+            s.includes('calandra') || 
+            s.includes('prensa') || 
+            s.includes('carrossel') || 
+            s.includes('costura')
+          );
+        } else if (selectedCategory === 'cnc') {
+          return tech.specialties.some(s => 
+            s.includes('cnc') || 
+            s.includes('router') || 
+            s.includes('laser') || 
+            s.includes('gravadora')
+          );
+        }
+        return true;
+      })
+    : technicians;
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -55,8 +91,8 @@ const FindTechnician = () => {
           <Link to="/" className="flex items-center mb-6">
             <span className="text-2xl font-bold">AssistAnywhere</span>
           </Link>
-          <h1 className="text-3xl font-bold mb-2">Encontre Técnicos na sua Região</h1>
-          <p className="text-lg opacity-90 mb-6">Localize profissionais qualificados perto de você</p>
+          <h1 className="text-3xl font-bold mb-2">Encontre Técnicos Especializados</h1>
+          <p className="text-lg opacity-90 mb-6">Localize profissionais qualificados para seus equipamentos</p>
           
           {/* Search Bar */}
           <div className="flex flex-col md:flex-row gap-2">
@@ -64,7 +100,7 @@ const FindTechnician = () => {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <Input 
                 type="text" 
-                placeholder="Buscar por tipo de serviço (ex: Computador, Impressora)" 
+                placeholder="Buscar por tipo de equipamento" 
                 value={filterByService}
                 onChange={(e) => setFilterByService(e.target.value)}
                 className="pl-10 bg-white text-black w-full"
@@ -88,6 +124,31 @@ const FindTechnician = () => {
         </div>
       </header>
 
+      {/* Equipment Categories Filter */}
+      <div className="container mx-auto px-4 py-4">
+        <div className="flex flex-wrap gap-2">
+          <Button 
+            variant={selectedCategory === null ? "default" : "outline"}
+            size="sm"
+            onClick={() => setSelectedCategory(null)}
+          >
+            Todos
+          </Button>
+          
+          {equipmentCategories.map(category => (
+            <Button
+              key={category.id}
+              variant={selectedCategory === category.id ? "default" : "outline"}
+              size="sm"
+              onClick={() => setSelectedCategory(category.id)}
+              className="flex items-center"
+            >
+              {category.icon} {category.label}
+            </Button>
+          ))}
+        </div>
+      </div>
+
       {/* Main Content */}
       <main className="container mx-auto p-4 md:p-6">
         <Tabs defaultValue="map" className="w-full">
@@ -102,7 +163,7 @@ const FindTechnician = () => {
               <div className="lg:col-span-2">
                 <BlurContainer className="h-[600px] rounded-xl overflow-hidden">
                   <TechnicianMap 
-                    technicians={technicians} 
+                    technicians={filteredTechnicians} 
                     selectedTechnician={selectedTechnician}
                     setSelectedTechnician={setSelectedTechnician}
                   />
@@ -226,7 +287,7 @@ const FindTechnician = () => {
                     <ul className="text-sm space-y-2">
                       <li className="flex gap-2">
                         <span className="text-primary font-bold">1.</span>
-                        <span>Encontre um técnico próximo à sua localização</span>
+                        <span>Encontre um técnico especializado em seu tipo de equipamento</span>
                       </li>
                       <li className="flex gap-2">
                         <span className="text-primary font-bold">2.</span>
@@ -257,7 +318,7 @@ const FindTechnician = () => {
           
           <TabsContent value="list">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {technicians.map((technician) => (
+              {filteredTechnicians.map((technician) => (
                 <Card 
                   key={technician.id} 
                   className={`cursor-pointer transition-all ${selectedTechnician?.id === technician.id ? 'ring-2 ring-primary' : ''}`}
@@ -317,7 +378,7 @@ const FindTechnician = () => {
               <ul className="text-sm space-y-2">
                 <li className="flex gap-2">
                   <span className="text-primary font-bold">1.</span>
-                  <span>Encontre um técnico próximo à sua localização</span>
+                  <span>Encontre um técnico especializado em seu tipo de equipamento</span>
                 </li>
                 <li className="flex gap-2">
                   <span className="text-primary font-bold">2.</span>

@@ -60,6 +60,37 @@ const mockEquipment: Equipment[] = [
     serialNumber: 'MT12309876',
     purchaseDate: '03/02/2022',
     status: 'operational'
+  },
+  {
+    id: 6,
+    name: 'Plotter UV Flexível',
+    type: 'uv-flexible',
+    model: 'UJV100-160',
+    brand: 'Mimaki',
+    serialNumber: 'MM20220307',
+    purchaseDate: '07/03/2022',
+    status: 'operational'
+  },
+  {
+    id: 7,
+    name: 'Plotter DTF Têxtil',
+    type: 'dtf-textile',
+    model: 'DTF-330',
+    brand: 'IJTP',
+    serialNumber: 'IJ202205121',
+    purchaseDate: '12/05/2022',
+    lastMaintenanceDate: '18/02/2023',
+    status: 'operational'
+  },
+  {
+    id: 8,
+    name: 'Carrossel para Seda',
+    type: 'silk-carousel',
+    model: 'SC-6/6',
+    brand: 'NS Máquinas',
+    serialNumber: 'NS76543210',
+    purchaseDate: '25/09/2021',
+    status: 'operational'
   }
 ];
 

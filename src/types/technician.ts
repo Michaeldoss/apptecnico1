@@ -13,4 +13,5 @@ export interface Technician {
   };
   availability: string[];
   photo?: string;
+  equipmentTypes?: string[]; // Added to specifically track equipment types the technician works with
 }

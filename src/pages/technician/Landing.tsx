@@ -6,7 +6,7 @@ import Footer from '@/components/layout/Footer';
 import AnimatedContainer from '@/components/ui/AnimatedContainer';
 import BlurContainer from '@/components/ui/BlurContainer';
 import { Button } from '@/components/ui/button';
-import { Wrench, CreditCard, Star, Shield, Clock } from 'lucide-react';
+import { Wrench, CreditCard, Star, Shield, Clock, Printer } from 'lucide-react';
 
 const TechnicianLanding = () => {
   return (
@@ -19,10 +19,10 @@ const TechnicianLanding = () => {
           <div className="container mx-auto text-center">
             <AnimatedContainer animation="fade" className="max-w-3xl mx-auto">
               <h1 className="text-4xl md:text-5xl font-bold mb-6">
-                Conecte-se com Clientes que Precisam dos Seus Serviços
+                Conecte-se com Clientes que Precisam dos Seus Serviços Especializados
               </h1>
               <p className="text-xl text-muted-foreground mb-8">
-                Ofereça seus serviços especializados para manutenção, instalação e reparo de equipamentos industriais.
+                Ofereça seus serviços para manutenção, instalação e reparo de equipamentos de impressão e corte industrial.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link to="/register">
@@ -40,8 +40,61 @@ const TechnicianLanding = () => {
           </div>
         </section>
         
-        {/* Benefits Section */}
+        {/* Equipment Types Section */}
         <section className="py-16 bg-muted/30">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-bold text-center mb-8">
+              Especialistas em Equipamentos para Impressão e Corte
+            </h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+              <BlurContainer className="p-6">
+                <div className="flex flex-col items-center text-center">
+                  <div className="bg-primary/10 p-3 rounded-full mb-4">
+                    <Printer className="h-8 w-8 text-primary" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">Plotters de Impressão</h3>
+                  <p className="text-muted-foreground">
+                    Eco Solvente, UV, Solvente, Sublimática, DTF Têxtil, Flatbed e mais
+                  </p>
+                </div>
+              </BlurContainer>
+              
+              <BlurContainer className="p-6">
+                <div className="flex flex-col items-center text-center">
+                  <div className="bg-primary/10 p-3 rounded-full mb-4">
+                    <Wrench className="h-8 w-8 text-primary" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">Equipamentos de Acabamento</h3>
+                  <p className="text-muted-foreground">
+                    Calandras, Prensas Térmicas, Carrosséis, e Máquinas de Costura
+                  </p>
+                </div>
+              </BlurContainer>
+              
+              <BlurContainer className="p-6">
+                <div className="flex flex-col items-center text-center">
+                  <div className="bg-primary/10 p-3 rounded-full mb-4">
+                    <Star className="h-8 w-8 text-primary" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">Máquinas CNC</h3>
+                  <p className="text-muted-foreground">
+                    CNC CO², CNC Router e Gravadoras a Laser
+                  </p>
+                </div>
+              </BlurContainer>
+            </div>
+            
+            <div className="text-center">
+              <p className="text-lg text-muted-foreground mb-6">
+                Nossa plataforma conecta técnicos especializados com clientes que precisam de serviços para equipamentos específicos de impressão e corte industrial.
+              </p>
+            </div>
+          </div>
+        </section>
+        
+        {/* Benefits Section */}
+        <section className="py-16">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-center mb-12">
               Por que se Tornar um Técnico Parceiro?
@@ -56,30 +109,6 @@ const TechnicianLanding = () => {
                   <h3 className="text-xl font-semibold mb-2">Receba por Serviço</h3>
                   <p className="text-muted-foreground">
                     Defina seus preços e receba pagamentos diretamente na sua conta bancária.
-                  </p>
-                </div>
-              </BlurContainer>
-              
-              <BlurContainer className="p-6">
-                <div className="flex flex-col items-center text-center">
-                  <div className="bg-primary/10 p-3 rounded-full mb-4">
-                    <Star className="h-8 w-8 text-primary" />
-                  </div>
-                  <h3 className="text-xl font-semibold mb-2">Construa sua Reputação</h3>
-                  <p className="text-muted-foreground">
-                    Receba avaliações dos clientes e destaque-se na plataforma.
-                  </p>
-                </div>
-              </BlurContainer>
-              
-              <BlurContainer className="p-6">
-                <div className="flex flex-col items-center text-center">
-                  <div className="bg-primary/10 p-3 rounded-full mb-4">
-                    <Wrench className="h-8 w-8 text-primary" />
-                  </div>
-                  <h3 className="text-xl font-semibold mb-2">Trabalhe com o que Você Conhece</h3>
-                  <p className="text-muted-foreground">
-                    Escolha os tipos de equipamentos com os quais você tem experiência.
                   </p>
                 </div>
               </BlurContainer>
@@ -118,7 +147,7 @@ const TechnicianLanding = () => {
               Pronto para começar?
             </h2>
             <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Junte-se à nossa rede de técnicos especializados e comece a transformar seu conhecimento em oportunidades de negócio.
+              Junte-se à nossa rede de técnicos especializados em equipamentos de impressão e corte industrial.
             </p>
             <Link to="/register">
               <Button size="lg">
