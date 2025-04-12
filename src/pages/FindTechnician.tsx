@@ -12,7 +12,7 @@ import {
   CardTitle 
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { MapPin, Search, Filter, Star, ArrowRight, AlertCircle, Printer, Scissors } from 'lucide-react';
+import { MapPin, Search, Filter, Star, ArrowRight, AlertCircle, Printer, Scissors, Wrench } from 'lucide-react';
 import TechnicianMap from '@/components/maps/TechnicianMap';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/hooks/use-toast';

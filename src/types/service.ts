@@ -19,6 +19,7 @@ export interface Service {
   date: string;
   address: string;
   price: string;
+  equipmentType?: string;  // Added this property to fix the error
   tracking?: ServiceTracking;
   clientId?: number;
   serviceOrderId?: number;
