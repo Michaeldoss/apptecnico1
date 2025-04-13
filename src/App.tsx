@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -29,6 +28,7 @@ import CustomerEquipment from "./pages/customer/Equipment";
 import CustomerProfile from "./pages/customer/Profile";
 import Store from "./pages/Store";
 import CompanyRegister from "./pages/store/CompanyRegister";
+import CompanyList from "./pages/store/CompanyList";
 import CategoryPage from "./pages/store/CategoryPage";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
@@ -70,6 +70,7 @@ const App = () => (
             <Route path="/find-technician" element={<FindTechnician />} />
             <Route path="/store" element={<Store />} />
             <Route path="/store/category/:categorySlug" element={<CategoryPage />} />
+            <Route path="/store/companies" element={<CompanyList />} />
             <Route path="/store/company-register" element={<CompanyRegister />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />

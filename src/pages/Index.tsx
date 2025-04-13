@@ -12,7 +12,9 @@ import {
   MessageSquare, 
   ShieldCheck, 
   CreditCard,
-  ArrowRight
+  ArrowRight,
+  Store as StoreIcon,
+  ShoppingBag
 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { 
@@ -75,7 +77,7 @@ const Index = () => {
                         { icon: <Wrench className="h-6 w-6 text-primary" />, title: "Manutenção Especializada", path: "/cliente/solicitar", tooltip: "Solicite serviços de manutenção" },
                         { icon: <Search className="h-6 w-6 text-primary" />, title: "Busca Inteligente", path: "/find-technician", tooltip: "Encontre técnicos na sua região" },
                         { icon: <ShieldCheck className="h-6 w-6 text-primary" />, title: "Técnicos Verificados", path: "/technician", tooltip: "Todos os técnicos são verificados" },
-                        { icon: <CreditCard className="h-6 w-6 text-primary" />, title: "Pagamento Seguro", path: "/cliente/pagamentos", tooltip: "Pagamentos seguros e garantidos" }
+                        { icon: <StoreIcon className="h-6 w-6 text-primary" />, title: "Loja de Peças", path: "/store", tooltip: "Acesse nossa loja de peças especializada" }
                       ].map((feature, index) => (
                         <Link to={feature.path} key={index}>
                           <Tooltip>
@@ -123,7 +125,7 @@ const Index = () => {
                   { icon: <Wrench className="h-6 w-6" />, title: "Serviços", path: "/cliente/servicos", tooltip: "Veja seus serviços solicitados" },
                   { icon: <MessageSquare className="h-6 w-6" />, title: "Chat", path: "/cliente/chat", tooltip: "Converse com técnicos" },
                   { icon: <CreditCard className="h-6 w-6" />, title: "Pagamentos", path: "/cliente/pagamentos", tooltip: "Gerencie seus pagamentos" },
-                  { icon: <Search className="h-6 w-6" />, title: "Encontrar Técnico", path: "/find-technician", tooltip: "Busque técnicos na sua região" },
+                  { icon: <StoreIcon className="h-6 w-6" />, title: "Loja", path: "/store", tooltip: "Acesse nossa loja de peças" },
                   { icon: <ShieldCheck className="h-6 w-6" />, title: "Suporte", path: "/contact", tooltip: "Entre em contato com o suporte" },
                 ].map((item, index) => (
                   <Link to={item.path} key={index}>
@@ -149,6 +151,70 @@ const Index = () => {
                   </Link>
                 ))}
               </TooltipProvider>
+            </div>
+          </div>
+        </section>
+        
+        {/* Store Highlight Section (New) */}
+        <section className="py-16">
+          <div className="container px-4 mx-auto">
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+                viewport={{ once: true }}
+                className="space-y-6"
+              >
+                <span className="inline-block px-3 py-1 text-xs font-medium bg-primary/10 text-primary rounded-full">
+                  Marketplace Especializado
+                </span>
+                <h2 className="text-3xl font-bold">Loja de Peças e Equipamentos</h2>
+                <p className="text-muted-foreground">
+                  Encontre peças originais e componentes para equipamentos de impressão industrial.
+                  Ofertas exclusivas de fornecedores verificados.
+                </p>
+                <div className="flex gap-4">
+                  <Link to="/store">
+                    <Button className="gap-2">
+                      Visitar Loja <ShoppingBag className="h-4 w-4" />
+                    </Button>
+                  </Link>
+                  <Link to="/store/company-register">
+                    <Button variant="outline">
+                      Cadastrar Empresa
+                    </Button>
+                  </Link>
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+                viewport={{ once: true }}
+                className="grid grid-cols-2 gap-4"
+              >
+                {[
+                  { title: "Cabeças de Impressão", description: "Peças originais para diversas marcas", link: "/store/category/cabecas-de-impressao" },
+                  { title: "Componentes", description: "Componentes especializados para manutenção", link: "/store/category/componentes-de-impressao" },
+                  { title: "Peças de Reposição", description: "Peças de alta qualidade para sua máquina", link: "/store/category/pecas-de-reposicao" },
+                  { title: "Empresas Parceiras", description: "Conheça nossos fornecedores verificados", link: "/store/companies" },
+                ].map((item, index) => (
+                  <Link to={item.link} key={index}>
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: index * 0.1 }}
+                      viewport={{ once: true }}
+                      className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-4 hover:bg-primary/5 hover:border-primary/20 transition-all duration-300"
+                    >
+                      <h3 className="font-semibold mb-1">{item.title}</h3>
+                      <p className="text-xs text-muted-foreground">{item.description}</p>
+                    </motion.div>
+                  </Link>
+                ))}
+              </motion.div>
             </div>
           </div>
         </section>

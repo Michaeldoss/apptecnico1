@@ -1,210 +1,338 @@
 
-import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import React, { useState } from 'react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { Button } from '@/components/ui/button';
-import AnimatedContainer from '@/components/ui/AnimatedContainer';
-import { ShoppingBag, Building2, Package, Truck, Search, Filter } from 'lucide-react';
-import { ProductCategory } from '@/types/product';
-import CategoryList from '@/components/store/CategoryList';
-import ProductList from '@/components/store/ProductList';
-import { products, getUniqueCategories, getProductCountByCategory, getProductsByCategory } from '@/data/products';
 import { Input } from '@/components/ui/input';
+import { getUniqueCategories, getProductCountByCategory, products } from '@/data/products';
+import { Printer, ArrowRight, Store as StoreIcon, Search, Package, Star } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { formatCurrency } from '@/lib/format';
+import AnimatedContainer from '@/components/ui/AnimatedContainer';
+import CategoryList from '@/components/store/CategoryList';
+import { Badge } from '@/components/ui/badge';
+import { 
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious 
+} from '@/components/ui/carousel';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+
+// Sample promotions data - in a real app, this would come from an API or database
+const promotions = [
+  {
+    id: 1,
+    title: "50% OFF em Cabeças de Impressão",
+    description: "Desconto especial em cabeças de impressão selecionadas. Válido até o fim do mês!",
+    image: "/placeholder.svg",
+    link: "/store/category/cabecas-de-impressao"
+  },
+  {
+    id: 2,
+    title: "Componentes de Impressão em Oferta",
+    description: "Compre 3 e leve 4 em componentes selecionados. Aproveite enquanto durar o estoque!",
+    image: "/placeholder.svg",
+    link: "/store/category/componentes-de-impressao"
+  },
+  {
+    id: 3,
+    title: "Cadastre sua Empresa",
+    description: "Quer vender peças e equipamentos na nossa plataforma? Cadastre sua empresa agora!",
+    image: "/placeholder.svg",
+    link: "/store/company-register"
+  }
+];
+
+// Sample featured companies - in a real app, this would come from an API or database
+const featuredCompanies = [
+  {
+    id: 1,
+    name: "TechPrint Solutions",
+    description: "Especialista em equipamentos de impressão digital",
+    rating: 4.9,
+    image: "/placeholder.svg",
+    products: 124
+  },
+  {
+    id: 2,
+    name: "Doss Group",
+    description: "Peças originais para impressoras industriais",
+    rating: 4.8,
+    image: "/placeholder.svg",
+    products: 87
+  },
+  {
+    id: 3,
+    name: "PrintMax",
+    description: "Soluções completas para o mercado gráfico",
+    rating: 4.7,
+    image: "/placeholder.svg",
+    products: 156
+  },
+  {
+    id: 4,
+    name: "InkTech Brasil",
+    description: "Tintas e suprimentos para impressão em grande formato",
+    rating: 4.6,
+    image: "/placeholder.svg",
+    products: 93
+  }
+];
 
 const Store = () => {
-  const { categorySlug } = useParams<{ categorySlug?: string }>();
   const [searchTerm, setSearchTerm] = useState('');
-  const [filteredProducts, setFilteredProducts] = useState(products);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   
-  // Define categories with their counts and descriptions
-  const categories: ProductCategory[] = [
-    {
-      name: "Cabeças de Impressão",
-      slug: "cabecas-de-impressao",
-      description: "Cabeças de impressão para diversos modelos de impressoras",
-      count: getProductCountByCategory("Cabeças de Impressão"),
-      icon: <Package className="h-8 w-8 text-primary" />,
-    },
-    {
-      name: "Componentes de Impressão",
-      slug: "componentes-de-impressao",
-      description: "Dampers, bulks e outros componentes de impressão",
-      count: getProductCountByCategory("Componentes de Impressão"),
-      icon: <ShoppingBag className="h-8 w-8 text-primary" />,
-    },
-    {
-      name: "Peças de Reposição",
-      slug: "pecas-de-reposicao",
-      description: "Peças e componentes para manutenção de equipamentos",
-      count: getProductCountByCategory("Peças de Reposição"),
-      icon: <Truck className="h-8 w-8 text-primary" />,
-    }
-  ];
-  
-  // Filter products based on search term and/or category
-  useEffect(() => {
-    let filtered = products;
+  // Get unique categories and convert to the correct format for the CategoryList component
+  const categories = getUniqueCategories().map(categoryName => {
+    // Create a slug from the category name
+    const slug = categoryName
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^\w\s]/g, '')
+      .replace(/\s+/g, '-');
     
-    // Filter by category if selected
-    if (selectedCategory) {
-      filtered = filtered.filter(product => product.categoria === selectedCategory);
+    const count = getProductCountByCategory(categoryName);
+    
+    // Map category name to icon
+    let icon;
+    switch(categoryName) {
+      case 'Cabeças de Impressão':
+        icon = <Printer className="h-6 w-6" />;
+        break;
+      case 'Componentes de Impressão':
+        icon = <Package className="h-6 w-6" />;
+        break;
+      default:
+        icon = <StoreIcon className="h-6 w-6" />;
     }
     
-    // Apply search filter if there's a search term
-    if (searchTerm.trim() !== '') {
-      const searchLower = searchTerm.toLowerCase();
-      filtered = filtered.filter(product => 
-        product.nome.toLowerCase().includes(searchLower) || 
-        product.codigo.toLowerCase().includes(searchLower)
-      );
-    }
-    
-    setFilteredProducts(filtered);
-  }, [searchTerm, selectedCategory]);
+    return {
+      name: categoryName,
+      slug,
+      count,
+      description: `${count} produtos disponíveis nesta categoria.`,
+      icon
+    };
+  });
   
-  // Set category filter from URL param if present
-  useEffect(() => {
-    if (categorySlug) {
-      const category = categories.find(c => c.slug === categorySlug);
-      if (category) {
-        setSelectedCategory(category.name);
-      }
-    }
-  }, [categorySlug]);
-
+  // Get featured products (most expensive ones for this demo)
+  const featuredProducts = [...products]
+    .sort((a, b) => b.preco - a.preco)
+    .slice(0, 8);
+  
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="flex-grow container mx-auto px-4 py-8">
-        <AnimatedContainer animation="fade" className="mb-10">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold mb-4">Loja de Peças e Equipamentos</h1>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Encontre componentes de qualidade, ferramentas especializadas e suprimentos da Doss Group para todas as suas necessidades técnicas.
-            </p>
-          </div>
-        </AnimatedContainer>
-
-        {/* Search and filter */}
-        <div className="mb-8">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="relative flex-grow">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-              <Input 
-                placeholder="Buscar por nome ou código..." 
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-            <div className="flex gap-2">
-              <Button 
-                variant="outline" 
-                onClick={() => setSelectedCategory(null)}
-                className={!selectedCategory ? "bg-primary/10" : ""}
-              >
-                Todos
-              </Button>
-              {categories.map(category => (
-                <Button
-                  key={category.slug}
-                  variant="outline"
-                  onClick={() => setSelectedCategory(category.name)}
-                  className={selectedCategory === category.name ? "bg-primary/10" : ""}
-                >
-                  {category.name.split(' ')[0]}
+      <main className="flex-grow">
+        {/* Hero section with search */}
+        <section className="bg-gradient-to-r from-primary/5 to-secondary/5 py-12">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto text-center">
+              <h1 className="text-3xl md:text-4xl font-bold mb-4">Marketplace de Peças e Equipamentos</h1>
+              <p className="text-muted-foreground mb-6">
+                Encontre peças, componentes e equipamentos especializados para impressoras industriais.
+              </p>
+              
+              <div className="flex w-full max-w-md mx-auto">
+                <Input
+                  type="search"
+                  placeholder="Buscar produtos..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="rounded-r-none"
+                />
+                <Button className="rounded-l-none">
+                  <Search className="h-4 w-4 mr-2" />
+                  Buscar
                 </Button>
-              ))}
+              </div>
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* Show categories if no filter and no search */}
-        {!selectedCategory && searchTerm.trim() === '' && (
-          <>
-            <h2 className="text-2xl font-bold mb-6">Categorias</h2>
-            <CategoryList categories={categories} />
-            
-            <div className="mt-12 mb-8">
-              <h2 className="text-2xl font-bold mb-6">Produtos em Destaque</h2>
-              <ProductList 
-                products={products
-                  .filter(p => p.estoque > 0)
-                  .sort(() => 0.5 - Math.random())
-                  .slice(0, 6)} 
-              />
-            </div>
-          </>
-        )}
-
-        {/* Show filtered products */}
-        {(selectedCategory || searchTerm.trim() !== '') && (
-          <AnimatedContainer animation="fade">
-            <ProductList 
-              products={filteredProducts}
-              title={selectedCategory || searchTerm.trim() !== '' ? `Produtos encontrados (${filteredProducts.length})` : undefined}
-            />
-          </AnimatedContainer>
-        )}
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16 mb-12">
-          <AnimatedContainer animation="slide-right" className="flex flex-col justify-center">
-            <h2 className="text-2xl font-bold mb-4">Venda seus produtos na nossa plataforma</h2>
-            <p className="text-muted-foreground mb-6">
-              Você é uma empresa que fornece peças, equipamentos ou suprimentos? Cadastre-se como vendedor e alcance milhares de técnicos em nossa plataforma.
-            </p>
-            <div>
-              <Link to="/store/company-register">
-                <Button className="flex items-center">
-                  <Building2 className="mr-2 h-5 w-5" />
-                  Cadastrar Empresa
+        {/* Promotions Carousel */}
+        <section className="py-12 bg-background">
+          <div className="container mx-auto px-4">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-2xl font-bold">Ofertas e Promoções</h2>
+              <Link to="/store/promotions">
+                <Button variant="ghost" className="text-primary">
+                  Ver todas <ArrowRight className="ml-1 h-4 w-4" />
                 </Button>
               </Link>
             </div>
-          </AnimatedContainer>
-          
-          <AnimatedContainer animation="slide-left">
-            <div className="bg-muted/20 p-6 rounded-lg border border-border h-full">
-              <h3 className="text-xl font-bold mb-3">Vantagens para Empresas</h3>
-              <ul className="space-y-2">
-                <li className="flex items-start">
-                  <span className="rounded-full bg-primary/10 p-1 mr-2">
-                    <svg className="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </span>
-                  <span>Acesso a uma rede de técnicos qualificados</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="rounded-full bg-primary/10 p-1 mr-2">
-                    <svg className="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </span>
-                  <span>Ferramentas de gestão de estoque e pedidos</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="rounded-full bg-primary/10 p-1 mr-2">
-                    <svg className="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </span>
-                  <span>Divulgação para um público-alvo específico</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="rounded-full bg-primary/10 p-1 mr-2">
-                    <svg className="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </span>
-                  <span>Processamento de pagamentos seguro</span>
-                </li>
-              </ul>
+            
+            <Carousel className="w-full">
+              <CarouselContent>
+                {promotions.map((promo) => (
+                  <CarouselItem key={promo.id} className="md:basis-1/2 lg:basis-1/3">
+                    <Link to={promo.link}>
+                      <Card className="h-full bg-gradient-to-br from-primary/5 to-accent/10 hover:shadow-lg transition-all">
+                        <CardHeader className="pb-2">
+                          <Badge variant="secondary" className="w-fit mb-2">Promoção</Badge>
+                          <CardTitle>{promo.title}</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <img 
+                            src={promo.image} 
+                            alt={promo.title}
+                            className="w-full h-40 object-cover rounded-md mb-4"
+                          />
+                          <p className="text-sm text-muted-foreground">{promo.description}</p>
+                        </CardContent>
+                        <CardFooter>
+                          <Button variant="secondary" className="w-full">
+                            Ver Detalhes <ArrowRight className="ml-1 h-4 w-4" />
+                          </Button>
+                        </CardFooter>
+                      </Card>
+                    </Link>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <div className="hidden md:flex">
+                <CarouselPrevious className="relative left-0 translate-x-0" />
+                <CarouselNext className="relative right-0 translate-x-0" />
+              </div>
+            </Carousel>
+          </div>
+        </section>
+        
+        {/* Featured Products */}
+        <section className="py-12 bg-muted/30">
+          <div className="container mx-auto px-4">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-2xl font-bold">Produtos em Destaque</h2>
+              <Link to="/store/products">
+                <Button variant="ghost" className="text-primary">
+                  Ver todos <ArrowRight className="ml-1 h-4 w-4" />
+                </Button>
+              </Link>
             </div>
-          </AnimatedContainer>
-        </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {featuredProducts.map((product) => (
+                <motion.div
+                  key={product.codigo}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  viewport={{ once: true }}
+                >
+                  <Card className="h-full hover:shadow-md transition-all">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-base font-medium truncate" title={product.nome}>
+                        {product.nome}
+                      </CardTitle>
+                      <p className="text-xs text-muted-foreground">Código: {product.codigo}</p>
+                    </CardHeader>
+                    <CardContent className="pb-2">
+                      <img 
+                        src="/placeholder.svg" 
+                        alt={product.nome}
+                        className="w-full h-32 object-contain mb-4 bg-background p-2 rounded-md"
+                      />
+                      <div className="flex justify-between items-center">
+                        <Badge variant="outline">{product.categoria}</Badge>
+                        <p className="font-semibold text-right text-primary">
+                          {formatCurrency(product.preco)}
+                        </p>
+                      </div>
+                    </CardContent>
+                    <CardFooter>
+                      <Button variant="secondary" className="w-full">Ver Detalhes</Button>
+                    </CardFooter>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+        
+        {/* Featured Companies */}
+        <section className="py-12 bg-background">
+          <div className="container mx-auto px-4">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-2xl font-bold">Empresas em Destaque</h2>
+              <Link to="/store/companies">
+                <Button variant="ghost" className="text-primary">
+                  Ver todas <ArrowRight className="ml-1 h-4 w-4" />
+                </Button>
+              </Link>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {featuredCompanies.map((company) => (
+                <motion.div
+                  key={company.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  viewport={{ once: true }}
+                >
+                  <Card className="h-full hover:shadow-md transition-all">
+                    <CardHeader>
+                      <div className="flex items-center gap-3">
+                        <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden">
+                          <img 
+                            src={company.image}
+                            alt={company.name}
+                            className="h-full w-full object-cover"
+                          />
+                        </div>
+                        <div>
+                          <CardTitle className="text-base">{company.name}</CardTitle>
+                          <div className="flex items-center text-sm text-amber-500">
+                            <Star className="h-3 w-3 fill-current mr-1" />
+                            {company.rating}
+                          </div>
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-muted-foreground mb-2">{company.description}</p>
+                      <p className="text-xs">{company.products} produtos disponíveis</p>
+                    </CardContent>
+                    <CardFooter>
+                      <Button variant="outline" className="w-full">Visitar Loja</Button>
+                    </CardFooter>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Categories Section */}
+        <section className="py-12 bg-muted/30">
+          <div className="container mx-auto px-4">
+            <AnimatedContainer animation="fade">
+              <h2 className="text-2xl font-bold mb-8">Categorias de Produtos</h2>
+              <CategoryList categories={categories} />
+            </AnimatedContainer>
+          </div>
+        </section>
+        
+        {/* All Stores CTA */}
+        <section className="py-12 bg-background">
+          <div className="container mx-auto px-4 text-center">
+            <AnimatedContainer animation="fade" className="max-w-3xl mx-auto">
+              <h2 className="text-2xl font-bold mb-4">Conheça todas as nossas lojas parceiras</h2>
+              <p className="text-muted-foreground mb-6">
+                Acesse nosso diretório completo de lojas especializadas em equipamentos e peças para impressão
+              </p>
+              <Link to="/store/companies">
+                <Button size="lg" className="gap-2">
+                  Ver Todas as Lojas <StoreIcon className="h-4 w-4" />
+                </Button>
+              </Link>
+            </AnimatedContainer>
+          </div>
+        </section>
       </main>
       <Footer />
     </div>
