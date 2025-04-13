@@ -18,6 +18,12 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
+import { 
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from "@/components/ui/tooltip";
 
 const TechnicianLanding = () => {
   return (
@@ -67,21 +73,32 @@ const TechnicianLanding = () => {
                 <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-3xl blur-3xl"></div>
                 <div className="relative h-full flex items-center justify-center bg-black/5 backdrop-blur-xl rounded-3xl border border-white/10 p-6 shadow-xl">
                   <div className="grid grid-cols-2 gap-4">
-                    {[
-                      { icon: <CreditCard className="h-6 w-6 text-primary" />, title: "Pagamentos Diretos" },
-                      { icon: <Users className="h-6 w-6 text-primary" />, title: "Novos Clientes" },
-                      { icon: <Calendar className="h-6 w-6 text-primary" />, title: "Agenda Flexível" },
-                      { icon: <Shield className="h-6 w-6 text-primary" />, title: "Segurança" }
-                    ].map((feature, index) => (
-                      <Card key={index} className="p-4 hover:bg-white/5 transition-all duration-300 backdrop-blur-md border border-white/10">
-                        <div className="flex flex-col items-center text-center gap-2">
-                          <div className="bg-primary/10 p-3 rounded-full">
-                            {feature.icon}
-                          </div>
-                          <h3 className="font-medium text-sm">{feature.title}</h3>
-                        </div>
-                      </Card>
-                    ))}
+                    <TooltipProvider>
+                      {[
+                        { icon: <CreditCard className="h-6 w-6 text-primary" />, title: "Pagamentos Diretos", tooltip: "Receba pagamentos diretamente dos clientes", path: "/tecnico/pagamentos" },
+                        { icon: <Users className="h-6 w-6 text-primary" />, title: "Novos Clientes", tooltip: "Amplie sua base de clientes", path: "/find-technician" },
+                        { icon: <Calendar className="h-6 w-6 text-primary" />, title: "Agenda Flexível", tooltip: "Gerencie sua disponibilidade", path: "/tecnico/agenda" },
+                        { icon: <Shield className="h-6 w-6 text-primary" />, title: "Segurança", tooltip: "Plataforma segura e confiável", path: "/about" }
+                      ].map((feature, index) => (
+                        <Link to={feature.path} key={index}>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Card className="p-4 hover:bg-white/5 transition-all duration-300 backdrop-blur-md border border-white/10 cursor-pointer">
+                                <div className="flex flex-col items-center text-center gap-2">
+                                  <div className="bg-primary/10 p-3 rounded-full">
+                                    {feature.icon}
+                                  </div>
+                                  <h3 className="font-medium text-sm">{feature.title}</h3>
+                                </div>
+                              </Card>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>{feature.tooltip}</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </Link>
+                      ))}
+                    </TooltipProvider>
                   </div>
                 </div>
               </motion.div>
@@ -103,40 +120,53 @@ const TechnicianLanding = () => {
             </motion.h2>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-              {[
-                {
-                  icon: <Printer />,
-                  title: "Plotters de Impressão",
-                  description: "Eco Solvente, UV, Sublimática, DTF"
-                },
-                {
-                  icon: <Wrench />,
-                  title: "Equipamentos de Acabamento",
-                  description: "Calandras, Prensas, Carrosséis"
-                },
-                {
-                  icon: <Zap />,
-                  title: "Máquinas CNC",
-                  description: "CNC CO², Router e Gravadoras Laser"
-                }
-              ].map((item, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 hover:bg-primary/5 hover:border-primary/20 transition-all duration-300"
-                >
-                  <div className="flex flex-col items-center text-center space-y-3">
-                    <div className="bg-primary/10 p-4 rounded-full">
-                      {item.icon}
-                    </div>
-                    <h3 className="text-lg font-semibold">{item.title}</h3>
-                    <p className="text-sm text-muted-foreground">{item.description}</p>
-                  </div>
-                </motion.div>
-              ))}
+              <TooltipProvider>
+                {[
+                  {
+                    icon: <Printer />,
+                    title: "Plotters de Impressão",
+                    description: "Eco Solvente, UV, Sublimática, DTF",
+                    path: "/store"
+                  },
+                  {
+                    icon: <Wrench />,
+                    title: "Equipamentos de Acabamento",
+                    description: "Calandras, Prensas, Carrosséis",
+                    path: "/store"
+                  },
+                  {
+                    icon: <Zap />,
+                    title: "Máquinas CNC",
+                    description: "CNC CO², Router e Gravadoras Laser",
+                    path: "/store"
+                  }
+                ].map((item, index) => (
+                  <Link to={item.path} key={index}>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <motion.div
+                          initial={{ opacity: 0, y: 20 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3, delay: index * 0.1 }}
+                          viewport={{ once: true }}
+                          className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 hover:bg-primary/5 hover:border-primary/20 transition-all duration-300 cursor-pointer"
+                        >
+                          <div className="flex flex-col items-center text-center space-y-3">
+                            <div className="bg-primary/10 p-4 rounded-full">
+                              {item.icon}
+                            </div>
+                            <h3 className="text-lg font-semibold">{item.title}</h3>
+                            <p className="text-sm text-muted-foreground">{item.description}</p>
+                          </div>
+                        </motion.div>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Ver peças e componentes para {item.title}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </Link>
+                ))}
+              </TooltipProvider>
             </div>
           </div>
         </section>
@@ -159,27 +189,28 @@ const TechnicianLanding = () => {
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { icon: <CreditCard />, title: "Receba por Serviço", description: "Defina seus preços e receba pagamentos diretos" },
-                { icon: <Shield />, title: "Segurança Garantida", description: "Todos os clientes são verificados" },
-                { icon: <Clock />, title: "Flexibilidade de Horário", description: "Gerencie sua agenda conforme sua disponibilidade" },
-                { icon: <Settings />, title: "Gestão Simplificada", description: "Ferramentas para gerenciar seus serviços" }
+                { icon: <CreditCard />, title: "Receba por Serviço", description: "Defina seus preços e receba pagamentos diretos", path: "/register" },
+                { icon: <Shield />, title: "Segurança Garantida", description: "Todos os clientes são verificados", path: "/about" },
+                { icon: <Clock />, title: "Flexibilidade de Horário", description: "Gerencie sua agenda conforme sua disponibilidade", path: "/tecnico/agenda" },
+                { icon: <Settings />, title: "Gestão Simplificada", description: "Ferramentas para gerenciar seus serviços", path: "/tecnico/servicos" }
               ].map((benefit, index) => (
-                <motion.div 
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 hover:bg-primary/5 hover:border-primary/20 transition-all duration-300"
-                >
-                  <div className="flex flex-col items-center text-center space-y-3">
-                    <div className="bg-primary/10 p-3 rounded-full">
-                      {benefit.icon}
+                <Link to={benefit.path} key={index}>
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                    viewport={{ once: true }}
+                    className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 hover:bg-primary/5 hover:border-primary/20 transition-all duration-300 cursor-pointer h-full"
+                  >
+                    <div className="flex flex-col items-center text-center space-y-3">
+                      <div className="bg-primary/10 p-3 rounded-full">
+                        {benefit.icon}
+                      </div>
+                      <h3 className="font-semibold">{benefit.title}</h3>
+                      <p className="text-sm text-muted-foreground">{benefit.description}</p>
                     </div>
-                    <h3 className="font-semibold">{benefit.title}</h3>
-                    <p className="text-sm text-muted-foreground">{benefit.description}</p>
-                  </div>
-                </motion.div>
+                  </motion.div>
+                </Link>
               ))}
             </div>
           </div>

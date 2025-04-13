@@ -15,6 +15,12 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
+import { 
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from "@/components/ui/tooltip";
 
 const Index = () => {
   return (
@@ -64,21 +70,32 @@ const Index = () => {
                 <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-3xl blur-3xl"></div>
                 <div className="relative bg-black/5 backdrop-blur-xl rounded-3xl border border-white/10 p-6 shadow-xl">
                   <div className="grid grid-cols-2 gap-4">
-                    {[
-                      { icon: <Wrench className="h-6 w-6 text-primary" />, title: "Manutenção Especializada" },
-                      { icon: <Search className="h-6 w-6 text-primary" />, title: "Busca Inteligente" },
-                      { icon: <ShieldCheck className="h-6 w-6 text-primary" />, title: "Técnicos Verificados" },
-                      { icon: <CreditCard className="h-6 w-6 text-primary" />, title: "Pagamento Seguro" }
-                    ].map((feature, index) => (
-                      <Card key={index} className="p-4 hover:bg-white/5 transition-all duration-300 backdrop-blur-md border border-white/10">
-                        <div className="flex flex-col items-center text-center gap-2">
-                          <div className="bg-primary/10 p-3 rounded-full">
-                            {feature.icon}
-                          </div>
-                          <h3 className="font-medium text-sm">{feature.title}</h3>
-                        </div>
-                      </Card>
-                    ))}
+                    <TooltipProvider>
+                      {[
+                        { icon: <Wrench className="h-6 w-6 text-primary" />, title: "Manutenção Especializada", path: "/cliente/solicitar", tooltip: "Solicite serviços de manutenção" },
+                        { icon: <Search className="h-6 w-6 text-primary" />, title: "Busca Inteligente", path: "/find-technician", tooltip: "Encontre técnicos na sua região" },
+                        { icon: <ShieldCheck className="h-6 w-6 text-primary" />, title: "Técnicos Verificados", path: "/technician", tooltip: "Todos os técnicos são verificados" },
+                        { icon: <CreditCard className="h-6 w-6 text-primary" />, title: "Pagamento Seguro", path: "/cliente/pagamentos", tooltip: "Pagamentos seguros e garantidos" }
+                      ].map((feature, index) => (
+                        <Link to={feature.path} key={index}>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Card className="p-4 hover:bg-white/5 transition-all duration-300 backdrop-blur-md border border-white/10 cursor-pointer">
+                                <div className="flex flex-col items-center text-center gap-2">
+                                  <div className="bg-primary/10 p-3 rounded-full">
+                                    {feature.icon}
+                                  </div>
+                                  <h3 className="font-medium text-sm">{feature.title}</h3>
+                                </div>
+                              </Card>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>{feature.tooltip}</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </Link>
+                      ))}
+                    </TooltipProvider>
                   </div>
                 </div>
               </motion.div>
@@ -100,29 +117,38 @@ const Index = () => {
             </motion.h2>
             
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
-              {[
-                { icon: <User className="h-6 w-6" />, title: "Perfil", path: "/cliente/perfil" },
-                { icon: <Wrench className="h-6 w-6" />, title: "Serviços", path: "/cliente/servicos" },
-                { icon: <MessageSquare className="h-6 w-6" />, title: "Chat", path: "/cliente/chat" },
-                { icon: <CreditCard className="h-6 w-6" />, title: "Pagamentos", path: "/cliente/pagamentos" },
-                { icon: <Search className="h-6 w-6" />, title: "Encontrar Técnico", path: "/find-technician" },
-                { icon: <ShieldCheck className="h-6 w-6" />, title: "Suporte", path: "/contact" },
-              ].map((item, index) => (
-                <Link to={item.path} key={index}>
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: index * 0.1 }}
-                    viewport={{ once: true }}
-                    className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4 flex flex-col items-center justify-center gap-3 text-center hover:bg-primary/5 hover:border-primary/20 transition-all duration-300 h-32"
-                  >
-                    <div className="bg-primary/10 p-3 rounded-full">
-                      {item.icon}
-                    </div>
-                    <span className="font-medium text-sm">{item.title}</span>
-                  </motion.div>
-                </Link>
-              ))}
+              <TooltipProvider>
+                {[
+                  { icon: <User className="h-6 w-6" />, title: "Perfil", path: "/cliente/perfil", tooltip: "Gerencie seu perfil" },
+                  { icon: <Wrench className="h-6 w-6" />, title: "Serviços", path: "/cliente/servicos", tooltip: "Veja seus serviços solicitados" },
+                  { icon: <MessageSquare className="h-6 w-6" />, title: "Chat", path: "/cliente/chat", tooltip: "Converse com técnicos" },
+                  { icon: <CreditCard className="h-6 w-6" />, title: "Pagamentos", path: "/cliente/pagamentos", tooltip: "Gerencie seus pagamentos" },
+                  { icon: <Search className="h-6 w-6" />, title: "Encontrar Técnico", path: "/find-technician", tooltip: "Busque técnicos na sua região" },
+                  { icon: <ShieldCheck className="h-6 w-6" />, title: "Suporte", path: "/contact", tooltip: "Entre em contato com o suporte" },
+                ].map((item, index) => (
+                  <Link to={item.path} key={index}>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <motion.div
+                          initial={{ opacity: 0, y: 20 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3, delay: index * 0.1 }}
+                          viewport={{ once: true }}
+                          className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4 flex flex-col items-center justify-center gap-3 text-center hover:bg-primary/5 hover:border-primary/20 transition-all duration-300 h-32 cursor-pointer"
+                        >
+                          <div className="bg-primary/10 p-3 rounded-full">
+                            {item.icon}
+                          </div>
+                          <span className="font-medium text-sm">{item.title}</span>
+                        </motion.div>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{item.tooltip}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </Link>
+                ))}
+              </TooltipProvider>
             </div>
           </div>
         </section>
@@ -148,37 +174,41 @@ const Index = () => {
                 {
                   step: "01",
                   title: "Solicite o Serviço",
-                  description: "Escolha o tipo de serviço necessário"
+                  description: "Escolha o tipo de serviço necessário",
+                  path: "/cliente/solicitar"
                 },
                 {
                   step: "02",
                   title: "Encontre um Técnico",
-                  description: "Conecte-se com especialistas qualificados"
+                  description: "Conecte-se com especialistas qualificados",
+                  path: "/find-technician"
                 },
                 {
                   step: "03",
                   title: "Problema Resolvido",
-                  description: "Receba o serviço e faça o pagamento"
+                  description: "Receba o serviço e faça o pagamento",
+                  path: "/cliente/pagamentos"
                 }
               ].map((item, index) => (
-                <motion.div 
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.2 }}
-                  viewport={{ once: true }}
-                  className="relative flex flex-col items-center text-center"
-                >
-                  <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-xl font-bold mb-4">
-                    {item.step}
-                  </div>
-                  <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
-                  <p className="text-sm text-muted-foreground max-w-xs">{item.description}</p>
-                  
-                  {index < 2 && (
-                    <div className="hidden md:block absolute top-8 left-[calc(100%-1rem)] w-[calc(100%-2rem)] h-[2px] bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
-                  )}
-                </motion.div>
+                <Link to={item.path} key={index}>
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.2 }}
+                    viewport={{ once: true }}
+                    className="relative flex flex-col items-center text-center cursor-pointer hover:scale-105 transition-transform duration-300"
+                  >
+                    <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-xl font-bold mb-4">
+                      {item.step}
+                    </div>
+                    <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
+                    <p className="text-sm text-muted-foreground max-w-xs">{item.description}</p>
+                    
+                    {index < 2 && (
+                      <div className="hidden md:block absolute top-8 left-[calc(100%-1rem)] w-[calc(100%-2rem)] h-[2px] bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
+                    )}
+                  </motion.div>
+                </Link>
               ))}
             </div>
           </div>
