@@ -33,6 +33,15 @@ export interface Company {
   productCount: number;
   location: string;
   featured?: boolean;
+  email?: string;
+  phone?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  zipCode?: string;
+  cnpj?: string;
+  contactName?: string;
+  password?: string;
 }
 
 export interface Promotion {

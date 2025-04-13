@@ -6,7 +6,7 @@ import Footer from '@/components/layout/Footer';
 import { Card, CardHeader, CardContent, CardFooter, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ChevronLeft, SearchIcon, Star } from 'lucide-react';
+import { ChevronLeft, SearchIcon, Star, Store, ArrowRight } from 'lucide-react';
 import AnimatedContainer from '@/components/ui/AnimatedContainer';
 import { motion } from 'framer-motion';
 
@@ -111,11 +111,20 @@ const CompanyList = () => {
                 </Link>
                 <h1 className="text-3xl font-bold">Empresas Parceiras</h1>
               </div>
-              <p className="text-muted-foreground mb-6">
-                Conheça as empresas que oferecem produtos e serviços especializados para equipamentos de impressão
-              </p>
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <p className="text-muted-foreground">
+                  Conheça as empresas que oferecem produtos e serviços especializados para equipamentos de impressão
+                </p>
+                
+                <Link to="/store/company-register">
+                  <Button className="whitespace-nowrap">
+                    <Store className="mr-2 h-4 w-4" />
+                    Cadastrar Minha Empresa
+                  </Button>
+                </Link>
+              </div>
 
-              <div className="flex gap-4 w-full max-w-md">
+              <div className="flex gap-4 w-full max-w-md mt-6">
                 <Input 
                   placeholder="Buscar empresa por nome ou localização" 
                   value={searchTerm}
@@ -165,7 +174,10 @@ const CompanyList = () => {
                       </div>
                     </CardContent>
                     <CardFooter>
-                      <Button variant="secondary" className="w-full">Ver Produtos</Button>
+                      <Button variant="secondary" className="w-full">
+                        Ver Produtos
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Button>
                     </CardFooter>
                   </Card>
                 </motion.div>

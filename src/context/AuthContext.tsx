@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { toast } from '@/hooks/use-toast';
 
-type UserType = 'technician' | 'customer' | 'admin' | null;
+type UserType = 'technician' | 'customer' | 'admin' | 'company' | null;
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -53,6 +53,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         { id: 1, name: 'Técnico Demo', email: 'tecnico@exemplo.com', password: '123456', type: 'technician' },
         { id: 2, name: 'Cliente Demo', email: 'cliente@exemplo.com', password: '123456', type: 'customer' },
         { id: 3, name: 'Admin Demo', email: 'admin@exemplo.com', password: '123456', type: 'admin' },
+        { id: 4, name: 'Doss Group', email: 'loja@exemplo.com', password: '123456', type: 'company' },
       ];
 
       const foundUser = mockUsers.find(
