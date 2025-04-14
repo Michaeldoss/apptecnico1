@@ -22,9 +22,11 @@ const Login = () => {
   React.useEffect(() => {
     if (isAuthenticated) {
       if (userType === 'technician') {
-        navigate('/tecnico/painel');
+        navigate('/technician/dashboard');
       } else if (userType === 'customer') {
         navigate('/cliente/painel');
+      } else if (userType === 'company') {
+        navigate('/store/company-dashboard');
       } else if (userType === 'admin') {
         navigate('/admin');
       }

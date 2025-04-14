@@ -54,7 +54,8 @@ const Navbar = () => {
 
   const getDashboardLink = () => {
     if (userType === "customer") return "/cliente/painel";
-    if (userType === "technician") return "/tecnico/painel";
+    if (userType === "technician") return "/technician/dashboard";
+    if (userType === "company") return "/store/company-dashboard";
     return "/";
   };
 
