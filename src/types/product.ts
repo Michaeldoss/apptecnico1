@@ -42,7 +42,7 @@ export interface Product {
   estoqueMinimo?: number;
   estoqueMaximo?: number;
   enderecoProduto?: string;
-  departamento?: number;
+  departamento?: string | number; // Changed from number to string | number to fix type error
   informacoesNutricionais?: boolean;
   tabelaNutricional?: {
     valorEnergetico?: number;

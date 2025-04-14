@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Navigate, Link } from 'react-router-dom';
@@ -17,7 +18,78 @@ import {
   AlertTriangle,
   Building,
   UserRound,
+  ArrowRight,
 } from 'lucide-react';
+import DashboardChart from '@/components/store/DashboardChart';
+import OrdersList from '@/components/store/OrdersList';
+
+// Sample data for charts
+const salesData = [
+  { name: 'Jan', vendas: 4000, receita: 2400 },
+  { name: 'Fev', vendas: 3000, receita: 1398 },
+  { name: 'Mar', vendas: 2000, receita: 9800 },
+  { name: 'Abr', vendas: 2780, receita: 3908 },
+  { name: 'Mai', vendas: 1890, receita: 4800 },
+  { name: 'Jun', vendas: 2390, receita: 3800 },
+  { name: 'Jul', vendas: 3490, receita: 4300 },
+];
+
+const categoryData = [
+  { name: 'Impressoras', valor: 4000 },
+  { name: 'Peças', valor: 3000 },
+  { name: 'Suprimentos', valor: 2000 },
+  { name: 'Manutenção', valor: 2780 },
+  { name: 'Outros', valor: 1890 },
+];
+
+// Sample orders data
+const sampleOrders = [
+  {
+    id: '1001',
+    customer: 'João Silva',
+    date: '14/04/2023',
+    total: 1250.00,
+    status: 'completed' as const,
+    items: 3,
+    paymentMethod: 'Cartão de Crédito'
+  },
+  {
+    id: '1002',
+    customer: 'Maria Oliveira',
+    date: '13/04/2023',
+    total: 450.90,
+    status: 'processing' as const,
+    items: 2,
+    paymentMethod: 'Pix'
+  },
+  {
+    id: '1003',
+    customer: 'Carlos Souza',
+    date: '12/04/2023',
+    total: 780.50,
+    status: 'shipping' as const,
+    items: 1,
+    paymentMethod: 'Boleto'
+  },
+  {
+    id: '1004',
+    customer: 'Ana Pereira',
+    date: '10/04/2023',
+    total: 1890.00,
+    status: 'pending' as const,
+    items: 4,
+    paymentMethod: 'Cartão de Crédito'
+  },
+  {
+    id: '1005',
+    customer: 'Roberto Lima',
+    date: '09/04/2023',
+    total: 320.75,
+    status: 'cancelled' as const,
+    items: 2,
+    paymentMethod: 'Pix'
+  },
+];
 
 const CompanyDashboard = () => {
   const { isAuthenticated, userType, user } = useAuth();
@@ -95,9 +167,9 @@ const CompanyDashboard = () => {
             </Card>
           </div>
           
-          <Tabs defaultValue="products">
+          <Tabs defaultValue="overview">
             <div className="border-b mb-6">
-              <TabsList className="w-full flex justify-start h-auto p-0 bg-transparent">
+              <TabsList className="w-full flex justify-start h-auto p-0 bg-transparent overflow-x-auto">
                 <TabsTrigger value="overview" className="py-3 px-4 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none bg-transparent">
                   <LayoutDashboard className="mr-2 h-4 w-4" />
                   Visão Geral
@@ -131,9 +203,12 @@ const CompanyDashboard = () => {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="h-[300px] flex justify-center items-center border rounded-md bg-muted/20">
-                      <p className="text-muted-foreground">Gráfico de atividade recente</p>
-                    </div>
+                    <DashboardChart 
+                      data={salesData} 
+                      type="area" 
+                      dataKeys={['vendas', 'receita']}
+                      height={300}
+                    />
                   </CardContent>
                 </Card>
                 
@@ -176,10 +251,12 @@ const CompanyDashboard = () => {
                       Gerencie o catálogo de produtos da sua loja
                     </CardDescription>
                   </div>
-                  <Button>
-                    <Plus className="mr-2 h-4 w-4" />
-                    Adicionar Produto
-                  </Button>
+                  <Link to="/store/company-products">
+                    <Button>
+                      <Plus className="mr-2 h-4 w-4" />
+                      Adicionar Produto
+                    </Button>
+                  </Link>
                 </CardHeader>
                 <CardContent>
                   <div className="border rounded-md">
@@ -249,10 +326,12 @@ const CompanyDashboard = () => {
                   <p className="text-sm text-muted-foreground">
                     Mostrando 5 de 87 produtos
                   </p>
-                  <div className="flex items-center space-x-2">
-                    <Button variant="outline" size="sm">Anterior</Button>
-                    <Button variant="outline" size="sm">Próximo</Button>
-                  </div>
+                  <Link to="/store/company-products">
+                    <Button variant="outline" size="sm" className="flex items-center gap-1">
+                      Ver todos os produtos
+                      <ArrowRight className="h-4 w-4" />
+                    </Button>
+                  </Link>
                 </CardFooter>
               </Card>
             </TabsContent>
@@ -266,16 +345,17 @@ const CompanyDashboard = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="flex items-center justify-center p-10 border rounded-md">
-                    <div className="text-center">
-                      <ShoppingBag className="mx-auto h-10 w-10 text-muted-foreground mb-4" />
-                      <h3 className="font-medium text-lg mb-2">Nenhum pedido recente</h3>
-                      <p className="text-muted-foreground max-w-md">
-                        Os pedidos feitos pelos clientes aparecerão aqui para processamento e acompanhamento.
-                      </p>
-                    </div>
-                  </div>
+                  <OrdersList orders={sampleOrders} />
                 </CardContent>
+                <CardFooter className="justify-between">
+                  <p className="text-sm text-muted-foreground">
+                    Mostrando 5 de {sampleOrders.length} pedidos
+                  </p>
+                  <div className="flex items-center space-x-2">
+                    <Button variant="outline" size="sm">Anterior</Button>
+                    <Button variant="outline" size="sm">Próximo</Button>
+                  </div>
+                </CardFooter>
               </Card>
             </TabsContent>
             
@@ -289,17 +369,70 @@ const CompanyDashboard = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-8">
-                    <div className="h-[300px] flex justify-center items-center border rounded-md bg-muted/20">
-                      <p className="text-muted-foreground">Gráfico de vendas mensal</p>
+                    <div className="h-[300px]">
+                      <DashboardChart 
+                        data={salesData} 
+                        type="line" 
+                        dataKeys={['vendas', 'receita']}
+                        title="Vendas e Receita Mensal"
+                        subtitle="Dados dos últimos 7 meses"
+                      />
                     </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="h-[200px] flex justify-center items-center border rounded-md bg-muted/20">
-                        <p className="text-muted-foreground">Produtos mais vendidos</p>
+                      <div className="h-[250px]">
+                        <DashboardChart 
+                          data={categoryData} 
+                          type="bar" 
+                          dataKeys={['valor']}
+                          title="Vendas por Categoria"
+                          subtitle="Distribuição por segmento"
+                        />
                       </div>
-                      <div className="h-[200px] flex justify-center items-center border rounded-md bg-muted/20">
-                        <p className="text-muted-foreground">Avaliações dos clientes</p>
-                      </div>
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="text-base">Avaliações dos clientes</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="space-y-4">
+                            <div className="flex justify-between items-center">
+                              <div className="flex gap-2 items-center">
+                                <span className="text-yellow-500 text-lg">★★★★★</span>
+                                <span className="text-sm">5 estrelas</span>
+                              </div>
+                              <span className="text-sm font-medium">68%</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <div className="flex gap-2 items-center">
+                                <span className="text-yellow-500 text-lg">★★★★☆</span>
+                                <span className="text-sm">4 estrelas</span>
+                              </div>
+                              <span className="text-sm font-medium">21%</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <div className="flex gap-2 items-center">
+                                <span className="text-yellow-500 text-lg">★★★☆☆</span>
+                                <span className="text-sm">3 estrelas</span>
+                              </div>
+                              <span className="text-sm font-medium">8%</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <div className="flex gap-2 items-center">
+                                <span className="text-yellow-500 text-lg">★★☆☆☆</span>
+                                <span className="text-sm">2 estrelas</span>
+                              </div>
+                              <span className="text-sm font-medium">2%</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <div className="flex gap-2 items-center">
+                                <span className="text-yellow-500 text-lg">★☆☆☆☆</span>
+                                <span className="text-sm">1 estrela</span>
+                              </div>
+                              <span className="text-sm font-medium">1%</span>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
                     </div>
                   </div>
                 </CardContent>

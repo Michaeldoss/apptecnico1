@@ -87,7 +87,7 @@ const CompanyProducts = () => {
     setOpenProductDialog(false);
   };
 
-  const handleSaveProduct = (productData: Partial<Product>) => {
+  const handleSaveProduct = (productData: any) => {
     try {
       if (editingProduct) {
         // Handle product update logic
