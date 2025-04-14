@@ -53,7 +53,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         { id: 1, name: 'Técnico Demo', email: 'tecnico@exemplo.com', password: '123456', type: 'technician' },
         { id: 2, name: 'Cliente Demo', email: 'cliente@exemplo.com', password: '123456', type: 'customer' },
         { id: 3, name: 'Admin Demo', email: 'admin@exemplo.com', password: '123456', type: 'admin' },
-        { id: 4, name: 'Doss Group', email: 'loja@exemplo.com', password: '123456', type: 'company' },
+        { 
+          id: 4, 
+          name: 'Doss Group', 
+          email: 'loja@exemplo.com', 
+          password: '123456', 
+          type: 'company',
+          description: 'Peças originais e componentes para impressoras industriais. Distribuidores autorizados das principais marcas.',
+          location: 'Rio de Janeiro, RJ',
+          logo: '/placeholder.svg',
+          rating: 4.8,
+          productCount: 87,
+          phone: '(21) 99999-9999',
+          address: 'Av. Rio Branco, 156 - Centro',
+          city: 'Rio de Janeiro',
+          state: 'RJ',
+          zipCode: '20040-901',
+          cnpj: '12345678000190',
+          contactName: 'João Silva'
+        },
       ];
 
       const foundUser = mockUsers.find(

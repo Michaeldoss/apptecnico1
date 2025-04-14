@@ -35,6 +35,8 @@ import CategoryPage from "./pages/store/CategoryPage";
 import CompanyList from "./pages/store/CompanyList";
 import CompanyRegister from "./pages/store/CompanyRegister";
 import CompanyDashboard from "./pages/store/CompanyDashboard";
+import CompanyProfile from "./pages/store/CompanyProfile";
+import CompanyProducts from "./pages/store/CompanyProducts";
 
 function App() {
   return (
@@ -53,13 +55,15 @@ function App() {
           <Route path="/store/companies" element={<CompanyList />} />
           <Route path="/store/company-register" element={<CompanyRegister />} />
           <Route path="/store/company-dashboard" element={<CompanyDashboard />} />
+          <Route path="/store/company-profile" element={<CompanyProfile />} />
+          <Route path="/store/company-products" element={<CompanyProducts />} />
 
           {/* Technician Routes */}
           <Route path="/technician" element={<TechnicianLanding />} />
           <Route
             path="/technician/dashboard"
             element={
-              <TechnicianLayout>
+              <TechnicianLayout title="Dashboard">
                 <TechnicianDashboard />
               </TechnicianLayout>
             }
@@ -67,7 +71,7 @@ function App() {
           <Route
             path="/technician/chat"
             element={
-              <TechnicianLayout>
+              <TechnicianLayout title="Chat">
                 <TechnicianChat />
               </TechnicianLayout>
             }
@@ -75,7 +79,7 @@ function App() {
           <Route
             path="/technician/schedule"
             element={
-              <TechnicianLayout>
+              <TechnicianLayout title="Agenda">
                 <TechnicianSchedule />
               </TechnicianLayout>
             }
@@ -83,7 +87,7 @@ function App() {
           <Route
             path="/technician/services"
             element={
-              <TechnicianLayout>
+              <TechnicianLayout title="Serviços">
                 <TechnicianServices />
               </TechnicianLayout>
             }
@@ -91,7 +95,7 @@ function App() {
           <Route
             path="/technician/parts"
             element={
-              <TechnicianLayout>
+              <TechnicianLayout title="Peças">
                 <TechnicianParts />
               </TechnicianLayout>
             }
@@ -99,7 +103,7 @@ function App() {
           <Route
             path="/technician/profile"
             element={
-              <TechnicianLayout>
+              <TechnicianLayout title="Perfil">
                 <TechnicianProfile />
               </TechnicianLayout>
             }
@@ -107,7 +111,7 @@ function App() {
           <Route
             path="/technician/service/:id"
             element={
-              <TechnicianLayout>
+              <TechnicianLayout title="Ordem de Serviço">
                 <TechnicianServiceOrder />
               </TechnicianLayout>
             }
@@ -117,7 +121,7 @@ function App() {
           <Route
             path="/customer/dashboard"
             element={
-              <CustomerLayout>
+              <CustomerLayout title="Dashboard">
                 <CustomerDashboard />
               </CustomerLayout>
             }
@@ -125,7 +129,7 @@ function App() {
           <Route
             path="/customer/equipment"
             element={
-              <CustomerLayout>
+              <CustomerLayout title="Equipamentos">
                 <CustomerEquipment />
               </CustomerLayout>
             }
@@ -133,7 +137,7 @@ function App() {
           <Route
             path="/customer/service-request"
             element={
-              <CustomerLayout>
+              <CustomerLayout title="Solicitar Serviço">
                 <CustomerServiceRequest />
               </CustomerLayout>
             }
@@ -141,7 +145,7 @@ function App() {
           <Route
             path="/customer/services"
             element={
-              <CustomerLayout>
+              <CustomerLayout title="Serviços">
                 <CustomerServices />
               </CustomerLayout>
             }
@@ -149,7 +153,7 @@ function App() {
           <Route
             path="/customer/tracking/:id"
             element={
-              <CustomerLayout>
+              <CustomerLayout title="Acompanhamento">
                 <CustomerTracking />
               </CustomerLayout>
             }
@@ -157,7 +161,7 @@ function App() {
           <Route
             path="/customer/service-orders"
             element={
-              <CustomerLayout>
+              <CustomerLayout title="Ordens de Serviço">
                 <CustomerServiceOrders />
               </CustomerLayout>
             }
@@ -165,7 +169,7 @@ function App() {
           <Route
             path="/customer/service/:id"
             element={
-              <CustomerLayout>
+              <CustomerLayout title="Detalhes do Serviço">
                 <CustomerServiceDetails />
               </CustomerLayout>
             }
@@ -173,7 +177,7 @@ function App() {
           <Route
             path="/customer/payments"
             element={
-              <CustomerLayout>
+              <CustomerLayout title="Pagamentos">
                 <CustomerPayments />
               </CustomerLayout>
             }
@@ -181,7 +185,7 @@ function App() {
           <Route
             path="/customer/payment/:id"
             element={
-              <CustomerLayout>
+              <CustomerLayout title="Detalhes do Pagamento">
                 <CustomerPaymentDetails />
               </CustomerLayout>
             }
@@ -189,7 +193,7 @@ function App() {
           <Route
             path="/customer/profile"
             element={
-              <CustomerLayout>
+              <CustomerLayout title="Perfil">
                 <CustomerProfile />
               </CustomerLayout>
             }

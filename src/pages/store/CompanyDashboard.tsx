@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Link } from 'react-router-dom';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { Button } from '@/components/ui/button';
@@ -17,13 +16,14 @@ import {
   Store, 
   AlertTriangle,
   Building,
+  UserRound,
 } from 'lucide-react';
 
 const CompanyDashboard = () => {
   const { isAuthenticated, userType, user } = useAuth();
   
-  // Redirect to login if not authenticated
-  if (!isAuthenticated || (userType !== 'customer' && userType !== 'admin')) {
+  // Redirect to login if not authenticated or not a company
+  if (!isAuthenticated || userType !== 'company') {
     return <Navigate to="/store/company-register" replace />;
   }
 
@@ -43,10 +43,18 @@ const CompanyDashboard = () => {
                 </p>
               </div>
             </div>
-            <Button>
-              <Settings className="mr-2 h-4 w-4" />
-              Configurações
-            </Button>
+            <div className="flex gap-2">
+              <Link to="/store/company-profile">
+                <Button variant="outline">
+                  <UserRound className="mr-2 h-4 w-4" />
+                  Meu Perfil
+                </Button>
+              </Link>
+              <Button>
+                <Settings className="mr-2 h-4 w-4" />
+                Configurações
+              </Button>
+            </div>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -55,7 +63,7 @@ const CompanyDashboard = () => {
                 <CardTitle className="text-sm font-medium text-muted-foreground">Produtos</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">87</div>
+                <div className="text-2xl font-bold">{user?.productCount || 87}</div>
               </CardContent>
             </Card>
             
@@ -82,7 +90,7 @@ const CompanyDashboard = () => {
                 <CardTitle className="text-sm font-medium text-muted-foreground">Avaliação</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">4.8 ★</div>
+                <div className="text-2xl font-bold">{user?.rating || 4.8} ★</div>
               </CardContent>
             </Card>
           </div>
