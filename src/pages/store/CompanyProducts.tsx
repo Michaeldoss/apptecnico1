@@ -19,32 +19,31 @@ import {
   Download
 } from 'lucide-react';
 import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 
 // Import product data
 import { products } from '@/data/products';
+import ProductForm from '@/components/store/ProductForm';
+import { Product } from '@/types/product';
+import { toast } from 'sonner';
 
 const CompanyProducts = () => {
   const { isAuthenticated, userType } = useAuth();
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [sortBy, setSortBy] = useState('name');
+  const [openProductDialog, setOpenProductDialog] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   
   // Redirect to login if not authenticated
   if (!isAuthenticated || userType !== 'company') {
@@ -74,6 +73,36 @@ const CompanyProducts = () => {
   // Get unique categories for filter dropdown
   const categories = Array.from(new Set(products.map(p => p.categoria))).filter(Boolean);
 
+  const handleOpenNewProduct = () => {
+    setEditingProduct(null);
+    setOpenProductDialog(true);
+  };
+
+  const handleEditProduct = (product: Product) => {
+    setEditingProduct(product);
+    setOpenProductDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenProductDialog(false);
+  };
+
+  const handleSaveProduct = (productData: Partial<Product>) => {
+    try {
+      if (editingProduct) {
+        // Handle product update logic
+        toast.success(`Produto "${productData.nome}" atualizado com sucesso!`);
+      } else {
+        // Handle new product creation logic
+        toast.success(`Produto "${productData.nome}" adicionado com sucesso!`);
+      }
+      
+      setOpenProductDialog(false);
+    } catch (error) {
+      toast.error('Erro ao salvar produto. Tente novamente.');
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -97,77 +126,10 @@ const CompanyProducts = () => {
                   Voltar
                 </Button>
               </Link>
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button>
-                    <Plus className="mr-2 h-4 w-4" />
-                    Novo Produto
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[525px]">
-                  <DialogHeader>
-                    <DialogTitle>Adicionar Novo Produto</DialogTitle>
-                    <DialogDescription>
-                      Preencha as informações do novo produto para o catálogo.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="code">Código</Label>
-                        <Input id="code" placeholder="Ex: 8006" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="category">Categoria</Label>
-                        <Select>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecione" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {categories.map(cat => (
-                              <SelectItem key={cat} value={cat}>{cat}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="name">Nome do Produto</Label>
-                      <Input id="name" placeholder="Nome do produto" />
-                    </div>
-                    <div className="grid grid-cols-3 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="unit">Unidade</Label>
-                        <Input id="unit" placeholder="UN" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="stock">Estoque</Label>
-                        <Input id="stock" type="number" placeholder="0" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="price">Preço (R$)</Label>
-                        <Input id="price" type="number" step="0.01" placeholder="0.00" />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="description">Descrição</Label>
-                      <Textarea id="description" placeholder="Descreva o produto..." />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="image">Imagem</Label>
-                      <div className="flex gap-2">
-                        <Input id="image" type="file" className="flex-1" />
-                        <Button variant="outline" size="icon">
-                          <FileUp className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                  <DialogFooter>
-                    <Button type="submit">Salvar Produto</Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
+              <Button onClick={handleOpenNewProduct}>
+                <Plus className="mr-2 h-4 w-4" />
+                Novo Produto
+              </Button>
             </div>
           </div>
 
@@ -251,7 +213,7 @@ const CompanyProducts = () => {
                       </div>
                       <div className="col-span-2 text-right">R$ {product.preco.toFixed(2).replace('.', ',')}</div>
                       <div className="col-span-2 text-right flex justify-end gap-1">
-                        <Button variant="ghost" size="icon">
+                        <Button variant="ghost" size="icon" onClick={() => handleEditProduct(product)}>
                           <Edit className="h-4 w-4" />
                         </Button>
                         <Button variant="ghost" size="icon">
@@ -317,6 +279,18 @@ const CompanyProducts = () => {
           </div>
         </div>
       </main>
+      
+      {/* Add/Edit Product Dialog */}
+      <Dialog open={openProductDialog} onOpenChange={setOpenProductDialog}>
+        <DialogContent className="max-w-5xl h-[90vh] overflow-y-auto p-0">
+          <ProductForm
+            initialData={editingProduct || {}}
+            categories={categories}
+            onSubmit={handleSaveProduct}
+            onCancel={handleCloseDialog}
+          />
+        </DialogContent>
+      </Dialog>
       
       <Footer />
     </div>

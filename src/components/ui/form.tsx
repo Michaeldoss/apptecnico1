@@ -1,3 +1,4 @@
+
 import * as React from "react"
 import * as LabelPrimitive from "@radix-ui/react-label"
 import { Slot } from "@radix-ui/react-slot"
@@ -164,6 +165,42 @@ const FormMessage = React.forwardRef<
 })
 FormMessage.displayName = "FormMessage"
 
+const FormRow = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("flex flex-wrap gap-4", className)}
+    {...props}
+  />
+))
+FormRow.displayName = "FormRow"
+
+const FormSection = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("space-y-4 py-2", className)}
+    {...props}
+  />
+))
+FormSection.displayName = "FormSection"
+
+const FormSectionTitle = React.forwardRef<
+  HTMLHeadingElement,
+  React.HTMLAttributes<HTMLHeadingElement>
+>(({ className, ...props }, ref) => (
+  <h3
+    ref={ref}
+    className={cn("text-lg font-medium text-primary mb-2", className)}
+    {...props}
+  />
+))
+FormSectionTitle.displayName = "FormSectionTitle"
+
 export {
   useFormField,
   Form,
@@ -173,4 +210,7 @@ export {
   FormDescription,
   FormMessage,
   FormField,
+  FormRow,
+  FormSection,
+  FormSectionTitle,
 }
