@@ -117,9 +117,9 @@ function App() {
             }
           />
 
-          {/* Customer Routes */}
+          {/* Customer Routes - Updated to use "/cliente/" path prefix */}
           <Route
-            path="/customer/dashboard"
+            path="/cliente/painel"
             element={
               <CustomerLayout title="Dashboard">
                 <CustomerDashboard />
@@ -127,7 +127,7 @@ function App() {
             }
           />
           <Route
-            path="/customer/equipment"
+            path="/cliente/equipamentos"
             element={
               <CustomerLayout title="Equipamentos">
                 <CustomerEquipment />
@@ -135,7 +135,7 @@ function App() {
             }
           />
           <Route
-            path="/customer/service-request"
+            path="/cliente/servico"
             element={
               <CustomerLayout title="Solicitar Serviço">
                 <CustomerServiceRequest />
@@ -143,7 +143,7 @@ function App() {
             }
           />
           <Route
-            path="/customer/services"
+            path="/cliente/servicos"
             element={
               <CustomerLayout title="Serviços">
                 <CustomerServices />
@@ -151,7 +151,7 @@ function App() {
             }
           />
           <Route
-            path="/customer/tracking/:id"
+            path="/cliente/rastreamento/:id"
             element={
               <CustomerLayout title="Acompanhamento">
                 <CustomerTracking />
@@ -159,7 +159,7 @@ function App() {
             }
           />
           <Route
-            path="/customer/service-orders"
+            path="/cliente/ordens"
             element={
               <CustomerLayout title="Ordens de Serviço">
                 <CustomerServiceOrders />
@@ -167,7 +167,7 @@ function App() {
             }
           />
           <Route
-            path="/customer/service/:id"
+            path="/cliente/servico/:id"
             element={
               <CustomerLayout title="Detalhes do Serviço">
                 <CustomerServiceDetails />
@@ -175,7 +175,7 @@ function App() {
             }
           />
           <Route
-            path="/customer/payments"
+            path="/cliente/pagamentos"
             element={
               <CustomerLayout title="Pagamentos">
                 <CustomerPayments />
@@ -183,7 +183,7 @@ function App() {
             }
           />
           <Route
-            path="/customer/payment/:id"
+            path="/cliente/pagamento/:id"
             element={
               <CustomerLayout title="Detalhes do Pagamento">
                 <CustomerPaymentDetails />
@@ -191,7 +191,7 @@ function App() {
             }
           />
           <Route
-            path="/customer/profile"
+            path="/cliente/perfil"
             element={
               <CustomerLayout title="Perfil">
                 <CustomerProfile />
@@ -200,7 +200,7 @@ function App() {
           />
 
           {/* Fallback Routes */}
-          <Route path="/dashboard" element={<Navigate to="/customer/dashboard" />} />
+          <Route path="/dashboard" element={<Navigate to="/cliente/painel" />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Toaster />

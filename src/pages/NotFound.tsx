@@ -28,8 +28,9 @@ const NotFound = () => {
   // Determinar a página inicial com base no tipo de usuário
   const getHomePage = () => {
     if (!isAuthenticated) return "/";
-    if (userType === "technician") return "/tecnico/painel";
+    if (userType === "technician") return "/technician/dashboard";
     if (userType === "customer") return "/cliente/painel";
+    if (userType === "company") return "/store/company-dashboard";
     return "/";
   };
 
