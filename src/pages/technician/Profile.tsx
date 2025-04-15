@@ -12,6 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { CheckCircle } from 'lucide-react';
 import { getAllEquipmentTypes } from '@/types/equipment';
 import { serviceTypeLabels } from '@/types/technician';
+import { useToast } from '@/hooks/use-toast';
 
 const TechnicianProfile = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -21,6 +22,7 @@ const TechnicianProfile = () => {
   const [selectedServices, setSelectedServices] = useState<string[]>([
     'installation', 'maintenance'
   ]);
+  const { toast } = useToast();
   
   // Dados de exemplo do perfil
   const profile = {
@@ -57,7 +59,10 @@ const TechnicianProfile = () => {
     // Simulação de envio
     setTimeout(() => {
       setIsLoading(false);
-      // Lógica de salvar
+      toast({
+        title: "Perfil atualizado",
+        description: "Suas informações foram atualizadas com sucesso."
+      });
     }, 1500);
   };
   
