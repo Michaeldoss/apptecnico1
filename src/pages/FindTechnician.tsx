@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { 
   Card, 
   CardContent, 
@@ -12,19 +11,15 @@ import {
   CardTitle 
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { MapPin, Search, Filter, Star, ArrowRight, AlertCircle, Printer, Scissors, Wrench } from 'lucide-react';
+import { MapPin, Star, ArrowRight, AlertCircle, Printer, Scissors, Wrench } from 'lucide-react';
 import TechnicianMap from '@/components/maps/TechnicianMap';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { useTechnicianSearch } from '@/hooks/useTechnicianSearch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import BlurContainer from '@/components/ui/BlurContainer';
-
-const equipmentCategories = [
-  { id: 'printers', label: 'Plotters', icon: <Printer className="h-4 w-4 mr-2" /> },
-  { id: 'finishing', label: 'Acabamento', icon: <Scissors className="h-4 w-4 mr-2" /> },
-  { id: 'cnc', label: 'Máquinas CNC', icon: <Wrench className="h-4 w-4 mr-2" /> },
-];
+import TechnicianFilters from '@/components/technician/TechnicianFilters';
+import { equipmentCategories } from '@/types/equipment';
 
 const FindTechnician = () => {
   const { isAuthenticated } = useAuth();
@@ -38,7 +33,13 @@ const FindTechnician = () => {
     searchLocation,
     setSearchLocation,
     filterByService,
-    setFilterByService
+    setFilterByService,
+    selectedState,
+    setSelectedState,
+    selectedCity,
+    setSelectedCity,
+    selectedEquipmentType,
+    setSelectedEquipmentType
   } = useTechnicianSearch();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
@@ -55,31 +56,13 @@ const FindTechnician = () => {
     }
   };
 
-  // Filter technicians by category if selected
+  // Filter technicians by equipment category if selected
   const filteredTechnicians = selectedCategory 
     ? technicians.filter(tech => {
-        if (selectedCategory === 'printers') {
-          return tech.specialties.some(s => 
-            s.includes('plotter') || 
-            s.includes('impressora') || 
-            s.includes('impressão')
-          );
-        } else if (selectedCategory === 'finishing') {
-          return tech.specialties.some(s => 
-            s.includes('calandra') || 
-            s.includes('prensa') || 
-            s.includes('carrossel') || 
-            s.includes('costura')
-          );
-        } else if (selectedCategory === 'cnc') {
-          return tech.specialties.some(s => 
-            s.includes('cnc') || 
-            s.includes('router') || 
-            s.includes('laser') || 
-            s.includes('gravadora')
-          );
-        }
-        return true;
+        const category = equipmentCategories.find(cat => cat.id === selectedCategory);
+        if (!category) return true;
+        
+        return tech.equipmentTypes?.some(type => category.types.includes(type));
       })
     : technicians;
 
@@ -94,33 +77,21 @@ const FindTechnician = () => {
           <h1 className="text-3xl font-bold mb-2">Encontre Técnicos Especializados</h1>
           <p className="text-lg opacity-90 mb-6">Localize profissionais qualificados para seus equipamentos</p>
           
-          {/* Search Bar */}
-          <div className="flex flex-col md:flex-row gap-2">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <Input 
-                type="text" 
-                placeholder="Buscar por tipo de equipamento" 
-                value={filterByService}
-                onChange={(e) => setFilterByService(e.target.value)}
-                className="pl-10 bg-white text-black w-full"
-              />
-            </div>
-            <div className="relative flex-1">
-              <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <Input 
-                type="text" 
-                placeholder="Localização (ex: São Paulo, SP)" 
-                value={searchLocation}
-                onChange={(e) => setSearchLocation(e.target.value)}
-                className="pl-10 bg-white text-black w-full"
-              />
-            </div>
-            <Button variant="secondary" className="whitespace-nowrap">
-              <Filter className="mr-2 h-4 w-4" />
-              Filtrar
-            </Button>
-          </div>
+          {/* Search Filters */}
+          <TechnicianFilters 
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            searchLocation={searchLocation}
+            setSearchLocation={setSearchLocation}
+            filterByService={filterByService}
+            setFilterByService={setFilterByService}
+            selectedState={selectedState}
+            setSelectedState={setSelectedState}
+            selectedCity={selectedCity}
+            setSelectedCity={setSelectedCity}
+            selectedEquipmentType={selectedEquipmentType}
+            setSelectedEquipmentType={setSelectedEquipmentType}
+          />
         </div>
       </header>
 
@@ -143,7 +114,10 @@ const FindTechnician = () => {
               onClick={() => setSelectedCategory(category.id)}
               className="flex items-center"
             >
-              {category.icon} {category.label}
+              {category.id === 'printers' && <Printer className="h-4 w-4 mr-2" />}
+              {category.id === 'finishing' && <Scissors className="h-4 w-4 mr-2" />}
+              {category.id === 'cnc' && <Wrench className="h-4 w-4 mr-2" />}
+              {category.label}
             </Button>
           ))}
         </div>

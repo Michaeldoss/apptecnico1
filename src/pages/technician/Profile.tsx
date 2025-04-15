@@ -7,12 +7,20 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { CheckCircle } from 'lucide-react';
+import { getAllEquipmentTypes } from '@/types/equipment';
+import { serviceTypeLabels } from '@/types/technician';
 
 const TechnicianProfile = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedEquipment, setSelectedEquipment] = useState<string[]>([
+    'eco-solvent', 'uv-flexible', 'solvent'
+  ]);
+  const [selectedServices, setSelectedServices] = useState<string[]>([
+    'installation', 'maintenance'
+  ]);
   
   // Dados de exemplo do perfil
   const profile = {
@@ -20,11 +28,27 @@ const TechnicianProfile = () => {
     email: 'ricardo.oliveira@exemplo.com',
     phone: '(11) 98765-4321',
     document: '123.456.789-00',
-    specialty: 'computadores',
-    description: 'Técnico especializado em manutenção de computadores, notebooks e instalação de redes. Mais de 5 anos de experiência no mercado.',
+    specialty: 'eco-solvent',
+    description: 'Técnico especializado em manutenção de plotters e equipamentos gráficos. Mais de 5 anos de experiência no mercado.',
     address: 'Av. Paulista, 1000, São Paulo - SP',
     rating: 4.8,
     reviewCount: 36,
+  };
+  
+  const handleEquipmentChange = (equipmentId: string) => {
+    setSelectedEquipment(prev => 
+      prev.includes(equipmentId) 
+        ? prev.filter(id => id !== equipmentId) 
+        : [...prev, equipmentId]
+    );
+  };
+
+  const handleServiceChange = (serviceId: string) => {
+    setSelectedServices(prev => 
+      prev.includes(serviceId) 
+        ? prev.filter(id => id !== serviceId) 
+        : [...prev, serviceId]
+    );
   };
   
   const handleSaveProfile = (e: React.FormEvent) => {
@@ -36,6 +60,8 @@ const TechnicianProfile = () => {
       // Lógica de salvar
     }, 1500);
   };
+  
+  const equipmentOptions = getAllEquipmentTypes();
   
   return (
     <TechnicianLayout title="Meu Perfil">
@@ -135,37 +161,47 @@ const TechnicianProfile = () => {
                     Atualize suas informações profissionais e especialidades
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <Label>Especialidades</Label>
-                    <RadioGroup defaultValue={profile.specialty}>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="general" id="general" />
-                          <Label htmlFor="general">Reparos Gerais</Label>
+                <CardContent className="space-y-6">
+                  <div className="space-y-4">
+                    <Label className="text-lg">Tipos de Equipamentos</Label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                      {equipmentOptions.map((equipment) => (
+                        <div key={equipment.value} className="flex items-center space-x-2">
+                          <Checkbox 
+                            id={`equipment-${equipment.value}`}
+                            checked={selectedEquipment.includes(equipment.value)}
+                            onCheckedChange={() => handleEquipmentChange(equipment.value)}
+                          />
+                          <Label 
+                            htmlFor={`equipment-${equipment.value}`}
+                            className="text-sm"
+                          >
+                            {equipment.label}
+                          </Label>
                         </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="computadores" id="computadores" />
-                          <Label htmlFor="computadores">Computadores</Label>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4 border-t pt-4">
+                    <Label className="text-lg">Tipos de Serviços</Label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {Object.entries(serviceTypeLabels).map(([value, label]) => (
+                        <div key={value} className="flex items-center space-x-2">
+                          <Checkbox 
+                            id={`service-${value}`}
+                            checked={selectedServices.includes(value)}
+                            onCheckedChange={() => handleServiceChange(value)}
+                          />
+                          <Label 
+                            htmlFor={`service-${value}`}
+                            className="text-sm"
+                          >
+                            {label}
+                          </Label>
                         </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="eletrodomesticos" id="eletrodomesticos" />
-                          <Label htmlFor="eletrodomesticos">Eletrodomésticos</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="eletronicos" id="eletronicos" />
-                          <Label htmlFor="eletronicos">Eletrônicos</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="redes" id="redes" />
-                          <Label htmlFor="redes">Redes</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="outros" id="outros" />
-                          <Label htmlFor="outros">Outros</Label>
-                        </div>
-                      </div>
-                    </RadioGroup>
+                      ))}
+                    </div>
                   </div>
                   
                   <div className="space-y-2">

@@ -60,8 +60,8 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
   const { unreadCount } = useNotifications();
   const { logout } = useAuth();
   
-  // Previnir a duplicação de sidebar verificando se já estamos em uma página de técnico
-  const pathPrefix = path.includes('/tecnico/') ? '/tecnico' : '/technician';
+  // Usar apenas '/tecnico' como prefixo para consistência
+  const pathPrefix = '/tecnico';
   
   const handleLogout = () => {
     logout();

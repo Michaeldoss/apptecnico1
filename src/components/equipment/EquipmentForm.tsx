@@ -11,7 +11,7 @@ import {
   DialogTitle,
   DialogFooter 
 } from '@/components/ui/dialog';
-import { Equipment, EquipmentType } from '@/types/equipment';
+import { Equipment, EquipmentType, getAllEquipmentTypes } from '@/types/equipment';
 import {
   Select,
   SelectContent,
@@ -26,29 +26,6 @@ interface EquipmentFormProps {
   onSave: (equipment: Omit<Equipment, 'id'> | Partial<Equipment> & { id: number }) => void;
   equipment?: Equipment;
 }
-
-const equipmentTypeOptions = [
-  { value: 'eco-solvent', label: 'Plotter eco solvente' },
-  { value: 'uv-flexible', label: 'Plotter UV flexível' },
-  { value: 'solvent', label: 'Plotter solvente' },
-  { value: 'sublimation', label: 'Plotter sublimática' },
-  { value: 'dtf-textile', label: 'Plotter DTF Têxtil' },
-  { value: 'dtf-uv', label: 'Plotter DTF UV' },
-  { value: 'uv-flatbed', label: 'Plotter Flatbed UV' },
-  { value: 'cutting', label: 'Plotter de recorte' },
-  { value: 'cylindrical-uv', label: 'Plotter UV cilíndrica' },
-  { value: 'sublimation-calander', label: 'Calandra para sublimação' },
-  { value: 'thermal-press', label: 'Prensa térmica para sublimação' },
-  { value: 'silk-carousel', label: 'Carrossel para silk' },
-  { value: 'dtf-carousel', label: 'Carrossel para DTF' },
-  { value: 'mixed-carousel', label: 'Carrossel misto' },
-  { value: 'sewing-machine', label: 'Máquina de costura' },
-  { value: 'offset', label: 'OFF-SET' },
-  { value: 'cnc-co2', label: 'CNC CO²' },
-  { value: 'cnc-router', label: 'CNC Router' },
-  { value: 'laser-engraver', label: 'Gravadora laser (Fiber)' },
-  { value: 'other', label: 'Outro' }
-];
 
 const statusOptions = [
   { value: 'operational', label: 'Operacional' },
@@ -71,6 +48,7 @@ const EquipmentForm: React.FC<EquipmentFormProps> = ({ isOpen, onClose, onSave, 
   });
   
   const isEditing = !!equipment;
+  const equipmentTypeOptions = getAllEquipmentTypes();
   
   useEffect(() => {
     if (equipment) {

@@ -9,12 +9,7 @@ import { Service } from '@/types/service';
 import ServicesList from '@/components/services/ServicesList';
 import TrackingDialog from '@/components/services/TrackingDialog';
 import { useServices } from '@/hooks/useServices';
-
-const equipmentCategories = [
-  { id: 'printers', label: 'Plotters', icon: <Printer className="h-4 w-4 mr-2" /> },
-  { id: 'finishing', label: 'Acabamento', icon: <Scissors className="h-4 w-4 mr-2" /> },
-  { id: 'cnc', label: 'Máquinas CNC', icon: <Wrench className="h-4 w-4 mr-2" /> },
-];
+import { equipmentCategories } from '@/types/equipment';
 
 const TechnicianServices = () => {
   const { services, searchQuery, setSearchQuery, handleTrackingAction } = useServices();
@@ -41,21 +36,13 @@ const TechnicianServices = () => {
   // Filter services by equipment category if selected
   const filteredServices = selectedCategory 
     ? services.filter(service => {
-        if (selectedCategory === 'printers') {
-          return service.equipmentType?.includes('plotter') || 
-                 service.description?.toLowerCase().includes('impressora') || 
-                 service.description?.toLowerCase().includes('plotter');
-        } else if (selectedCategory === 'finishing') {
-          return service.equipmentType?.includes('calandra') || 
-                 service.equipmentType?.includes('prensa') ||
-                 service.equipmentType?.includes('carrossel') ||
-                 service.equipmentType?.includes('costura');
-        } else if (selectedCategory === 'cnc') {
-          return service.equipmentType?.includes('cnc') || 
-                 service.equipmentType?.includes('router') ||
-                 service.equipmentType?.includes('laser');
-        }
-        return true;
+        const category = equipmentCategories.find(cat => cat.id === selectedCategory);
+        if (!category) return true;
+        
+        return category.types.some(type => 
+          service.equipmentType?.includes(type) || 
+          service.description?.toLowerCase().includes(type)
+        );
       })
     : services;
   
@@ -93,7 +80,10 @@ const TechnicianServices = () => {
               onClick={() => setSelectedCategory(category.id)}
               className="flex items-center"
             >
-              {category.icon} {category.label}
+              {category.id === 'printers' && <Printer className="h-4 w-4 mr-2" />}
+              {category.id === 'finishing' && <Scissors className="h-4 w-4 mr-2" />}
+              {category.id === 'cnc' && <Wrench className="h-4 w-4 mr-2" />}
+              {category.label}
             </Button>
           ))}
         </div>
