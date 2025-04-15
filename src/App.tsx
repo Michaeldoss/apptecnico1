@@ -58,8 +58,10 @@ function App() {
           <Route path="/store/company-profile" element={<CompanyProfile />} />
           <Route path="/store/company-products" element={<CompanyProducts />} />
 
-          {/* Technician Routes */}
+          {/* Technician Routes - Add both path formats to support /technician/ and /tecnico/ */}
           <Route path="/technician" element={<TechnicianLanding />} />
+          <Route path="/tecnico" element={<TechnicianLanding />} />
+          
           <Route
             path="/technician/dashboard"
             element={
@@ -69,6 +71,15 @@ function App() {
             }
           />
           <Route
+            path="/tecnico/painel"
+            element={
+              <TechnicianLayout title="Dashboard">
+                <TechnicianDashboard />
+              </TechnicianLayout>
+            }
+          />
+          
+          <Route
             path="/technician/chat"
             element={
               <TechnicianLayout title="Chat">
@@ -76,6 +87,15 @@ function App() {
               </TechnicianLayout>
             }
           />
+          <Route
+            path="/tecnico/chat"
+            element={
+              <TechnicianLayout title="Chat">
+                <TechnicianChat />
+              </TechnicianLayout>
+            }
+          />
+          
           <Route
             path="/technician/schedule"
             element={
@@ -85,6 +105,15 @@ function App() {
             }
           />
           <Route
+            path="/tecnico/agenda"
+            element={
+              <TechnicianLayout title="Agenda">
+                <TechnicianSchedule />
+              </TechnicianLayout>
+            }
+          />
+          
+          <Route
             path="/technician/services"
             element={
               <TechnicianLayout title="Serviços">
@@ -92,6 +121,15 @@ function App() {
               </TechnicianLayout>
             }
           />
+          <Route
+            path="/tecnico/servicos"
+            element={
+              <TechnicianLayout title="Serviços">
+                <TechnicianServices />
+              </TechnicianLayout>
+            }
+          />
+          
           <Route
             path="/technician/parts"
             element={
@@ -101,6 +139,15 @@ function App() {
             }
           />
           <Route
+            path="/tecnico/pecas"
+            element={
+              <TechnicianLayout title="Peças">
+                <TechnicianParts />
+              </TechnicianLayout>
+            }
+          />
+          
+          <Route
             path="/technician/profile"
             element={
               <TechnicianLayout title="Perfil">
@@ -109,7 +156,24 @@ function App() {
             }
           />
           <Route
+            path="/tecnico/perfil"
+            element={
+              <TechnicianLayout title="Perfil">
+                <TechnicianProfile />
+              </TechnicianLayout>
+            }
+          />
+          
+          <Route
             path="/technician/service/:id"
+            element={
+              <TechnicianLayout title="Ordem de Serviço">
+                <TechnicianServiceOrder />
+              </TechnicianLayout>
+            }
+          />
+          <Route
+            path="/tecnico/servico/:id"
             element={
               <TechnicianLayout title="Ordem de Serviço">
                 <TechnicianServiceOrder />
