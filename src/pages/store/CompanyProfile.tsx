@@ -22,12 +22,16 @@ import {
   Save,
   ArrowLeft,
   Wrench,
-  CheckCircle
+  CheckCircle,
+  ShieldCheck,
+  AlertCircle
 } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
 
 const CompanyProfile = () => {
   const { isAuthenticated, userType, user } = useAuth();
   const [offersTechnicalService, setOffersTechnicalService] = useState(false);
+  const [loading, setLoading] = useState(false);
   
   // Redirect to login if not authenticated or not a company
   if (!isAuthenticated || userType !== 'company') {
@@ -37,10 +41,30 @@ const CompanyProfile = () => {
   // Handle form submission (mock)
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Perfil atualizado",
-      description: "As alterações foram salvas com sucesso.",
-    });
+    setLoading(true);
+    
+    // Simular envio
+    setTimeout(() => {
+      setLoading(false);
+      toast({
+        title: "Perfil atualizado",
+        description: "As alterações foram salvas com sucesso.",
+      });
+    }, 1500);
+  };
+
+  const handleTechProfileSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    
+    // Simular envio
+    setTimeout(() => {
+      setLoading(false);
+      toast({
+        title: "Configurações técnicas salvas",
+        description: "Seu perfil de assistência técnica foi atualizado com sucesso.",
+      });
+    }, 1500);
   };
 
   return (
@@ -51,9 +75,9 @@ const CompanyProfile = () => {
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center">
-              <UserRound className="h-10 w-10 text-primary mr-4" />
+              <Building2 className="h-10 w-10 text-primary mr-4" />
               <div>
-                <h1 className="text-3xl font-bold">Meu Perfil</h1>
+                <h1 className="text-3xl font-bold">Meu Perfil - Lojista</h1>
                 <p className="text-muted-foreground">
                   Gerencie as informações da sua empresa
                 </p>
@@ -203,12 +227,16 @@ const CompanyProfile = () => {
                   </Card>
                   
                   <div className="flex justify-end gap-4">
-                    <Button variant="outline" type="button">
+                    <Button variant="outline" type="button" disabled={loading}>
                       Cancelar
                     </Button>
-                    <Button type="submit">
-                      <Save className="mr-2 h-4 w-4" />
-                      Salvar Alterações
+                    <Button type="submit" disabled={loading}>
+                      {loading ? "Salvando..." : (
+                        <>
+                          <Save className="mr-2 h-4 w-4" />
+                          Salvar Alterações
+                        </>
+                      )}
                     </Button>
                   </div>
                 </div>
@@ -237,7 +265,7 @@ const CompanyProfile = () => {
                   </div>
                   
                   {offersTechnicalService && (
-                    <div className="space-y-4">
+                    <form onSubmit={handleTechProfileSubmit} className="space-y-4">
                       <div>
                         <Label htmlFor="tech-description">Descrição dos serviços técnicos</Label>
                         <Textarea 
@@ -271,49 +299,79 @@ const CompanyProfile = () => {
                         <h4 className="text-sm font-medium mb-3">Especialidades</h4>
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                           <div className="flex items-center space-x-2">
-                            <input type="checkbox" id="computers" className="rounded border-gray-300" />
-                            <label htmlFor="computers">Computadores</label>
+                            <Checkbox id="computers" />
+                            <Label htmlFor="computers">Computadores</Label>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <input type="checkbox" id="printers" className="rounded border-gray-300" />
-                            <label htmlFor="printers">Impressoras</label>
+                            <Checkbox id="printers" />
+                            <Label htmlFor="printers">Impressoras</Label>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <input type="checkbox" id="networks" className="rounded border-gray-300" />
-                            <label htmlFor="networks">Redes</label>
+                            <Checkbox id="networks" />
+                            <Label htmlFor="networks">Redes</Label>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <input type="checkbox" id="electronics" className="rounded border-gray-300" />
-                            <label htmlFor="electronics">Eletrônicos</label>
+                            <Checkbox id="electronics" />
+                            <Label htmlFor="electronics">Eletrônicos</Label>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <input type="checkbox" id="appliances" className="rounded border-gray-300" />
-                            <label htmlFor="appliances">Eletrodomésticos</label>
+                            <Checkbox id="appliances" />
+                            <Label htmlFor="appliances">Eletrodomésticos</Label>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <input type="checkbox" id="other" className="rounded border-gray-300" />
-                            <label htmlFor="other">Outros</label>
+                            <Checkbox id="other" />
+                            <Label htmlFor="other">Outros</Label>
                           </div>
                         </div>
                       </div>
                       
                       <div>
                         <h4 className="text-sm font-medium mb-3">Certificações</h4>
-                        <div className="border-dashed border-2 border-gray-300 p-4 rounded-md text-center">
-                          <p className="text-sm text-muted-foreground mb-2">
-                            Adicione certificações técnicas, autorizações de fabricantes, etc.
-                          </p>
-                          <Button variant="outline" type="button" size="sm">
-                            Adicionar Certificação
-                          </Button>
+                        <div className="space-y-2">
+                          <div className="border rounded-md p-4">
+                            <div className="flex justify-between items-center">
+                              <div className="flex items-center">
+                                <ShieldCheck className="h-5 w-5 text-green-500 mr-2" />
+                                <div>
+                                  <p className="font-medium">Autorizada Fabricante X</p>
+                                  <p className="text-sm text-muted-foreground">Certificação válida até 12/2025</p>
+                                </div>
+                              </div>
+                              <Button variant="outline" size="sm">Visualizar</Button>
+                            </div>
+                          </div>
+                          
+                          <div className="border rounded-md p-4">
+                            <div className="flex justify-between items-center">
+                              <div className="flex items-center">
+                                <AlertCircle className="h-5 w-5 text-amber-500 mr-2" />
+                                <div>
+                                  <p className="font-medium">Certificação Técnica</p>
+                                  <p className="text-sm text-muted-foreground">Aguardando aprovação</p>
+                                </div>
+                              </div>
+                              <Button variant="outline" size="sm">Visualizar</Button>
+                            </div>
+                          </div>
+                          
+                          <div className="border-dashed border-2 border-gray-300 p-4 rounded-md text-center">
+                            <p className="text-sm text-muted-foreground mb-2">
+                              Adicione certificações técnicas, autorizações de fabricantes, etc.
+                            </p>
+                            <Button variant="outline" type="button" size="sm">
+                              Adicionar Nova Certificação
+                            </Button>
+                          </div>
                         </div>
                       </div>
-                    </div>
+                      
+                      <div className="flex justify-end">
+                        <Button type="submit" disabled={loading}>
+                          {loading ? "Salvando..." : "Salvar Configurações Técnicas"}
+                        </Button>
+                      </div>
+                    </form>
                   )}
-                  
-                  <div className="flex justify-end">
-                    <Button type="button">Salvar Configurações</Button>
-                  </div>
                 </CardContent>
               </Card>
             </TabsContent>

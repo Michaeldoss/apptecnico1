@@ -60,8 +60,8 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
   const { unreadCount } = useNotifications();
   const { logout } = useAuth();
   
-  // Make sure we only show the sidebar once
-  const isEmbedded = path.includes('/tecnico/') || path.includes('/technician/');
+  // Previnir a duplicação de sidebar verificando se já estamos em uma página de técnico
+  const pathPrefix = path.includes('/tecnico/') ? '/tecnico' : '/technician';
   
   const handleLogout = () => {
     logout();
@@ -76,28 +76,28 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
         <aside className="w-64 shrink-0 border-r pr-6 hidden md:block">
           <div className="space-y-1 py-4">
             <SidebarItem 
-              to="/tecnico/painel" 
+              to={`${pathPrefix}/painel`} 
               icon={LayoutDashboard} 
               active={path.includes('/painel') || path.includes('/dashboard')}
             >
               Painel
             </SidebarItem>
             <SidebarItem 
-              to="/tecnico/perfil" 
+              to={`${pathPrefix}/perfil`} 
               icon={User} 
               active={path.includes('/perfil') || path.includes('/profile')}
             >
               Meu Perfil
             </SidebarItem>
             <SidebarItem 
-              to="/tecnico/servicos" 
+              to={`${pathPrefix}/servicos`} 
               icon={Wrench} 
               active={path.includes('/servicos') || path.includes('/services')}
             >
               Serviços
             </SidebarItem>
             <SidebarItem 
-              to="/tecnico/chat" 
+              to={`${pathPrefix}/chat`} 
               icon={MessageSquare} 
               active={path.includes('/chat')}
               badge={unreadCount}
@@ -105,14 +105,14 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
               Mensagens
             </SidebarItem>
             <SidebarItem 
-              to="/tecnico/pecas" 
+              to={`${pathPrefix}/pecas`} 
               icon={Package} 
               active={path.includes('/pecas') || path.includes('/parts')}
             >
               Peças
             </SidebarItem>
             <SidebarItem 
-              to="/tecnico/agenda" 
+              to={`${pathPrefix}/agenda`} 
               icon={Calendar} 
               active={path.includes('/agenda') || path.includes('/schedule')}
             >
