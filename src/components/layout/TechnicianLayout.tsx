@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { useNotifications } from '@/hooks/useNotifications';
 import { Badge } from '@/components/ui/badge';
+import { useAuth } from '@/context/AuthContext';
 
 type SidebarItemProps = {
   to: string;
@@ -57,6 +58,14 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
   const location = useLocation();
   const path = location.pathname;
   const { unreadCount } = useNotifications();
+  const { logout } = useAuth();
+  
+  // Make sure we only show the sidebar once
+  const isEmbedded = path.includes('/tecnico/') || path.includes('/technician/');
+  
+  const handleLogout = () => {
+    logout();
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -69,28 +78,28 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
             <SidebarItem 
               to="/tecnico/painel" 
               icon={LayoutDashboard} 
-              active={path === '/tecnico/painel'}
+              active={path.includes('/painel') || path.includes('/dashboard')}
             >
               Painel
             </SidebarItem>
             <SidebarItem 
               to="/tecnico/perfil" 
               icon={User} 
-              active={path === '/tecnico/perfil'}
+              active={path.includes('/perfil') || path.includes('/profile')}
             >
               Meu Perfil
             </SidebarItem>
             <SidebarItem 
               to="/tecnico/servicos" 
               icon={Wrench} 
-              active={path === '/tecnico/servicos'}
+              active={path.includes('/servicos') || path.includes('/services')}
             >
               Serviços
             </SidebarItem>
             <SidebarItem 
               to="/tecnico/chat" 
               icon={MessageSquare} 
-              active={path === '/tecnico/chat'}
+              active={path.includes('/chat')}
               badge={unreadCount}
             >
               Mensagens
@@ -98,23 +107,27 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
             <SidebarItem 
               to="/tecnico/pecas" 
               icon={Package} 
-              active={path === '/tecnico/pecas'}
+              active={path.includes('/pecas') || path.includes('/parts')}
             >
               Peças
             </SidebarItem>
             <SidebarItem 
               to="/tecnico/agenda" 
               icon={Calendar} 
-              active={path === '/tecnico/agenda'}
+              active={path.includes('/agenda') || path.includes('/schedule')}
             >
               Agenda
             </SidebarItem>
           </div>
           
           <div className="pt-6 mt-6 border-t">
-            <SidebarItem to="/logout" icon={LogOut} active={false}>
-              Sair
-            </SidebarItem>
+            <button 
+              onClick={handleLogout}
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-base transition-all hover:bg-primary-foreground text-muted-foreground w-full text-left"
+            >
+              <LogOut className="h-5 w-5" />
+              <span>Sair</span>
+            </button>
           </div>
         </aside>
         

@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Navigate, Link } from 'react-router-dom';
 import Navbar from '@/components/layout/Navbar';
@@ -9,6 +9,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Switch } from '@/components/ui/switch';
 import { toast } from '@/hooks/use-toast';
 import { 
   Building2, 
@@ -18,11 +20,14 @@ import {
   Mail,
   FileText,
   Save,
-  ArrowLeft
+  ArrowLeft,
+  Wrench,
+  CheckCircle
 } from 'lucide-react';
 
 const CompanyProfile = () => {
   const { isAuthenticated, userType, user } = useAuth();
+  const [offersTechnicalService, setOffersTechnicalService] = useState(false);
   
   // Redirect to login if not authenticated or not a company
   if (!isAuthenticated || userType !== 'company') {
@@ -62,133 +67,258 @@ const CompanyProfile = () => {
             </Link>
           </div>
           
-          <form onSubmit={handleSubmit}>
-            <div className="space-y-6">
+          <Tabs defaultValue="company">
+            <TabsList className="w-full mb-6">
+              <TabsTrigger value="company">Empresa</TabsTrigger>
+              <TabsTrigger value="technical">Assistência Técnica</TabsTrigger>
+              <TabsTrigger value="documents">Documentos</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="company">
+              <form onSubmit={handleSubmit}>
+                <div className="space-y-6">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center">
+                        <Building2 className="h-5 w-5 mr-2" /> 
+                        Informações da Empresa
+                      </CardTitle>
+                      <CardDescription>
+                        Dados básicos da sua empresa na plataforma
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="flex items-center gap-4">
+                        <div className="h-24 w-24 rounded-md border flex items-center justify-center bg-muted">
+                          <img 
+                            src={user?.logo || "/placeholder.svg"} 
+                            alt="Logo" 
+                            className="max-h-20 max-w-20 object-contain" 
+                          />
+                        </div>
+                        <div className="flex-1">
+                          <Label htmlFor="companyName">Nome da Empresa</Label>
+                          <Input 
+                            id="companyName" 
+                            defaultValue={user?.name || "Doss Group"} 
+                            className="mb-2"
+                          />
+                          <Button type="button" variant="outline" size="sm">
+                            Alterar Logo
+                          </Button>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <Label htmlFor="description">Descrição da Empresa</Label>
+                        <Textarea 
+                          id="description" 
+                          defaultValue={user?.description || "Peças originais e componentes para impressoras industriais. Distribuidores autorizados das principais marcas."} 
+                          rows={3}
+                        />
+                      </div>
+                      
+                      <div>
+                        <Label htmlFor="cnpj">CNPJ</Label>
+                        <Input 
+                          id="cnpj" 
+                          defaultValue={user?.cnpj || "12.345.678/0001-90"}
+                        />
+                      </div>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center">
+                        <MapPin className="h-5 w-5 mr-2" /> 
+                        Endereço e Contato
+                      </CardTitle>
+                      <CardDescription>
+                        Informações de localização e contato
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="address">Endereço</Label>
+                          <Input 
+                            id="address" 
+                            defaultValue={user?.address || "Av. Rio Branco, 156 - Centro"}
+                          />
+                        </div>
+                        
+                        <div>
+                          <Label htmlFor="contactName">Nome do Contato</Label>
+                          <Input 
+                            id="contactName" 
+                            defaultValue={user?.contactName || "João Silva"}
+                          />
+                        </div>
+                        
+                        <div>
+                          <Label htmlFor="city">Cidade</Label>
+                          <Input 
+                            id="city" 
+                            defaultValue={user?.city || "Rio de Janeiro"}
+                          />
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <Label htmlFor="state">Estado</Label>
+                            <Input 
+                              id="state" 
+                              defaultValue={user?.state || "RJ"}
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="zipCode">CEP</Label>
+                            <Input 
+                              id="zipCode" 
+                              defaultValue={user?.zipCode || "20040-901"}
+                            />
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center gap-2">
+                          <Phone className="h-4 w-4 text-muted-foreground" />
+                          <Input 
+                            id="phone" 
+                            defaultValue={user?.phone || "(21) 99999-9999"}
+                            className="flex-1"
+                          />
+                        </div>
+                        
+                        <div className="flex items-center gap-2">
+                          <Mail className="h-4 w-4 text-muted-foreground" />
+                          <Input 
+                            id="email" 
+                            defaultValue={user?.email || "loja@exemplo.com"}
+                            className="flex-1"
+                          />
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  
+                  <div className="flex justify-end gap-4">
+                    <Button variant="outline" type="button">
+                      Cancelar
+                    </Button>
+                    <Button type="submit">
+                      <Save className="mr-2 h-4 w-4" />
+                      Salvar Alterações
+                    </Button>
+                  </div>
+                </div>
+              </form>
+            </TabsContent>
+            
+            <TabsContent value="technical">
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center">
-                    <Building2 className="h-5 w-5 mr-2" /> 
-                    Informações da Empresa
+                    <Wrench className="h-5 w-5 mr-2" /> 
+                    Assistência Técnica
                   </CardTitle>
                   <CardDescription>
-                    Dados básicos da sua empresa na plataforma
+                    Configure sua empresa como prestadora de serviços técnicos
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex items-center gap-4">
-                    <div className="h-24 w-24 rounded-md border flex items-center justify-center bg-muted">
-                      <img 
-                        src={user?.logo || "/placeholder.svg"} 
-                        alt="Logo" 
-                        className="max-h-20 max-w-20 object-contain" 
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <Label htmlFor="companyName">Nome da Empresa</Label>
-                      <Input 
-                        id="companyName" 
-                        defaultValue={user?.name || "Doss Group"} 
-                        className="mb-2"
-                      />
-                      <Button type="button" variant="outline" size="sm">
-                        Alterar Logo
-                      </Button>
-                    </div>
+                <CardContent className="space-y-6">
+                  <div className="flex items-center space-x-2">
+                    <Switch 
+                      id="technical-services" 
+                      checked={offersTechnicalService}
+                      onCheckedChange={setOffersTechnicalService}
+                    />
+                    <Label htmlFor="technical-services">Oferecer serviços de assistência técnica</Label>
                   </div>
                   
-                  <div>
-                    <Label htmlFor="description">Descrição da Empresa</Label>
-                    <Textarea 
-                      id="description" 
-                      defaultValue={user?.description || "Peças originais e componentes para impressoras industriais. Distribuidores autorizados das principais marcas."} 
-                      rows={3}
-                    />
-                  </div>
+                  {offersTechnicalService && (
+                    <div className="space-y-4">
+                      <div>
+                        <Label htmlFor="tech-description">Descrição dos serviços técnicos</Label>
+                        <Textarea 
+                          id="tech-description" 
+                          placeholder="Descreva quais tipos de serviços técnicos sua empresa oferece, especialidades, equipamentos atendidos, etc."
+                          rows={4}
+                        />
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="service-area">Área de atendimento (km)</Label>
+                          <Input 
+                            id="service-area" 
+                            type="number"
+                            placeholder="10"
+                          />
+                        </div>
+                        
+                        <div>
+                          <Label htmlFor="hourly-rate">Valor hora técnica (R$)</Label>
+                          <Input 
+                            id="hourly-rate" 
+                            type="number"
+                            placeholder="100"
+                          />
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <h4 className="text-sm font-medium mb-3">Especialidades</h4>
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                          <div className="flex items-center space-x-2">
+                            <input type="checkbox" id="computers" className="rounded border-gray-300" />
+                            <label htmlFor="computers">Computadores</label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <input type="checkbox" id="printers" className="rounded border-gray-300" />
+                            <label htmlFor="printers">Impressoras</label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <input type="checkbox" id="networks" className="rounded border-gray-300" />
+                            <label htmlFor="networks">Redes</label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <input type="checkbox" id="electronics" className="rounded border-gray-300" />
+                            <label htmlFor="electronics">Eletrônicos</label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <input type="checkbox" id="appliances" className="rounded border-gray-300" />
+                            <label htmlFor="appliances">Eletrodomésticos</label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <input type="checkbox" id="other" className="rounded border-gray-300" />
+                            <label htmlFor="other">Outros</label>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <h4 className="text-sm font-medium mb-3">Certificações</h4>
+                        <div className="border-dashed border-2 border-gray-300 p-4 rounded-md text-center">
+                          <p className="text-sm text-muted-foreground mb-2">
+                            Adicione certificações técnicas, autorizações de fabricantes, etc.
+                          </p>
+                          <Button variant="outline" type="button" size="sm">
+                            Adicionar Certificação
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                   
-                  <div>
-                    <Label htmlFor="cnpj">CNPJ</Label>
-                    <Input 
-                      id="cnpj" 
-                      defaultValue={user?.cnpj || "12.345.678/0001-90"}
-                    />
+                  <div className="flex justify-end">
+                    <Button type="button">Salvar Configurações</Button>
                   </div>
                 </CardContent>
               </Card>
-              
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <MapPin className="h-5 w-5 mr-2" /> 
-                    Endereço e Contato
-                  </CardTitle>
-                  <CardDescription>
-                    Informações de localização e contato
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="address">Endereço</Label>
-                      <Input 
-                        id="address" 
-                        defaultValue={user?.address || "Av. Rio Branco, 156 - Centro"}
-                      />
-                    </div>
-                    
-                    <div>
-                      <Label htmlFor="contactName">Nome do Contato</Label>
-                      <Input 
-                        id="contactName" 
-                        defaultValue={user?.contactName || "João Silva"}
-                      />
-                    </div>
-                    
-                    <div>
-                      <Label htmlFor="city">Cidade</Label>
-                      <Input 
-                        id="city" 
-                        defaultValue={user?.city || "Rio de Janeiro"}
-                      />
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="state">Estado</Label>
-                        <Input 
-                          id="state" 
-                          defaultValue={user?.state || "RJ"}
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="zipCode">CEP</Label>
-                        <Input 
-                          id="zipCode" 
-                          defaultValue={user?.zipCode || "20040-901"}
-                        />
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center gap-2">
-                      <Phone className="h-4 w-4 text-muted-foreground" />
-                      <Input 
-                        id="phone" 
-                        defaultValue={user?.phone || "(21) 99999-9999"}
-                        className="flex-1"
-                      />
-                    </div>
-                    
-                    <div className="flex items-center gap-2">
-                      <Mail className="h-4 w-4 text-muted-foreground" />
-                      <Input 
-                        id="email" 
-                        defaultValue={user?.email || "loja@exemplo.com"}
-                        className="flex-1"
-                      />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              
+            </TabsContent>
+            
+            <TabsContent value="documents">
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center">
@@ -206,7 +336,11 @@ const CompanyProfile = () => {
                         <p className="font-medium">Contrato de Fornecedor</p>
                         <p className="text-sm text-muted-foreground">Última atualização: 25/03/2025</p>
                       </div>
-                      <Button variant="outline" size="sm">Visualizar</Button>
+                      <div className="flex items-center">
+                        <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
+                        <span className="text-sm text-green-600 mr-4">Aprovado</span>
+                        <Button variant="outline" size="sm">Visualizar</Button>
+                      </div>
                     </div>
                     
                     <div className="flex items-center justify-between p-4 border rounded-md">
@@ -214,7 +348,11 @@ const CompanyProfile = () => {
                         <p className="font-medium">Certidão Negativa</p>
                         <p className="text-sm text-muted-foreground">Última atualização: 10/02/2025</p>
                       </div>
-                      <Button variant="outline" size="sm">Visualizar</Button>
+                      <div className="flex items-center">
+                        <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
+                        <span className="text-sm text-green-600 mr-4">Aprovado</span>
+                        <Button variant="outline" size="sm">Visualizar</Button>
+                      </div>
                     </div>
                     
                     <div className="flex items-center justify-between p-4 border rounded-md">
@@ -227,18 +365,8 @@ const CompanyProfile = () => {
                   </div>
                 </CardContent>
               </Card>
-              
-              <div className="flex justify-end gap-4">
-                <Button variant="outline" type="button">
-                  Cancelar
-                </Button>
-                <Button type="submit">
-                  <Save className="mr-2 h-4 w-4" />
-                  Salvar Alterações
-                </Button>
-              </div>
-            </div>
-          </form>
+            </TabsContent>
+          </Tabs>
         </div>
       </main>
       
