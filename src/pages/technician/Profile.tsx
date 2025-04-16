@@ -69,177 +69,175 @@ const TechnicianProfile = () => {
   const equipmentOptions = getAllEquipmentTypes();
   
   return (
-    <TechnicianLayout title="Meu Perfil">
-      <div className="space-y-6">
-        <Card>
-          <CardHeader className="flex flex-row items-start justify-between">
-            <div className="flex items-center space-x-4">
-              <Avatar className="h-20 w-20">
-                <AvatarImage src="" alt={profile.name} />
-                <AvatarFallback className="text-lg">{profile.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-              </Avatar>
-              <div>
-                <CardTitle>{profile.name}</CardTitle>
-                <CardDescription>
-                  <div className="flex items-center mt-1">
-                    <span className="flex items-center">
-                      <span className="text-yellow-500 mr-1">★</span>
-                      <span className="font-medium">{profile.rating}</span>
-                    </span>
-                    <span className="mx-2">•</span>
-                    <span>{profile.reviewCount} avaliações</span>
-                  </div>
-                </CardDescription>
-              </div>
+    <div className="space-y-6">
+      <Card>
+        <CardHeader className="flex flex-row items-start justify-between">
+          <div className="flex items-center space-x-4">
+            <Avatar className="h-20 w-20">
+              <AvatarImage src="" alt={profile.name} />
+              <AvatarFallback className="text-lg">{profile.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+            </Avatar>
+            <div>
+              <CardTitle>{profile.name}</CardTitle>
+              <CardDescription>
+                <div className="flex items-center mt-1">
+                  <span className="flex items-center">
+                    <span className="text-yellow-500 mr-1">★</span>
+                    <span className="font-medium">{profile.rating}</span>
+                  </span>
+                  <span className="mx-2">•</span>
+                  <span>{profile.reviewCount} avaliações</span>
+                </div>
+              </CardDescription>
             </div>
-            <Button>Alterar Foto</Button>
-          </CardHeader>
-          <CardContent>
-            <p className="text-muted-foreground">{profile.description}</p>
-            <div className="flex items-center mt-4">
-              <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-              <span className="text-sm">Perfil verificado</span>
-            </div>
-          </CardContent>
-        </Card>
+          </div>
+          <Button>Alterar Foto</Button>
+        </CardHeader>
+        <CardContent>
+          <p className="text-muted-foreground">{profile.description}</p>
+          <div className="flex items-center mt-4">
+            <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
+            <span className="text-sm">Perfil verificado</span>
+          </div>
+        </CardContent>
+      </Card>
+      
+      <Tabs defaultValue="personal">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="personal">Informações Pessoais</TabsTrigger>
+          <TabsTrigger value="professional">Informações Profissionais</TabsTrigger>
+        </TabsList>
         
-        <Tabs defaultValue="personal">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="personal">Informações Pessoais</TabsTrigger>
-            <TabsTrigger value="professional">Informações Profissionais</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="personal" className="mt-4">
-            <Card>
-              <form onSubmit={handleSaveProfile}>
-                <CardHeader>
-                  <CardTitle>Dados Pessoais</CardTitle>
-                  <CardDescription>
-                    Atualize suas informações pessoais
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="full-name">Nome Completo</Label>
-                      <Input id="full-name" defaultValue={profile.name} />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
-                      <Input id="email" type="email" defaultValue={profile.email} />
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="phone">Telefone</Label>
-                      <Input id="phone" defaultValue={profile.phone} />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="document">CNPJ</Label>
-                      <Input id="document" defaultValue={profile.document} />
-                    </div>
+        <TabsContent value="personal" className="mt-4">
+          <Card>
+            <form onSubmit={handleSaveProfile}>
+              <CardHeader>
+                <CardTitle>Dados Pessoais</CardTitle>
+                <CardDescription>
+                  Atualize suas informações pessoais
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="full-name">Nome Completo</Label>
+                    <Input id="full-name" defaultValue={profile.name} />
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="address">Endereço completo</Label>
-                    <Input id="address" defaultValue={profile.address} />
+                    <Label htmlFor="email">Email</Label>
+                    <Input id="email" type="email" defaultValue={profile.email} />
                   </div>
-                </CardContent>
-                <CardFooter>
-                  <Button type="submit" disabled={isLoading}>
-                    {isLoading ? 'Salvando...' : 'Salvar Alterações'}
-                  </Button>
-                </CardFooter>
-              </form>
-            </Card>
-          </TabsContent>
-          
-          <TabsContent value="professional" className="mt-4">
-            <Card>
-              <form onSubmit={handleSaveProfile}>
-                <CardHeader>
-                  <CardTitle>Perfil Profissional</CardTitle>
-                  <CardDescription>
-                    Atualize suas informações profissionais e especialidades
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="space-y-4">
-                    <Label className="text-lg">Tipos de Equipamentos</Label>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                      {equipmentOptions.map((equipment) => (
-                        <div key={equipment.value} className="flex items-center space-x-2">
-                          <Checkbox 
-                            id={`equipment-${equipment.value}`}
-                            checked={selectedEquipment.includes(equipment.value)}
-                            onCheckedChange={() => handleEquipmentChange(equipment.value)}
-                          />
-                          <Label 
-                            htmlFor={`equipment-${equipment.value}`}
-                            className="text-sm"
-                          >
-                            {equipment.label}
-                          </Label>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-4 border-t pt-4">
-                    <Label className="text-lg">Tipos de Serviços</Label>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {Object.entries(serviceTypeLabels).map(([value, label]) => (
-                        <div key={value} className="flex items-center space-x-2">
-                          <Checkbox 
-                            id={`service-${value}`}
-                            checked={selectedServices.includes(value)}
-                            onCheckedChange={() => handleServiceChange(value)}
-                          />
-                          <Label 
-                            htmlFor={`service-${value}`}
-                            className="text-sm"
-                          >
-                            {label}
-                          </Label>
-                        </div>
-                      ))}
-                    </div>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="phone">Telefone</Label>
+                    <Input id="phone" defaultValue={profile.phone} />
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="description">Descrição profissional</Label>
-                    <Textarea 
-                      id="description" 
-                      placeholder="Descreva sua experiência, habilidades e serviços oferecidos" 
-                      defaultValue={profile.description}
-                      rows={4}
-                    />
+                    <Label htmlFor="document">CNPJ</Label>
+                    <Input id="document" defaultValue={profile.document} />
                   </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="hourly-rate">Valor da hora de serviço (R$)</Label>
-                    <Input id="hourly-rate" type="number" placeholder="100" />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="address">Endereço completo</Label>
+                  <Input id="address" defaultValue={profile.address} />
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button type="submit" disabled={isLoading}>
+                  {isLoading ? 'Salvando...' : 'Salvar Alterações'}
+                </Button>
+              </CardFooter>
+            </form>
+          </Card>
+        </TabsContent>
+        
+        <TabsContent value="professional" className="mt-4">
+          <Card>
+            <form onSubmit={handleSaveProfile}>
+              <CardHeader>
+                <CardTitle>Perfil Profissional</CardTitle>
+                <CardDescription>
+                  Atualize suas informações profissionais e especialidades
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="space-y-4">
+                  <Label className="text-lg">Tipos de Equipamentos</Label>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {equipmentOptions.map((equipment) => (
+                      <div key={equipment.value} className="flex items-center space-x-2">
+                        <Checkbox 
+                          id={`equipment-${equipment.value}`}
+                          checked={selectedEquipment.includes(equipment.value)}
+                          onCheckedChange={() => handleEquipmentChange(equipment.value)}
+                        />
+                        <Label 
+                          htmlFor={`equipment-${equipment.value}`}
+                          className="text-sm"
+                        >
+                          {equipment.label}
+                        </Label>
+                      </div>
+                    ))}
                   </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="service-area">Área de atendimento (raio em km)</Label>
-                    <Input id="service-area" type="number" placeholder="10" />
+                </div>
+                
+                <div className="space-y-4 border-t pt-4">
+                  <Label className="text-lg">Tipos de Serviços</Label>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {Object.entries(serviceTypeLabels).map(([value, label]) => (
+                      <div key={value} className="flex items-center space-x-2">
+                        <Checkbox 
+                          id={`service-${value}`}
+                          checked={selectedServices.includes(value)}
+                          onCheckedChange={() => handleServiceChange(value)}
+                        />
+                        <Label 
+                          htmlFor={`service-${value}`}
+                          className="text-sm"
+                        >
+                          {label}
+                        </Label>
+                      </div>
+                    ))}
                   </div>
-                </CardContent>
-                <CardFooter>
-                  <Button type="submit" disabled={isLoading}>
-                    {isLoading ? 'Salvando...' : 'Salvar Alterações'}
-                  </Button>
-                </CardFooter>
-              </form>
-            </Card>
-          </TabsContent>
-        </Tabs>
-      </div>
-    </TechnicianLayout>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="description">Descrição profissional</Label>
+                  <Textarea 
+                    id="description" 
+                    placeholder="Descreva sua experiência, habilidades e serviços oferecidos" 
+                    defaultValue={profile.description}
+                    rows={4}
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="hourly-rate">Valor da hora de serviço (R$)</Label>
+                  <Input id="hourly-rate" type="number" placeholder="100" />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="service-area">Área de atendimento (raio em km)</Label>
+                  <Input id="service-area" type="number" placeholder="10" />
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button type="submit" disabled={isLoading}>
+                  {isLoading ? 'Salvando...' : 'Salvar Alterações'}
+                </Button>
+              </CardFooter>
+            </form>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
   );
 };
 
