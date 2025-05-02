@@ -1,4 +1,3 @@
-
 import * as React from "react"
 import useEmblaCarousel, {
   type UseEmblaCarouselType,
@@ -74,7 +73,7 @@ const Carousel = React.forwardRef<
     const [slidesInView, setSlidesInView] = React.useState<number[]>([])
     const [slideNodes, setSlideNodes] = React.useState<HTMLElement[]>([])
 
-    const onSelect = React.useCallback((api: CarouselApi) => {
+    const onSelect = React.useCallback(() => {
       if (!api) {
         return
       }
@@ -86,7 +85,7 @@ const Carousel = React.forwardRef<
       const viewNodes = api.slidesInView(true)
       setSlidesInView(viewNodes)
       setSlideNodes(api.slideNodes())
-    }, [])
+    }, [api])
 
     const scrollPrev = React.useCallback(() => {
       api?.scrollPrev()
@@ -126,7 +125,7 @@ const Carousel = React.forwardRef<
         return
       }
 
-      onSelect(api)
+      onSelect()
       api.on("reInit", onSelect)
       api.on("select", onSelect)
 
