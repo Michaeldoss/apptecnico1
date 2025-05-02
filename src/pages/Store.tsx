@@ -5,7 +5,7 @@ import Footer from '@/components/layout/Footer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { getUniqueCategories, getProductCountByCategory, products } from '@/data/products';
-import { Printer, ArrowRight, Store as StoreIcon, Search, Package, Star } from 'lucide-react';
+import { Printer, ArrowRight, Store as StoreIcon, Search, Package, Star, Plus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { formatCurrency } from '@/lib/format';
@@ -20,6 +20,7 @@ import {
   CarouselPrevious 
 } from '@/components/ui/carousel';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 // Sample promotions data - in a real app, this would come from an API or database
 const promotions = [
@@ -39,10 +40,10 @@ const promotions = [
   },
   {
     id: 3,
-    title: "Cadastre sua Empresa",
-    description: "Quer vender peças e equipamentos na nossa plataforma? Cadastre sua empresa agora!",
+    title: "Novos Equipamentos Disponíveis",
+    description: "Confira os últimos lançamentos de equipamentos para impressão digital!",
     image: "/placeholder.svg",
-    link: "/store/company-register"
+    link: "/store/category/equipamentos"
   }
 ];
 
@@ -131,6 +132,24 @@ const Store = () => {
         {/* Hero section with search */}
         <section className="bg-gradient-to-r from-primary/5 to-secondary/5 py-12">
           <div className="container mx-auto px-4">
+            <div className="flex justify-end mb-2">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link to="/store/company-register">
+                      <Button variant="outline" size="sm" className="gap-1 rounded-full">
+                        <Plus className="h-4 w-4" />
+                        <span className="hidden md:inline">Cadastrar Empresa</span>
+                      </Button>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Cadastre sua empresa como fornecedor</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+            
             <div className="max-w-4xl mx-auto text-center">
               <h1 className="text-3xl md:text-4xl font-bold mb-4">Marketplace de Peças e Equipamentos</h1>
               <p className="text-muted-foreground mb-6">
@@ -154,8 +173,8 @@ const Store = () => {
           </div>
         </section>
 
-        {/* Promotions Carousel */}
-        <section className="py-12 bg-background">
+        {/* Promotions Carousel - Modern version */}
+        <section className="py-12 bg-background overflow-hidden">
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-2xl font-bold">Ofertas e Promoções</h2>
@@ -166,37 +185,41 @@ const Store = () => {
               </Link>
             </div>
             
-            <Carousel className="w-full">
-              <CarouselContent>
+            <Carousel
+              opts={{
+                align: "start",
+                loop: true,
+              }}
+              className="w-full"
+            >
+              <CarouselContent className="-ml-2 md:-ml-4">
                 {promotions.map((promo) => (
-                  <CarouselItem key={promo.id} className="md:basis-1/2 lg:basis-1/3">
+                  <CarouselItem key={promo.id} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
                     <Link to={promo.link}>
-                      <Card className="h-full bg-gradient-to-br from-primary/5 to-accent/10 hover:shadow-lg transition-all">
-                        <CardHeader className="pb-2">
-                          <Badge variant="secondary" className="w-fit mb-2">Promoção</Badge>
-                          <CardTitle>{promo.title}</CardTitle>
-                        </CardHeader>
-                        <CardContent>
+                      <div className="overflow-hidden rounded-xl group">
+                        <div className="relative h-[300px] overflow-hidden">
                           <img 
                             src={promo.image} 
                             alt={promo.title}
-                            className="w-full h-40 object-cover rounded-md mb-4"
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                           />
-                          <p className="text-sm text-muted-foreground">{promo.description}</p>
-                        </CardContent>
-                        <CardFooter>
-                          <Button variant="secondary" className="w-full">
-                            Ver Detalhes <ArrowRight className="ml-1 h-4 w-4" />
-                          </Button>
-                        </CardFooter>
-                      </Card>
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-6">
+                            <Badge variant="secondary" className="w-fit mb-2">Promoção</Badge>
+                            <h3 className="text-xl font-bold text-white">{promo.title}</h3>
+                            <p className="text-sm text-white/80 mt-2">{promo.description}</p>
+                            <Button variant="secondary" className="w-fit mt-4 bg-white/20 backdrop-blur-sm hover:bg-white/30">
+                              Ver Detalhes <ArrowRight className="ml-1 h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
                     </Link>
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <div className="hidden md:flex">
-                <CarouselPrevious className="relative left-0 translate-x-0" />
-                <CarouselNext className="relative right-0 translate-x-0" />
+              <div className="flex justify-center mt-4 gap-2">
+                <CarouselPrevious className="static transform-none mx-0 bg-background/80 backdrop-blur-sm" />
+                <CarouselNext className="static transform-none mx-0 bg-background/80 backdrop-blur-sm" />
               </div>
             </Carousel>
           </div>
@@ -223,7 +246,7 @@ const Store = () => {
                   transition={{ duration: 0.3 }}
                   viewport={{ once: true }}
                 >
-                  <Card className="h-full hover:shadow-md transition-all">
+                  <Card className="h-full hover:shadow-md transition-all group overflow-hidden">
                     <CardHeader className="pb-2">
                       <CardTitle className="text-base font-medium truncate" title={product.nome}>
                         {product.nome}
@@ -231,11 +254,13 @@ const Store = () => {
                       <p className="text-xs text-muted-foreground">Código: {product.codigo}</p>
                     </CardHeader>
                     <CardContent className="pb-2">
-                      <img 
-                        src="/placeholder.svg" 
-                        alt={product.nome}
-                        className="w-full h-32 object-contain mb-4 bg-background p-2 rounded-md"
-                      />
+                      <div className="relative w-full h-32 mb-4 bg-background rounded-md overflow-hidden">
+                        <img 
+                          src="/placeholder.svg" 
+                          alt={product.nome}
+                          className="w-full h-full object-contain p-2 transition-transform duration-300 group-hover:scale-105"
+                        />
+                      </div>
                       <div className="flex justify-between items-center">
                         <Badge variant="outline">{product.categoria}</Badge>
                         <p className="font-semibold text-right text-primary">
