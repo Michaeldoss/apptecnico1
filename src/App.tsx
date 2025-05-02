@@ -58,18 +58,10 @@ function App() {
           <Route path="/store/company-profile" element={<CompanyProfile />} />
           <Route path="/store/company-products" element={<CompanyProducts />} />
 
-          {/* Technician Routes - Add both path formats to support /technician/ and /tecnico/ */}
-          <Route path="/technician" element={<TechnicianLanding />} />
+          {/* Technician Routes - Using only /tecnico/ for consistency */}
+          <Route path="/technician" element={<Navigate to="/tecnico" replace />} />
           <Route path="/tecnico" element={<TechnicianLanding />} />
           
-          <Route
-            path="/technician/dashboard"
-            element={
-              <TechnicianLayout title="Dashboard">
-                <TechnicianDashboard />
-              </TechnicianLayout>
-            }
-          />
           <Route
             path="/tecnico/painel"
             element={
@@ -80,14 +72,6 @@ function App() {
           />
           
           <Route
-            path="/technician/chat"
-            element={
-              <TechnicianLayout title="Chat">
-                <TechnicianChat />
-              </TechnicianLayout>
-            }
-          />
-          <Route
             path="/tecnico/chat"
             element={
               <TechnicianLayout title="Chat">
@@ -96,14 +80,6 @@ function App() {
             }
           />
           
-          <Route
-            path="/technician/schedule"
-            element={
-              <TechnicianLayout title="Agenda">
-                <TechnicianSchedule />
-              </TechnicianLayout>
-            }
-          />
           <Route
             path="/tecnico/agenda"
             element={
@@ -114,14 +90,6 @@ function App() {
           />
           
           <Route
-            path="/technician/services"
-            element={
-              <TechnicianLayout title="Serviços">
-                <TechnicianServices />
-              </TechnicianLayout>
-            }
-          />
-          <Route
             path="/tecnico/servicos"
             element={
               <TechnicianLayout title="Serviços">
@@ -130,14 +98,6 @@ function App() {
             }
           />
           
-          <Route
-            path="/technician/parts"
-            element={
-              <TechnicianLayout title="Peças">
-                <TechnicianParts />
-              </TechnicianLayout>
-            }
-          />
           <Route
             path="/tecnico/pecas"
             element={
@@ -148,14 +108,6 @@ function App() {
           />
           
           <Route
-            path="/technician/profile"
-            element={
-              <TechnicianLayout title="Perfil">
-                <TechnicianProfile />
-              </TechnicianLayout>
-            }
-          />
-          <Route
             path="/tecnico/perfil"
             element={
               <TechnicianLayout title="Perfil">
@@ -165,14 +117,6 @@ function App() {
           />
           
           <Route
-            path="/technician/service/:id"
-            element={
-              <TechnicianLayout title="Ordem de Serviço">
-                <TechnicianServiceOrder />
-              </TechnicianLayout>
-            }
-          />
-          <Route
             path="/tecnico/servico/:id"
             element={
               <TechnicianLayout title="Ordem de Serviço">
@@ -180,6 +124,15 @@ function App() {
               </TechnicianLayout>
             }
           />
+
+          {/* Redirect old English routes to Portuguese routes */}
+          <Route path="/technician/dashboard" element={<Navigate to="/tecnico/painel" replace />} />
+          <Route path="/technician/chat" element={<Navigate to="/tecnico/chat" replace />} />
+          <Route path="/technician/schedule" element={<Navigate to="/tecnico/agenda" replace />} />
+          <Route path="/technician/services" element={<Navigate to="/tecnico/servicos" replace />} />
+          <Route path="/technician/parts" element={<Navigate to="/tecnico/pecas" replace />} />
+          <Route path="/technician/profile" element={<Navigate to="/tecnico/perfil" replace />} />
+          <Route path="/technician/service/:id" element={<Navigate to="/tecnico/servico/:id" replace />} />
 
           {/* Customer Routes - Updated to use "/cliente/" path prefix */}
           <Route
