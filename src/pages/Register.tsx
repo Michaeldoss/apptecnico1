@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -19,7 +20,7 @@ import AnimatedContainer from '@/components/ui/AnimatedContainer';
 import BlurContainer from '@/components/ui/BlurContainer';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import { Printer, Scissors, Wrench, Upload, FileText, Clock, MapPin, CreditCard, Briefcase, Key as KeyIcon } from 'lucide-react';
+import { Printer, Scissors, Wrench, Upload, FileText, Clock, MapPin, CreditCard, Briefcase, Key as KeyIcon, Store } from 'lucide-react';
 
 const equipmentTypes = [
   { id: 'eco-solvent', label: 'Plotter eco solvente' },
@@ -63,6 +64,7 @@ const Register = () => {
     cnpj: null,
   });
   const [profilePicture, setProfilePicture] = useState(null);
+  const [productCategories, setProductCategories] = useState<string[]>([]);
 
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,6 +78,7 @@ const Register = () => {
       console.log('Equipamentos selecionados:', selectedEquipment);
       console.log('Serviços selecionados:', selectedServices);
       console.log('Documentos:', documentFiles);
+      console.log('Categorias de produtos:', productCategories);
     }, 1500);
   };
 
@@ -92,6 +95,14 @@ const Register = () => {
       prev.includes(serviceId) 
         ? prev.filter(id => id !== serviceId) 
         : [...prev, serviceId]
+    );
+  };
+
+  const handleCategoryChange = (category: string) => {
+    setProductCategories(prev => 
+      prev.includes(category) 
+        ? prev.filter(c => c !== category) 
+        : [...prev, category]
     );
   };
 
@@ -119,15 +130,18 @@ const Register = () => {
             <p className="text-muted-foreground mt-2">
               {accountType === 'technician' 
                 ? 'Cadastre-se como técnico especializado para oferecer seus serviços' 
+                : accountType === 'store'
+                ? 'Cadastre-se como lojista para vender produtos e peças para equipamentos'
                 : 'Cadastre-se para encontrar técnicos especializados para seus equipamentos'}
             </p>
           </AnimatedContainer>
           
           <BlurContainer className="p-8">
             <Tabs defaultValue="client" className="mb-6" onValueChange={setAccountType}>
-              <TabsList className="grid w-full grid-cols-2">
+              <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="client">Conta de Cliente</TabsTrigger>
                 <TabsTrigger value="technician">Conta de Técnico</TabsTrigger>
+                <TabsTrigger value="store">Conta de Lojista</TabsTrigger>
               </TabsList>
               
               <TabsContent value="client" className="mt-6">
@@ -141,6 +155,13 @@ const Register = () => {
                 <p className="text-sm text-muted-foreground mb-4 flex items-center gap-2">
                   <Wrench className="h-4 w-4" />
                   Crie uma conta de técnico para oferecer seus serviços para máquinas industriais.
+                </p>
+              </TabsContent>
+              
+              <TabsContent value="store" className="mt-6">
+                <p className="text-sm text-muted-foreground mb-4 flex items-center gap-2">
+                  <Store className="h-4 w-4" />
+                  Crie uma conta de lojista para vender peças, insumos e equipamentos para o mercado gráfico.
                 </p>
               </TabsContent>
             </Tabs>
@@ -530,6 +551,178 @@ const Register = () => {
                         <Label htmlFor="pix-key">Chave PIX</Label>
                         <Input 
                           id="pix-key"
+                          placeholder="CPF, telefone, e-mail ou chave aleatória" 
+                          className="rounded-lg"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+              
+              {accountType === 'store' && (
+                <>
+                  {/* Informações da Loja */}
+                  <div className="border-t border-border pt-6 space-y-4">
+                    <h3 className="text-lg font-medium flex items-center gap-2">
+                      <Store className="h-5 w-5" /> Informações da Loja
+                    </h3>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="store-name">Nome da Loja</Label>
+                        <Input 
+                          id="store-name"
+                          placeholder="Suprimentos Gráficos Ltda" 
+                          required 
+                          className="rounded-lg"
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="store-cnpj">CNPJ</Label>
+                        <Input 
+                          id="store-cnpj"
+                          placeholder="00.000.000/0001-00" 
+                          required 
+                          className="rounded-lg"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="store-description">Descrição da Loja</Label>
+                      <Textarea 
+                        id="store-description"
+                        placeholder="Descreva sua loja, tipos de produtos, especialidades..." 
+                        required 
+                        className="rounded-lg min-h-[100px]"
+                      />
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Esta descrição aparecerá na sua página da loja.
+                      </p>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="store-logo">Logo da Loja</Label>
+                      <Input 
+                        id="store-logo"
+                        type="file"
+                        accept="image/*"
+                        className="rounded-lg"
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="store-cnpj-file">Comprovante CNPJ</Label>
+                      <Input 
+                        id="store-cnpj-file"
+                        type="file"
+                        accept="image/*,.pdf"
+                        onChange={(e) => handleFileChange('cnpj', e)}
+                        className="rounded-lg"
+                      />
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Cartão CNPJ ou Contrato Social
+                      </p>
+                    </div>
+                  </div>
+                  
+                  {/* Categorias de Produtos */}
+                  <div className="border-t border-border pt-6 space-y-4">
+                    <h3 className="text-lg font-medium flex items-center gap-2">
+                      <Briefcase className="h-5 w-5" /> Categorias de Produtos
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      Selecione as categorias de produtos que você vende:
+                    </p>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {[
+                        { id: 'ink', label: 'Tintas' },
+                        { id: 'vinyl', label: 'Vinil Adesivo' },
+                        { id: 'banner', label: 'Lona para Banner' },
+                        { id: 'paper', label: 'Papéis Especiais' },
+                        { id: 'textile', label: 'Tecidos para Impressão' },
+                        { id: 'hardware', label: 'Peças e Hardware' },
+                        { id: 'printers', label: 'Impressoras' },
+                        { id: 'cutters', label: 'Máquinas de Recorte' },
+                        { id: 'sublimation', label: 'Produtos para Sublimação' },
+                        { id: 'tools', label: 'Ferramentas' },
+                      ].map((category) => (
+                        <div key={category.id} className="flex items-center space-x-2">
+                          <Checkbox 
+                            id={`category-${category.id}`}
+                            checked={productCategories.includes(category.id)}
+                            onCheckedChange={() => handleCategoryChange(category.id)}
+                          />
+                          <Label 
+                            htmlFor={`category-${category.id}`}
+                            className="text-sm"
+                          >
+                            {category.label}
+                          </Label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* Informações Bancárias */}
+                  <div className="border-t border-border pt-6 space-y-4">
+                    <h3 className="text-lg font-medium flex items-center gap-2">
+                      <CreditCard className="h-5 w-5" /> Informações Bancárias
+                    </h3>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="store-bank">Banco</Label>
+                        <Input 
+                          id="store-bank"
+                          placeholder="Banco do Brasil" 
+                          required 
+                          className="rounded-lg"
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="store-agency">Agência</Label>
+                        <Input 
+                          id="store-agency"
+                          placeholder="0001" 
+                          required 
+                          className="rounded-lg"
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="store-account">Conta</Label>
+                        <Input 
+                          id="store-account"
+                          placeholder="12345-6" 
+                          required 
+                          className="rounded-lg"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="store-account-type">Tipo de Conta</Label>
+                        <select 
+                          id="store-account-type"
+                          className="w-full p-2 border rounded-lg"
+                          required
+                        >
+                          <option value="">Selecione</option>
+                          <option value="checking">Corrente</option>
+                          <option value="savings">Poupança</option>
+                        </select>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="store-pix-key">Chave PIX</Label>
+                        <Input 
+                          id="store-pix-key"
                           placeholder="CPF, telefone, e-mail ou chave aleatória" 
                           className="rounded-lg"
                         />
