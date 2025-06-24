@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -8,6 +9,7 @@ import { Printer, ArrowRight, Store as StoreIcon, Search, Package, Star, Plus } 
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { formatCurrency } from '@/lib/format';
+import { cn } from '@/lib/utils';
 import AnimatedContainer from '@/components/ui/AnimatedContainer';
 import CategoryList from '@/components/store/CategoryList';
 import { Badge } from '@/components/ui/badge';
