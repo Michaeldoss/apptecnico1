@@ -7,10 +7,13 @@ import { Button } from '@/components/ui/button';
 import { AlertCircle, CheckCircle, Clock, DollarSign, MessageSquare } from 'lucide-react';
 import { useChat } from '@/hooks/useChat';
 import { useNotifications } from '@/hooks/useNotifications';
-import ChatMessage from '@/components/chat/ChatMessage';
 import { useAuth } from '@/context/AuthContext';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { cn } from '@/lib/utils';
 
 const TechnicianDashboard = () => {
+  const isMobile = useIsMobile();
+  
   // Dados de exemplo
   const pendingServices = 5;
   const completedServices = 12;
@@ -54,14 +57,23 @@ const TechnicianDashboard = () => {
   return (
     <TechnicianLayout title="Painel do Técnico">
       {/* Cards principais */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-6">
+      <div className={cn(
+        "grid gap-4 mb-6",
+        isMobile ? "grid-cols-1" : "grid-cols-2 lg:grid-cols-4"
+      )}>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Serviços Pendentes</CardTitle>
+            <CardTitle className={cn(
+              "font-medium",
+              isMobile ? "text-sm" : "text-sm"
+            )}>Serviços Pendentes</CardTitle>
             <AlertCircle className="h-4 w-4 text-yellow-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{pendingServices}</div>
+            <div className={cn(
+              "font-bold",
+              isMobile ? "text-xl" : "text-2xl"
+            )}>{pendingServices}</div>
             <p className="text-xs text-muted-foreground">
               +2 desde ontem
             </p>
@@ -70,11 +82,17 @@ const TechnicianDashboard = () => {
         
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Serviços Concluídos</CardTitle>
+            <CardTitle className={cn(
+              "font-medium",
+              isMobile ? "text-sm" : "text-sm"
+            )}>Serviços Concluídos</CardTitle>
             <CheckCircle className="h-4 w-4 text-green-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{completedServices}</div>
+            <div className={cn(
+              "font-bold",
+              isMobile ? "text-xl" : "text-2xl"
+            )}>{completedServices}</div>
             <p className="text-xs text-muted-foreground">
               +3 neste mês
             </p>
@@ -83,11 +101,17 @@ const TechnicianDashboard = () => {
         
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Serviços Agendados</CardTitle>
+            <CardTitle className={cn(
+              "font-medium",
+              isMobile ? "text-sm" : "text-sm"
+            )}>Serviços Agendados</CardTitle>
             <Clock className="h-4 w-4 text-blue-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{scheduledServices}</div>
+            <div className={cn(
+              "font-bold",
+              isMobile ? "text-xl" : "text-2xl"
+            )}>{scheduledServices}</div>
             <p className="text-xs text-muted-foreground">
               Para os próximos 7 dias
             </p>
@@ -96,11 +120,17 @@ const TechnicianDashboard = () => {
         
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Ganhos do Mês</CardTitle>
+            <CardTitle className={cn(
+              "font-medium",
+              isMobile ? "text-sm" : "text-sm"
+            )}>Ganhos do Mês</CardTitle>
             <DollarSign className="h-4 w-4 text-green-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{monthlyEarnings}</div>
+            <div className={cn(
+              "font-bold",
+              isMobile ? "text-xl" : "text-2xl"
+            )}>{monthlyEarnings}</div>
             <p className="text-xs text-muted-foreground">
               +12% em relação ao mês anterior
             </p>
@@ -109,12 +139,18 @@ const TechnicianDashboard = () => {
       </div>
       
       {/* Dividir em duas colunas para mensagens e serviços recentes */}
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className={cn(
+        "grid gap-6",
+        isMobile ? "grid-cols-1" : "grid-cols-1 md:grid-cols-2"
+      )}>
         {/* Mensagens recentes */}
         <div className="rounded-lg border bg-card">
           <div className="flex items-center justify-between px-4 py-3 border-b">
             <div className="flex items-center">
-              <h2 className="font-semibold">Mensagens Recentes</h2>
+              <h2 className={cn(
+                "font-semibold",
+                isMobile ? "text-base" : ""
+              )}>Mensagens Recentes</h2>
               {unreadCount > 0 && (
                 <span className="ml-2 inline-flex items-center justify-center bg-primary text-primary-foreground text-xs rounded-full h-5 px-2">
                   {unreadCount} {unreadCount === 1 ? 'nova' : 'novas'}
@@ -124,7 +160,7 @@ const TechnicianDashboard = () => {
             <Link to="/tecnico/chat">
               <Button variant="outline" size="sm" className="flex items-center gap-2">
                 <MessageSquare size={16} />
-                Ver Todas
+                {!isMobile && "Ver Todas"}
               </Button>
             </Link>
           </div>
@@ -133,7 +169,10 @@ const TechnicianDashboard = () => {
               recentMessages.map((message) => (
                 <div key={message.id} className="p-4">
                   <div className="flex items-center justify-between mb-1">
-                    <span className="font-medium">{message.senderName}</span>
+                    <span className={cn(
+                      "font-medium",
+                      isMobile ? "text-sm" : ""
+                    )}>{message.senderName}</span>
                     <span className="text-xs text-muted-foreground">
                       {new Date(message.timestamp).toLocaleTimeString()}
                     </span>
@@ -169,9 +208,14 @@ const TechnicianDashboard = () => {
         {/* Lista de serviços recentes */}
         <div className="rounded-lg border bg-card">
           <div className="flex items-center justify-between px-4 py-3 border-b">
-            <h2 className="font-semibold">Serviços Recentes</h2>
+            <h2 className={cn(
+              "font-semibold",
+              isMobile ? "text-base" : ""
+            )}>Serviços Recentes</h2>
             <Link to="/tecnico/servicos">
-              <Button variant="outline" size="sm">Ver Todos</Button>
+              <Button variant="outline" size="sm">
+                {isMobile ? "Ver" : "Ver Todos"}
+              </Button>
             </Link>
           </div>
           <div className="divide-y">
@@ -179,7 +223,10 @@ const TechnicianDashboard = () => {
               <div key={service.id} className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium">{service.client}</p>
+                    <p className={cn(
+                      "font-medium",
+                      isMobile ? "text-sm" : ""
+                    )}>{service.client}</p>
                     <p className="text-sm text-muted-foreground">{service.serviceType}</p>
                   </div>
                   <div className="text-right">

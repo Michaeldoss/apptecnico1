@@ -81,17 +81,25 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
         {isMobile && (
           <button 
             onClick={toggleMenu}
-            className="fixed top-20 left-4 z-40 bg-primary text-white p-2 rounded-full shadow-lg"
+            className="fixed top-20 left-4 z-40 bg-primary text-white p-2 rounded-full shadow-lg md:hidden"
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
+        )}
+
+        {/* Overlay for mobile */}
+        {isMobile && isMenuOpen && (
+          <div 
+            className="fixed inset-0 bg-black/50 z-20 md:hidden"
+            onClick={closeMenu}
+          />
         )}
         
         {/* Sidebar */}
         <aside 
           className={cn(
             "w-64 shrink-0 border-r pr-6 transition-all duration-300",
-            isMobile ? "fixed left-0 top-16 bottom-0 bg-background z-30 h-[calc(100vh-4rem)] px-4 pt-16 pb-6 shadow-xl" : "hidden md:block",
+            isMobile ? "fixed left-0 top-16 bottom-0 bg-background z-30 h-[calc(100vh-4rem)] px-4 pt-16 pb-6 shadow-xl overflow-y-auto" : "hidden md:block",
             isMobile && !isMenuOpen ? "-translate-x-full" : isMobile && isMenuOpen ? "translate-x-0" : ""
           )}
         >
@@ -155,24 +163,39 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
           </div>
           
           <div className="pt-6 mt-6 border-t">
-            <SidebarItem 
-              to="/logout" 
-              icon={LogOut} 
-              active={false}
-              onClick={closeMenu}
+            <button 
+              onClick={() => {
+                handleLogout();
+                closeMenu();
+              }}
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-base transition-all hover:bg-primary-foreground text-muted-foreground w-full text-left"
             >
-              Sair
-            </SidebarItem>
+              <LogOut className="h-5 w-5" />
+              <span>Sair</span>
+            </button>
           </div>
         </aside>
         
         {/* Conteúdo principal */}
-        <main className="flex-1">
-          <div className="flex items-center justify-between mb-6">
-            <h1 className="text-2xl font-bold">{title}</h1>
+        <main className={cn(
+          "flex-1",
+          isMobile ? "pl-0" : ""
+        )}>
+          <div className={cn(
+            "flex items-center justify-between mb-6",
+            isMobile ? "flex-col gap-4 items-start" : ""
+          )}>
+            <h1 className={cn(
+              "text-2xl font-bold",
+              isMobile ? "text-xl pl-12" : ""
+            )}>{title}</h1>
           </div>
           
-          {children}
+          <div className={cn(
+            isMobile ? "px-2" : ""
+          )}>
+            {children}
+          </div>
         </main>
       </div>
       

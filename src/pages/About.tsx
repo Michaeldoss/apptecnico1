@@ -4,23 +4,41 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import AnimatedContainer from '@/components/ui/AnimatedContainer';
 import BlurContainer from '@/components/ui/BlurContainer';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { cn } from '@/lib/utils';
 
 const About = () => {
+  const isMobile = useIsMobile();
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="flex-grow container mx-auto px-4 py-12">
-        <AnimatedContainer animation="fade" className="mb-12">
-          <h1 className="text-4xl font-bold mb-6">Sobre a TechSupport</h1>
-          <p className="text-muted-foreground mb-8 text-lg">
+      <main className="flex-grow container mx-auto px-4 py-8 md:py-12">
+        <AnimatedContainer animation="fade" className="mb-8 md:mb-12">
+          <h1 className={cn(
+            "font-bold mb-4 md:mb-6 text-center",
+            isMobile ? "text-3xl" : "text-4xl"
+          )}>Sobre a TechSupport</h1>
+          <p className={cn(
+            "text-muted-foreground mb-6 md:mb-8 text-center max-w-3xl mx-auto",
+            isMobile ? "text-base px-4" : "text-lg"
+          )}>
             Conheça mais sobre nossa missão, visão e história.
           </p>
         </AnimatedContainer>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
+        <div className={cn(
+          "grid gap-8 md:gap-12 mb-12 md:mb-16",
+          isMobile ? "grid-cols-1" : "grid-cols-1 md:grid-cols-2"
+        )}>
           <AnimatedContainer animation="slide-right" delay={0.2}>
-            <BlurContainer className="p-8">
-              <h2 className="text-2xl font-semibold mb-4">Nossa Missão</h2>
+            <BlurContainer className={cn(
+              isMobile ? "p-6" : "p-8"
+            )}>
+              <h2 className={cn(
+                "font-semibold mb-4",
+                isMobile ? "text-xl" : "text-2xl"
+              )}>Nossa Missão</h2>
               <p className="text-muted-foreground mb-4">
                 A TechSupport nasceu com o objetivo de conectar pessoas que precisam de suporte técnico
                 com os melhores profissionais disponíveis. Nossa missão é tornar o suporte técnico
@@ -34,8 +52,13 @@ const About = () => {
           </AnimatedContainer>
 
           <AnimatedContainer animation="slide-left" delay={0.4}>
-            <BlurContainer className="p-8">
-              <h2 className="text-2xl font-semibold mb-4">Nossa Visão</h2>
+            <BlurContainer className={cn(
+              isMobile ? "p-6" : "p-8"
+            )}>
+              <h2 className={cn(
+                "font-semibold mb-4",
+                isMobile ? "text-xl" : "text-2xl"
+              )}>Nossa Visão</h2>
               <p className="text-muted-foreground mb-4">
                 Queremos ser a principal plataforma de conexão entre técnicos e clientes no Brasil,
                 revolucionando a maneira como as pessoas resolvem seus problemas tecnológicos.
@@ -48,9 +71,14 @@ const About = () => {
           </AnimatedContainer>
         </div>
 
-        <AnimatedContainer animation="fade" delay={0.6} className="mb-16">
-          <BlurContainer className="p-8">
-            <h2 className="text-2xl font-semibold mb-4">Nossa História</h2>
+        <AnimatedContainer animation="fade" delay={0.6} className="mb-12 md:mb-16">
+          <BlurContainer className={cn(
+            isMobile ? "p-6" : "p-8"
+          )}>
+            <h2 className={cn(
+              "font-semibold mb-4",
+              isMobile ? "text-xl" : "text-2xl"
+            )}>Nossa História</h2>
             <p className="text-muted-foreground mb-4">
               Fundada em 2023, a TechSupport começou como uma startup com apenas 5 técnicos
               cadastrados. Hoje, contamos com uma rede de mais de 1.000 profissionais qualificados
@@ -65,17 +93,38 @@ const About = () => {
         </AnimatedContainer>
 
         <AnimatedContainer animation="scale" delay={0.8}>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <BlurContainer className="p-6 text-center">
-              <div className="text-primary text-4xl font-bold mb-2">1000+</div>
+          <div className={cn(
+            "grid gap-6 md:gap-8",
+            isMobile ? "grid-cols-1" : "grid-cols-1 md:grid-cols-3"
+          )}>
+            <BlurContainer className={cn(
+              "text-center",
+              isMobile ? "p-4" : "p-6"
+            )}>
+              <div className={cn(
+                "text-primary font-bold mb-2",
+                isMobile ? "text-3xl" : "text-4xl"
+              )}>1000+</div>
               <div className="font-medium">Técnicos Cadastrados</div>
             </BlurContainer>
-            <BlurContainer className="p-6 text-center">
-              <div className="text-primary text-4xl font-bold mb-2">10k+</div>
+            <BlurContainer className={cn(
+              "text-center",
+              isMobile ? "p-4" : "p-6"
+            )}>
+              <div className={cn(
+                "text-primary font-bold mb-2",
+                isMobile ? "text-3xl" : "text-4xl"
+              )}>10k+</div>
               <div className="font-medium">Serviços Realizados</div>
             </BlurContainer>
-            <BlurContainer className="p-6 text-center">
-              <div className="text-primary text-4xl font-bold mb-2">98%</div>
+            <BlurContainer className={cn(
+              "text-center",
+              isMobile ? "p-4" : "p-6"
+            )}>
+              <div className={cn(
+                "text-primary font-bold mb-2",
+                isMobile ? "text-3xl" : "text-4xl"
+              )}>98%</div>
               <div className="font-medium">Clientes Satisfeitos</div>
             </BlurContainer>
           </div>
