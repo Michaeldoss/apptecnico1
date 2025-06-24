@@ -106,7 +106,7 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
           />
         )}
         
-        {/* Sidebar */}
+        {/* Sidebar - apenas uma instância */}
         <aside className={cn(
           "w-64 shrink-0 border-r pr-6 transition-all duration-300",
           isMobile ? "fixed left-0 top-16 bottom-0 bg-background z-30 h-[calc(100vh-4rem)] px-4 pt-16 pb-6 shadow-xl overflow-y-auto" : "hidden md:block",
@@ -154,6 +154,7 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
             >
               Peças
             </SidebarItem>
+            {/* Agenda - apenas uma entrada no menu */}
             <SidebarItem 
               to={`${pathPrefix}/agenda`} 
               icon={Calendar} 
@@ -178,9 +179,9 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
           </div>
         </aside>
         
-        {/* Conteúdo principal */}
+        {/* Conteúdo principal - isolado e sem sobreposição */}
         <main className={cn(
-          "flex-1",
+          "flex-1 min-h-0", // min-h-0 previne overflow
           isMobile ? "pl-0" : ""
         )}>
           <div className={cn(
@@ -193,7 +194,9 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
             )}>{title}</h1>
           </div>
           
+          {/* Container isolado para o conteúdo específico da página */}
           <div className={cn(
+            "w-full h-full",
             isMobile ? "px-2" : ""
           )}>
             {children}
