@@ -16,7 +16,8 @@ import {
   FileText,
   Printer,
   Menu,
-  X
+  X,
+  Calendar
 } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -53,7 +54,7 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
   const location = useLocation();
   const path = location.pathname;
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { logout, isAuthenticated, userType } = useAuth();
   const isMobile = useIsMobile();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -71,6 +72,9 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
       setIsMenuOpen(false);
     }
   };
+
+  // Verificar se o usuário está logado como cliente
+  const isCustomerLoggedIn = isAuthenticated && userType === 'customer';
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -128,6 +132,19 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
             >
               Meus Equipamentos
             </SidebarItem>
+            
+            {/* Aba Agenda - só aparece se o usuário estiver logado como cliente */}
+            {isCustomerLoggedIn && (
+              <SidebarItem 
+                to="/cliente/agenda" 
+                icon={Calendar} 
+                active={path.startsWith('/cliente/agenda')}
+                onClick={closeMenu}
+              >
+                Agenda
+              </SidebarItem>
+            )}
+            
             <SidebarItem 
               to="/cliente/rastreamento" 
               icon={MapPin} 
