@@ -79,7 +79,7 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
     <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
       
-      <div className="flex-1 flex container-standard px-4 py-6 gap-6">
+      <div className="flex-1 flex container mx-auto px-4 py-6 gap-6 max-w-7xl">
         {/* Mobile menu toggle */}
         {isMobile && (
           <button 
@@ -110,7 +110,7 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
             <SidebarItem 
               to="/cliente/painel" 
               icon={LayoutDashboard} 
-              active={path === '/cliente/painel'}
+              active={path === '/cliente/painel' || path === '/cliente/dashboard'}
               onClick={closeMenu}
             >
               Painel
@@ -118,7 +118,7 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
             <SidebarItem 
               to="/cliente/servicos" 
               icon={Wrench} 
-              active={path.startsWith('/cliente/servicos')}
+              active={path.startsWith('/cliente/servicos') || path.startsWith('/cliente/services')}
               onClick={closeMenu}
             >
               Meus Serviços
@@ -126,7 +126,7 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
             <SidebarItem 
               to="/cliente/equipamentos" 
               icon={Printer} 
-              active={path.startsWith('/cliente/equipamentos')}
+              active={path.startsWith('/cliente/equipamentos') || path.startsWith('/cliente/equipment')}
               onClick={closeMenu}
             >
               Meus Equipamentos
@@ -136,7 +136,7 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
               <SidebarItem 
                 to="/cliente/agenda" 
                 icon={Calendar} 
-                active={path.startsWith('/cliente/agenda')}
+                active={path.startsWith('/cliente/agenda') || path.startsWith('/cliente/schedule')}
                 onClick={closeMenu}
               >
                 Agenda
@@ -146,7 +146,7 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
             <SidebarItem 
               to="/cliente/rastreamento" 
               icon={MapPin} 
-              active={path.startsWith('/cliente/rastreamento')}
+              active={path.startsWith('/cliente/rastreamento') || path.startsWith('/cliente/tracking')}
               onClick={closeMenu}
             >
               Rastreamento
@@ -154,7 +154,7 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
             <SidebarItem 
               to="/cliente/pagamentos" 
               icon={CreditCard} 
-              active={path.startsWith('/cliente/pagamentos')}
+              active={path.startsWith('/cliente/pagamentos') || path.startsWith('/cliente/payments')}
               onClick={closeMenu}
             >
               Pagamentos
@@ -162,7 +162,7 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
             <SidebarItem 
               to="/cliente/ordens" 
               icon={FileText} 
-              active={path.startsWith('/cliente/ordens')}
+              active={path.startsWith('/cliente/ordens') || path.startsWith('/cliente/orders')}
               onClick={closeMenu}
             >
               Ordens de Serviço
@@ -170,7 +170,7 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
             <SidebarItem 
               to="/cliente/perfil" 
               icon={User} 
-              active={path === '/cliente/perfil'}
+              active={path === '/cliente/perfil' || path === '/cliente/profile'}
               onClick={closeMenu}
             >
               Minha Conta
@@ -193,7 +193,7 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
         
         {/* Conteúdo principal */}
         <main className={cn(
-          "flex-1",
+          "flex-1 min-w-0",
           isMobile ? "pl-0" : ""
         )}>
           <div className={cn(
@@ -207,7 +207,7 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
           </div>
           
           <div className={cn(
-            "grid-standard",
+            "w-full",
             isMobile ? "px-2" : ""
           )}>
             {children}
