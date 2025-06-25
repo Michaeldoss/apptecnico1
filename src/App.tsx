@@ -1,3 +1,4 @@
+
 import React, { Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/context/AuthContext";
@@ -25,6 +26,7 @@ const TechnicianParts = React.lazy(() => import("@/pages/technician/Parts"));
 const TechnicianSchedule = React.lazy(() => import("@/pages/technician/Schedule"));
 const TechnicianChat = React.lazy(() => import("@/pages/technician/Chat"));
 const TechnicianServiceOrder = React.lazy(() => import("@/pages/technician/ServiceOrder"));
+const TechnicianPayments = React.lazy(() => import("@/pages/technician/Payments"));
 const CompanyRegister = React.lazy(() => import("@/pages/store/CompanyRegister"));
 const CompanyDashboard = React.lazy(() => import("@/pages/store/CompanyDashboard"));
 const CompanyProfile = React.lazy(() => import("@/pages/store/CompanyProfile"));
@@ -42,7 +44,6 @@ const CustomerTracking = React.lazy(() => import("@/pages/customer/Tracking"));
 const CustomerSchedule = React.lazy(() => import("@/pages/customer/Schedule"));
 const CustomerServiceRequest = React.lazy(() => import("@/pages/customer/ServiceRequest"));
 const NotFound = React.lazy(() => import("@/pages/NotFound"));
-const TechnicianPayments = React.lazy(() => import("@/pages/technician/Payments"));
 
 const queryClient = new QueryClient();
 
@@ -52,24 +53,42 @@ function App() {
       <AuthProvider>
         <Router>
           <div className="App">
-            <Suspense fallback={<div>Carregando...</div>}>
+            <Suspense fallback={
+              <div className="flex items-center justify-center min-h-screen">
+                <div className="text-center">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                  <p className="mt-2 text-gray-600">Carregando...</p>
+                </div>
+              </div>
+            }>
               <Routes>
+                {/* Public Routes */}
                 <Route path="/" element={<Index />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/cadastro" element={<Register />} />
                 <Route path="/find-technician" element={<FindTechnician />} />
                 <Route path="/services" element={<Services />} />
                 <Route path="/terms" element={<Terms />} />
+                <Route path="/sell-equipment" element={<SellEquipment />} />
+                <Route path="/sell-equipment/create" element={<SellEquipmentCreate />} />
+                <Route path="/customer/service-request" element={<CustomerServiceRequest />} />
                 
-                {/* Customer routes */}
-                <Route path="/cliente/painel" element={
+                {/* Store Public Routes */}
+                <Route path="/store" element={<Store />} />
+                <Route path="/store/company-register" element={<CompanyRegister />} />
+                <Route path="/store/companies" element={<CompanyList />} />
+                <Route path="/store/category/:categorySlug" element={<CategoryPage />} />
+                
+                {/* Customer Routes */}
+                <Route path="/cliente/dashboard" element={
                   <ProtectedRoute allowedUserTypes={['customer']}>
                     <CustomerDashboard />
                   </ProtectedRoute>
                 } />
-                <Route path="/cliente/dashboard" element={
+                <Route path="/cliente/painel" element={
                   <ProtectedRoute allowedUserTypes={['customer']}>
                     <CustomerDashboard />
                   </ProtectedRoute>
@@ -145,52 +164,14 @@ function App() {
                   </ProtectedRoute>
                 } />
                 
-                {/* Technician routes (English) */}
-                <Route path="/technician" element={<TechnicianLanding />} />
-                <Route path="/technician/dashboard" element={
-                  <ProtectedRoute allowedUserTypes={['technician']}>
-                    <TechnicianDashboard />
-                  </ProtectedRoute>
-                } />
-                <Route path="/technician/services" element={
-                  <ProtectedRoute allowedUserTypes={['technician']}>
-                    <TechnicianServices />
-                  </ProtectedRoute>
-                } />
-                <Route path="/technician/profile" element={
-                  <ProtectedRoute allowedUserTypes={['technician']}>
-                    <TechnicianProfile />
-                  </ProtectedRoute>
-                } />
-                <Route path="/technician/parts" element={
-                  <ProtectedRoute allowedUserTypes={['technician']}>
-                    <TechnicianParts />
-                  </ProtectedRoute>
-                } />
-                <Route path="/technician/schedule" element={
-                  <ProtectedRoute allowedUserTypes={['technician']}>
-                    <TechnicianSchedule />
-                  </ProtectedRoute>
-                } />
-                <Route path="/technician/chat" element={
-                  <ProtectedRoute allowedUserTypes={['technician']}>
-                    <TechnicianChat />
-                  </ProtectedRoute>
-                } />
-                <Route path="/technician/payments" element={
-                  <ProtectedRoute allowedUserTypes={['technician']}>
-                    <TechnicianPayments />
-                  </ProtectedRoute>
-                } />
-                
-                {/* Technician routes (Portuguese) */}
+                {/* Technician Routes - Portuguese */}
                 <Route path="/tecnico" element={<TechnicianLanding />} />
-                <Route path="/tecnico/painel" element={
+                <Route path="/tecnico/dashboard" element={
                   <ProtectedRoute allowedUserTypes={['technician']}>
                     <TechnicianDashboard />
                   </ProtectedRoute>
                 } />
-                <Route path="/tecnico/dashboard" element={
+                <Route path="/tecnico/painel" element={
                   <ProtectedRoute allowedUserTypes={['technician']}>
                     <TechnicianDashboard />
                   </ProtectedRoute>
@@ -256,30 +237,55 @@ function App() {
                   </ProtectedRoute>
                 } />
                 
-                {/* Sell Equipment routes */}
-                <Route path="/sell-equipment" element={<SellEquipment />} />
-                <Route path="/sell-equipment/create" element={<SellEquipmentCreate />} />
-                
-                {/* Customer routes */}
-                <Route path="/customer/service-request" element={<CustomerServiceRequest />} />
-                
-                {/* Store routes */}
-                <Route path="/store" element={<Store />} />
-                <Route path="/store/company-register" element={<CompanyRegister />} />
-                <Route path="/store/company-dashboard" element={
-                  <ProtectedRoute allowedUserTypes={['company']}>
-                    <CompanyDashboard />
+                {/* Technician Routes - English (redirect to Portuguese) */}
+                <Route path="/technician" element={<TechnicianLanding />} />
+                <Route path="/technician/dashboard" element={
+                  <ProtectedRoute allowedUserTypes={['technician']}>
+                    <TechnicianDashboard />
+                  </ProtectedRoute>
+                } />
+                <Route path="/technician/services" element={
+                  <ProtectedRoute allowedUserTypes={['technician']}>
+                    <TechnicianServices />
+                  </ProtectedRoute>
+                } />
+                <Route path="/technician/profile" element={
+                  <ProtectedRoute allowedUserTypes={['technician']}>
+                    <TechnicianProfile />
+                  </ProtectedRoute>
+                } />
+                <Route path="/technician/parts" element={
+                  <ProtectedRoute allowedUserTypes={['technician']}>
+                    <TechnicianParts />
+                  </ProtectedRoute>
+                } />
+                <Route path="/technician/schedule" element={
+                  <ProtectedRoute allowedUserTypes={['technician']}>
+                    <TechnicianSchedule />
+                  </ProtectedRoute>
+                } />
+                <Route path="/technician/chat" element={
+                  <ProtectedRoute allowedUserTypes={['technician']}>
+                    <TechnicianChat />
+                  </ProtectedRoute>
+                } />
+                <Route path="/technician/payments" element={
+                  <ProtectedRoute allowedUserTypes={['technician']}>
+                    <TechnicianPayments />
                   </ProtectedRoute>
                 } />
                 
-                {/* Loja routes - Nova rota para empresas */}
+                {/* Company/Store Routes */}
                 <Route path="/loja/dashboard" element={
                   <ProtectedRoute allowedUserTypes={['company']}>
                     <CompanyDashboard />
                   </ProtectedRoute>
                 } />
-                
-                {/* ... keep existing code (remaining store routes) */}
+                <Route path="/store/company-dashboard" element={
+                  <ProtectedRoute allowedUserTypes={['company']}>
+                    <CompanyDashboard />
+                  </ProtectedRoute>
+                } />
                 <Route path="/store/company-profile" element={
                   <ProtectedRoute allowedUserTypes={['company']}>
                     <CompanyProfile />
@@ -295,9 +301,15 @@ function App() {
                     <CompanyProducts />
                   </ProtectedRoute>
                 } />
-                <Route path="/store/companies" element={<CompanyList />} />
-                <Route path="/store/category/:categorySlug" element={<CategoryPage />} />
                 
+                {/* Dashboard routes for direct access */}
+                <Route path="/dashboard" element={
+                  <ProtectedRoute allowedUserTypes={['customer', 'technician', 'company']}>
+                    <CustomerDashboard />
+                  </ProtectedRoute>
+                } />
+                
+                {/* 404 - Not Found */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>

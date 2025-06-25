@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -14,41 +15,46 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { login, isAuthenticated, userType } = useAuth();
+  const { login, isAuthenticated, userType, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
 
   console.log('Login - Componente renderizado');
   console.log('Login - isAuthenticated:', isAuthenticated);
   console.log('Login - userType:', userType);
+  console.log('Login - authLoading:', authLoading);
 
   // Redirecionar se já estiver autenticado
   useEffect(() => {
-    console.log('Login - useEffect executado');
-    console.log('Login - isAuthenticated:', isAuthenticated);
-    console.log('Login - userType:', userType);
-
-    if (isAuthenticated && userType) {
-      console.log('Login - Usuário autenticado, redirecionando...');
+    if (!authLoading && isAuthenticated && userType) {
+      console.log('Login - Usuário já autenticado, redirecionando...');
       
-      if (userType === 'technician') {
-        console.log('Login - Redirecionando para dashboard do técnico');
-        navigate('/technician/dashboard');
-      } else if (userType === 'customer') {
-        console.log('Login - Redirecionando para painel do cliente');
-        navigate('/cliente/dashboard');
-      } else if (userType === 'company') {
-        console.log('Login - Redirecionando para dashboard da empresa');
-        navigate('/loja/dashboard');
-      } else if (userType === 'admin') {
-        console.log('Login - Redirecionando para admin');
-        navigate('/admin');
+      switch (userType) {
+        case 'technician':
+          console.log('Login - Redirecionando para dashboard do técnico');
+          navigate('/tecnico/dashboard', { replace: true });
+          break;
+        case 'customer':
+          console.log('Login - Redirecionando para painel do cliente');
+          navigate('/cliente/dashboard', { replace: true });
+          break;
+        case 'company':
+          console.log('Login - Redirecionando para dashboard da empresa');
+          navigate('/loja/dashboard', { replace: true });
+          break;
+        case 'admin':
+          console.log('Login - Redirecionando para admin');
+          navigate('/admin', { replace: true });
+          break;
+        default:
+          console.log('Login - Tipo de usuário desconhecido, redirecionando para home');
+          navigate('/', { replace: true });
       }
     }
-  }, [isAuthenticated, userType, navigate]);
+  }, [isAuthenticated, userType, authLoading, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Login - Tentativa de login');
+    console.log('Login - Tentativa de login para:', email);
     
     if (!email || !password) {
       console.log('Login - Email ou senha vazios');
@@ -58,72 +64,33 @@ const Login = () => {
     setIsLoading(true);
     
     try {
-      console.log('Login - Fazendo requisição para API');
-      
-      // Fazer requisição para API de login
-      const response = await fetch('/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      console.log('Login - Resposta da API recebida:', response.status);
-
-      if (!response.ok) {
-        throw new Error('Falha na requisição de login');
-      }
-
-      const data = await response.json();
-      console.log('Login - Dados retornados:', data);
-
-      // Verificar se o login foi bem-sucedido
-      if (data.status === 'ok' && data.user) {
-        console.log('Login - Login bem-sucedido, tipo de usuário:', data.user.tipo);
-        
-        // Atualizar o contexto de autenticação
-        const success = await login(email, password);
-        
-        if (success) {
-          // Redirecionar baseado no tipo de usuário
-          const userTipo = data.user.tipo;
-          
-          if (userTipo === 'loja') {
-            console.log('Login - Redirecionando para dashboard da loja');
-            navigate('/loja/dashboard');
-          } else if (userTipo === 'tecnico') {
-            console.log('Login - Redirecionando para dashboard do técnico');
-            navigate('/technician/dashboard');
-          } else if (userTipo === 'cliente') {
-            console.log('Login - Redirecionando para dashboard do cliente');
-            navigate('/cliente/dashboard');
-          } else {
-            console.log('Login - Tipo de usuário desconhecido, redirecionando para home');
-            navigate('/');
-          }
-        }
-      } else {
-        console.log('Login - Login falhou:', data.message || 'Erro desconhecido');
-        throw new Error(data.message || 'Falha no login');
-      }
-    } catch (error) {
-      console.error('Login - Erro durante login:', error);
-      
-      // Fallback para o sistema de login mock existente
-      console.log('Login - Tentando sistema de login mock como fallback');
+      console.log('Login - Iniciando processo de login');
       const success = await login(email, password);
       
       if (success) {
-        console.log('Login - Login mock bem-sucedido, aguardando redirecionamento...');
-        // O redirecionamento será feito pelo useEffect
+        console.log('Login - Login bem-sucedido, redirecionamento será feito pelo useEffect');
+        // O redirecionamento será feito pelo useEffect após o estado ser atualizado
       } else {
-        console.log('Login - Login mock também falhou');
+        console.log('Login - Login falhou');
+        setIsLoading(false);
       }
-    } finally {
+    } catch (error) {
+      console.error('Login - Erro durante login:', error);
       setIsLoading(false);
     }
   };
+
+  // Mostrar loading enquanto verifica autenticação
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-2 text-gray-600">Verificando autenticação...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
