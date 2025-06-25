@@ -88,7 +88,6 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
       <Navbar />
       
       <div className="flex-1 flex container-standard px-4 py-6 gap-6">
-        {/* Mobile menu toggle */}
         {isMobile && (
           <button 
             onClick={toggleMenu}
@@ -98,7 +97,6 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
           </button>
         )}
 
-        {/* Overlay for mobile */}
         {isMobile && isMenuOpen && (
           <div 
             className="fixed inset-0 bg-black/50 z-20 md:hidden"
@@ -106,7 +104,6 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
           />
         )}
         
-        {/* Sidebar */}
         <aside className={cn(
           "w-64 shrink-0 border-r border-gray-border pr-6 transition-all duration-300",
           isMobile ? "fixed left-0 top-16 bottom-0 bg-white z-30 h-[calc(100vh-4rem)] px-4 pt-16 pb-6 shadow-xl overflow-y-auto" : "hidden md:block",
@@ -178,7 +175,6 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
           </div>
         </aside>
         
-        {/* Conteúdo principal */}
         <main className={cn(
           "flex-1 min-h-0",
           isMobile ? "pl-0" : ""

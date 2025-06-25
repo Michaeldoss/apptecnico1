@@ -65,8 +65,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
     };
 
-    // Pequeno delay para evitar problemas de renderização
-    const timer = setTimeout(initAuth, 100);
+    const timer = setTimeout(initAuth, 50);
     return () => clearTimeout(timer);
   }, []);
 
@@ -113,15 +112,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       console.log('AuthProvider - Usuário encontrado:', foundUser.name, foundUser.type);
 
-      // Remover senha antes de armazenar
       const { password: _, ...userWithoutPassword } = foundUser;
       
-      // Definir estado
       setUser(userWithoutPassword);
       setUserType(foundUser.type as UserType);
       setIsAuthenticated(true);
       
-      // Persistir dados
       localStorage.setItem('techSupportUser', JSON.stringify(userWithoutPassword));
       
       console.log('AuthProvider - Login bem-sucedido, estado atualizado');

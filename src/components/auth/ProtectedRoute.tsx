@@ -21,7 +21,6 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   console.log('ProtectedRoute - user:', user?.name);
   console.log('ProtectedRoute - allowedUserTypes:', allowedUserTypes);
 
-  // Mostrar loading enquanto verifica autenticação
   if (isLoading) {
     console.log('ProtectedRoute - Ainda carregando...');
     return (
@@ -50,6 +49,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   }
 
   console.log('ProtectedRoute - Acesso autorizado para:', userType);
+  
   return <>{children}</>;
 };
 

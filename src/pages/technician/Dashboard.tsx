@@ -17,7 +17,14 @@ const TechnicianDashboard = () => {
   
   if (!isAuthenticated || userType !== 'technician') {
     console.log('TechnicianDashboard - Acesso negado');
-    return <div>Acesso negado</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold text-gray-700">Acesso negado</h2>
+          <p className="text-gray-500 mt-2">Você precisa estar logado como técnico para acessar esta página.</p>
+        </div>
+      </div>
+    );
   }
 
   const todayServices = 3;
