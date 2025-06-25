@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -48,7 +49,7 @@ const Index = () => {
                 className="space-y-8"
               >
                 <span className="inline-block px-4 py-2 text-sm font-medium bg-emerald-50 text-emerald-600 rounded-full border border-emerald-200">
-                  DGSoluções - Suporte Técnico Inteligente
+                  DGSoluções
                 </span>
                 <h1 className={cn(
                   "font-bold leading-tight text-blue-900 font-inter",
