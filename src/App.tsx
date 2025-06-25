@@ -17,6 +17,7 @@ const Services = React.lazy(() => import("@/pages/Services"));
 const SellEquipment = React.lazy(() => import("@/pages/SellEquipment"));
 const SellEquipmentCreate = React.lazy(() => import("@/pages/SellEquipmentCreate"));
 const TechnicianLanding = React.lazy(() => import("@/pages/technician/Landing"));
+const TechnicianDashboard = React.lazy(() => import("@/pages/technician/Dashboard"));
 const CompanyRegister = React.lazy(() => import("@/pages/store/CompanyRegister"));
 const CompanyDashboard = React.lazy(() => import("@/pages/store/CompanyDashboard"));
 const CompanyProfile = React.lazy(() => import("@/pages/store/CompanyProfile"));
@@ -47,6 +48,7 @@ function App() {
                 
                 {/* Technician routes */}
                 <Route path="/technician" element={<TechnicianLanding />} />
+                <Route path="/technician/dashboard" element={<TechnicianDashboard />} />
                 
                 {/* Sell Equipment routes */}
                 <Route path="/sell-equipment" element={<SellEquipment />} />
