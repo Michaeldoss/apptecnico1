@@ -93,55 +93,110 @@
   }
 
   html, body {
-    @apply antialiased bg-white text-gray-900;
+    @apply antialiased bg-white text-gray-primary;
     font-family: 'Inter', sans-serif;
+    font-weight: 400;
   }
 
   body {
-    @apply bg-white text-gray-900;
+    @apply bg-white text-gray-primary;
   }
 
   .font-inter {
     font-family: 'Inter', sans-serif;
   }
 
-  /* Tipografia global */
+  /* Tipografia global com contraste melhorado */
   h1, .text-3xl, .text-4xl, .text-5xl {
     @apply font-bold text-tech-primary;
     font-weight: 700;
+    color: #1D4ED8;
   }
 
   h2, h3, .text-xl, .text-2xl {
-    @apply font-medium text-tech-primary;
-    font-weight: 500;
+    @apply font-semibold text-tech-primary;
+    font-weight: 600;
+    color: #1D4ED8;
   }
 
   p, span, div {
-    @apply text-gray-900;
+    @apply text-gray-primary;
     font-weight: 400;
+    color: #111827;
   }
 
   .text-muted-foreground {
-    @apply text-gray-500;
+    @apply text-gray-secondary;
+    color: #6B7280;
   }
 
-  /* Botões globais */
+  /* Garantir contraste adequado em textos */
+  .text-primary {
+    color: #1D4ED8 !important;
+  }
+
+  .text-secondary {
+    color: #6B7280 !important;
+  }
+
+  .text-white {
+    color: #FFFFFF !important;
+  }
+
+  /* Botões globais com melhor contraste */
   .btn-primary {
-    @apply bg-tech-primary text-white font-medium px-6 py-3 rounded-lg transition-all duration-200 hover:bg-tech-primary-hover hover:shadow-lg hover:scale-105;
+    @apply bg-tech-primary text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:bg-tech-primary-hover hover:shadow-lg hover:scale-105;
+    background-color: #1D4ED8;
+    color: #FFFFFF;
+    font-weight: 600;
   }
 
   .btn-secondary {
-    @apply bg-white text-tech-primary border border-tech-primary font-medium px-6 py-3 rounded-lg transition-all duration-200 hover:bg-tech-primary hover:text-white hover:shadow-lg;
+    @apply bg-white text-tech-primary border border-tech-primary font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:bg-tech-primary hover:text-white hover:shadow-lg;
+    background-color: #FFFFFF;
+    color: #1D4ED8;
+    border-color: #1D4ED8;
+    font-weight: 600;
   }
 
-  /* Cards globais */
+  /* Botões de segurança para pagamentos */
+  .btn-secure {
+    @apply bg-tech-accent text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:bg-green-600 hover:shadow-lg flex items-center gap-2;
+    background-color: #10B981;
+    color: #FFFFFF;
+    font-weight: 600;
+  }
+
+  .btn-secure::before {
+    content: "🔒";
+    margin-right: 4px;
+  }
+
+  /* Cards globais com melhor contraste */
   .card-standard {
-    @apply bg-white border border-gray-200 rounded-lg shadow-sm p-6 transition-all duration-200 hover:shadow-md;
+    @apply bg-white border border-gray-border rounded-lg shadow-sm p-6 transition-all duration-200 hover:shadow-md;
+    background-color: #FFFFFF;
+    border-color: #E5E7EB;
+    color: #111827;
+  }
+
+  /* Cards de segurança */
+  .card-secure {
+    @apply bg-white border border-tech-accent rounded-lg shadow-sm p-6 transition-all duration-200 hover:shadow-md;
+    background-color: #FFFFFF;
+    border-color: #10B981;
+    border-width: 2px;
   }
 
   /* Ícones globais */
   .icon-standard {
     @apply text-tech-primary transition-all duration-200 hover:text-tech-primary-hover hover:scale-105;
+    color: #1D4ED8;
+  }
+
+  .icon-secure {
+    @apply text-tech-accent transition-all duration-200 hover:text-green-600 hover:scale-105;
+    color: #10B981;
   }
 
   /* Animações suaves */
@@ -164,6 +219,39 @@
 
   .grid-standard {
     @apply grid gap-6;
+  }
+
+  /* Melhorias de responsividade */
+  @media (max-width: 768px) {
+    .section-padding {
+      @apply py-8 px-4;
+    }
+    
+    .grid-standard {
+      @apply grid gap-4;
+    }
+    
+    .btn-primary,
+    .btn-secondary,
+    .btn-secure {
+      @apply px-4 py-2 text-sm;
+    }
+  }
+
+  /* Indicadores de segurança */
+  .security-badge {
+    @apply inline-flex items-center gap-1 px-3 py-1 bg-tech-accent text-white text-xs font-semibold rounded-full;
+    background-color: #10B981;
+    color: #FFFFFF;
+  }
+
+  .ssl-indicator {
+    @apply flex items-center gap-2 text-tech-accent font-medium text-sm;
+    color: #10B981;
+  }
+
+  .ssl-indicator::before {
+    content: "🔒";
   }
 }
 
@@ -211,4 +299,35 @@
 
 .scroll-container::-webkit-scrollbar-thumb:hover {
   background-color: rgba(29, 78, 216, 0.5);
+}
+
+/* Melhorias de contraste para elementos específicos */
+.bg-muted {
+  background-color: #F3F4F6 !important;
+  color: #111827 !important;
+}
+
+.text-muted {
+  color: #6B7280 !important;
+}
+
+/* Garantir que todos os inputs tenham bom contraste */
+input, textarea, select {
+  @apply bg-white text-gray-primary border-gray-border;
+  background-color: #FFFFFF;
+  color: #111827;
+  border-color: #E5E7EB;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #9CA3AF;
+}
+
+/* Dropdowns com melhor contraste */
+.dropdown-content {
+  @apply bg-white border border-gray-border shadow-lg;
+  background-color: #FFFFFF;
+  border-color: #E5E7EB;
+  color: #111827;
 }

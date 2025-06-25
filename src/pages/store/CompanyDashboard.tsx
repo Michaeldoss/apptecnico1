@@ -19,6 +19,8 @@ import {
   Building,
   UserRound,
   ArrowRight,
+  Shield,
+  Lock,
 } from 'lucide-react';
 import DashboardChart from '@/components/store/DashboardChart';
 import OrdersList from '@/components/store/OrdersList';
@@ -100,19 +102,26 @@ const CompanyDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
       
       <main className="flex-grow container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center">
-              <Building className="h-10 w-10 text-primary mr-4" />
+              <Building className="h-10 w-10 text-tech-primary mr-4" />
               <div>
-                <h1 className="text-3xl font-bold">Portal do Fornecedor</h1>
-                <p className="text-muted-foreground">
+                <h1 className="text-3xl font-bold text-tech-primary font-inter">
+                  Portal do Fornecedor
+                </h1>
+                <p className="text-gray-secondary font-inter">
                   Bem-vindo, {user?.name || 'Doss Group'}!
                 </p>
+                <div className="flex items-center gap-2 mt-2">
+                  <div className="ssl-indicator">
+                    SSL Ativo - Ambiente Seguro
+                  </div>
+                </div>
               </div>
             </div>
             <div className="flex gap-2">
@@ -122,7 +131,7 @@ const CompanyDashboard = () => {
                   Meu Perfil
                 </Button>
               </Link>
-              <Button>
+              <Button variant="secure" showLock>
                 <Settings className="mr-2 h-4 w-4" />
                 Configurações
               </Button>
@@ -130,64 +139,70 @@ const CompanyDashboard = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <Card>
+            <Card className="card-standard">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">Produtos</CardTitle>
+                <CardTitle className="text-sm font-semibold text-gray-secondary font-inter">Produtos</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{user?.productCount || 87}</div>
+                <div className="text-2xl font-bold text-gray-primary font-inter">{user?.productCount || 87}</div>
               </CardContent>
             </Card>
             
-            <Card>
+            <Card className="card-standard">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">Vendas (Mês)</CardTitle>
+                <CardTitle className="text-sm font-semibold text-gray-secondary font-inter">Vendas (Mês)</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">23</div>
+                <div className="text-2xl font-bold text-gray-primary font-inter">23</div>
               </CardContent>
             </Card>
             
-            <Card>
+            <Card className="card-secure">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">Faturamento</CardTitle>
+                <CardTitle className="text-sm font-semibold text-tech-accent font-inter flex items-center gap-1">
+                  <Lock className="h-4 w-4" />
+                  Faturamento
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">R$ 12.450,00</div>
+                <div className="text-2xl font-bold text-gray-primary font-inter">R$ 12.450,00</div>
+                <div className="security-badge mt-2">
+                  Pagamento Protegido
+                </div>
               </CardContent>
             </Card>
             
-            <Card>
+            <Card className="card-standard">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">Avaliação</CardTitle>
+                <CardTitle className="text-sm font-semibold text-gray-secondary font-inter">Avaliação</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{user?.rating || 4.8} ★</div>
+                <div className="text-2xl font-bold text-gray-primary font-inter">{user?.rating || 4.8} ★</div>
               </CardContent>
             </Card>
           </div>
           
           <Tabs defaultValue="overview">
-            <div className="border-b mb-6">
+            <div className="border-b border-gray-border mb-6">
               <TabsList className="w-full flex justify-start h-auto p-0 bg-transparent overflow-x-auto">
-                <TabsTrigger value="overview" className="py-3 px-4 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none bg-transparent">
-                  <LayoutDashboard className="mr-2 h-4 w-4" />
+                <TabsTrigger value="overview" className="py-3 px-4 data-[state=active]:border-b-2 data-[state=active]:border-tech-primary rounded-none bg-transparent text-gray-primary font-inter font-medium">
+                  <LayoutDashboard className="mr-2 h-4 w-4 text-tech-primary" />
                   Visão Geral
                 </TabsTrigger>
-                <TabsTrigger value="products" className="py-3 px-4 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none bg-transparent">
-                  <Package className="mr-2 h-4 w-4" />
+                <TabsTrigger value="products" className="py-3 px-4 data-[state=active]:border-b-2 data-[state=active]:border-tech-primary rounded-none bg-transparent text-gray-primary font-inter font-medium">
+                  <Package className="mr-2 h-4 w-4 text-tech-primary" />
                   Produtos
                 </TabsTrigger>
-                <TabsTrigger value="orders" className="py-3 px-4 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none bg-transparent">
-                  <ShoppingBag className="mr-2 h-4 w-4" />
+                <TabsTrigger value="orders" className="py-3 px-4 data-[state=active]:border-b-2 data-[state=active]:border-tech-primary rounded-none bg-transparent text-gray-primary font-inter font-medium">
+                  <ShoppingBag className="mr-2 h-4 w-4 text-tech-primary" />
                   Pedidos
                 </TabsTrigger>
-                <TabsTrigger value="analytics" className="py-3 px-4 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none bg-transparent">
-                  <BarChart3 className="mr-2 h-4 w-4" />
+                <TabsTrigger value="analytics" className="py-3 px-4 data-[state=active]:border-b-2 data-[state=active]:border-tech-primary rounded-none bg-transparent text-gray-primary font-inter font-medium">
+                  <BarChart3 className="mr-2 h-4 w-4 text-tech-primary" />
                   Analytics
                 </TabsTrigger>
-                <TabsTrigger value="store" className="py-3 px-4 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none bg-transparent">
-                  <Store className="mr-2 h-4 w-4" />
+                <TabsTrigger value="store" className="py-3 px-4 data-[state=active]:border-b-2 data-[state=active]:border-tech-primary rounded-none bg-transparent text-gray-primary font-inter font-medium">
+                  <Store className="mr-2 h-4 w-4 text-tech-primary" />
                   Minha Loja
                 </TabsTrigger>
               </TabsList>
@@ -195,10 +210,10 @@ const CompanyDashboard = () => {
             
             <TabsContent value="overview">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <Card className="md:col-span-2">
+                <Card className="md:col-span-2 card-standard">
                   <CardHeader>
-                    <CardTitle>Desempenho Recente</CardTitle>
-                    <CardDescription>
+                    <CardTitle className="text-gray-primary font-inter">Desempenho Recente</CardTitle>
+                    <CardDescription className="text-gray-secondary font-inter">
                       Visualização dos últimos 30 dias de atividade da sua loja
                     </CardDescription>
                   </CardHeader>
@@ -212,28 +227,28 @@ const CompanyDashboard = () => {
                   </CardContent>
                 </Card>
                 
-                <Card>
+                <Card className="card-standard">
                   <CardHeader>
-                    <CardTitle>Atenção Necessária</CardTitle>
-                    <CardDescription>
+                    <CardTitle className="text-gray-primary font-inter">Atenção Necessária</CardTitle>
+                    <CardDescription className="text-gray-secondary font-inter">
                       Itens que precisam da sua atenção
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                      <div className="bg-yellow-100 text-yellow-800 p-3 rounded-md flex items-start">
-                        <AlertTriangle className="h-5 w-5 mr-2 flex-shrink-0" />
+                      <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 p-3 rounded-md flex items-start">
+                        <AlertTriangle className="h-5 w-5 mr-2 flex-shrink-0 text-yellow-600" />
                         <div>
-                          <p className="font-medium">Estoque Baixo</p>
-                          <p className="text-sm">3 produtos estão com estoque abaixo do mínimo</p>
+                          <p className="font-semibold text-yellow-900 font-inter">Estoque Baixo</p>
+                          <p className="text-sm text-yellow-700 font-inter">3 produtos estão com estoque abaixo do mínimo</p>
                         </div>
                       </div>
                       
-                      <div className="bg-blue-100 text-blue-800 p-3 rounded-md flex items-start">
-                        <AlertTriangle className="h-5 w-5 mr-2 flex-shrink-0" />
+                      <div className="bg-blue-50 border border-blue-200 text-blue-800 p-3 rounded-md flex items-start">
+                        <AlertTriangle className="h-5 w-5 mr-2 flex-shrink-0 text-blue-600" />
                         <div>
-                          <p className="font-medium">Pedidos Pendentes</p>
-                          <p className="text-sm">5 pedidos aguardando processamento</p>
+                          <p className="font-semibold text-blue-900 font-inter">Pedidos Pendentes</p>
+                          <p className="text-sm text-blue-700 font-inter">5 pedidos aguardando processamento</p>
                         </div>
                       </div>
                     </div>
@@ -510,6 +525,24 @@ const CompanyDashboard = () => {
               </Card>
             </TabsContent>
           </Tabs>
+          
+          {/* Security footer */}
+          <div className="mt-12 pt-6 border-t border-gray-border">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="ssl-indicator">
+                  Ambiente protegido e seguro
+                </div>
+                <div className="flex items-center gap-2 text-tech-accent font-medium text-sm">
+                  <Shield className="h-4 w-4" />
+                  <span>Pagamento via ambiente criptografado</span>
+                </div>
+              </div>
+              <div className="security-badge">
+                Certificado SSL Ativo
+              </div>
+            </div>
+          </div>
         </div>
       </main>
       

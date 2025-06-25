@@ -60,10 +60,10 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <Router>
-          <div className="min-h-screen bg-background">
+          <div className="min-h-screen bg-white">
             <Suspense fallback={
-              <div className="flex items-center justify-center min-h-screen">
-                <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+              <div className="flex items-center justify-center min-h-screen bg-white">
+                <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-tech-primary"></div>
               </div>
             }>
               <Routes>
@@ -75,6 +75,7 @@ function App() {
                 <Route path="/register" element={<Register />} />
                 <Route path="/find-technician" element={<FindTechnician />} />
                 <Route path="/store" element={<Store />} />
+                <Route path="/services" element={<ServicesMaintenancePage />} />
                 
                 {/* New temporary pages */}
                 <Route path="/servicos/manutencao" element={<ServicesMaintenancePage />} />
@@ -99,7 +100,7 @@ function App() {
                       <Route path="pagamentos/:id" element={<CustomerPaymentDetails />} />
                       <Route path="equipamentos" element={<CustomerEquipment />} />
                       <Route path="agenda" element={<CustomerSchedule />} />
-                      <Route path="acompanhamento" element={<CustomerTracking />} />
+                      <Route path="rastreamento" element={<CustomerTracking />} />
                     </Routes>
                   </ProtectedRoute>
                 } />
@@ -132,7 +133,12 @@ function App() {
                 <Route path="/store/company/:companyId" element={<CompanyProducts />} />
                 <Route path="/store/company/:companyId/profile" element={<CompanyProfile />} />
 
-                {/* Protected Store Company routes */}
+                {/* Protected Store Company routes - Fixed route */}
+                <Route path="/store/company-dashboard" element={
+                  <ProtectedRoute>
+                    <CompanyDashboard />
+                  </ProtectedRoute>
+                } />
                 <Route path="/store/dashboard" element={
                   <ProtectedRoute>
                     <CompanyDashboard />

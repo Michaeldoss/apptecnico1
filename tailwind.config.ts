@@ -63,19 +63,48 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Nova identidade visual
-				'tech-primary': '#1D4ED8',
-				'tech-primary-hover': '#2563EB',
+				// Nova identidade visual com cores específicas
+				'tech-primary': {
+					DEFAULT: '#1D4ED8',
+					hover: '#2563EB',
+				},
 				'tech-secondary': '#3B82F6',
-				'tech-accent': '#10B981',
+				'tech-accent': {
+					DEFAULT: '#10B981',
+					hover: '#059669',
+				},
 				'gray-primary': '#111827',
 				'gray-secondary': '#6B7280',
 				'gray-light': '#F3F4F6',
-				'gray-border': '#E5E7EB'
+				'gray-border': '#E5E7EB',
+				// Cores de contraste garantido
+				'contrast-text': '#111827',
+				'contrast-bg': '#FFFFFF',
+				'success': {
+					DEFAULT: '#10B981',
+					hover: '#059669',
+					light: '#D1FAE5',
+				},
+				'warning': {
+					DEFAULT: '#F59E0B',
+					hover: '#D97706',
+					light: '#FEF3C7',
+				},
+				'danger': {
+					DEFAULT: '#EF4444',
+					hover: '#DC2626',
+					light: '#FEE2E2',
+				}
 			},
 			fontFamily: {
 				'inter': ['Inter', 'sans-serif'],
 				'sans': ['Inter', 'sans-serif'],
+			},
+			fontWeight: {
+				'normal': '400',
+				'medium': '500',
+				'semibold': '600',
+				'bold': '700',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -150,6 +179,10 @@ export default {
 				'rotate': {
 					'0%': { transform: 'rotate(0deg)' },
 					'100%': { transform: 'rotate(360deg)' }
+				},
+				'secure-glow': {
+					'0%, 100%': { boxShadow: '0 0 5px rgba(16, 185, 129, 0.3)' },
+					'50%': { boxShadow: '0 0 15px rgba(16, 185, 129, 0.5)' }
 				}
 			},
 			animation: {
@@ -170,7 +203,8 @@ export default {
 				'pulse': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
 				'rotate': 'rotate 1s linear infinite',
 				'enter': 'fade-in 0.3s ease-out, scale-in 0.2s ease-out',
-				'exit': 'fade-out 0.3s ease-out, scale-out 0.2s ease-out'
+				'exit': 'fade-out 0.3s ease-out, scale-out 0.2s ease-out',
+				'secure-glow': 'secure-glow 2s ease-in-out infinite'
 			}
 		}
 	},
