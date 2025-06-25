@@ -160,7 +160,7 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/help" className="text-gray-secondary hover:text-tech-primary transition-colors duration-200 font-inter">
+                <Link to="/help-center" className="text-gray-secondary hover:text-tech-primary transition-colors duration-200 font-inter">
                   Central de Ajuda
                 </Link>
               </li>
@@ -187,8 +187,8 @@ const Footer = () => {
             <Link to="/privacy" className="hover:text-tech-primary transition-colors duration-200 font-inter">
               Privacidade
             </Link>
-            <Link to="/cookies" className="hover:text-tech-primary transition-colors duration-200 font-inter">
-              Cookies
+            <Link to="/support" className="hover:text-tech-primary transition-colors duration-200 font-inter">
+              Suporte
             </Link>
           </div>
         </div>

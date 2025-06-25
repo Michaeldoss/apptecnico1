@@ -22,6 +22,13 @@ const SearchPage = lazy(() => import('@/pages/SearchPage'));
 const TechniciansPage = lazy(() => import('@/pages/TechniciansPage'));
 const ShopPage = lazy(() => import('@/pages/ShopPage'));
 
+// Support pages
+const Support = lazy(() => import('@/pages/Support'));
+const FAQ = lazy(() => import('@/pages/FAQ'));
+const HelpCenter = lazy(() => import('@/pages/HelpCenter'));
+const Terms = lazy(() => import('@/pages/Terms'));
+const Privacy = lazy(() => import('@/pages/Privacy'));
+
 // Customer pages
 const CustomerDashboard = lazy(() => import('@/pages/customer/Dashboard'));
 const CustomerProfile = lazy(() => import('@/pages/customer/Profile'));
@@ -76,6 +83,13 @@ function App() {
                 <Route path="/find-technician" element={<FindTechnician />} />
                 <Route path="/store" element={<Store />} />
                 <Route path="/services" element={<ServicesMaintenancePage />} />
+                
+                {/* Support routes */}
+                <Route path="/support" element={<Support />} />
+                <Route path="/faq" element={<FAQ />} />
+                <Route path="/help-center" element={<HelpCenter />} />
+                <Route path="/terms" element={<Terms />} />
+                <Route path="/privacy" element={<Privacy />} />
                 
                 {/* New temporary pages */}
                 <Route path="/servicos/manutencao" element={<ServicesMaintenancePage />} />
