@@ -88,14 +88,14 @@ const TechnicianFilters: React.FC<TechnicianFiltersProps> = ({
               <div className="space-y-2">
                 <Label htmlFor="equipment-type">Tipo de Equipamento</Label>
                 <Select 
-                  value={selectedEquipmentType} 
-                  onValueChange={(value) => setSelectedEquipmentType(value as EquipmentType | '')}
+                  value={selectedEquipmentType || "all"} 
+                  onValueChange={(value) => setSelectedEquipmentType(value === "all" ? '' : value as EquipmentType)}
                 >
                   <SelectTrigger id="equipment-type">
                     <SelectValue placeholder="Selecione um tipo de equipamento" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Todos os tipos</SelectItem>
+                    <SelectItem value="all">Todos os tipos</SelectItem>
                     {equipmentOptions.map((option) => (
                       <SelectItem key={option.value} value={option.value}>
                         {option.label}
@@ -108,14 +108,14 @@ const TechnicianFilters: React.FC<TechnicianFiltersProps> = ({
               <div className="space-y-2">
                 <Label htmlFor="state">Estado</Label>
                 <Select 
-                  value={selectedState} 
-                  onValueChange={setSelectedState}
+                  value={selectedState || "all"} 
+                  onValueChange={(value) => setSelectedState(value === "all" ? '' : value)}
                 >
                   <SelectTrigger id="state">
                     <SelectValue placeholder="Selecione um estado" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Todos os estados</SelectItem>
+                    <SelectItem value="all">Todos os estados</SelectItem>
                     {brazilianStates.map((state) => (
                       <SelectItem key={state.value} value={state.value}>
                         {state.label}
