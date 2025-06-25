@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -135,11 +134,10 @@ const SellEquipment = () => {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
               <h1 className="text-4xl md:text-5xl font-bold mb-6">
-                Equipamentos Gráficos à Venda
+                Vender Equipamento
               </h1>
               <p className="text-xl mb-8">
-                Compre e venda equipamentos gráficos com segurança. 
-                Encontre as melhores oportunidades do mercado.
+                Anuncie seu equipamento gráfico com segurança e alcance milhares de compradores interessados.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link to="/sell-equipment/create">
