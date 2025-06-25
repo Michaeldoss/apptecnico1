@@ -11,7 +11,7 @@ import {
   CardTitle 
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { MapPin, Star, ArrowRight, AlertCircle, Printer, Scissors, Wrench } from 'lucide-react';
+import { MapPin, Star, ArrowRight, AlertCircle, Printer, Scissors, Wrench, Home, Users, Store, Settings, User, LogIn, UserPlus, FileText, Phone, Info } from 'lucide-react';
 import TechnicianMap from '@/components/maps/TechnicianMap';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/hooks/use-toast';
@@ -66,8 +66,97 @@ const FindTechnician = () => {
       })
     : technicians;
 
+  const menuItems = [
+    { label: "Início", path: "/", icon: Home },
+    { label: "Técnicos", path: "/find-technician", icon: Users },
+    { label: "Lojas", path: "/store", icon: Store },
+    { label: "Máquinas", path: "/machines", icon: Settings },
+    { label: "Equipamentos", path: "/equipment", icon: Wrench },
+    { label: "Serviços", path: "/services", icon: FileText },
+    { label: "Quem Somos", path: "/about", icon: Info },
+    { label: "Contatos", path: "/contact", icon: Phone },
+  ];
+
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Top Navigation Menu */}
+      <div className="bg-white border-b border-gray-200 shadow-sm">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between py-3">
+            {/* Main Navigation */}
+            <div className="hidden md:flex items-center space-x-6">
+              {menuItems.map((item) => (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className="flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors duration-200"
+                >
+                  <item.icon className="h-4 w-4" />
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+
+            {/* Auth Buttons */}
+            <div className="flex items-center space-x-3">
+              {!isAuthenticated && (
+                <>
+                  <Link to="/login">
+                    <Button variant="outline" size="sm" className="flex items-center gap-2">
+                      <LogIn className="h-4 w-4" />
+                      Login
+                    </Button>
+                  </Link>
+                  <div className="flex items-center space-x-2">
+                    <Link to="/register">
+                      <Button size="sm" className="flex items-center gap-1 text-xs">
+                        <User className="h-3 w-3" />
+                        Cliente
+                      </Button>
+                    </Link>
+                    <Link to="/technician">
+                      <Button size="sm" className="flex items-center gap-1 text-xs bg-green-600 hover:bg-green-700">
+                        <Users className="h-3 w-3" />
+                        Técnico
+                      </Button>
+                    </Link>
+                    <Link to="/store/company-register">
+                      <Button size="sm" className="flex items-center gap-1 text-xs bg-purple-600 hover:bg-purple-700">
+                        <Store className="h-3 w-3" />
+                        Lojista
+                      </Button>
+                    </Link>
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Mobile Menu Button */}
+            <div className="md:hidden">
+              <Button variant="ghost" size="sm">
+                Menu
+              </Button>
+            </div>
+          </div>
+
+          {/* Mobile Navigation */}
+          <div className="md:hidden border-t border-gray-200 py-3">
+            <div className="grid grid-cols-4 gap-2 text-center">
+              {menuItems.slice(0, 8).map((item) => (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className="flex flex-col items-center gap-1 p-2 text-xs text-gray-600 hover:text-blue-600 transition-colors"
+                >
+                  <item.icon className="h-4 w-4" />
+                  <span className="truncate">{item.label}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Header */}
       <header className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white p-6">
         <div className="container mx-auto">
