@@ -53,7 +53,6 @@ const Navbar = () => {
   const menuItems = [
     { label: "Técnicos", path: "/find-technician" },
     { label: "Lojas", path: "/store" },
-    { label: "Máquinas", path: "/machines" },
     { label: "Equipamentos", path: "/equipment" },
     { label: "Vender Equipamento", path: "/sell-equipment" },
     { label: "Serviços", path: "/services" },
