@@ -34,12 +34,12 @@ const SidebarItem = ({ to, icon: Icon, children, active, onClick }: SidebarItemP
     <Link
       to={to}
       className={cn(
-        "flex items-center gap-3 rounded-lg px-3 py-2 text-base transition-all hover:bg-primary-foreground",
-        active ? "bg-primary-foreground text-primary font-medium" : "text-muted-foreground"
+        "flex items-center gap-3 rounded-lg px-4 py-3 text-base transition-all duration-200 hover:bg-gray-light font-inter font-medium",
+        active ? "bg-tech-primary text-white shadow-sm" : "text-gray-primary hover:text-tech-primary"
       )}
       onClick={onClick}
     >
-      <Icon className="h-5 w-5" />
+      <Icon className={cn("h-5 w-5", active ? "text-white" : "text-tech-primary")} />
       <span>{children}</span>
     </Link>
   );
@@ -73,19 +73,18 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
     }
   };
 
-  // Verificar se o usuário está logado como cliente
   const isCustomerLoggedIn = isAuthenticated && userType === 'customer';
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
       
-      <div className="flex-1 flex container mx-auto px-4 py-6 gap-6">
+      <div className="flex-1 flex container-standard px-4 py-6 gap-6">
         {/* Mobile menu toggle */}
         {isMobile && (
           <button 
             onClick={toggleMenu}
-            className="fixed top-20 left-4 z-40 bg-primary text-white p-2 rounded-full shadow-lg md:hidden"
+            className="fixed top-20 left-4 z-40 bg-tech-primary text-white p-3 rounded-full shadow-lg md:hidden hover:bg-tech-primary-hover transition-colors duration-200"
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -102,12 +101,12 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
         {/* Sidebar */}
         <aside 
           className={cn(
-            "w-64 shrink-0 border-r pr-6 transition-all duration-300",
-            isMobile ? "fixed left-0 top-16 bottom-0 bg-background z-30 h-[calc(100vh-4rem)] px-4 pt-16 pb-6 shadow-xl overflow-y-auto" : "hidden md:block",
+            "w-64 shrink-0 border-r border-gray-border pr-6 transition-all duration-300",
+            isMobile ? "fixed left-0 top-16 bottom-0 bg-white z-30 h-[calc(100vh-4rem)] px-4 pt-16 pb-6 shadow-xl overflow-y-auto" : "hidden md:block",
             isMobile && !isMenuOpen ? "-translate-x-full" : isMobile && isMenuOpen ? "translate-x-0" : ""
           )}
         >
-          <div className="space-y-1 py-4">
+          <div className="space-y-2 py-4">
             <SidebarItem 
               to="/cliente/painel" 
               icon={LayoutDashboard} 
@@ -133,7 +132,6 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
               Meus Equipamentos
             </SidebarItem>
             
-            {/* Aba Agenda - só aparece se o usuário estiver logado como cliente */}
             {isCustomerLoggedIn && (
               <SidebarItem 
                 to="/cliente/agenda" 
@@ -179,15 +177,15 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
             </SidebarItem>
           </div>
           
-          <div className="pt-6 mt-6 border-t">
+          <div className="pt-6 mt-6 border-t border-gray-border">
             <button 
               onClick={() => {
                 handleLogout();
                 closeMenu();
               }}
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-base transition-all hover:bg-primary-foreground text-muted-foreground w-full text-left"
+              className="flex items-center gap-3 rounded-lg px-4 py-3 text-base transition-all duration-200 hover:bg-gray-light text-gray-primary hover:text-tech-primary w-full text-left font-inter font-medium"
             >
-              <LogOut className="h-5 w-5" />
+              <LogOut className="h-5 w-5 text-tech-primary" />
               <span>Sair</span>
             </button>
           </div>
@@ -203,12 +201,13 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
             isMobile ? "flex-col gap-4 items-start" : ""
           )}>
             <h1 className={cn(
-              "text-2xl font-bold",
-              isMobile ? "text-xl pl-12" : ""
+              "text-3xl font-bold text-tech-primary font-inter",
+              isMobile ? "text-2xl pl-12" : ""
             )}>{title}</h1>
           </div>
           
           <div className={cn(
+            "grid-standard",
             isMobile ? "px-2" : ""
           )}>
             {children}

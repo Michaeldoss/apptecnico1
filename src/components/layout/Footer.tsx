@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -5,18 +6,18 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-background border-t border-border py-12">
+    <footer className="bg-white border-t border-gray-border py-12">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <h3 className="font-semibold text-lg mb-4">TechSupport</h3>
-            <p className="text-muted-foreground text-sm mb-4">
+            <h3 className="font-bold text-lg mb-4 text-tech-primary font-inter">AssistAnywhere</h3>
+            <p className="text-gray-secondary text-sm mb-4 font-inter">
               Conectando você aos melhores técnicos para resolver seus problemas tecnológicos.
             </p>
             <div className="flex space-x-4">
               <a
                 href="#"
-                className="text-foreground/60 hover:text-foreground transition-colors"
+                className="text-gray-secondary hover:text-tech-primary transition-colors duration-200"
                 aria-label="Facebook"
               >
                 <svg
@@ -34,7 +35,7 @@ const Footer = () => {
               </a>
               <a
                 href="#"
-                className="text-foreground/60 hover:text-foreground transition-colors"
+                className="text-gray-secondary hover:text-tech-primary transition-colors duration-200"
                 aria-label="Twitter"
               >
                 <svg
@@ -52,7 +53,7 @@ const Footer = () => {
               </a>
               <a
                 href="#"
-                className="text-foreground/60 hover:text-foreground transition-colors"
+                className="text-gray-secondary hover:text-tech-primary transition-colors duration-200"
                 aria-label="Instagram"
               >
                 <svg
@@ -72,7 +73,7 @@ const Footer = () => {
               </a>
               <a
                 href="#"
-                className="text-foreground/60 hover:text-foreground transition-colors"
+                className="text-gray-secondary hover:text-tech-primary transition-colors duration-200"
                 aria-label="LinkedIn"
               >
                 <svg
@@ -94,30 +95,30 @@ const Footer = () => {
           </div>
 
           <div>
-            <h3 className="font-semibold text-lg mb-4">Links Rápidos</h3>
+            <h3 className="font-medium text-lg mb-4 text-tech-primary font-inter">Links Rápidos</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link to="/" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/" className="text-gray-secondary hover:text-tech-primary transition-colors duration-200 font-inter">
                   Início
                 </Link>
               </li>
               <li>
-                <Link to="/services" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/services" className="text-gray-secondary hover:text-tech-primary transition-colors duration-200 font-inter">
                   Serviços
                 </Link>
               </li>
               <li>
-                <Link to="/store" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/store" className="text-gray-secondary hover:text-tech-primary transition-colors duration-200 font-inter">
                   Loja
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/about" className="text-gray-secondary hover:text-tech-primary transition-colors duration-200 font-inter">
                   Sobre Nós
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/contact" className="text-gray-secondary hover:text-tech-primary transition-colors duration-200 font-inter">
                   Contato
                 </Link>
               </li>
@@ -125,25 +126,25 @@ const Footer = () => {
           </div>
 
           <div>
-            <h3 className="font-semibold text-lg mb-4">Para Técnicos</h3>
+            <h3 className="font-medium text-lg mb-4 text-tech-primary font-inter">Para Técnicos</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link to="/technician" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/technician" className="text-gray-secondary hover:text-tech-primary transition-colors duration-200 font-inter">
                   Seja um Técnico
                 </Link>
               </li>
               <li>
-                <Link to="/tecnico/painel" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/tecnico/painel" className="text-gray-secondary hover:text-tech-primary transition-colors duration-200 font-inter">
                   Dashboard do Técnico
                 </Link>
               </li>
               <li>
-                <Link to="/tecnico/servicos" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/tecnico/servicos" className="text-gray-secondary hover:text-tech-primary transition-colors duration-200 font-inter">
                   Serviços
                 </Link>
               </li>
               <li>
-                <Link to="/tecnico/pecas" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/tecnico/pecas" className="text-gray-secondary hover:text-tech-primary transition-colors duration-200 font-inter">
                   Peças
                 </Link>
               </li>
@@ -151,25 +152,25 @@ const Footer = () => {
           </div>
 
           <div>
-            <h3 className="font-semibold text-lg mb-4">Suporte</h3>
+            <h3 className="font-medium text-lg mb-4 text-tech-primary font-inter">Suporte</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link to="/faq" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/faq" className="text-gray-secondary hover:text-tech-primary transition-colors duration-200 font-inter">
                   FAQ
                 </Link>
               </li>
               <li>
-                <Link to="/help" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/help" className="text-gray-secondary hover:text-tech-primary transition-colors duration-200 font-inter">
                   Central de Ajuda
                 </Link>
               </li>
               <li>
-                <Link to="/terms" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/terms" className="text-gray-secondary hover:text-tech-primary transition-colors duration-200 font-inter">
                   Termos de Serviço
                 </Link>
               </li>
               <li>
-                <Link to="/privacy" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/privacy" className="text-gray-secondary hover:text-tech-primary transition-colors duration-200 font-inter">
                   Política de Privacidade
                 </Link>
               </li>
@@ -177,16 +178,16 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-border mt-12 pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-muted-foreground">
-          <p>&copy; {currentYear} TechSupport. Todos os direitos reservados.</p>
+        <div className="border-t border-gray-border mt-12 pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-secondary">
+          <p className="font-inter">&copy; {currentYear} AssistAnywhere. Todos os direitos reservados.</p>
           <div className="flex space-x-4 mt-4 md:mt-0">
-            <Link to="/terms" className="hover:text-foreground transition-colors">
+            <Link to="/terms" className="hover:text-tech-primary transition-colors duration-200 font-inter">
               Termos
             </Link>
-            <Link to="/privacy" className="hover:text-foreground transition-colors">
+            <Link to="/privacy" className="hover:text-tech-primary transition-colors duration-200 font-inter">
               Privacidade
             </Link>
-            <Link to="/cookies" className="hover:text-foreground transition-colors">
+            <Link to="/cookies" className="hover:text-tech-primary transition-colors duration-200 font-inter">
               Cookies
             </Link>
           </div>
