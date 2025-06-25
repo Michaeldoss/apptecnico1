@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import {
   Menu,
@@ -27,7 +27,10 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isAuthenticated, userType, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const isMobile = useIsMobile();
+
+  const isHomePage = location.pathname === "/";
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -59,12 +62,22 @@ const Navbar = () => {
     { label: "Contatos", path: "/contact" },
   ];
 
+  // Classes dinâmicas baseadas na página
+  const navbarClasses = isHomePage 
+    ? "bg-transparent absolute w-full top-0 z-50"
+    : "bg-white border-b border-gray-200 w-full top-0 z-50 shadow-sm sticky";
+  
+  const textClasses = isHomePage ? "text-white" : "text-gray-800";
+  const logoClasses = isHomePage ? "text-white" : "text-blue-600";
+  const hoverClasses = isHomePage ? "hover:text-blue-200" : "hover:text-blue-600";
+  const buttonClasses = isHomePage ? "text-white hover:text-blue-200 hover:bg-white/10" : "text-gray-800 hover:text-blue-600 hover:bg-blue-50";
+
   return (
-    <nav className="bg-white border-b border-gray-200 w-full top-0 z-50 shadow-sm sticky">
+    <nav className={navbarClasses}>
       <div className="container flex items-center justify-between h-16 px-4 md:px-6 mx-auto">
         {/* Logo */}
         <Link to="/" className="flex items-center">
-          <span className="text-2xl font-bold text-blue-600 font-inter">
+          <span className={`text-2xl font-bold font-inter ${logoClasses}`}>
             DGSoluções
           </span>
         </Link>
@@ -75,7 +88,7 @@ const Navbar = () => {
             <Link
               key={item.path}
               to={item.path}
-              className="text-sm font-medium text-gray-800 hover:text-blue-600 transition-colors duration-200 font-inter"
+              className={`text-sm font-medium transition-colors duration-200 font-inter ${textClasses} ${hoverClasses}`}
             >
               {item.label}
             </Link>
@@ -89,7 +102,7 @@ const Navbar = () => {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="flex items-center gap-2 text-gray-800 hover:text-blue-600 hover:bg-blue-50 font-inter font-medium"
+                  className={`flex items-center gap-2 font-inter font-medium ${buttonClasses}`}
                 >
                   <User className="h-4 w-4" />
                   <span>Minha Conta</span>
@@ -122,7 +135,10 @@ const Navbar = () => {
                 variant="outline" 
                 size="sm" 
                 onClick={handleLoginClick}
-                className="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-inter font-semibold transition-all duration-200"
+                className={isHomePage 
+                  ? "border-2 border-white text-white hover:bg-white hover:text-blue-600 font-inter font-semibold transition-all duration-200"
+                  : "border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-inter font-semibold transition-all duration-200"
+                }
               >
                 <LogIn className="h-4 w-4 mr-2" /> Entrar
               </Button>
@@ -179,7 +195,7 @@ const Navbar = () => {
             size="icon"
             onClick={toggleMenu}
             aria-label="Toggle Menu"
-            className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+            className={isHomePage ? "text-white hover:text-blue-200 hover:bg-white/10" : "text-blue-600 hover:text-blue-700 hover:bg-blue-50"}
           >
             {isMenuOpen ? (
               <X className="h-6 w-6" />
