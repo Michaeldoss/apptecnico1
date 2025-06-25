@@ -28,6 +28,7 @@ const FAQ = lazy(() => import('@/pages/FAQ'));
 const HelpCenter = lazy(() => import('@/pages/HelpCenter'));
 const Terms = lazy(() => import('@/pages/Terms'));
 const Privacy = lazy(() => import('@/pages/Privacy'));
+const Cookies = lazy(() => import('@/pages/Cookies'));
 
 // Customer pages
 const CustomerDashboard = lazy(() => import('@/pages/customer/Dashboard'));
@@ -90,6 +91,7 @@ function App() {
                 <Route path="/help-center" element={<HelpCenter />} />
                 <Route path="/terms" element={<Terms />} />
                 <Route path="/privacy" element={<Privacy />} />
+                <Route path="/cookies" element={<Cookies />} />
                 
                 {/* New temporary pages */}
                 <Route path="/servicos/manutencao" element={<ServicesMaintenancePage />} />
@@ -147,7 +149,7 @@ function App() {
                 <Route path="/store/company/:companyId" element={<CompanyProducts />} />
                 <Route path="/store/company/:companyId/profile" element={<CompanyProfile />} />
 
-                {/* Protected Store Company routes - Fixed route */}
+                {/* Protected Store Company routes */}
                 <Route path="/store/company-dashboard" element={
                   <ProtectedRoute>
                     <CompanyDashboard />

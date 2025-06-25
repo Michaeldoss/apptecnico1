@@ -181,13 +181,16 @@ const Footer = () => {
         <div className="border-t border-gray-border mt-12 pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-secondary">
           <p className="font-inter">&copy; {currentYear} AssistAnywhere. Todos os direitos reservados.</p>
           <div className="flex space-x-4 mt-4 md:mt-0">
-            <Link to="/terms" className="hover:text-tech-primary transition-colors duration-200 font-inter">
+            <Link to="/terms" className="text-gray-secondary hover:text-tech-primary transition-colors duration-200 font-inter">
               Termos
             </Link>
-            <Link to="/privacy" className="hover:text-tech-primary transition-colors duration-200 font-inter">
+            <Link to="/privacy" className="text-gray-secondary hover:text-tech-primary transition-colors duration-200 font-inter">
               Privacidade
             </Link>
-            <Link to="/support" className="hover:text-tech-primary transition-colors duration-200 font-inter">
+            <Link to="/cookies" className="text-gray-secondary hover:text-tech-primary transition-colors duration-200 font-inter">
+              Política de Cookies
+            </Link>
+            <Link to="/support" className="text-gray-secondary hover:text-tech-primary transition-colors duration-200 font-inter">
               Suporte
             </Link>
           </div>
