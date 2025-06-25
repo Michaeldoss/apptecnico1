@@ -107,11 +107,13 @@ const SellEquipment = () => {
 
   const renderMapView = () => {
     return (
-      <div className="w-full h-96 bg-blue-50 relative overflow-hidden rounded-lg border">
+      <div className="w-full h-96 bg-gray-100 relative overflow-hidden rounded-lg border">
         <div 
-          className="w-full h-full bg-cover bg-center relative"
+          className="w-full h-full relative"
           style={{ 
-            backgroundImage: 'linear-gradient(rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.1)), url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'%3E%3Cg fill-opacity=\'0.03\'%3E%3Cpolygon fill=\'%23000\' points=\'50 0 60 40 100 50 60 60 50 100 40 60 0 50 40 40\'/%3E%3C/g%3E%3C/svg%3E")'
+            backgroundImage: `url("https://maps.googleapis.com/maps/api/staticmap?center=São+Paulo,SP&zoom=10&size=800x400&scale=2&maptype=roadmap&key=YOUR_GOOGLE_MAPS_API_KEY")`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
           }}
         >
           {/* Marcadores dos equipamentos */}
@@ -149,11 +151,11 @@ const SellEquipment = () => {
             </button>
           </div>
           
-          {/* Legenda */}
-          <div className="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-2 rounded text-sm shadow">
+          {/* Aviso sobre API key */}
+          <div className="absolute top-4 left-4 bg-yellow-100 border border-yellow-400 text-yellow-800 px-3 py-2 rounded text-sm shadow">
             <div className="flex items-center gap-2">
-              <MapPin className="h-4 w-4 text-red-500 fill-red-500" />
-              <span>Equipamentos disponíveis</span>
+              <MapPin className="h-4 w-4" />
+              <span>Configure sua chave do Google Maps para melhor experiência</span>
             </div>
           </div>
         </div>
@@ -206,7 +208,7 @@ const SellEquipment = () => {
                     Anunciar Equipamento
                   </Button>
                 </Link>
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600" onClick={handleMapView}>
+                <Button size="lg" className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold" onClick={handleMapView}>
                   <Map className="h-5 w-5 mr-2" />
                   Ver no Mapa
                 </Button>
