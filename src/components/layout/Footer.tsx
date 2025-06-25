@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -10,12 +9,7 @@ const Footer = () => {
     "Técnico em Rio de Janeiro", 
     "Técnico em Belo Horizonte",
     "Técnico em Porto Alegre",
-    "Técnico em Salvador",
-    "Técnico em Brasília",
-    "Técnico em Curitiba",
-    "Técnico em Recife",
-    "Técnico em Fortaleza",
-    "Técnico em Manaus"
+    "Técnico em Salvador"
   ];
 
   return (
@@ -26,9 +20,6 @@ const Footer = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <h3 className="font-bold text-lg mb-4 text-tech-primary font-inter">Principais Cidades</h3>
-              <p className="text-gray-secondary text-sm mb-4 font-inter">
-                Cidades com mais técnicos ativos
-              </p>
               <div className="grid grid-cols-1 gap-1 text-sm">
                 {cities.map((city, index) => (
                   <Link
