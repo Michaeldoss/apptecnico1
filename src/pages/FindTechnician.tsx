@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -11,14 +10,17 @@ import {
   CardTitle 
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { MapPin, Star, ArrowRight, AlertCircle, Printer, Scissors, Wrench } from 'lucide-react';
+import { MapPin, Star, ArrowRight, AlertCircle, Printer, Scissors, Wrench, Calculator, Clock } from 'lucide-react';
 import TechnicianMap from '@/components/maps/TechnicianMap';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { useTechnicianSearch } from '@/hooks/useTechnicianSearch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import BlurContainer from '@/components/ui/BlurContainer';
 import TechnicianFilters from '@/components/technician/TechnicianFilters';
+import QuoteRequestForm from '@/components/services/QuoteRequestForm';
+import TechnicalVisitForm from '@/components/services/TechnicalVisitForm';
 import { equipmentCategories } from '@/types/equipment';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -44,6 +46,8 @@ const FindTechnician = () => {
     setSelectedEquipmentType
   } = useTechnicianSearch();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [quoteDialogOpen, setQuoteDialogOpen] = useState(false);
+  const [visitDialogOpen, setVisitDialogOpen] = useState(false);
 
   const handleContactRequest = (technicianId: number) => {
     if (!isAuthenticated) {
@@ -53,9 +57,24 @@ const FindTechnician = () => {
         variant: "destructive",
       });
     } else {
-      // Redirect to service request page (this route needs to exist)
+      // Redirect to service request page
       window.location.href = `/customer/service-request?technician=${technicianId}`;
     }
+  };
+
+  const handleQuoteRequest = (technicianId: number) => {
+    setSelectedTechnician(technicians.find(t => t.id === technicianId) || null);
+    setQuoteDialogOpen(true);
+  };
+
+  const handleVisitRequest = (technicianId: number) => {
+    setSelectedTechnician(technicians.find(t => t.id === technicianId) || null);
+    setVisitDialogOpen(true);
+  };
+
+  const handleFormSuccess = () => {
+    setQuoteDialogOpen(false);
+    setVisitDialogOpen(false);
   };
 
   // Filter technicians by equipment category if selected
@@ -177,13 +196,64 @@ const FindTechnician = () => {
                         </div>
                         <p className="text-sm text-gray-600">{selectedTechnician.description}</p>
                       </CardContent>
-                      <CardFooter>
+                      <CardFooter className="flex flex-col gap-2">
                         <Button 
                           className="w-full bg-blue-600 hover:bg-blue-700" 
                           onClick={() => handleContactRequest(selectedTechnician.id)}
                         >
                           Solicitar Serviço
                         </Button>
+                        <div className="flex gap-2 w-full">
+                          <Dialog open={quoteDialogOpen} onOpenChange={setQuoteDialogOpen}>
+                            <DialogTrigger asChild>
+                              <Button 
+                                variant="outline" 
+                                className="flex-1"
+                                onClick={() => handleQuoteRequest(selectedTechnician.id)}
+                              >
+                                <Calculator className="h-4 w-4 mr-2" />
+                                Orçamento
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                              <DialogHeader>
+                                <DialogTitle>Solicitar Orçamento</DialogTitle>
+                                <DialogDescription>
+                                  Solicite um orçamento para {selectedTechnician?.name}
+                                </DialogDescription>
+                              </DialogHeader>
+                              <QuoteRequestForm 
+                                onSuccess={handleFormSuccess} 
+                                technicianId={selectedTechnician?.id}
+                              />
+                            </DialogContent>
+                          </Dialog>
+                          
+                          <Dialog open={visitDialogOpen} onOpenChange={setVisitDialogOpen}>
+                            <DialogTrigger asChild>
+                              <Button 
+                                variant="outline" 
+                                className="flex-1"
+                                onClick={() => handleVisitRequest(selectedTechnician.id)}
+                              >
+                                <Clock className="h-4 w-4 mr-2" />
+                                Visita
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                              <DialogHeader>
+                                <DialogTitle>Agendar Visita Técnica</DialogTitle>
+                                <DialogDescription>
+                                  Agende uma visita técnica com {selectedTechnician?.name}
+                                </DialogDescription>
+                              </DialogHeader>
+                              <TechnicalVisitForm 
+                                onSuccess={handleFormSuccess} 
+                                technicianId={selectedTechnician?.id}
+                              />
+                            </DialogContent>
+                          </Dialog>
+                        </div>
                       </CardFooter>
                     </Card>
                   </div>
@@ -226,13 +296,64 @@ const FindTechnician = () => {
                         <p className="text-sm text-gray-600">Sábado: 8h às 12h</p>
                       </div>
                     </CardContent>
-                    <CardFooter>
+                    <CardFooter className="flex flex-col gap-2">
                       <Button 
                         className="w-full bg-blue-600 hover:bg-blue-700" 
                         onClick={() => handleContactRequest(selectedTechnician.id)}
                       >
                         Solicitar Serviço
                       </Button>
+                      <div className="flex gap-2 w-full">
+                        <Dialog open={quoteDialogOpen} onOpenChange={setQuoteDialogOpen}>
+                          <DialogTrigger asChild>
+                            <Button 
+                              variant="outline" 
+                              className="flex-1"
+                              onClick={() => handleQuoteRequest(selectedTechnician.id)}
+                            >
+                              <Calculator className="h-4 w-4 mr-2" />
+                              Orçamento
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                            <DialogHeader>
+                              <DialogTitle>Solicitar Orçamento</DialogTitle>
+                              <DialogDescription>
+                                Solicite um orçamento para {selectedTechnician?.name}
+                              </DialogDescription>
+                            </DialogHeader>
+                            <QuoteRequestForm 
+                              onSuccess={handleFormSuccess} 
+                              technicianId={selectedTechnician?.id}
+                            />
+                          </DialogContent>
+                        </Dialog>
+                        
+                        <Dialog open={visitDialogOpen} onOpenChange={setVisitDialogOpen}>
+                          <DialogTrigger asChild>
+                            <Button 
+                              variant="outline" 
+                              className="flex-1"
+                              onClick={() => handleVisitRequest(selectedTechnician.id)}
+                            >
+                              <Clock className="h-4 w-4 mr-2" />
+                              Visita
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                            <DialogHeader>
+                              <DialogTitle>Agendar Visita Técnica</DialogTitle>
+                              <DialogDescription>
+                                Agende uma visita técnica com {selectedTechnician?.name}
+                              </DialogDescription>
+                            </DialogHeader>
+                            <TechnicalVisitForm 
+                              onSuccess={handleFormSuccess} 
+                              technicianId={selectedTechnician?.id}
+                            />
+                          </DialogContent>
+                        </Dialog>
+                      </div>
                     </CardFooter>
                   </Card>
                 ) : (
@@ -325,7 +446,7 @@ const FindTechnician = () => {
                     </div>
                     <p className="text-sm text-gray-600 line-clamp-2">{technician.description}</p>
                   </CardContent>
-                  <CardFooter>
+                  <CardFooter className="flex flex-col gap-2">
                     <Button 
                       className="w-full bg-blue-600 hover:bg-blue-700" 
                       onClick={(e) => {
@@ -335,6 +456,63 @@ const FindTechnician = () => {
                     >
                       Solicitar Serviço
                     </Button>
+                    <div className="flex gap-2 w-full">
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button 
+                            variant="outline" 
+                            className="flex-1"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleQuoteRequest(technician.id);
+                            }}
+                          >
+                            <Calculator className="h-4 w-4 mr-1" />
+                            Orçamento
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                          <DialogHeader>
+                            <DialogTitle>Solicitar Orçamento</DialogTitle>
+                            <DialogDescription>
+                              Solicite um orçamento para {technician.name}
+                            </DialogDescription>
+                          </DialogHeader>
+                          <QuoteRequestForm 
+                            onSuccess={handleFormSuccess} 
+                            technicianId={technician.id}
+                          />
+                        </DialogContent>
+                      </Dialog>
+                      
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button 
+                            variant="outline" 
+                            className="flex-1"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleVisitRequest(technician.id);
+                            }}
+                          >
+                            <Clock className="h-4 w-4 mr-1" />
+                            Visita
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                          <DialogHeader>
+                            <DialogTitle>Agendar Visita Técnica</DialogTitle>
+                            <DialogDescription>
+                              Agende uma visita técnica com {technician.name}
+                            </DialogDescription>
+                          </DialogHeader>
+                          <TechnicalVisitForm 
+                            onSuccess={handleFormSuccess} 
+                            technicianId={technician.id}
+                          />
+                        </DialogContent>
+                      </Dialog>
+                    </div>
                   </CardFooter>
                 </Card>
               ))}
