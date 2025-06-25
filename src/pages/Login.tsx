@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -18,16 +18,30 @@ const Login = () => {
   const { login, isAuthenticated, userType } = useAuth();
   const navigate = useNavigate();
 
+  console.log('Login - Componente renderizado');
+  console.log('Login - isAuthenticated:', isAuthenticated);
+  console.log('Login - userType:', userType);
+
   // Redirecionar se já estiver autenticado
-  React.useEffect(() => {
-    if (isAuthenticated) {
+  useEffect(() => {
+    console.log('Login - useEffect executado');
+    console.log('Login - isAuthenticated:', isAuthenticated);
+    console.log('Login - userType:', userType);
+
+    if (isAuthenticated && userType) {
+      console.log('Login - Usuário autenticado, redirecionando...');
+      
       if (userType === 'technician') {
+        console.log('Login - Redirecionando para dashboard do técnico');
         navigate('/technician/dashboard');
       } else if (userType === 'customer') {
+        console.log('Login - Redirecionando para painel do cliente');
         navigate('/cliente/painel');
       } else if (userType === 'company') {
+        console.log('Login - Redirecionando para dashboard da empresa');
         navigate('/store/company-dashboard');
       } else if (userType === 'admin') {
+        console.log('Login - Redirecionando para admin');
         navigate('/admin');
       }
     }
@@ -35,14 +49,28 @@ const Login = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('Login - Tentativa de login');
+    
+    if (!email || !password) {
+      console.log('Login - Email ou senha vazios');
+      return;
+    }
+
     setIsLoading(true);
     
     try {
+      console.log('Login - Chamando função de login');
       const success = await login(email, password);
+      console.log('Login - Resultado do login:', success);
       
       if (success) {
-        // O redirecionamento será feito pelo useEffect acima
+        console.log('Login - Login bem-sucedido, aguardando redirecionamento...');
+        // O redirecionamento será feito pelo useEffect
+      } else {
+        console.log('Login - Login falhou');
       }
+    } catch (error) {
+      console.error('Login - Erro durante login:', error);
     } finally {
       setIsLoading(false);
     }
@@ -72,6 +100,7 @@ const Login = () => {
                     className="w-full rounded-lg"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    disabled={isLoading}
                   />
                 </div>
                 
@@ -93,6 +122,7 @@ const Login = () => {
                     className="w-full rounded-lg"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    disabled={isLoading}
                   />
                 </div>
                 
@@ -105,7 +135,7 @@ const Login = () => {
               <Button 
                 type="submit" 
                 className="w-full rounded-lg" 
-                disabled={isLoading}
+                disabled={isLoading || !email || !password}
               >
                 {isLoading ? (
                   <span className="flex items-center">
@@ -128,7 +158,7 @@ const Login = () => {
               </div>
               
               <div className="grid grid-cols-1 gap-3">
-                <Button variant="outline" type="button" className="rounded-lg">
+                <Button variant="outline" type="button" className="rounded-lg" disabled={isLoading}>
                   <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                     <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -139,6 +169,17 @@ const Login = () => {
                 </Button>
               </div>
             </form>
+
+            {/* Área de teste com credenciais */}
+            <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+              <p className="text-sm font-medium text-gray-700 mb-2">Credenciais de teste:</p>
+              <div className="text-xs text-gray-600 space-y-1">
+                <p><strong>Cliente:</strong> cliente@exemplo.com / 123456</p>
+                <p><strong>Técnico:</strong> tecnico@exemplo.com / 123456</p>
+                <p><strong>Empresa:</strong> loja@exemplo.com / 123456</p>
+                <p><strong>Admin:</strong> admin@exemplo.com / 123456</p>
+              </div>
+            </div>
           </BlurContainer>
           
           <p className="text-center text-sm mt-6">

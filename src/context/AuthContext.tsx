@@ -10,6 +10,7 @@ interface AuthContextType {
   user: any | null;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
+  isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -18,6 +19,7 @@ const AuthContext = createContext<AuthContextType>({
   user: null,
   login: async () => false,
   logout: () => {},
+  isLoading: true,
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -29,36 +31,47 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    console.log('AuthProvider - Verificando autenticação inicial');
-    // Verificar se o usuário está logado ao carregar a aplicação
-    const storedUser = localStorage.getItem('techSupportUser');
-    console.log('AuthProvider - storedUser do localStorage:', storedUser);
+    console.log('AuthProvider - Inicializando autenticação');
     
-    if (storedUser) {
+    const initAuth = () => {
       try {
-        const userData = JSON.parse(storedUser);
-        console.log('AuthProvider - userData parseado:', userData);
-        console.log('AuthProvider - userType do userData:', userData.type);
+        const storedUser = localStorage.getItem('techSupportUser');
+        console.log('AuthProvider - Dados no localStorage:', storedUser);
         
-        setUser(userData);
-        setUserType(userData.type);
-        setIsAuthenticated(true);
-        console.log('AuthProvider - Estado definido - autenticado:', true, 'tipo:', userData.type);
+        if (storedUser) {
+          const userData = JSON.parse(storedUser);
+          console.log('AuthProvider - Dados do usuário carregados:', userData);
+          
+          setUser(userData);
+          setUserType(userData.type as UserType);
+          setIsAuthenticated(true);
+          
+          console.log('AuthProvider - Estado definido como autenticado');
+        } else {
+          console.log('AuthProvider - Nenhum usuário encontrado');
+          setUser(null);
+          setUserType(null);
+          setIsAuthenticated(false);
+        }
       } catch (error) {
-        console.error('AuthProvider - Erro ao carregar dados do usuário:', error);
+        console.error('AuthProvider - Erro ao carregar dados:', error);
         localStorage.removeItem('techSupportUser');
+        setUser(null);
+        setUserType(null);
+        setIsAuthenticated(false);
+      } finally {
+        setIsLoading(false);
+        console.log('AuthProvider - Inicialização concluída');
       }
-    } else {
-      console.log('AuthProvider - Nenhum usuário encontrado no localStorage');
-    }
-    setIsLoading(false);
-    console.log('AuthProvider - Carregamento finalizado');
+    };
+
+    initAuth();
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
+    console.log('AuthProvider - Iniciando login para:', email);
+    
     try {
-      console.log('AuthProvider - Tentativa de login para:', email);
-      
       const mockUsers = [
         { id: 1, name: 'Técnico Demo', email: 'tecnico@exemplo.com', password: '123456', type: 'technician' },
         { id: 2, name: 'Cliente Demo', email: 'cliente@exemplo.com', password: '123456', type: 'customer' },
@@ -69,7 +82,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           email: 'loja@exemplo.com', 
           password: '123456', 
           type: 'company',
-          description: 'Peças originais e componentes para impressoras industriais. Distribuidores autorizados das principais marcas.',
+          description: 'Peças originais e componentes para impressoras industriais.',
           location: 'Rio de Janeiro, RJ',
           logo: '/placeholder.svg',
           rating: 4.8,
@@ -84,42 +97,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         },
       ];
 
-      const foundUser = mockUsers.find(
-        (u) => u.email === email && u.password === password
-      );
+      const foundUser = mockUsers.find(u => u.email === email && u.password === password);
 
-      if (foundUser) {
-        console.log('AuthProvider - Usuário encontrado:', foundUser);
-        
-        // Simular um pequeno atraso para dar feedback visual
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
-        // Remover senha antes de armazenar
-        const { password: _, ...userWithoutPassword } = foundUser;
-        console.log('AuthProvider - Dados do usuário sem senha:', userWithoutPassword);
-        
-        // Armazenar dados do usuário
-        setUser(userWithoutPassword);
-        setUserType(foundUser.type as UserType);
-        setIsAuthenticated(true);
-        
-        // Persistir dados de autenticação
-        localStorage.setItem('techSupportUser', JSON.stringify(userWithoutPassword));
-        console.log('AuthProvider - Dados salvos no localStorage');
-        console.log('AuthProvider - Estado atual após login:', {
-          isAuthenticated: true,
-          userType: foundUser.type,
-          user: userWithoutPassword.name
-        });
-        
-        toast({
-          title: "Login realizado com sucesso",
-          description: `Bem-vindo, ${foundUser.name}!`,
-        });
-        
-        return true;
-      } else {
-        console.log('AuthProvider - Credenciais inválidas para:', email);
+      if (!foundUser) {
+        console.log('AuthProvider - Credenciais inválidas');
         toast({
           variant: "destructive",
           title: "Falha na autenticação",
@@ -127,6 +108,28 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         });
         return false;
       }
+
+      console.log('AuthProvider - Usuário encontrado:', foundUser.name, foundUser.type);
+
+      // Remover senha antes de armazenar
+      const { password: _, ...userWithoutPassword } = foundUser;
+      
+      // Definir estado
+      setUser(userWithoutPassword);
+      setUserType(foundUser.type as UserType);
+      setIsAuthenticated(true);
+      
+      // Persistir dados
+      localStorage.setItem('techSupportUser', JSON.stringify(userWithoutPassword));
+      
+      console.log('AuthProvider - Login bem-sucedido, estado atualizado');
+      
+      toast({
+        title: "Login realizado com sucesso",
+        description: `Bem-vindo, ${foundUser.name}!`,
+      });
+      
+      return true;
     } catch (error) {
       console.error('AuthProvider - Erro no login:', error);
       toast({
@@ -140,30 +143,34 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = () => {
     console.log('AuthProvider - Fazendo logout');
+    
     setUser(null);
     setUserType(null);
     setIsAuthenticated(false);
     localStorage.removeItem('techSupportUser');
+    
     toast({
       title: "Logout realizado",
       description: "Você saiu da sua conta.",
     });
   };
 
-  if (isLoading) {
-    console.log('AuthProvider - Ainda carregando...');
-    return <div className="flex items-center justify-center h-screen">Carregando...</div>;
-  }
-
-  console.log('AuthProvider - Estado final:', { 
+  console.log('AuthProvider - Estado atual:', { 
     isAuthenticated, 
     userType, 
     user: user?.name,
-    userId: user?.id 
+    isLoading 
   });
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, userType, user, login, logout }}>
+    <AuthContext.Provider value={{ 
+      isAuthenticated, 
+      userType, 
+      user, 
+      login, 
+      logout, 
+      isLoading 
+    }}>
       {children}
     </AuthContext.Provider>
   );
