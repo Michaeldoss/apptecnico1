@@ -88,7 +88,7 @@ const Navbar = () => {
             <Link
               key={item.path}
               to={item.path}
-              className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200 font-inter"
+              className="text-sm font-medium text-gray-800 hover:text-blue-600 transition-colors duration-200 font-inter"
             >
               {item.label}
             </Link>
@@ -102,7 +102,7 @@ const Navbar = () => {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="flex items-center gap-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 font-inter font-medium"
+                  className="flex items-center gap-2 text-gray-800 hover:text-blue-600 hover:bg-blue-50 font-inter font-medium"
                 >
                   <User className="h-4 w-4" />
                   <span>Minha Conta</span>
@@ -111,7 +111,7 @@ const Navbar = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="bg-white border-gray-200 shadow-xl">
                 <DropdownMenuItem asChild>
-                  <Link to={getDashboardLink()} className="font-inter font-medium">Painel</Link>
+                  <Link to={getDashboardLink()} className="font-inter font-medium text-gray-800">Painel</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link
@@ -120,7 +120,7 @@ const Navbar = () => {
                         ? "/cliente/perfil"
                         : "/tecnico/perfil"
                     }
-                    className="font-inter font-medium"
+                    className="font-inter font-medium text-gray-800"
                   >
                     Perfil
                   </Link>
@@ -135,7 +135,7 @@ const Navbar = () => {
                 variant="outline" 
                 size="sm" 
                 onClick={handleLoginClick}
-                className="border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-inter font-medium transition-all duration-200"
+                className="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-inter font-semibold transition-all duration-200"
               >
                 <LogIn className="h-4 w-4 mr-2" /> Entrar
               </Button>
@@ -145,7 +145,7 @@ const Navbar = () => {
                 <DropdownMenuTrigger asChild>
                   <Button 
                     size="sm" 
-                    className="bg-blue-600 text-white hover:bg-blue-700 font-inter font-medium transition-all duration-200"
+                    className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 font-inter font-semibold transition-all duration-200 border-0 shadow-lg"
                   >
                     <UserPlus className="h-4 w-4 mr-2" /> Cadastre-se
                     <ChevronDown className="h-4 w-4 ml-2" />
@@ -156,25 +156,25 @@ const Navbar = () => {
                     <Link to="/register" className="font-inter font-medium flex items-center gap-3 p-3">
                       <User className="h-4 w-4 text-blue-600" />
                       <div>
-                        <div className="font-medium text-gray-900">Cliente</div>
+                        <div className="font-semibold text-gray-800">Cliente</div>
                         <div className="text-xs text-gray-600">Solicitar serviços</div>
                       </div>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link to="/technician" className="font-inter font-medium flex items-center gap-3 p-3">
-                      <Wrench className="h-4 w-4 text-green-600" />
+                      <Wrench className="h-4 w-4 text-yellow-600" />
                       <div>
-                        <div className="font-medium text-gray-900">Técnico</div>
+                        <div className="font-semibold text-gray-800">Técnico</div>
                         <div className="text-xs text-gray-600">Prestar serviços</div>
                       </div>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link to="/store/company-register" className="font-inter font-medium flex items-center gap-3 p-3">
-                      <Store className="h-4 w-4 text-purple-600" />
+                      <Store className="h-4 w-4 text-blue-600" />
                       <div>
-                        <div className="font-medium text-gray-900">Lojista</div>
+                        <div className="font-semibold text-gray-800">Lojista</div>
                         <div className="text-xs text-gray-600">Vender produtos</div>
                       </div>
                     </Link>
@@ -210,7 +210,7 @@ const Navbar = () => {
                 <Link
                   key={item.path}
                   to={item.path}
-                  className="text-sm font-medium p-3 rounded-lg hover:bg-gray-50 text-gray-700 transition-colors duration-200 font-inter"
+                  className="text-sm font-medium p-3 rounded-lg hover:bg-blue-50 text-gray-800 hover:text-blue-600 transition-colors duration-200 font-inter"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item.label}
@@ -222,16 +222,16 @@ const Navbar = () => {
                   <>
                     <Link
                       to={getDashboardLink()}
-                      className="flex items-center p-3 rounded-lg hover:bg-gray-50 w-full mb-3 transition-colors duration-200 font-inter"
+                      className="flex items-center p-3 rounded-lg hover:bg-blue-50 w-full mb-3 transition-colors duration-200 font-inter"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       <User className="h-5 w-5 mr-3 text-blue-600" />
-                      <span className="text-gray-700 font-medium">Meu Painel</span>
+                      <span className="text-gray-800 font-medium">Meu Painel</span>
                     </Link>
                     <Button
                       variant="outline"
                       size="sm"
-                      className="w-full border border-red-500 text-red-600 hover:bg-red-600 hover:text-white font-inter font-medium"
+                      className="w-full border-2 border-red-500 text-red-600 hover:bg-red-600 hover:text-white font-inter font-semibold"
                       onClick={() => {
                         handleLogout();
                         setIsMenuOpen(false);
@@ -244,28 +244,28 @@ const Navbar = () => {
                   <div className="flex flex-col space-y-3">
                     <Button
                       variant="outline"
-                      className="w-full justify-center border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-inter font-medium"
+                      className="w-full justify-center border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-inter font-semibold"
                       onClick={handleLoginClick}
                     >
                       <LogIn className="h-4 w-4 mr-2" /> Entrar
                     </Button>
                     
-                    <div className="text-center text-sm font-medium text-gray-700 mb-2">Cadastre-se como:</div>
+                    <div className="text-center text-sm font-semibold text-gray-800 mb-2 font-inter">Cadastre-se como:</div>
                     
                     <Link to="/register" onClick={() => setIsMenuOpen(false)}>
-                      <Button className="w-full justify-start bg-blue-600 text-white hover:bg-blue-700 font-inter font-medium mb-2">
+                      <Button className="w-full justify-start bg-blue-600 text-white hover:bg-blue-700 font-inter font-semibold mb-2 shadow-lg">
                         <User className="h-4 w-4 mr-2" /> Cliente
                       </Button>
                     </Link>
                     
                     <Link to="/technician" onClick={() => setIsMenuOpen(false)}>
-                      <Button className="w-full justify-start bg-green-600 text-white hover:bg-green-700 font-inter font-medium mb-2">
+                      <Button className="w-full justify-start bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 font-inter font-semibold mb-2 shadow-lg">
                         <Wrench className="h-4 w-4 mr-2" /> Técnico
                       </Button>
                     </Link>
                     
                     <Link to="/store/company-register" onClick={() => setIsMenuOpen(false)}>
-                      <Button className="w-full justify-start bg-purple-600 text-white hover:bg-purple-700 font-inter font-medium">
+                      <Button className="w-full justify-start bg-blue-700 text-white hover:bg-blue-800 font-inter font-semibold shadow-lg">
                         <Store className="h-4 w-4 mr-2" /> Lojista
                       </Button>
                     </Link>
