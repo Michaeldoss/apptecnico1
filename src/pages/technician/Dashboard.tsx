@@ -1,250 +1,134 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
-import TechnicianLayout from '@/components/layout/TechnicianLayout';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { AlertCircle, CheckCircle, Clock, DollarSign, MessageSquare } from 'lucide-react';
-import { useChat } from '@/hooks/useChat';
-import { useNotifications } from '@/hooks/useNotifications';
+import { Calendar, Wrench, MapPin, DollarSign } from 'lucide-react';
+import TechnicianLayout from '@/components/layout/TechnicianLayout';
+import { Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { cn } from '@/lib/utils';
 
 const TechnicianDashboard = () => {
-  const isMobile = useIsMobile();
+  const { user, isAuthenticated, userType } = useAuth();
   
-  // Dados de exemplo
+  console.log('TechnicianDashboard - Renderizando');
+  console.log('TechnicianDashboard - isAuthenticated:', isAuthenticated);
+  console.log('TechnicianDashboard - userType:', userType);
+  console.log('TechnicianDashboard - user:', user?.name);
+  
+  if (!isAuthenticated || userType !== 'technician') {
+    console.log('TechnicianDashboard - Acesso negado');
+    return <div>Acesso negado</div>;
+  }
+
+  const todayServices = 3;
+  const weeklyEarnings = 2450.00;
   const pendingServices = 5;
-  const completedServices = 12;
-  const scheduledServices = 3;
-  const monthlyEarnings = 'R$ 2.850,00';
-  
-  const { unreadCount } = useNotifications();
-  const { user } = useAuth();
-  const { conversations, messages } = useChat();
-  
-  // Obter as últimas 3 mensagens não lidas
-  const recentMessages = messages
-    .filter(msg => !msg.read && msg.senderId !== user?.id)
-    .slice(0, 3);
-  
-  // Serviços recentes de exemplo
-  const recentServices = [
-    {
-      id: 1,
-      client: 'Carlos Silva',
-      serviceType: 'Reparo de Computador',
-      date: '20/07/2023',
-      status: 'concluído',
-    },
-    {
-      id: 2,
-      client: 'Ana Soares',
-      serviceType: 'Instalação de Rede',
-      date: '18/07/2023',
-      status: 'em andamento',
-    },
-    {
-      id: 3,
-      client: 'Ricardo Oliveira',
-      serviceType: 'Manutenção de Impressora',
-      date: '15/07/2023',
-      status: 'concluído',
-    },
-  ];
 
   return (
-    <TechnicianLayout title="Painel do Técnico">
-      {/* Cards principais */}
-      <div className={cn(
-        "grid gap-4 mb-6",
-        isMobile ? "grid-cols-1" : "grid-cols-2 lg:grid-cols-4"
-      )}>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className={cn(
-              "font-medium",
-              isMobile ? "text-sm" : "text-sm"
-            )}>Serviços Pendentes</CardTitle>
-            <AlertCircle className="h-4 w-4 text-yellow-500" />
-          </CardHeader>
-          <CardContent>
-            <div className={cn(
-              "font-bold",
-              isMobile ? "text-xl" : "text-2xl"
-            )}>{pendingServices}</div>
-            <p className="text-xs text-muted-foreground">
-              +2 desde ontem
-            </p>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className={cn(
-              "font-medium",
-              isMobile ? "text-sm" : "text-sm"
-            )}>Serviços Concluídos</CardTitle>
-            <CheckCircle className="h-4 w-4 text-green-500" />
-          </CardHeader>
-          <CardContent>
-            <div className={cn(
-              "font-bold",
-              isMobile ? "text-xl" : "text-2xl"
-            )}>{completedServices}</div>
-            <p className="text-xs text-muted-foreground">
-              +3 neste mês
-            </p>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className={cn(
-              "font-medium",
-              isMobile ? "text-sm" : "text-sm"
-            )}>Serviços Agendados</CardTitle>
-            <Clock className="h-4 w-4 text-blue-500" />
-          </CardHeader>
-          <CardContent>
-            <div className={cn(
-              "font-bold",
-              isMobile ? "text-xl" : "text-2xl"
-            )}>{scheduledServices}</div>
-            <p className="text-xs text-muted-foreground">
-              Para os próximos 7 dias
-            </p>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className={cn(
-              "font-medium",
-              isMobile ? "text-sm" : "text-sm"
-            )}>Ganhos do Mês</CardTitle>
-            <DollarSign className="h-4 w-4 text-green-500" />
-          </CardHeader>
-          <CardContent>
-            <div className={cn(
-              "font-bold",
-              isMobile ? "text-xl" : "text-2xl"
-            )}>{monthlyEarnings}</div>
-            <p className="text-xs text-muted-foreground">
-              +12% em relação ao mês anterior
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-      
-      {/* Dividir em duas colunas para mensagens e serviços recentes */}
-      <div className={cn(
-        "grid gap-6",
-        isMobile ? "grid-cols-1" : "grid-cols-1 md:grid-cols-2"
-      )}>
-        {/* Mensagens recentes */}
-        <div className="rounded-lg border bg-card">
-          <div className="flex items-center justify-between px-4 py-3 border-b">
-            <div className="flex items-center">
-              <h2 className={cn(
-                "font-semibold",
-                isMobile ? "text-base" : ""
-              )}>Mensagens Recentes</h2>
-              {unreadCount > 0 && (
-                <span className="ml-2 inline-flex items-center justify-center bg-primary text-primary-foreground text-xs rounded-full h-5 px-2">
-                  {unreadCount} {unreadCount === 1 ? 'nova' : 'novas'}
-                </span>
-              )}
-            </div>
-            <Link to="/tecnico/chat">
-              <Button variant="outline" size="sm" className="flex items-center gap-2">
-                <MessageSquare size={16} />
-                {!isMobile && "Ver Todas"}
-              </Button>
-            </Link>
-          </div>
-          <div className="divide-y">
-            {recentMessages.length > 0 ? (
-              recentMessages.map((message) => (
-                <div key={message.id} className="p-4">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className={cn(
-                      "font-medium",
-                      isMobile ? "text-sm" : ""
-                    )}>{message.senderName}</span>
-                    <span className="text-xs text-muted-foreground">
-                      {new Date(message.timestamp).toLocaleTimeString()}
-                    </span>
-                  </div>
-                  <p className="text-sm truncate">{message.content}</p>
-                  {message.serviceRequest && (
-                    <div className="mt-1">
-                      <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">
-                        Nova solicitação
-                      </span>
-                    </div>
-                  )}
-                </div>
-              ))
-            ) : (
-              <div className="p-4 text-center text-muted-foreground">
-                Nenhuma mensagem não lida
-              </div>
-            )}
-            
-            {recentMessages.length === 0 && conversations.length > 0 && (
-              <div className="p-4 text-center">
-                <Link to="/tecnico/chat">
-                  <Button variant="secondary" size="sm">
-                    Ver todas as conversas
-                  </Button>
-                </Link>
-              </div>
-            )}
-          </div>
+    <TechnicianLayout title="Dashboard do Técnico">
+      <div className="space-y-6">
+        <div className="mb-4">
+          <p className="text-gray-600">
+            Bem-vindo, {user?.name || 'Técnico'}! Aqui está um resumo das suas atividades.
+          </p>
         </div>
         
-        {/* Lista de serviços recentes */}
-        <div className="rounded-lg border bg-card">
-          <div className="flex items-center justify-between px-4 py-3 border-b">
-            <h2 className={cn(
-              "font-semibold",
-              isMobile ? "text-base" : ""
-            )}>Serviços Recentes</h2>
-            <Link to="/tecnico/servicos">
-              <Button variant="outline" size="sm">
-                {isMobile ? "Ver" : "Ver Todos"}
-              </Button>
-            </Link>
-          </div>
-          <div className="divide-y">
-            {recentServices.map((service) => (
-              <div key={service.id} className="p-4">
-                <div className="flex items-center justify-between">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium">Serviços Hoje</CardTitle>
+              <Calendar className="h-4 w-4 text-blue-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{todayServices}</div>
+              <p className="text-xs text-muted-foreground">Agendados para hoje</p>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium">Serviços Pendentes</CardTitle>
+              <Wrench className="h-4 w-4 text-orange-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{pendingServices}</div>
+              <p className="text-xs text-muted-foreground">Aguardando atendimento</p>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium">Localização</CardTitle>
+              <MapPin className="h-4 w-4 text-green-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">Ativo</div>
+              <p className="text-xs text-muted-foreground">Disponível para chamados</p>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium">Ganhos (Semana)</CardTitle>
+              <DollarSign className="h-4 w-4 text-green-600" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">R$ {weeklyEarnings.toFixed(2)}</div>
+              <p className="text-xs text-muted-foreground">Últimos 7 dias</p>
+            </CardContent>
+          </Card>
+        </div>
+        
+        <div className="grid gap-4 md:grid-cols-2">
+          <Card>
+            <CardHeader>
+              <CardTitle>Próximos Atendimentos</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-2">
+                <li className="flex justify-between items-center">
                   <div>
-                    <p className={cn(
-                      "font-medium",
-                      isMobile ? "text-sm" : ""
-                    )}>{service.client}</p>
-                    <p className="text-sm text-muted-foreground">{service.serviceType}</p>
+                    <p className="font-medium">Reparo de Impressora</p>
+                    <p className="text-sm text-muted-foreground">14:00 - João Silva</p>
                   </div>
-                  <div className="text-right">
-                    <p className="text-sm">{service.date}</p>
-                    <span 
-                      className={`inline-block px-2 py-1 text-xs rounded-full ${
-                        service.status === 'concluído' 
-                          ? 'bg-green-100 text-green-800' 
-                          : 'bg-yellow-100 text-yellow-800'
-                      }`}
-                    >
-                      {service.status}
-                    </span>
+                  <span className="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                    Hoje
+                  </span>
+                </li>
+                <li className="flex justify-between items-center">
+                  <div>
+                    <p className="font-medium">Manutenção de PC</p>
+                    <p className="text-sm text-muted-foreground">16:30 - Maria Oliveira</p>
                   </div>
-                </div>
+                  <span className="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                    Hoje
+                  </span>
+                </li>
+              </ul>
+              <Button variant="outline" className="w-full mt-4" asChild>
+                <Link to="/tecnico/servicos">Ver todos os serviços</Link>
+              </Button>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader>
+              <CardTitle>Ações Rápidas</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <Button className="w-full" asChild>
+                  <Link to="/tecnico/agenda">Ver Agenda</Link>
+                </Button>
+                <Button variant="outline" className="w-full" asChild>
+                  <Link to="/tecnico/perfil">Atualizar Perfil</Link>
+                </Button>
+                <Button variant="outline" className="w-full" asChild>
+                  <Link to="/tecnico/pecas">Gerenciar Peças</Link>
+                </Button>
               </div>
-            ))}
-          </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </TechnicianLayout>

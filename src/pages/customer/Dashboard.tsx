@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Wrench, MapPin, CreditCard, Clock } from 'lucide-react';
+import { Wrench, MapPin, CreditCard } from 'lucide-react';
 import CustomerLayout from '@/components/layout/CustomerLayout';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
@@ -10,27 +10,17 @@ import { useAuth } from '@/context/AuthContext';
 const CustomerDashboard = () => {
   const { user, isAuthenticated, userType } = useAuth();
   
-  console.log('CustomerDashboard - INÍCIO DA RENDERIZAÇÃO');
+  console.log('CustomerDashboard - Renderizando');
   console.log('CustomerDashboard - isAuthenticated:', isAuthenticated);
   console.log('CustomerDashboard - userType:', userType);
   console.log('CustomerDashboard - user:', user?.name);
   
-  // Verificação adicional de segurança
-  if (!isAuthenticated) {
-    console.log('CustomerDashboard - Usuário não autenticado, não deveria chegar aqui');
-    return <div>Redirecionando...</div>;
-  }
-  
-  if (userType !== 'customer') {
-    console.log('CustomerDashboard - Tipo de usuário incorreto:', userType);
+  if (!isAuthenticated || userType !== 'customer') {
+    console.log('CustomerDashboard - Acesso negado');
     return <div>Acesso negado</div>;
   }
   
-  console.log('CustomerDashboard - Renderizando painel do cliente');
-  
-  // Dados de exemplo
   const activeServices = 2;
-  const completedServices = 8;
   const pendingPayments = 1;
   
   return (
@@ -42,7 +32,6 @@ const CustomerDashboard = () => {
           </p>
         </div>
         
-        {/* Cards principais */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -51,9 +40,7 @@ const CustomerDashboard = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{activeServices}</div>
-              <p className="text-xs text-muted-foreground">
-                Em andamento
-              </p>
+              <p className="text-xs text-muted-foreground">Em andamento</p>
               <Button variant="link" size="sm" asChild className="mt-2 p-0">
                 <Link to="/cliente/servicos">Ver serviços</Link>
               </Button>
@@ -67,9 +54,7 @@ const CustomerDashboard = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">1</div>
-              <p className="text-xs text-muted-foreground">
-                Atendimento em andamento
-              </p>
+              <p className="text-xs text-muted-foreground">Atendimento em andamento</p>
               <Button variant="link" size="sm" asChild className="mt-2 p-0">
                 <Link to="/cliente/rastreamento">Rastrear técnico</Link>
               </Button>
@@ -83,9 +68,7 @@ const CustomerDashboard = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{pendingPayments}</div>
-              <p className="text-xs text-muted-foreground">
-                Pendente de pagamento
-              </p>
+              <p className="text-xs text-muted-foreground">Pendente de pagamento</p>
               <Button variant="link" size="sm" asChild className="mt-2 p-0">
                 <Link to="/cliente/pagamentos">Ver pagamentos</Link>
               </Button>
@@ -93,7 +76,6 @@ const CustomerDashboard = () => {
           </Card>
         </div>
         
-        {/* Visão rápida */}
         <div className="grid gap-4 md:grid-cols-2">
           <Card>
             <CardHeader>

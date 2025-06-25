@@ -25,7 +25,6 @@ import {
 import DashboardChart from '@/components/store/DashboardChart';
 import OrdersList from '@/components/store/OrdersList';
 
-// Sample data for charts
 const salesData = [
   { name: 'Jan', vendas: 4000, receita: 2400 },
   { name: 'Fev', vendas: 3000, receita: 1398 },
@@ -44,7 +43,6 @@ const categoryData = [
   { name: 'Outros', valor: 1890 },
 ];
 
-// Sample orders data
 const sampleOrders = [
   {
     id: '1001',
@@ -64,40 +62,18 @@ const sampleOrders = [
     items: 2,
     paymentMethod: 'Pix'
   },
-  {
-    id: '1003',
-    customer: 'Carlos Souza',
-    date: '12/04/2023',
-    total: 780.50,
-    status: 'shipping' as const,
-    items: 1,
-    paymentMethod: 'Boleto'
-  },
-  {
-    id: '1004',
-    customer: 'Ana Pereira',
-    date: '10/04/2023',
-    total: 1890.00,
-    status: 'pending' as const,
-    items: 4,
-    paymentMethod: 'Cartão de Crédito'
-  },
-  {
-    id: '1005',
-    customer: 'Roberto Lima',
-    date: '09/04/2023',
-    total: 320.75,
-    status: 'cancelled' as const,
-    items: 2,
-    paymentMethod: 'Pix'
-  },
 ];
 
 const CompanyDashboard = () => {
   const { isAuthenticated, userType, user } = useAuth();
   
-  // Redirect to login if not authenticated or not a company
+  console.log('CompanyDashboard - Renderizando');
+  console.log('CompanyDashboard - isAuthenticated:', isAuthenticated);
+  console.log('CompanyDashboard - userType:', userType);
+  console.log('CompanyDashboard - user:', user?.name);
+  
   if (!isAuthenticated || userType !== 'company') {
+    console.log('CompanyDashboard - Redirecionando para registro');
     return <Navigate to="/store/company-register" replace />;
   }
 
@@ -109,19 +85,14 @@ const CompanyDashboard = () => {
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center">
-              <Building className="h-10 w-10 text-tech-primary mr-4" />
+              <Building className="h-10 w-10 text-blue-600 mr-4" />
               <div>
-                <h1 className="text-3xl font-bold text-tech-primary font-inter">
+                <h1 className="text-3xl font-bold text-gray-900">
                   Portal do Fornecedor
                 </h1>
-                <p className="text-gray-secondary font-inter">
+                <p className="text-gray-600">
                   Bem-vindo, {user?.name || 'Doss Group'}!
                 </p>
-                <div className="flex items-center gap-2 mt-2">
-                  <div className="ssl-indicator">
-                    SSL Ativo - Ambiente Seguro
-                  </div>
-                </div>
               </div>
             </div>
             <div className="flex gap-2">
@@ -132,7 +103,7 @@ const CompanyDashboard = () => {
                 </Button>
               </Link>
               <Link to="/store/company-settings">
-                <Button variant="secure" showLock>
+                <Button>
                   <Settings className="mr-2 h-4 w-4" />
                   Configurações
                 </Button>
@@ -141,81 +112,73 @@ const CompanyDashboard = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <Card className="card-standard">
+            <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-semibold text-gray-secondary font-inter">Produtos</CardTitle>
+                <CardTitle className="text-sm font-semibold text-gray-600">Produtos</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-gray-primary font-inter">{user?.productCount || 87}</div>
+                <div className="text-2xl font-bold text-gray-900">{user?.productCount || 87}</div>
               </CardContent>
             </Card>
             
-            <Card className="card-standard">
+            <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-semibold text-gray-secondary font-inter">Vendas (Mês)</CardTitle>
+                <CardTitle className="text-sm font-semibold text-gray-600">Vendas (Mês)</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-gray-primary font-inter">23</div>
+                <div className="text-2xl font-bold text-gray-900">23</div>
               </CardContent>
             </Card>
             
-            <Card className="card-secure">
+            <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-semibold text-tech-accent font-inter flex items-center gap-1">
+                <CardTitle className="text-sm font-semibold text-gray-600 flex items-center gap-1">
                   <Lock className="h-4 w-4" />
                   Faturamento
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-gray-primary font-inter">R$ 12.450,00</div>
-                <div className="security-badge mt-2">
+                <div className="text-2xl font-bold text-gray-900">R$ 12.450,00</div>
+                <div className="text-xs text-green-600 mt-2">
                   Pagamento Protegido
                 </div>
               </CardContent>
             </Card>
             
-            <Card className="card-standard">
+            <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-semibold text-gray-secondary font-inter">Avaliação</CardTitle>
+                <CardTitle className="text-sm font-semibold text-gray-600">Avaliação</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-gray-primary font-inter">{user?.rating || 4.8} ★</div>
+                <div className="text-2xl font-bold text-gray-900">{user?.rating || 4.8} ★</div>
               </CardContent>
             </Card>
           </div>
           
           <Tabs defaultValue="overview">
-            <div className="border-b border-gray-border mb-6">
-              <TabsList className="w-full flex justify-start h-auto p-0 bg-transparent overflow-x-auto">
-                <TabsTrigger value="overview" className="py-3 px-4 data-[state=active]:border-b-2 data-[state=active]:border-tech-primary rounded-none bg-transparent text-gray-primary font-inter font-medium">
-                  <LayoutDashboard className="mr-2 h-4 w-4 text-tech-primary" />
+            <div className="border-b border-gray-200 mb-6">
+              <TabsList className="w-full flex justify-start h-auto p-0 bg-transparent">
+                <TabsTrigger value="overview" className="py-3 px-4 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 rounded-none bg-transparent text-gray-700 font-medium">
+                  <LayoutDashboard className="mr-2 h-4 w-4 text-blue-600" />
                   Visão Geral
                 </TabsTrigger>
-                <TabsTrigger value="products" className="py-3 px-4 data-[state=active]:border-b-2 data-[state=active]:border-tech-primary rounded-none bg-transparent text-gray-primary font-inter font-medium">
-                  <Package className="mr-2 h-4 w-4 text-tech-primary" />
+                <TabsTrigger value="products" className="py-3 px-4 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 rounded-none bg-transparent text-gray-700 font-medium">
+                  <Package className="mr-2 h-4 w-4 text-blue-600" />
                   Produtos
                 </TabsTrigger>
-                <TabsTrigger value="orders" className="py-3 px-4 data-[state=active]:border-b-2 data-[state=active]:border-tech-primary rounded-none bg-transparent text-gray-primary font-inter font-medium">
-                  <ShoppingBag className="mr-2 h-4 w-4 text-tech-primary" />
+                <TabsTrigger value="orders" className="py-3 px-4 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 rounded-none bg-transparent text-gray-700 font-medium">
+                  <ShoppingBag className="mr-2 h-4 w-4 text-blue-600" />
                   Pedidos
-                </TabsTrigger>
-                <TabsTrigger value="analytics" className="py-3 px-4 data-[state=active]:border-b-2 data-[state=active]:border-tech-primary rounded-none bg-transparent text-gray-primary font-inter font-medium">
-                  <BarChart3 className="mr-2 h-4 w-4 text-tech-primary" />
-                  Analytics
-                </TabsTrigger>
-                <TabsTrigger value="store" className="py-3 px-4 data-[state=active]:border-b-2 data-[state=active]:border-tech-primary rounded-none bg-transparent text-gray-primary font-inter font-medium">
-                  <Store className="mr-2 h-4 w-4 text-tech-primary" />
-                  Minha Loja
                 </TabsTrigger>
               </TabsList>
             </div>
             
             <TabsContent value="overview">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <Card className="md:col-span-2 card-standard">
+                <Card className="md:col-span-2">
                   <CardHeader>
-                    <CardTitle className="text-gray-primary font-inter">Desempenho Recente</CardTitle>
-                    <CardDescription className="text-gray-secondary font-inter">
+                    <CardTitle className="text-gray-900">Desempenho Recente</CardTitle>
+                    <CardDescription className="text-gray-600">
                       Visualização dos últimos 30 dias de atividade da sua loja
                     </CardDescription>
                   </CardHeader>
@@ -229,10 +192,10 @@ const CompanyDashboard = () => {
                   </CardContent>
                 </Card>
                 
-                <Card className="card-standard">
+                <Card>
                   <CardHeader>
-                    <CardTitle className="text-gray-primary font-inter">Atenção Necessária</CardTitle>
-                    <CardDescription className="text-gray-secondary font-inter">
+                    <CardTitle className="text-gray-900">Atenção Necessária</CardTitle>
+                    <CardDescription className="text-gray-600">
                       Itens que precisam da sua atenção
                     </CardDescription>
                   </CardHeader>
@@ -241,16 +204,16 @@ const CompanyDashboard = () => {
                       <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 p-3 rounded-md flex items-start">
                         <AlertTriangle className="h-5 w-5 mr-2 flex-shrink-0 text-yellow-600" />
                         <div>
-                          <p className="font-semibold text-yellow-900 font-inter">Estoque Baixo</p>
-                          <p className="text-sm text-yellow-700 font-inter">3 produtos estão com estoque abaixo do mínimo</p>
+                          <p className="font-semibold text-yellow-900">Estoque Baixo</p>
+                          <p className="text-sm text-yellow-700">3 produtos estão com estoque abaixo do mínimo</p>
                         </div>
                       </div>
                       
                       <div className="bg-blue-50 border border-blue-200 text-blue-800 p-3 rounded-md flex items-start">
                         <AlertTriangle className="h-5 w-5 mr-2 flex-shrink-0 text-blue-600" />
                         <div>
-                          <p className="font-semibold text-blue-900 font-inter">Pedidos Pendentes</p>
-                          <p className="text-sm text-blue-700 font-inter">5 pedidos aguardando processamento</p>
+                          <p className="font-semibold text-blue-900">Pedidos Pendentes</p>
+                          <p className="text-sm text-blue-700">5 pedidos aguardando processamento</p>
                         </div>
                       </div>
                     </div>
@@ -277,7 +240,7 @@ const CompanyDashboard = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="border rounded-md">
-                    <div className="grid grid-cols-12 bg-muted/50 p-3 text-sm font-medium border-b">
+                    <div className="grid grid-cols-12 bg-gray-50 p-3 text-sm font-medium border-b">
                       <div className="col-span-1">#</div>
                       <div className="col-span-5">Nome</div>
                       <div className="col-span-2 text-right">Estoque</div>
@@ -285,10 +248,9 @@ const CompanyDashboard = () => {
                       <div className="col-span-2 text-right">Status</div>
                     </div>
                     
-                    {/* Product list */}
                     <div className="divide-y">
-                      <div className="grid grid-cols-12 p-3 items-center hover:bg-muted/20">
-                        <div className="col-span-1 text-muted-foreground">8006</div>
+                      <div className="grid grid-cols-12 p-3 items-center hover:bg-gray-50">
+                        <div className="col-span-1 text-gray-500">8006</div>
                         <div className="col-span-5 font-medium">BOMBA DE TINTA 100/200ML</div>
                         <div className="col-span-2 text-right">14</div>
                         <div className="col-span-2 text-right">R$ 155,00</div>
@@ -296,52 +258,12 @@ const CompanyDashboard = () => {
                           <span className="inline-block px-2 py-1 rounded-full bg-green-100 text-green-800 text-xs">Ativo</span>
                         </div>
                       </div>
-                      
-                      <div className="grid grid-cols-12 p-3 items-center hover:bg-muted/20">
-                        <div className="col-span-1 text-muted-foreground">8007</div>
-                        <div className="col-span-5 font-medium">BOMBA DE TINTA 300/400ML</div>
-                        <div className="col-span-2 text-right">22</div>
-                        <div className="col-span-2 text-right">R$ 205,00</div>
-                        <div className="col-span-2 text-right">
-                          <span className="inline-block px-2 py-1 rounded-full bg-green-100 text-green-800 text-xs">Ativo</span>
-                        </div>
-                      </div>
-                      
-                      <div className="grid grid-cols-12 p-3 items-center hover:bg-muted/20">
-                        <div className="col-span-1 text-muted-foreground">222240</div>
-                        <div className="col-span-5 font-medium">BOTÃO ON/OFF - XULI - POLAR</div>
-                        <div className="col-span-2 text-right">3</div>
-                        <div className="col-span-2 text-right">R$ 90,00</div>
-                        <div className="col-span-2 text-right">
-                          <span className="inline-block px-2 py-1 rounded-full bg-yellow-100 text-yellow-800 text-xs">Estoque Baixo</span>
-                        </div>
-                      </div>
-                      
-                      <div className="grid grid-cols-12 p-3 items-center hover:bg-muted/20">
-                        <div className="col-span-1 text-muted-foreground">8008</div>
-                        <div className="col-span-5 font-medium">BOMBA DE TINTA PERISTÁLTICA</div>
-                        <div className="col-span-2 text-right">5</div>
-                        <div className="col-span-2 text-right">R$ 432,00</div>
-                        <div className="col-span-2 text-right">
-                          <span className="inline-block px-2 py-1 rounded-full bg-green-100 text-green-800 text-xs">Ativo</span>
-                        </div>
-                      </div>
-                      
-                      <div className="grid grid-cols-12 p-3 items-center hover:bg-muted/20">
-                        <div className="col-span-1 text-muted-foreground">222153</div>
-                        <div className="col-span-5 font-medium">BULK 1,5L PRETO UV COM ALARME</div>
-                        <div className="col-span-2 text-right">0</div>
-                        <div className="col-span-2 text-right">R$ 380,00</div>
-                        <div className="col-span-2 text-right">
-                          <span className="inline-block px-2 py-1 rounded-full bg-red-100 text-red-800 text-xs">Sem Estoque</span>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </CardContent>
                 <CardFooter className="justify-between">
-                  <p className="text-sm text-muted-foreground">
-                    Mostrando 5 de 87 produtos
+                  <p className="text-sm text-gray-500">
+                    Mostrando produtos disponíveis
                   </p>
                   <Link to="/store/company-products">
                     <Button variant="outline" size="sm" className="flex items-center gap-1">
@@ -364,187 +286,9 @@ const CompanyDashboard = () => {
                 <CardContent>
                   <OrdersList orders={sampleOrders} />
                 </CardContent>
-                <CardFooter className="justify-between">
-                  <p className="text-sm text-muted-foreground">
-                    Mostrando 5 de {sampleOrders.length} pedidos
-                  </p>
-                  <div className="flex items-center space-x-2">
-                    <Button variant="outline" size="sm">Anterior</Button>
-                    <Button variant="outline" size="sm">Próximo</Button>
-                  </div>
-                </CardFooter>
-              </Card>
-            </TabsContent>
-            
-            <TabsContent value="analytics">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Estatísticas e Análises</CardTitle>
-                  <CardDescription>
-                    Acompanhe o desempenho da sua loja
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-8">
-                    <div className="h-[300px]">
-                      <DashboardChart 
-                        data={salesData} 
-                        type="line" 
-                        dataKeys={['vendas', 'receita']}
-                        title="Vendas e Receita Mensal"
-                        subtitle="Dados dos últimos 7 meses"
-                      />
-                    </div>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="h-[250px]">
-                        <DashboardChart 
-                          data={categoryData} 
-                          type="bar" 
-                          dataKeys={['valor']}
-                          title="Vendas por Categoria"
-                          subtitle="Distribuição por segmento"
-                        />
-                      </div>
-                      <Card>
-                        <CardHeader>
-                          <CardTitle className="text-base">Avaliações dos clientes</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="space-y-4">
-                            <div className="flex justify-between items-center">
-                              <div className="flex gap-2 items-center">
-                                <span className="text-yellow-500 text-lg">★★★★★</span>
-                                <span className="text-sm">5 estrelas</span>
-                              </div>
-                              <span className="text-sm font-medium">68%</span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                              <div className="flex gap-2 items-center">
-                                <span className="text-yellow-500 text-lg">★★★★☆</span>
-                                <span className="text-sm">4 estrelas</span>
-                              </div>
-                              <span className="text-sm font-medium">21%</span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                              <div className="flex gap-2 items-center">
-                                <span className="text-yellow-500 text-lg">★★★☆☆</span>
-                                <span className="text-sm">3 estrelas</span>
-                              </div>
-                              <span className="text-sm font-medium">8%</span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                              <div className="flex gap-2 items-center">
-                                <span className="text-yellow-500 text-lg">★★☆☆☆</span>
-                                <span className="text-sm">2 estrelas</span>
-                              </div>
-                              <span className="text-sm font-medium">2%</span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                              <div className="flex gap-2 items-center">
-                                <span className="text-yellow-500 text-lg">★☆☆☆☆</span>
-                                <span className="text-sm">1 estrela</span>
-                              </div>
-                              <span className="text-sm font-medium">1%</span>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-            
-            <TabsContent value="store">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Minha Loja</CardTitle>
-                  <CardDescription>
-                    Gerencie as configurações e aparência da sua loja
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-6">
-                    <div className="bg-card border p-6 rounded-md">
-                      <h3 className="text-lg font-medium mb-4">Perfil da Loja</h3>
-                      <div className="flex flex-col md:flex-row gap-6">
-                        <div className="md:w-1/3">
-                          <div className="border border-dashed rounded-md flex items-center justify-center p-8">
-                            <div className="text-center">
-                              <Store className="h-10 w-10 mx-auto text-muted-foreground mb-2" />
-                              <p className="text-sm text-muted-foreground">
-                                Clique para atualizar o logo da sua loja
-                              </p>
-                              <Button variant="outline" size="sm" className="mt-4">
-                                Alterar Logo
-                              </Button>
-                            </div>
-                          </div>
-                        </div>
-                        
-                        <div className="md:w-2/3">
-                          <div className="space-y-4">
-                            <div>
-                              <h4 className="text-sm font-medium mb-1">Nome da Loja</h4>
-                              <p>Doss Group</p>
-                            </div>
-                            
-                            <div>
-                              <h4 className="text-sm font-medium mb-1">Descrição</h4>
-                              <p>Peças originais e componentes para impressoras industriais. Distribuidores autorizados das principais marcas.</p>
-                            </div>
-                            
-                            <div>
-                              <h4 className="text-sm font-medium mb-1">Localização</h4>
-                              <p>Rio de Janeiro, RJ</p>
-                            </div>
-                            
-                            <Button variant="outline" size="sm">
-                              Editar Informações
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="bg-card border p-6 rounded-md">
-                      <h3 className="text-lg font-medium mb-4">Configurações da Loja</h3>
-                      <div className="space-y-4">
-                        <Button variant="outline" size="sm">
-                          Gerenciar Categorias
-                        </Button>
-                        <Button variant="outline" size="sm">
-                          Configurar Métodos de Envio
-                        </Button>
-                        <Button variant="outline" size="sm">
-                          Configurar Promoções
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
               </Card>
             </TabsContent>
           </Tabs>
-          
-          {/* Security footer */}
-          <div className="mt-12 pt-6 border-t border-gray-border">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-4">
-                <div className="ssl-indicator">
-                  Ambiente protegido e seguro
-                </div>
-                <div className="flex items-center gap-2 text-tech-accent font-medium text-sm">
-                  <Shield className="h-4 w-4" />
-                  <span>Pagamento via ambiente criptografado</span>
-                </div>
-              </div>
-              <div className="security-badge">
-                Certificado SSL Ativo
-              </div>
-            </div>
-          </div>
         </div>
       </main>
       

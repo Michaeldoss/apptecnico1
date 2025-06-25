@@ -65,7 +65,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
     };
 
-    initAuth();
+    // Pequeno delay para evitar problemas de renderização
+    const timer = setTimeout(initAuth, 100);
+    return () => clearTimeout(timer);
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
