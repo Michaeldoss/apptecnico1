@@ -1,7 +1,7 @@
-
 import React from 'react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import TechnicianCarousel from '@/components/home/TechnicianCarousel';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -34,7 +34,7 @@ const Index = () => {
       <Navbar />
       
       <main className="flex-grow">
-        {/* Hero Section - Updated with new visual identity */}
+        {/* Hero Section - Updated with new company name */}
         <section className="relative py-16 md:py-24 overflow-hidden bg-white">
           <div className="container px-6 mx-auto relative z-10">
             <div className={cn(
@@ -48,7 +48,7 @@ const Index = () => {
                 className="space-y-8"
               >
                 <span className="inline-block px-4 py-2 text-sm font-medium bg-emerald-50 text-emerald-600 rounded-full border border-emerald-200">
-                  Suporte Técnico Inteligente
+                  DGSoluções - Suporte Técnico Inteligente
                 </span>
                 <h1 className={cn(
                   "font-bold leading-tight text-blue-900 font-inter",
@@ -57,7 +57,7 @@ const Index = () => {
                   Precisando de suporte técnico? <span className="text-blue-600">Nós conectamos você ao especialista certo.</span>
                 </h1>
                 <p className={cn(
-                  "text-slate-600 leading-relaxed font-inter",
+                  "text-gray-700 leading-relaxed font-inter",
                   isMobile ? "text-base" : "text-lg md:text-xl"
                 )}>
                   Soluções rápidas com técnicos certificados em manutenção, instalação e suporte em equipamentos industriais e de impressão.
@@ -140,7 +140,10 @@ const Index = () => {
           </div>
         </section>
         
-        {/* Quick Access Section - Updated colors */}
+        {/* Technician Carousel Section */}
+        <TechnicianCarousel />
+        
+        {/* Quick Access Section - Updated colors for better contrast */}
         <section className="py-16 md:py-20 bg-gray-50">
           <div className="container px-6 mx-auto">
             <motion.h2 
@@ -195,7 +198,7 @@ const Index = () => {
                         </motion.div>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>{item.tooltip}</p>
+                        <p className="text-gray-800">{item.tooltip}</p>
                       </TooltipContent>
                     </Tooltip>
                   </Link>

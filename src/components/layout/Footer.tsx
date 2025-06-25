@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -10,7 +9,7 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <h3 className="font-bold text-lg mb-4 text-tech-primary font-inter">AssistAnywhere</h3>
+            <h3 className="font-bold text-lg mb-4 text-tech-primary font-inter">DGSoluções</h3>
             <p className="text-gray-secondary text-sm mb-4 font-inter">
               Conectando você aos melhores técnicos para resolver seus problemas tecnológicos.
             </p>
@@ -179,7 +178,7 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-gray-border mt-12 pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-secondary">
-          <p className="font-inter">&copy; {currentYear} AssistAnywhere. Todos os direitos reservados.</p>
+          <p className="font-inter">&copy; {currentYear} DGSoluções. Todos os direitos reservados.</p>
           <div className="flex space-x-4 mt-4 md:mt-0">
             <Link to="/terms" className="text-gray-secondary hover:text-tech-primary transition-colors duration-200 font-inter">
               Termos

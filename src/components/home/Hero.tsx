@@ -14,14 +14,17 @@ const Hero = () => {
       
       <div className="max-w-6xl mx-auto relative z-10">
         <AnimatedContainer animation="slide-right" className="text-center space-y-8 md:space-y-12 mb-16">
-          {/* Novo Título Principal */}
+          {/* Título Principal Atualizado */}
           <div className="space-y-6 md:space-y-8">
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight">
+            <span className="inline-block px-4 py-2 text-sm font-medium bg-blue-100 text-blue-800 rounded-full border border-blue-200">
+              DGSoluções - Suporte Técnico Inteligente
+            </span>
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight text-blue-900">
               Resolva problemas técnicos{" "}
-              <span className="text-[#1D4ED8] font-black">em minutos</span>
+              <span className="text-blue-600 font-black">em minutos</span>
             </h1>
             
-            <p className="text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed px-4">
+            <p className="text-lg md:text-xl lg:text-2xl text-gray-700 max-w-3xl mx-auto leading-relaxed px-4 font-inter">
               Conectamos você com técnicos especializados em equipamentos industriais de forma rápida e confiável
             </p>
           </div>
