@@ -3,83 +3,88 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
-import { Search, MapPin, UserPlus, Store } from "lucide-react";
+import { Search, MapPin, ArrowRight, Star, Users, CheckCircle2 } from "lucide-react";
 
 const Hero = () => {
   return (
-    <section className="bg-gradient-to-br from-blue-700 to-blue-800 text-white py-20 px-4">
-      <div className="max-w-6xl mx-auto">
+    <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-16 px-4 min-h-[70vh] flex items-center">
+      <div className="max-w-6xl mx-auto w-full">
         {/* Título Principal */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight text-white">
-            Encontre o <span className="text-yellow-300">técnico ideal</span><br />
+            Encontre o <span className="text-yellow-300 bg-yellow-300/10 px-2 py-1 rounded-lg">técnico ideal</span><br />
             para seu equipamento
           </h1>
           
-          <p className="text-xl md:text-2xl mb-8 text-blue-100 max-w-3xl mx-auto font-medium">
+          <p className="text-xl md:text-2xl mb-8 text-blue-100 max-w-3xl mx-auto font-medium leading-relaxed">
             Conectamos você com profissionais qualificados para manutenção e reparo de equipamentos industriais
           </p>
         </div>
 
-        {/* Formulário de Busca */}
-        <div className="bg-white rounded-xl p-8 shadow-2xl max-w-4xl mx-auto mb-12">
+        {/* Formulário de Busca Melhorado */}
+        <div className="bg-white rounded-2xl p-8 shadow-2xl max-w-4xl mx-auto mb-12 border border-blue-200">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Campo de Serviço */}
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 h-5 w-5" />
+            <div className="relative group">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Tipo de equipamento</label>
+              <Search className="absolute left-4 top-11 transform text-gray-400 h-5 w-5 group-focus-within:text-blue-600 transition-colors" />
               <Input 
-                placeholder="Que tipo de equipamento?" 
-                className="pl-12 h-14 text-gray-800 border-2 border-gray-200 focus:border-blue-600 text-base font-medium"
+                placeholder="Ex: Impressora, CNC, Torno..." 
+                className="pl-12 h-12 text-gray-800 border-2 border-gray-200 focus:border-blue-600 text-base font-medium rounded-lg shadow-sm hover:border-gray-300 transition-all"
               />
             </div>
             
             {/* Campo de Localização */}
-            <div className="relative">
-              <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 h-5 w-5" />
+            <div className="relative group">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Localização</label>
+              <MapPin className="absolute left-4 top-11 transform text-gray-400 h-5 w-5 group-focus-within:text-blue-600 transition-colors" />
               <Input 
-                placeholder="Onde está localizado?" 
-                className="pl-12 h-14 text-gray-800 border-2 border-gray-200 focus:border-blue-600 text-base font-medium"
+                placeholder="Cidade, estado ou CEP" 
+                className="pl-12 h-12 text-gray-800 border-2 border-gray-200 focus:border-blue-600 text-base font-medium rounded-lg shadow-sm hover:border-gray-300 transition-all"
               />
             </div>
             
             {/* Botão de Busca */}
-            <Link to="/find-technician">
-              <Button className="w-full h-14 bg-orange-600 hover:bg-orange-700 text-white font-bold text-lg shadow-lg transition-all duration-200 border-0">
-                Encontrar Técnicos
-              </Button>
-            </Link>
+            <div className="flex flex-col justify-end">
+              <Link to="/find-technician">
+                <Button className="w-full h-12 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold text-lg shadow-lg transition-all duration-200 border-0 rounded-lg group">
+                  Buscar Técnicos
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
 
-        {/* Botões de Cadastro */}
-        <div className="flex flex-col md:flex-row gap-6 justify-center items-center mb-12">
-          <Link to="/register" className="w-full md:w-auto">
-            <Button className="w-full md:w-auto bg-green-600 hover:bg-green-700 text-white font-bold px-8 py-4 text-lg rounded-lg shadow-lg transition-all duration-200 border-0">
-              <UserPlus className="mr-3 h-6 w-6" />
-              Cadastrar como Cliente
-            </Button>
-          </Link>
-          
-          <div className="text-white font-medium text-lg">ou</div>
-          
-          <Link to="/store/company-register" className="w-full md:w-auto">
-            <Button className="w-full md:w-auto bg-purple-600 hover:bg-purple-700 text-white font-bold px-8 py-4 text-lg rounded-lg shadow-lg transition-all duration-200 border-0">
-              <Store className="mr-3 h-6 w-6" />
-              Cadastrar como Lojista
-            </Button>
-          </Link>
+        {/* Badges de Benefícios Melhorados */}
+        <div className="flex flex-wrap justify-center gap-6 mb-12">
+          <div className="bg-white/15 backdrop-blur-lg px-6 py-4 rounded-full border border-white/20 flex items-center gap-3 hover:bg-white/20 transition-all duration-200">
+            <CheckCircle2 className="h-5 w-5 text-green-300" />
+            <span className="text-white font-semibold text-base">Técnicos Verificados</span>
+          </div>
+          <div className="bg-white/15 backdrop-blur-lg px-6 py-4 rounded-full border border-white/20 flex items-center gap-3 hover:bg-white/20 transition-all duration-200">
+            <Star className="h-5 w-5 text-yellow-300" />
+            <span className="text-white font-semibold text-base">Orçamento Grátis</span>
+          </div>
+          <div className="bg-white/15 backdrop-blur-lg px-6 py-4 rounded-full border border-white/20 flex items-center gap-3 hover:bg-white/20 transition-all duration-200">
+            <Users className="h-5 w-5 text-blue-300" />
+            <span className="text-white font-semibold text-base">+5.000 Profissionais</span>
+          </div>
         </div>
 
-        {/* Badges de Benefícios */}
-        <div className="flex flex-wrap justify-center gap-6">
-          <div className="bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full border border-white/30">
-            <span className="text-white font-semibold text-base">✓ Técnicos Verificados</span>
+        {/* Estatísticas */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+            <div className="text-3xl font-bold text-yellow-300 mb-2">98%</div>
+            <div className="text-blue-100 font-medium">Taxa de Satisfação</div>
           </div>
-          <div className="bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full border border-white/30">
-            <span className="text-white font-semibold text-base">✓ Orçamento Grátis</span>
+          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+            <div className="text-3xl font-bold text-yellow-300 mb-2">24h</div>
+            <div className="text-blue-100 font-medium">Tempo Médio de Resposta</div>
           </div>
-          <div className="bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full border border-white/30">
-            <span className="text-white font-semibold text-base">✓ Garantia de Serviço</span>
+          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+            <div className="text-3xl font-bold text-yellow-300 mb-2">15K+</div>
+            <div className="text-blue-100 font-medium">Serviços Realizados</div>
           </div>
         </div>
       </div>
