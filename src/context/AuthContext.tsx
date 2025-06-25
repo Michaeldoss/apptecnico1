@@ -29,14 +29,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    console.log('AuthProvider - useEffect iniciado');
     // Verificar se o usuário está logado ao carregar a aplicação
     const storedUser = localStorage.getItem('techSupportUser');
+    console.log('AuthProvider - storedUser:', storedUser);
+    
     if (storedUser) {
       try {
         const userData = JSON.parse(storedUser);
+        console.log('AuthProvider - userData:', userData);
         setUser(userData);
         setUserType(userData.type);
         setIsAuthenticated(true);
+        console.log('AuthProvider - Usuario autenticado automaticamente');
       } catch (error) {
         console.error('Erro ao carregar dados do usuário:', error);
         localStorage.removeItem('techSupportUser');
@@ -47,6 +52,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
+      console.log('AuthProvider - login tentativa:', email);
       // Simular verificação de credenciais (em produção, isso seria uma chamada de API)
       // Dados mockados para simulação:
       const mockUsers = [
@@ -79,6 +85,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       );
 
       if (foundUser) {
+        console.log('AuthProvider - usuario encontrado:', foundUser);
         // Simular um pequeno atraso para dar feedback visual
         await new Promise(resolve => setTimeout(resolve, 500));
         
@@ -92,6 +99,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         
         // Persistir dados de autenticação
         localStorage.setItem('techSupportUser', JSON.stringify(userWithoutPassword));
+        console.log('AuthProvider - dados salvos no localStorage');
         
         toast({
           title: "Login realizado com sucesso",
@@ -100,6 +108,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         
         return true;
       } else {
+        console.log('AuthProvider - credenciais inválidas');
         toast({
           variant: "destructive",
           title: "Falha na autenticação",
@@ -119,6 +128,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const logout = () => {
+    console.log('AuthProvider - logout');
     setUser(null);
     setUserType(null);
     setIsAuthenticated(false);
@@ -130,8 +140,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   if (isLoading) {
-    return null; // ou um componente de carregamento
+    console.log('AuthProvider - carregando...');
+    return <div className="flex items-center justify-center h-screen">Carregando...</div>;
   }
+
+  console.log('AuthProvider - estado atual:', { isAuthenticated, userType, user: user?.name });
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, userType, user, login, logout }}>
