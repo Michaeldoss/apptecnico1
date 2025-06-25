@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import AnimatedContainer from "@/components/ui/AnimatedContainer";
 import BlurContainer from "@/components/ui/BlurContainer";
-import { Search, Wrench, ShieldCheck, Package, Clock } from "lucide-react";
+import { Search, Wrench, ShieldCheck, Package, Clock, Briefcase } from "lucide-react";
 
 const Hero = () => {
   return (
@@ -14,20 +14,20 @@ const Hero = () => {
       
       <div className="max-w-6xl mx-auto relative z-10">
         <AnimatedContainer animation="slide-right" className="text-center space-y-8 md:space-y-12 mb-16">
-          {/* Título Principal */}
-          <div className="space-y-4 md:space-y-6">
+          {/* Novo Título Principal */}
+          <div className="space-y-6 md:space-y-8">
             <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight">
-              Encontre especialistas para seus equipamentos{" "}
+              Resolva problemas técnicos{" "}
               <span className="text-[#1D4ED8] font-black">em minutos</span>
             </h1>
             
             <p className="text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed px-4">
-              Conecte-se instantaneamente com técnicos qualificados para manutenção e reparo de equipamentos industriais
+              Conectamos você com técnicos especializados em equipamentos industriais de forma rápida e confiável
             </p>
           </div>
 
-          {/* Botões de Ação */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
+          {/* Botões de Ação Melhorados */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-6">
             <Link to="/find-technician">
               <Button size="lg" className="w-full sm:w-auto text-base font-semibold px-8 py-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300">
                 <Search className="w-5 h-5 mr-2" />
@@ -36,14 +36,14 @@ const Hero = () => {
             </Link>
             <Link to="/technician">
               <Button size="lg" variant="outline" className="w-full sm:w-auto text-base font-semibold px-8 py-4 rounded-full border-2 hover:bg-primary/5 transition-all duration-300">
-                <Wrench className="w-5 h-5 mr-2" />
+                <Briefcase className="w-5 h-5 mr-2" />
                 🧰 Sou Técnico
               </Button>
             </Link>
           </div>
         </AnimatedContainer>
 
-        {/* Cards de Benefícios */}
+        {/* Cards de Benefícios em Grid 2x2 */}
         <AnimatedContainer animation="slide-left" delay={300}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {[
