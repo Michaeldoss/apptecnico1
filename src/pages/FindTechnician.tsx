@@ -24,6 +24,7 @@ import TechnicalVisitForm from '@/components/services/TechnicalVisitForm';
 import { equipmentCategories } from '@/types/equipment';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import TechnicianPricing from '@/components/technician/TechnicianPricing';
 
 const FindTechnician = () => {
   const { isAuthenticated } = useAuth();
@@ -48,6 +49,13 @@ const FindTechnician = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [quoteDialogOpen, setQuoteDialogOpen] = useState(false);
   const [visitDialogOpen, setVisitDialogOpen] = useState(false);
+
+  // Mock pricing data - in real app this would come from the technician data
+  const getTechnicianPricing = (technicianId: number) => ({
+    quotePrice: 0,
+    visitPrice: 80,
+    laborPrice: 120
+  });
 
   const handleContactRequest = (technicianId: number) => {
     if (!isAuthenticated) {
@@ -167,7 +175,7 @@ const FindTechnician = () => {
                 
                 {/* Mobile Technician Detail */}
                 {selectedTechnician && (
-                  <div className="lg:hidden mt-4">
+                  <div className="lg:hidden mt-4 space-y-4">
                     <Card>
                       <CardHeader>
                         <div className="flex justify-between items-start">
@@ -212,14 +220,14 @@ const FindTechnician = () => {
                                 onClick={() => handleQuoteRequest(selectedTechnician.id)}
                               >
                                 <Calculator className="h-4 w-4 mr-2" />
-                                Orçamento
+                                Orçamento Grátis
                               </Button>
                             </DialogTrigger>
                             <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                               <DialogHeader>
-                                <DialogTitle>Solicitar Orçamento</DialogTitle>
+                                <DialogTitle>Solicitar Orçamento Gratuito</DialogTitle>
                                 <DialogDescription>
-                                  Solicite um orçamento para {selectedTechnician?.name}
+                                  Solicite um orçamento gratuito para {selectedTechnician?.name}
                                 </DialogDescription>
                               </DialogHeader>
                               <QuoteRequestForm 
@@ -237,7 +245,7 @@ const FindTechnician = () => {
                                 onClick={() => handleVisitRequest(selectedTechnician.id)}
                               >
                                 <Clock className="h-4 w-4 mr-2" />
-                                Visita
+                                Visita R$ {getTechnicianPricing(selectedTechnician.id).visitPrice}
                               </Button>
                             </DialogTrigger>
                             <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -250,112 +258,122 @@ const FindTechnician = () => {
                               <TechnicalVisitForm 
                                 onSuccess={handleFormSuccess} 
                                 technicianId={selectedTechnician?.id}
+                                visitPrice={getTechnicianPricing(selectedTechnician.id).visitPrice}
                               />
                             </DialogContent>
                           </Dialog>
                         </div>
                       </CardFooter>
                     </Card>
+                    
+                    {/* Mobile Pricing */}
+                    <TechnicianPricing pricing={getTechnicianPricing(selectedTechnician.id)} />
                   </div>
                 )}
               </div>
               
               {/* Technicians Detail - Desktop */}
-              <div className="hidden lg:block">
+              <div className="hidden lg:block space-y-4">
                 {selectedTechnician ? (
-                  <Card>
-                    <CardHeader>
-                      <div className="flex justify-between items-start">
+                  <>
+                    <Card>
+                      <CardHeader>
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <CardTitle className="text-blue-600">{selectedTechnician.name}</CardTitle>
+                            <CardDescription className="flex items-center mt-1">
+                              <MapPin className="h-4 w-4 mr-1" />
+                              {selectedTechnician.location}
+                            </CardDescription>
+                          </div>
+                          <div className="flex items-center">
+                            <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                            <span className="ml-1 font-medium">{selectedTechnician.rating}</span>
+                            <span className="text-xs text-gray-500 ml-1">({selectedTechnician.reviewCount})</span>
+                          </div>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="mb-4">
+                          <h4 className="font-semibold mb-2 text-gray-800">Especialidades</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {selectedTechnician.specialties.map((specialty, index) => (
+                              <Badge key={index} variant="outline">{specialty}</Badge>
+                            ))}
+                          </div>
+                        </div>
+                        <p className="text-sm text-gray-600 mb-4">{selectedTechnician.description}</p>
                         <div>
-                          <CardTitle className="text-blue-600">{selectedTechnician.name}</CardTitle>
-                          <CardDescription className="flex items-center mt-1">
-                            <MapPin className="h-4 w-4 mr-1" />
-                            {selectedTechnician.location}
-                          </CardDescription>
+                          <h4 className="font-semibold mb-2 text-gray-800">Horários Disponíveis</h4>
+                          <p className="text-sm text-gray-600">Segunda à Sexta: 8h às 18h</p>
+                          <p className="text-sm text-gray-600">Sábado: 8h às 12h</p>
                         </div>
-                        <div className="flex items-center">
-                          <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                          <span className="ml-1 font-medium">{selectedTechnician.rating}</span>
-                          <span className="text-xs text-gray-500 ml-1">({selectedTechnician.reviewCount})</span>
+                      </CardContent>
+                      <CardFooter className="flex flex-col gap-2">
+                        <Button 
+                          className="w-full bg-blue-600 hover:bg-blue-700" 
+                          onClick={() => handleContactRequest(selectedTechnician.id)}
+                        >
+                          Solicitar Serviço
+                        </Button>
+                        <div className="flex gap-2 w-full">
+                          <Dialog open={quoteDialogOpen} onOpenChange={setQuoteDialogOpen}>
+                            <DialogTrigger asChild>
+                              <Button 
+                                variant="outline" 
+                                className="flex-1"
+                                onClick={() => handleQuoteRequest(selectedTechnician.id)}
+                              >
+                                <Calculator className="h-4 w-4 mr-2" />
+                                Orçamento Grátis
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                              <DialogHeader>
+                                <DialogTitle>Solicitar Orçamento Gratuito</DialogTitle>
+                                <DialogDescription>
+                                  Solicite um orçamento gratuito para {selectedTechnician?.name}
+                                </DialogDescription>
+                              </DialogHeader>
+                              <QuoteRequestForm 
+                                onSuccess={handleFormSuccess} 
+                                technicianId={selectedTechnician?.id}
+                              />
+                            </DialogContent>
+                          </Dialog>
+                          
+                          <Dialog open={visitDialogOpen} onOpenChange={setVisitDialogOpen}>
+                            <DialogTrigger asChild>
+                              <Button 
+                                variant="outline" 
+                                className="flex-1"
+                                onClick={() => handleVisitRequest(selectedTechnician.id)}
+                              >
+                                <Clock className="h-4 w-4 mr-2" />
+                                Visita R$ {getTechnicianPricing(selectedTechnician.id).visitPrice}
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                              <DialogHeader>
+                                <DialogTitle>Agendar Visita Técnica</DialogTitle>
+                                <DialogDescription>
+                                  Agende uma visita técnica com {selectedTechnician?.name}
+                                </DialogDescription>
+                              </DialogHeader>
+                              <TechnicalVisitForm 
+                                onSuccess={handleFormSuccess} 
+                                technicianId={selectedTechnician?.id}
+                                visitPrice={getTechnicianPricing(selectedTechnician.id).visitPrice}
+                              />
+                            </DialogContent>
+                          </Dialog>
                         </div>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="mb-4">
-                        <h4 className="font-semibold mb-2 text-gray-800">Especialidades</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {selectedTechnician.specialties.map((specialty, index) => (
-                            <Badge key={index} variant="outline">{specialty}</Badge>
-                          ))}
-                        </div>
-                      </div>
-                      <p className="text-sm text-gray-600 mb-4">{selectedTechnician.description}</p>
-                      <div>
-                        <h4 className="font-semibold mb-2 text-gray-800">Horários Disponíveis</h4>
-                        <p className="text-sm text-gray-600">Segunda à Sexta: 8h às 18h</p>
-                        <p className="text-sm text-gray-600">Sábado: 8h às 12h</p>
-                      </div>
-                    </CardContent>
-                    <CardFooter className="flex flex-col gap-2">
-                      <Button 
-                        className="w-full bg-blue-600 hover:bg-blue-700" 
-                        onClick={() => handleContactRequest(selectedTechnician.id)}
-                      >
-                        Solicitar Serviço
-                      </Button>
-                      <div className="flex gap-2 w-full">
-                        <Dialog open={quoteDialogOpen} onOpenChange={setQuoteDialogOpen}>
-                          <DialogTrigger asChild>
-                            <Button 
-                              variant="outline" 
-                              className="flex-1"
-                              onClick={() => handleQuoteRequest(selectedTechnician.id)}
-                            >
-                              <Calculator className="h-4 w-4 mr-2" />
-                              Orçamento
-                            </Button>
-                          </DialogTrigger>
-                          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-                            <DialogHeader>
-                              <DialogTitle>Solicitar Orçamento</DialogTitle>
-                              <DialogDescription>
-                                Solicite um orçamento para {selectedTechnician?.name}
-                              </DialogDescription>
-                            </DialogHeader>
-                            <QuoteRequestForm 
-                              onSuccess={handleFormSuccess} 
-                              technicianId={selectedTechnician?.id}
-                            />
-                          </DialogContent>
-                        </Dialog>
-                        
-                        <Dialog open={visitDialogOpen} onOpenChange={setVisitDialogOpen}>
-                          <DialogTrigger asChild>
-                            <Button 
-                              variant="outline" 
-                              className="flex-1"
-                              onClick={() => handleVisitRequest(selectedTechnician.id)}
-                            >
-                              <Clock className="h-4 w-4 mr-2" />
-                              Visita
-                            </Button>
-                          </DialogTrigger>
-                          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-                            <DialogHeader>
-                              <DialogTitle>Agendar Visita Técnica</DialogTitle>
-                              <DialogDescription>
-                                Agende uma visita técnica com {selectedTechnician?.name}
-                              </DialogDescription>
-                            </DialogHeader>
-                            <TechnicalVisitForm 
-                              onSuccess={handleFormSuccess} 
-                              technicianId={selectedTechnician?.id}
-                            />
-                          </DialogContent>
-                        </Dialog>
-                      </div>
-                    </CardFooter>
-                  </Card>
+                      </CardFooter>
+                    </Card>
+                    
+                    {/* Desktop Pricing */}
+                    <TechnicianPricing pricing={getTechnicianPricing(selectedTechnician.id)} />
+                  </>
                 ) : (
                   <Card>
                     <CardHeader>
@@ -468,14 +486,14 @@ const FindTechnician = () => {
                             }}
                           >
                             <Calculator className="h-4 w-4 mr-1" />
-                            Orçamento
+                            Grátis
                           </Button>
                         </DialogTrigger>
                         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                           <DialogHeader>
-                            <DialogTitle>Solicitar Orçamento</DialogTitle>
+                            <DialogTitle>Solicitar Orçamento Gratuito</DialogTitle>
                             <DialogDescription>
-                              Solicite um orçamento para {technician.name}
+                              Solicite um orçamento gratuito para {technician.name}
                             </DialogDescription>
                           </DialogHeader>
                           <QuoteRequestForm 
@@ -496,7 +514,7 @@ const FindTechnician = () => {
                             }}
                           >
                             <Clock className="h-4 w-4 mr-1" />
-                            Visita
+                            R$ {getTechnicianPricing(technician.id).visitPrice}
                           </Button>
                         </DialogTrigger>
                         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -509,6 +527,7 @@ const FindTechnician = () => {
                           <TechnicalVisitForm 
                             onSuccess={handleFormSuccess} 
                             technicianId={technician.id}
+                            visitPrice={getTechnicianPricing(technician.id).visitPrice}
                           />
                         </DialogContent>
                       </Dialog>
