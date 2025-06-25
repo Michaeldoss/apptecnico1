@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -54,6 +55,7 @@ const Navbar = () => {
     { label: "Lojas", path: "/store" },
     { label: "Máquinas", path: "/machines" },
     { label: "Equipamentos", path: "/equipment" },
+    { label: "Vender Equipamento", path: "/sell-equipment" },
     { label: "Serviços", path: "/services" },
     { label: "Quem Somos", path: "/about" },
     { label: "Contatos", path: "/contact" },
