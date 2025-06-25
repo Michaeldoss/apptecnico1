@@ -69,10 +69,10 @@ const FindTechnician = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-primary text-white p-6">
+      <header className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white p-6">
         <div className="container mx-auto">
           <Link to="/" className="flex items-center mb-6">
-            <span className="text-2xl font-bold">AssistAnywhere</span>
+            <span className="text-2xl font-bold">DGSoluções</span>
           </Link>
           <h1 className="text-3xl font-bold mb-2">Encontre Técnicos Especializados</h1>
           <p className="text-lg opacity-90 mb-6">Localize profissionais qualificados para seus equipamentos</p>
