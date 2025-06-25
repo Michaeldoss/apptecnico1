@@ -14,6 +14,7 @@ import { getAllEquipmentTypes } from '@/types/equipment';
 import { serviceTypeLabels } from '@/types/technician';
 import { useToast } from '@/hooks/use-toast';
 import TechnicianPricing from '@/components/technician/TechnicianPricing';
+import ImageUpload from '@/components/ui/image-upload';
 
 const TechnicianProfile = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -23,6 +24,10 @@ const TechnicianProfile = () => {
   const [selectedServices, setSelectedServices] = useState<string[]>([
     'installation', 'maintenance'
   ]);
+  
+  // Estado para a foto do perfil
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
   
   // Estado para preços
   const [pricing, setPricing] = useState({
@@ -60,10 +65,26 @@ const TechnicianProfile = () => {
         : [...prev, serviceId]
     );
   };
+
+  const handleImageChange = (file: File | null, imageUrl: string | null) => {
+    setProfileImageFile(file);
+    setProfileImage(imageUrl);
+    
+    if (file) {
+      toast({
+        title: "Foto carregada",
+        description: `Arquivo "${file.name}" foi carregado com sucesso.`
+      });
+    }
+  };
   
   const handleSaveProfile = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    
+    // Aqui você faria o upload da imagem para o servidor
+    console.log('Salvando perfil...', { profileImageFile, profileImage });
+    
     // Simulação de envio
     setTimeout(() => {
       setIsLoading(false);
@@ -95,8 +116,13 @@ const TechnicianProfile = () => {
         <CardHeader className="flex flex-row items-start justify-between">
           <div className="flex items-center space-x-4">
             <Avatar className="h-20 w-20">
-              <AvatarImage src="" alt={profile.name} />
-              <AvatarFallback className="text-lg">{profile.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+              <AvatarImage 
+                src={profileImage || ""} 
+                alt={profile.name} 
+              />
+              <AvatarFallback className="text-lg">
+                {profile.name.split(' ').map(n => n[0]).join('')}
+              </AvatarFallback>
             </Avatar>
             <div>
               <CardTitle>{profile.name}</CardTitle>
@@ -112,7 +138,14 @@ const TechnicianProfile = () => {
               </CardDescription>
             </div>
           </div>
-          <Button>Alterar Foto</Button>
+          
+          <div className="space-y-4">
+            <ImageUpload
+              currentImage={profileImage || undefined}
+              onImageChange={handleImageChange}
+              size="md"
+            />
+          </div>
         </CardHeader>
         <CardContent>
           <p className="text-muted-foreground">{profile.description}</p>
