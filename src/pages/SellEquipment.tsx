@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, Filter, Plus, Grid, List, MapPin, SlidersHorizontal } from 'lucide-react';
+import { Search, Filter, Plus, Grid, List, MapPin, SlidersHorizontal, Map } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import EquipmentForSaleCard from '@/components/sell-equipment/EquipmentForSaleCard';
@@ -84,7 +84,7 @@ const SellEquipment = () => {
   const [selectedCondition, setSelectedCondition] = useState<string>('all');
   const [selectedType, setSelectedType] = useState<string>('all');
   const [priceRange, setPriceRange] = useState({ min: '', max: '' });
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [viewMode, setViewMode] = useState<'grid' | 'list' | 'map'>('grid');
   const [favorites, setFavorites] = useState<string[]>([]);
   const [showFilters, setShowFilters] = useState(false);
 
@@ -98,6 +98,66 @@ const SellEquipment = () => {
       prev.includes(equipmentId) 
         ? prev.filter(id => id !== equipmentId)
         : [...prev, equipmentId]
+    );
+  };
+
+  const handleMapView = () => {
+    setViewMode('map');
+  };
+
+  const renderMapView = () => {
+    return (
+      <div className="w-full h-96 bg-blue-50 relative overflow-hidden rounded-lg border">
+        <div 
+          className="w-full h-full bg-cover bg-center relative"
+          style={{ 
+            backgroundImage: 'linear-gradient(rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.1)), url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'%3E%3Cg fill-opacity=\'0.03\'%3E%3Cpolygon fill=\'%23000\' points=\'50 0 60 40 100 50 60 60 50 100 40 60 0 50 40 40\'/%3E%3C/g%3E%3C/svg%3E")'
+          }}
+        >
+          {/* Marcadores dos equipamentos */}
+          {filteredEquipments.slice(0, 10).map((equipment, index) => {
+            const position = {
+              x: 20 + (index % 4) * 20,
+              y: 20 + Math.floor(index / 4) * 25
+            };
+            
+            return (
+              <div
+                key={equipment.id}
+                className="absolute cursor-pointer transition-all transform -translate-x-1/2 -translate-y-1/2 group"
+                style={{ left: `${position.x}%`, top: `${position.y}%` }}
+              >
+                <div className="flex flex-col items-center">
+                  <MapPin className="h-8 w-8 text-red-500 fill-red-500 drop-shadow-lg" />
+                  <div className="hidden group-hover:block bg-white shadow-lg rounded p-2 text-xs font-medium whitespace-nowrap mt-1 border max-w-48">
+                    <div className="font-semibold">{equipment.title}</div>
+                    <div className="text-gray-600">{equipment.location.city}, {equipment.location.state}</div>
+                    <div className="text-blue-600 font-semibold">R$ {equipment.price.toLocaleString('pt-BR')}</div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+          
+          {/* Controles do mapa */}
+          <div className="absolute bottom-4 right-4 flex flex-col gap-2">
+            <button className="bg-white p-2 rounded-full shadow hover:bg-gray-100 border">
+              <Plus className="h-4 w-4 text-gray-700" />
+            </button>
+            <button className="bg-white p-2 rounded-full shadow hover:bg-gray-100 border">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-700"><path d="M5 12h14"/></svg>
+            </button>
+          </div>
+          
+          {/* Legenda */}
+          <div className="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-2 rounded text-sm shadow">
+            <div className="flex items-center gap-2">
+              <MapPin className="h-4 w-4 text-red-500 fill-red-500" />
+              <span>Equipamentos disponíveis</span>
+            </div>
+          </div>
+        </div>
+      </div>
     );
   };
 
@@ -146,8 +206,8 @@ const SellEquipment = () => {
                     Anunciar Equipamento
                   </Button>
                 </Link>
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600">
-                  <MapPin className="h-5 w-5 mr-2" />
+                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600" onClick={handleMapView}>
+                  <Map className="h-5 w-5 mr-2" />
                   Ver no Mapa
                 </Button>
               </div>
@@ -251,6 +311,13 @@ const SellEquipment = () => {
                   >
                     <List className="h-4 w-4" />
                   </Button>
+                  <Button
+                    variant={viewMode === 'map' ? 'default' : 'ghost'}
+                    size="sm"
+                    onClick={() => setViewMode('map')}
+                  >
+                    <Map className="h-4 w-4" />
+                  </Button>
                 </div>
               </div>
             </div>
@@ -288,7 +355,9 @@ const SellEquipment = () => {
               </div>
             </div>
 
-            {filteredEquipments.length > 0 ? (
+            {viewMode === 'map' ? (
+              renderMapView()
+            ) : filteredEquipments.length > 0 ? (
               <div className={`grid gap-6 ${
                 viewMode === 'grid' 
                   ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' 
