@@ -13,7 +13,12 @@ import {
   CheckCircle,
   Phone,
   User,
-  Store
+  Store,
+  MessageCircle,
+  Send,
+  Youtube,
+  Facebook,
+  Instagram
 } from "lucide-react";
 
 const Features = () => {
@@ -160,14 +165,39 @@ const Features = () => {
           </div>
         </div>
 
-        {/* CTA para Técnicos */}
+        {/* CTA para Comunidade */}
         <div className="bg-gradient-to-r from-blue-700 to-blue-800 rounded-2xl p-12 text-center text-white shadow-2xl">
           <h3 className="text-3xl md:text-4xl font-bold mb-6 drop-shadow-lg">
-            Faça parte da nossa comunidade
+            Comunidade de Profissionais
           </h3>
           <p className="text-xl mb-8 text-blue-100 font-medium max-w-2xl mx-auto drop-shadow-sm">
             Junte-se a milhares de profissionais e empresas que confiam na nossa plataforma
           </p>
+          
+          {/* Links de Comunidade */}
+          <div className="flex flex-wrap justify-center gap-4 mb-8">
+            <a href="#" className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition-colors">
+              <MessageCircle className="h-5 w-5" />
+              WhatsApp
+            </a>
+            <a href="#" className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition-colors">
+              <Send className="h-5 w-5" />
+              Telegram
+            </a>
+            <a href="#" className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition-colors">
+              <Youtube className="h-5 w-5" />
+              YouTube
+            </a>
+            <a href="#" className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition-colors">
+              <Facebook className="h-5 w-5" />
+              Facebook
+            </a>
+            <a href="#" className="bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition-colors">
+              <Instagram className="h-5 w-5" />
+              Instagram
+            </a>
+          </div>
+          
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/technician">
               <Button className="bg-white text-blue-700 hover:bg-gray-100 font-bold px-8 py-4 text-lg rounded-lg shadow-lg transition-all duration-200 border-0 hover:scale-105">
