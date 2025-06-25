@@ -1,96 +1,66 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
-import AnimatedContainer from "@/components/ui/AnimatedContainer";
-import BlurContainer from "@/components/ui/BlurContainer";
-import { Search, Wrench, ShieldCheck, Package, Clock, Briefcase } from "lucide-react";
+import { Search, MapPin } from "lucide-react";
 
 const Hero = () => {
   return (
-    <section className="py-16 md:py-24 px-6 bg-gradient-to-br from-background via-accent/5 to-background relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 bg-grid-white/5 bg-[size:50px_50px] [mask-image:radial-gradient(white,transparent_70%)]" />
-      
-      <div className="max-w-6xl mx-auto relative z-10">
-        <AnimatedContainer animation="slide-right" className="text-center space-y-8 md:space-y-12 mb-16">
-          {/* Título Principal Atualizado */}
-          <div className="space-y-6 md:space-y-8">
-            <span className="inline-block px-4 py-2 text-sm font-medium bg-blue-100 text-blue-800 rounded-full border border-blue-200">
-              DGSoluções
-            </span>
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight text-blue-900">
-              Resolva problemas técnicos{" "}
-              <span className="text-blue-600 font-black">em minutos</span>
-            </h1>
+    <section className="bg-gradient-to-b from-blue-600 to-blue-700 text-white py-20 px-4">
+      <div className="max-w-4xl mx-auto text-center">
+        {/* Título Principal */}
+        <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+          Encontre o <span className="text-yellow-300">técnico ideal</span><br />
+          para seu equipamento
+        </h1>
+        
+        <p className="text-xl md:text-2xl mb-8 text-blue-100 max-w-2xl mx-auto">
+          Conectamos você com profissionais qualificados para manutenção e reparo de equipamentos industriais
+        </p>
+
+        {/* Formulário de Busca Simples */}
+        <div className="bg-white rounded-lg p-6 shadow-2xl max-w-3xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Campo de Serviço */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <Input 
+                placeholder="Que tipo de equipamento?" 
+                className="pl-10 h-12 text-gray-700 border-gray-200"
+              />
+            </div>
             
-            <p className="text-lg md:text-xl lg:text-2xl text-gray-700 max-w-3xl mx-auto leading-relaxed px-4 font-inter">
-              Conectamos você com técnicos especializados em equipamentos industriais de forma rápida e confiável
-            </p>
-          </div>
-
-          {/* Botões de Ação Melhorados */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-6">
+            {/* Campo de Localização */}
+            <div className="relative">
+              <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <Input 
+                placeholder="Onde está localizado?" 
+                className="pl-10 h-12 text-gray-700 border-gray-200"
+              />
+            </div>
+            
+            {/* Botão de Busca */}
             <Link to="/find-technician">
-              <Button size="lg" className="w-full sm:w-auto text-base font-semibold px-8 py-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300">
-                <Search className="w-5 h-5 mr-2" />
-                🔍 Encontrar Técnico
-              </Button>
-            </Link>
-            <Link to="/technician">
-              <Button size="lg" variant="outline" className="w-full sm:w-auto text-base font-semibold px-8 py-4 rounded-full border-2 hover:bg-primary/5 transition-all duration-300">
-                <Briefcase className="w-5 h-5 mr-2" />
-                🧰 Sou Técnico
+              <Button className="w-full h-12 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-lg">
+                Encontrar Técnicos
               </Button>
             </Link>
           </div>
-        </AnimatedContainer>
+        </div>
 
-        {/* Cards de Benefícios em Grid 2x2 */}
-        <AnimatedContainer animation="slide-left" delay={300}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            {[
-              {
-                icon: <Wrench className="w-8 h-8 text-primary" />,
-                title: "Instalação & Manutenção",
-                description: "Serviços completos para seus equipamentos industriais"
-              },
-              {
-                icon: <ShieldCheck className="w-8 h-8 text-primary" />,
-                title: "Técnicos Avaliados", 
-                description: "Profissionais verificados com avaliações reais"
-              },
-              {
-                icon: <Package className="w-8 h-8 text-primary" />,
-                title: "Peças com Garantia",
-                description: "Componentes originais direto dos fornecedores"
-              },
-              {
-                icon: <Clock className="w-8 h-8 text-primary" />,
-                title: "Acompanhamento em Tempo Real",
-                description: "Monitore cada etapa do seu serviço"
-              }
-            ].map((benefit, index) => (
-              <BlurContainer
-                key={index}
-                className="p-6 md:p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white/80 backdrop-blur-sm border border-white/20 rounded-2xl"
-                intensity="light"
-              >
-                <div className="flex flex-col items-center text-center space-y-4">
-                  <div className="bg-primary/10 p-4 rounded-full">
-                    {benefit.icon}
-                  </div>
-                  <h3 className="text-lg md:text-xl font-bold text-foreground">
-                    {benefit.title}
-                  </h3>
-                  <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
-                    {benefit.description}
-                  </p>
-                </div>
-              </BlurContainer>
-            ))}
+        {/* Badges de Benefícios */}
+        <div className="flex flex-wrap justify-center gap-4 mt-8">
+          <div className="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
+            <span className="text-sm font-medium">✓ Técnicos Verificados</span>
           </div>
-        </AnimatedContainer>
+          <div className="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
+            <span className="text-sm font-medium">✓ Orçamento Grátis</span>
+          </div>
+          <div className="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
+            <span className="text-sm font-medium">✓ Garantia de Serviço</span>
+          </div>
+        </div>
       </div>
     </section>
   );
