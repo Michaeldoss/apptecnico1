@@ -93,13 +93,13 @@
   }
 
   html, body {
-    @apply antialiased bg-white text-gray-primary;
+    @apply antialiased bg-white text-gray-900;
     font-family: 'Inter', sans-serif;
     font-weight: 400;
   }
 
   body {
-    @apply bg-white text-gray-primary;
+    @apply bg-white text-gray-900;
   }
 
   .font-inter {
@@ -108,26 +108,26 @@
 
   /* Tipografia global com contraste melhorado */
   h1, .text-3xl, .text-4xl, .text-5xl {
-    @apply font-bold text-tech-primary;
+    @apply font-bold text-gray-900;
     font-weight: 700;
-    color: #1D4ED8;
-  }
-
-  h2, h3, .text-xl, .text-2xl {
-    @apply font-semibold text-tech-primary;
-    font-weight: 600;
-    color: #1D4ED8;
-  }
-
-  p, span, div {
-    @apply text-gray-primary;
-    font-weight: 400;
     color: #111827;
   }
 
+  h2, h3, .text-xl, .text-2xl {
+    @apply font-semibold text-gray-900;
+    font-weight: 600;
+    color: #111827;
+  }
+
+  p, span, div {
+    @apply text-gray-800;
+    font-weight: 400;
+    color: #1F2937;
+  }
+
   .text-muted-foreground {
-    @apply text-gray-secondary;
-    color: #6B7280;
+    @apply text-gray-600;
+    color: #4B5563;
   }
 
   /* Garantir contraste adequado em textos */
@@ -136,33 +136,44 @@
   }
 
   .text-secondary {
-    color: #6B7280 !important;
+    color: #4B5563 !important;
   }
 
   .text-white {
     color: #FFFFFF !important;
   }
 
+  /* Melhor contraste para textos sobre fundos escuros */
+  .text-light {
+    color: #F9FAFB !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  .text-light-secondary {
+    color: #E5E7EB !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
   /* Botões globais com melhor contraste */
   .btn-primary {
-    @apply bg-tech-primary text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:bg-tech-primary-hover hover:shadow-lg hover:scale-105;
-    background-color: #1D4ED8;
+    @apply bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:bg-blue-700 hover:shadow-lg hover:scale-105;
+    background-color: #2563EB;
     color: #FFFFFF;
     font-weight: 600;
   }
 
   .btn-secondary {
-    @apply bg-white text-tech-primary border border-tech-primary font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:bg-tech-primary hover:text-white hover:shadow-lg;
+    @apply bg-white text-blue-600 border-2 border-blue-600 font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:bg-blue-600 hover:text-white hover:shadow-lg;
     background-color: #FFFFFF;
-    color: #1D4ED8;
-    border-color: #1D4ED8;
+    color: #2563EB;
+    border-color: #2563EB;
     font-weight: 600;
   }
 
   /* Botões de segurança para pagamentos */
   .btn-secure {
-    @apply bg-tech-accent text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:bg-green-600 hover:shadow-lg flex items-center gap-2;
-    background-color: #10B981;
+    @apply bg-green-600 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:bg-green-700 hover:shadow-lg flex items-center gap-2;
+    background-color: #059669;
     color: #FFFFFF;
     font-weight: 600;
   }
@@ -174,7 +185,7 @@
 
   /* Cards globais com melhor contraste */
   .card-standard {
-    @apply bg-white border border-gray-border rounded-lg shadow-sm p-6 transition-all duration-200 hover:shadow-md;
+    @apply bg-white border-2 border-gray-200 rounded-lg shadow-sm p-6 transition-all duration-200 hover:shadow-md hover:border-gray-300;
     background-color: #FFFFFF;
     border-color: #E5E7EB;
     color: #111827;
@@ -182,7 +193,7 @@
 
   /* Cards de segurança */
   .card-secure {
-    @apply bg-white border border-tech-accent rounded-lg shadow-sm p-6 transition-all duration-200 hover:shadow-md;
+    @apply bg-white border-2 border-green-500 rounded-lg shadow-sm p-6 transition-all duration-200 hover:shadow-md;
     background-color: #FFFFFF;
     border-color: #10B981;
     border-width: 2px;
@@ -190,13 +201,13 @@
 
   /* Ícones globais */
   .icon-standard {
-    @apply text-tech-primary transition-all duration-200 hover:text-tech-primary-hover hover:scale-105;
-    color: #1D4ED8;
+    @apply text-blue-600 transition-all duration-200 hover:text-blue-700 hover:scale-105;
+    color: #2563EB;
   }
 
   .icon-secure {
-    @apply text-tech-accent transition-all duration-200 hover:text-green-600 hover:scale-105;
-    color: #10B981;
+    @apply text-green-600 transition-all duration-200 hover:text-green-700 hover:scale-105;
+    color: #059669;
   }
 
   /* Animações suaves */
@@ -205,7 +216,7 @@
   }
 
   .link-underline {
-    @apply relative after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-tech-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left;
+    @apply relative after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-blue-600 after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left;
   }
 
   /* Layout padronizado */
@@ -240,18 +251,92 @@
 
   /* Indicadores de segurança */
   .security-badge {
-    @apply inline-flex items-center gap-1 px-3 py-1 bg-tech-accent text-white text-xs font-semibold rounded-full;
-    background-color: #10B981;
+    @apply inline-flex items-center gap-1 px-3 py-1 bg-green-600 text-white text-xs font-semibold rounded-full;
+    background-color: #059669;
     color: #FFFFFF;
   }
 
   .ssl-indicator {
-    @apply flex items-center gap-2 text-tech-accent font-medium text-sm;
-    color: #10B981;
+    @apply flex items-center gap-2 text-green-600 font-medium text-sm;
+    color: #059669;
   }
 
   .ssl-indicator::before {
     content: "🔒";
+  }
+
+  /* Melhor contraste para inputs */
+  input, textarea, select {
+    @apply bg-white text-gray-900 border-2 border-gray-300 focus:border-blue-600 focus:ring-blue-600;
+    background-color: #FFFFFF;
+    color: #111827;
+    border-color: #D1D5DB;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: #6B7280;
+    font-weight: 400;
+  }
+
+  /* Labels com melhor contraste */
+  label {
+    @apply text-gray-800 font-semibold;
+    color: #1F2937;
+    font-weight: 600;
+  }
+
+  /* Dropdowns com melhor contraste */
+  .dropdown-content {
+    @apply bg-white border-2 border-gray-200 shadow-xl;
+    background-color: #FFFFFF;
+    border-color: #E5E7EB;
+    color: #111827;
+  }
+
+  /* Contraste para textos sobre fundos coloridos */
+  .bg-blue-600 .text-white,
+  .bg-blue-700 .text-white,
+  .bg-blue-800 .text-white {
+    color: #FFFFFF !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  .bg-green-600 .text-white,
+  .bg-green-700 .text-white {
+    color: #FFFFFF !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  .bg-purple-600 .text-white,
+  .bg-purple-700 .text-white {
+    color: #FFFFFF !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Melhor legibilidade para badges e elementos pequenos */
+  .badge {
+    @apply font-medium;
+    font-weight: 500;
+  }
+
+  /* Estados de hover e foco mais visíveis */
+  button:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    @apply ring-2 ring-blue-600 ring-offset-2;
+    outline: none;
+  }
+
+  /* Links com melhor contraste */
+  a {
+    @apply text-blue-600 hover:text-blue-700 transition-colors duration-200;
+    color: #2563EB;
+  }
+
+  a:hover {
+    color: #1D4ED8;
   }
 }
 
@@ -293,12 +378,12 @@
 }
 
 .scroll-container::-webkit-scrollbar-thumb {
-  background-color: rgba(29, 78, 216, 0.3);
+  background-color: rgba(37, 99, 235, 0.3);
   border-radius: 4px;
 }
 
 .scroll-container::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(29, 78, 216, 0.5);
+  background-color: rgba(37, 99, 235, 0.5);
 }
 
 /* Melhorias de contraste para elementos específicos */
@@ -308,26 +393,14 @@
 }
 
 .text-muted {
-  color: #6B7280 !important;
+  color: #4B5563 !important;
 }
 
-/* Garantir que todos os inputs tenham bom contraste */
-input, textarea, select {
-  @apply bg-white text-gray-primary border-gray-border;
-  background-color: #FFFFFF;
-  color: #111827;
-  border-color: #E5E7EB;
+/* Sombras de texto para melhor legibilidade */
+.text-shadow {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-input::placeholder,
-textarea::placeholder {
-  color: #9CA3AF;
-}
-
-/* Dropdowns com melhor contraste */
-.dropdown-content {
-  @apply bg-white border border-gray-border shadow-lg;
-  background-color: #FFFFFF;
-  border-color: #E5E7EB;
-  color: #111827;
+.text-shadow-strong {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
