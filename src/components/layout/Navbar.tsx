@@ -105,7 +105,7 @@ const Navbar = () => {
                   className={`flex items-center gap-2 font-inter font-medium ${buttonClasses}`}
                 >
                   <User className="h-4 w-4" />
-                  <span>Minha Conta</span>
+                  <span className={textClasses}>Minha Conta</span>
                   <ChevronDown className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
