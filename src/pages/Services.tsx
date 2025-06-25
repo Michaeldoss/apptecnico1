@@ -66,10 +66,10 @@ const Services = () => {
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-20">
           <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 text-white">
               Nossos Serviços
             </h1>
-            <p className="text-xl mb-8 max-w-2xl mx-auto">
+            <p className="text-xl mb-8 max-w-2xl mx-auto text-white">
               Serviços técnicos especializados para todos os tipos de equipamentos
             </p>
             <Link to="/find-technician">

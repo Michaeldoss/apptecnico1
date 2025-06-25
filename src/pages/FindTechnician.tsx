@@ -75,8 +75,8 @@ const FindTechnician = () => {
       {/* Header */}
       <header className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white p-6">
         <div className="container mx-auto">
-          <h1 className="text-3xl font-bold mb-2">Encontre Técnicos Especializados</h1>
-          <p className="text-lg opacity-90 mb-6">Localize profissionais qualificados para seus equipamentos</p>
+          <h1 className="text-3xl font-bold mb-2 text-white">Encontre Técnicos Especializados</h1>
+          <p className="text-lg opacity-90 mb-6 text-white">Localize profissionais qualificados para seus equipamentos</p>
           
           {/* Search Filters */}
           <TechnicianFilters 
