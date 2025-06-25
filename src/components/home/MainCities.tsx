@@ -17,18 +17,18 @@ const MainCities = () => {
   ];
 
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-8 bg-gray-50">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8 text-center">
+        <h2 className="text-xl font-bold text-gray-900 mb-4 text-center">
           Principais cidades
         </h2>
         
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 mb-4">
           {cities.map((city, index) => (
             <Link
               key={index}
               to="/find-technician"
-              className="text-blue-600 hover:text-blue-700 hover:underline font-medium text-sm p-2 text-center transition-colors duration-200"
+              className="text-blue-600 hover:text-blue-700 hover:underline text-xs p-1 text-center transition-colors duration-200"
             >
               {city}
             </Link>
@@ -36,7 +36,7 @@ const MainCities = () => {
         </div>
         
         <div className="text-center">
-          <Link to="/find-technician" className="text-blue-600 hover:text-blue-700 font-semibold hover:underline">
+          <Link to="/find-technician" className="text-blue-600 hover:text-blue-700 text-sm hover:underline">
             Ver mais
           </Link>
         </div>

@@ -12,26 +12,26 @@ const CompanyValues = () => {
   ];
 
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-8 bg-gray-50">
       <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-xl font-bold text-gray-900 mb-3">
             Nossa equipe trabalhando
           </h2>
-          <h3 className="text-xl md:text-2xl font-semibold text-gray-800 mb-8">
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">
             Os maiores valores dos nossos profissionais
           </h3>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-4">
             {values.map((value, index) => (
-              <div key={index} className="flex items-center text-left bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-                <div className="w-2 h-2 bg-blue-600 rounded-full mr-4 flex-shrink-0"></div>
-                <span className="text-gray-800 font-medium">{value}</span>
+              <div key={index} className="flex items-center text-left bg-white p-2 rounded border border-gray-200">
+                <div className="w-1.5 h-1.5 bg-blue-600 rounded-full mr-3 flex-shrink-0"></div>
+                <span className="text-gray-800 text-sm">{value}</span>
               </div>
             ))}
           </div>
           
-          <button className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200">
+          <button className="bg-blue-600 text-white px-6 py-2 rounded font-semibold hover:bg-blue-700 transition-colors duration-200 text-sm">
             Conheça nossas vagas
           </button>
         </div>

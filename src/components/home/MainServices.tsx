@@ -17,18 +17,18 @@ const MainServices = () => {
   ];
 
   return (
-    <section className="py-16 bg-white">
+    <section className="py-8 bg-white">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8 text-center">
+        <h2 className="text-xl font-bold text-gray-900 mb-4 text-center">
           Principais serviços
         </h2>
         
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 mb-4">
           {services.map((service, index) => (
             <Link
               key={index}
               to="/find-technician"
-              className="text-blue-600 hover:text-blue-700 hover:underline font-medium text-sm p-2 text-center transition-colors duration-200"
+              className="text-blue-600 hover:text-blue-700 hover:underline text-xs p-1 text-center transition-colors duration-200"
             >
               {service}
             </Link>
@@ -36,7 +36,7 @@ const MainServices = () => {
         </div>
         
         <div className="text-center">
-          <Link to="/services" className="text-blue-600 hover:text-blue-700 font-semibold hover:underline">
+          <Link to="/services" className="text-blue-600 hover:text-blue-700 text-sm hover:underline">
             Ver mais
           </Link>
         </div>
