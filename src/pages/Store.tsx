@@ -163,8 +163,8 @@ const Store = () => {
     <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
       <main className="flex-grow">
-        {/* Hero section - Cores da home aplicadas */}
-        <section className="bg-gradient-to-r from-tech-primary/10 to-tech-accent/10 py-8 md:py-12">
+        {/* Hero section - cores da home: azul com gradiente */}
+        <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-8 md:py-12">
           <div className="container mx-auto px-4">
             <div className={cn(
               "flex mb-2",
@@ -174,7 +174,7 @@ const Store = () => {
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Link to="/store/company-register">
-                      <Button variant="outline" size="sm" className="gap-1 rounded-full text-tech-primary border-tech-primary hover:bg-tech-primary hover:text-white font-inter">
+                      <Button variant="outline" size="sm" className="gap-1 rounded-full border-yellow-300 text-yellow-300 hover:bg-yellow-300 hover:text-blue-800 font-inter">
                         <Plus className="h-4 w-4" />
                         <span className={cn(isMobile ? "inline" : "hidden md:inline")}>
                           {isMobile ? "Cadastrar" : "Cadastrar Empresa"}
@@ -191,11 +191,11 @@ const Store = () => {
             
             <div className="max-w-4xl mx-auto text-center">
               <h1 className={cn(
-                "font-bold mb-4 text-gray-primary font-inter",
+                "font-bold mb-4 text-white font-inter drop-shadow-lg",
                 isMobile ? "text-2xl" : "text-3xl md:text-4xl"
               )}>Marketplace de Peças e Equipamentos</h1>
               <p className={cn(
-                "text-gray-secondary mb-6 font-inter",
+                "text-gray-100 mb-6 font-inter drop-shadow-md",
                 isMobile ? "text-sm px-4" : ""
               )}>
                 Encontre peças, componentes e equipamentos especializados para impressoras industriais.
@@ -211,14 +211,14 @@ const Store = () => {
                   value={searchTerm}
                   onChange={handleSearchInputChange}
                   className={cn(
-                    "bg-white border-gray-border font-inter",
+                    "bg-white border-gray-300 text-gray-900 font-inter",
                     isMobile ? "rounded-md" : "rounded-r-none"
                   )}
                 />
                 <Button 
                   onClick={handleSearch}
                   className={cn(
-                    "bg-tech-primary hover:bg-tech-primary-hover font-inter",
+                    "bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold font-inter",
                     isMobile ? "rounded-md" : "rounded-l-none"
                   )}
                 >
@@ -237,12 +237,12 @@ const Store = () => {
               <div className="flex items-center justify-between mb-6">
                 <div>
                   <h2 className={cn(
-                    "font-bold text-gray-primary font-inter",
+                    "font-bold text-gray-900 font-inter",
                     isMobile ? "text-xl" : "text-2xl"
                   )}>
                     Resultados da Busca
                   </h2>
-                  <p className="text-gray-secondary font-inter">
+                  <p className="text-gray-600 font-inter">
                     {filteredProducts.length} produto(s) encontrado(s) para "{searchTerm}"
                   </p>
                 </div>
@@ -252,7 +252,7 @@ const Store = () => {
                     setSearchTerm('');
                     setShowSearchResults(false);
                   }}
-                  className="text-tech-primary border-tech-primary hover:bg-tech-primary hover:text-white font-inter"
+                  className="text-blue-600 border-blue-600 hover:bg-blue-600 hover:text-white font-inter"
                 >
                   Limpar Busca
                 </Button>
@@ -262,9 +262,9 @@ const Store = () => {
                 <ProductList products={filteredProducts} showCategory={true} />
               ) : (
                 <div className="text-center py-12">
-                  <Package className="h-16 w-16 text-gray-secondary mx-auto mb-4" />
-                  <h3 className="text-lg font-medium mb-2 text-gray-primary font-inter">Nenhum produto encontrado</h3>
-                  <p className="text-gray-secondary mb-4 font-inter">
+                  <Package className="h-16 w-16 text-gray-600 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium mb-2 text-gray-900 font-inter">Nenhum produto encontrado</h3>
+                  <p className="text-gray-600 mb-4 font-inter">
                     Tente usar termos diferentes ou navegue pelas categorias abaixo.
                   </p>
                   <Button 
@@ -273,7 +273,7 @@ const Store = () => {
                       setSearchTerm('');
                       setShowSearchResults(false);
                     }}
-                    className="text-tech-primary border-tech-primary hover:bg-tech-primary hover:text-white font-inter"
+                    className="text-blue-600 border-blue-600 hover:bg-blue-600 hover:text-white font-inter"
                   >
                     Ver Todos os Produtos
                   </Button>
@@ -286,16 +286,16 @@ const Store = () => {
         {/* Show other sections only when not showing search results */}
         {!showSearchResults && (
           <>
-            {/* Promotions Carousel - Cores aplicadas */}
+            {/* Promotions Carousel - fundo branco */}
             <section className="py-8 md:py-12 bg-white overflow-hidden">
               <div className="container mx-auto px-4">
                 <div className="flex items-center justify-between mb-6 md:mb-8">
                   <h2 className={cn(
-                    "font-bold text-gray-primary font-inter",
+                    "font-bold text-gray-900 font-inter",
                     isMobile ? "text-xl" : "text-2xl"
                   )}>Ofertas e Promoções</h2>
                   <Link to="/store/promotions">
-                    <Button variant="ghost" className="text-tech-primary hover:text-tech-primary-hover font-inter" size={isMobile ? "sm" : "default"}>
+                    <Button variant="ghost" className="text-blue-600 hover:text-blue-700 font-inter" size={isMobile ? "sm" : "default"}>
                       Ver todas <ArrowRight className="ml-1 h-4 w-4" />
                     </Button>
                   </Link>
@@ -329,16 +329,16 @@ const Store = () => {
                                 "absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end",
                                 isMobile ? "p-4" : "p-6"
                               )}>
-                                <Badge variant="secondary" className="w-fit mb-2 font-inter">Promoção</Badge>
+                                <Badge variant="secondary" className="w-fit mb-2 bg-yellow-400 text-gray-900 font-inter">Promoção</Badge>
                                 <h3 className={cn(
-                                  "font-bold text-white font-inter",
+                                  "font-bold text-white font-inter drop-shadow-lg",
                                   isMobile ? "text-lg" : "text-xl"
                                 )}>{promo.title}</h3>
                                 <p className={cn(
-                                  "text-white/80 mt-2 font-inter",
+                                  "text-white/80 mt-2 font-inter drop-shadow-md",
                                   isMobile ? "text-xs" : "text-sm"
                                 )}>{promo.description}</p>
-                                <Button variant="secondary" className="w-fit mt-4 bg-white/20 backdrop-blur-sm hover:bg-white/30 font-inter" size={isMobile ? "sm" : "default"}>
+                                <Button variant="secondary" className="w-fit mt-4 bg-yellow-400 text-gray-900 hover:bg-yellow-500 font-inter" size={isMobile ? "sm" : "default"}>
                                   Ver Detalhes <ArrowRight className="ml-1 h-4 w-4" />
                                 </Button>
                               </div>
@@ -349,23 +349,23 @@ const Store = () => {
                     ))}
                   </CarouselContent>
                   <div className="flex justify-center mt-4 gap-2">
-                    <CarouselPrevious className="static transform-none mx-0 bg-white/80 backdrop-blur-sm" />
-                    <CarouselNext className="static transform-none mx-0 bg-white/80 backdrop-blur-sm" />
+                    <CarouselPrevious className="static transform-none mx-0 bg-white/80 backdrop-blur-sm border-blue-600" />
+                    <CarouselNext className="static transform-none mx-0 bg-white/80 backdrop-blur-sm border-blue-600" />
                   </div>
                 </Carousel>
               </div>
             </section>
             
-            {/* Featured Products - Cores aplicadas */}
-            <section className="py-8 md:py-12 bg-gray-light">
+            {/* Featured Products - fundo cinza claro */}
+            <section className="py-8 md:py-12 bg-gray-50">
               <div className="container mx-auto px-4">
                 <div className="flex items-center justify-between mb-6 md:mb-8">
                   <h2 className={cn(
-                    "font-bold text-gray-primary font-inter",
+                    "font-bold text-gray-900 font-inter",
                     isMobile ? "text-xl" : "text-2xl"
                   )}>Produtos em Destaque</h2>
                   <Link to="/store/products">
-                    <Button variant="ghost" className="text-tech-primary hover:text-tech-primary-hover font-inter" size={isMobile ? "sm" : "default"}>
+                    <Button variant="ghost" className="text-blue-600 hover:text-blue-700 font-inter" size={isMobile ? "sm" : "default"}>
                       Ver todos <ArrowRight className="ml-1 h-4 w-4" />
                     </Button>
                   </Link>
@@ -383,19 +383,19 @@ const Store = () => {
                       transition={{ duration: 0.3 }}
                       viewport={{ once: true }}
                     >
-                      <Card className="h-full hover:shadow-md transition-all group overflow-hidden bg-white border-gray-border">
+                      <Card className="h-full hover:shadow-md transition-all group overflow-hidden bg-white border-gray-200">
                         <CardHeader className={cn(
                           "pb-2",
                           isMobile ? "p-3" : ""
                         )}>
                           <CardTitle className={cn(
-                            "font-medium truncate text-gray-primary font-inter",
+                            "font-medium truncate text-gray-900 font-inter",
                             isMobile ? "text-sm" : "text-base"
                           )} title={product.nome}>
                             {product.nome}
                           </CardTitle>
                           <p className={cn(
-                            "text-gray-secondary font-inter",
+                            "text-gray-600 font-inter",
                             isMobile ? "text-xs" : "text-xs"
                           )}>Código: {product.codigo}</p>
                         </CardHeader>
@@ -415,11 +415,11 @@ const Store = () => {
                           </div>
                           <div className="flex justify-between items-center">
                             <Badge variant="outline" className={cn(
-                              "border-gray-border text-gray-secondary font-inter",
+                              "border-blue-600 text-blue-600 font-inter",
                               isMobile ? "text-xs" : ""
                             )}>{product.categoria}</Badge>
                             <p className={cn(
-                              "font-semibold text-right text-tech-primary font-inter",
+                              "font-semibold text-right text-blue-600 font-inter",
                               isMobile ? "text-sm" : ""
                             )}>
                               {formatCurrency(product.preco)}
@@ -429,7 +429,7 @@ const Store = () => {
                         <CardFooter className={cn(
                           isMobile ? "p-3 pt-0" : ""
                         )}>
-                          <Button variant="secondary" className="w-full bg-gray-light text-gray-primary border-gray-border hover:bg-gray-border font-inter" size={isMobile ? "sm" : "default"}>
+                          <Button variant="secondary" className="w-full bg-yellow-400 text-gray-900 hover:bg-yellow-500 font-inter" size={isMobile ? "sm" : "default"}>
                             Ver Detalhes
                           </Button>
                         </CardFooter>
@@ -440,16 +440,16 @@ const Store = () => {
               </div>
             </section>
             
-            {/* Featured Companies - Cores aplicadas */}
+            {/* Featured Companies - fundo branco */}
             <section className="py-8 md:py-12 bg-white">
               <div className="container mx-auto px-4">
                 <div className="flex items-center justify-between mb-6 md:mb-8">
                   <h2 className={cn(
-                    "font-bold text-gray-primary font-inter",
+                    "font-bold text-gray-900 font-inter",
                     isMobile ? "text-xl" : "text-2xl"
                   )}>Empresas em Destaque</h2>
                   <Link to="/store/companies">
-                    <Button variant="ghost" className="text-tech-primary hover:text-tech-primary-hover font-inter" size={isMobile ? "sm" : "default"}>
+                    <Button variant="ghost" className="text-blue-600 hover:text-blue-700 font-inter" size={isMobile ? "sm" : "default"}>
                       Ver todas <ArrowRight className="ml-1 h-4 w-4" />
                     </Button>
                   </Link>
@@ -467,12 +467,12 @@ const Store = () => {
                       transition={{ duration: 0.3 }}
                       viewport={{ once: true }}
                     >
-                      <Card className="h-full hover:shadow-md transition-all bg-white border-gray-border">
+                      <Card className="h-full hover:shadow-md transition-all bg-white border-gray-200">
                         <CardHeader className={cn(
                           isMobile ? "p-4" : ""
                         )}>
                           <div className="flex items-center gap-3">
-                            <div className="h-12 w-12 rounded-full bg-tech-primary/10 flex items-center justify-center overflow-hidden">
+                            <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden">
                               <img 
                                 src={company.image}
                                 alt={company.name}
@@ -481,10 +481,10 @@ const Store = () => {
                             </div>
                             <div>
                               <CardTitle className={cn(
-                                "text-gray-primary font-inter",
+                                "text-gray-900 font-inter",
                                 isMobile ? "text-base" : "text-base"
                               )}>{company.name}</CardTitle>
-                              <div className="flex items-center text-sm text-amber-500">
+                              <div className="flex items-center text-sm text-yellow-500">
                                 <Star className="h-3 w-3 fill-current mr-1" />
                                 <span className="font-inter">{company.rating}</span>
                               </div>
@@ -495,15 +495,15 @@ const Store = () => {
                           isMobile ? "p-4 pt-0" : ""
                         )}>
                           <p className={cn(
-                            "text-gray-secondary mb-2 font-inter",
+                            "text-gray-600 mb-2 font-inter",
                             isMobile ? "text-sm" : "text-sm"
                           )}>{company.description}</p>
-                          <p className="text-xs text-gray-secondary font-inter">{company.products} produtos disponíveis</p>
+                          <p className="text-xs text-gray-600 font-inter">{company.products} produtos disponíveis</p>
                         </CardContent>
                         <CardFooter className={cn(
                           isMobile ? "p-4 pt-0" : ""
                         )}>
-                          <Button variant="outline" className="w-full text-tech-primary border-tech-primary hover:bg-tech-primary hover:text-white font-inter" size={isMobile ? "sm" : "default"}>
+                          <Button variant="outline" className="w-full text-blue-600 border-blue-600 hover:bg-blue-600 hover:text-white font-inter" size={isMobile ? "sm" : "default"}>
                             Visitar Loja
                           </Button>
                         </CardFooter>
@@ -514,12 +514,12 @@ const Store = () => {
               </div>
             </section>
 
-            {/* Categories Section - Cores aplicadas */}
-            <section className="py-8 md:py-12 bg-gray-light">
+            {/* Categories Section - fundo cinza claro */}
+            <section className="py-8 md:py-12 bg-gray-50">
               <div className="container mx-auto px-4">
                 <AnimatedContainer animation="fade">
                   <h2 className={cn(
-                    "font-bold mb-6 md:mb-8 text-gray-primary font-inter",
+                    "font-bold mb-6 md:mb-8 text-gray-900 font-inter",
                     isMobile ? "text-xl" : "text-2xl"
                   )}>Categorias de Produtos</h2>
                   <CategoryList categories={categories} />
@@ -527,22 +527,22 @@ const Store = () => {
               </div>
             </section>
             
-            {/* All Stores CTA - Cores aplicadas */}
+            {/* All Stores CTA - fundo branco */}
             <section className="py-8 md:py-12 bg-white">
               <div className="container mx-auto px-4 text-center">
                 <AnimatedContainer animation="fade" className="max-w-3xl mx-auto">
                   <h2 className={cn(
-                    "font-bold mb-4 text-gray-primary font-inter",
+                    "font-bold mb-4 text-gray-900 font-inter",
                     isMobile ? "text-xl" : "text-2xl"
                   )}>Conheça todas as nossas lojas parceiras</h2>
                   <p className={cn(
-                    "text-gray-secondary mb-6 font-inter",
+                    "text-gray-600 mb-6 font-inter",
                     isMobile ? "text-sm px-4" : ""
                   )}>
                     Acesse nosso diretório completo de lojas especializadas em equipamentos e peças para impressão
                   </p>
                   <Link to="/store/companies">
-                    <Button size={isMobile ? "default" : "lg"} className="gap-2 bg-tech-primary hover:bg-tech-primary-hover font-inter">
+                    <Button size={isMobile ? "default" : "lg"} className="gap-2 bg-blue-600 hover:bg-blue-700 text-white font-inter">
                       Ver Todas as Lojas <StoreIcon className="h-4 w-4" />
                     </Button>
                   </Link>

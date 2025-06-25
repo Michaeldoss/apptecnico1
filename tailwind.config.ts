@@ -63,20 +63,20 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Nova identidade visual com cores específicas
+				// Paleta consistente para todo o projeto - baseada na home
 				'tech-primary': {
-					DEFAULT: '#1D4ED8',
-					hover: '#2563EB',
+					DEFAULT: '#2563EB', // blue-600
+					hover: '#1D4ED8', // blue-700
 				},
-				'tech-secondary': '#3B82F6',
+				'tech-secondary': '#3B82F6', // blue-500
 				'tech-accent': {
-					DEFAULT: '#10B981',
-					hover: '#059669',
+					DEFAULT: '#EAB308', // yellow-500
+					hover: '#CA8A04', // yellow-600
 				},
-				'gray-primary': '#111827',
-				'gray-secondary': '#6B7280',
-				'gray-light': '#F3F4F6',
-				'gray-border': '#E5E7EB',
+				'gray-primary': '#111827', // gray-900
+				'gray-secondary': '#4B5563', // gray-600
+				'gray-light': '#F9FAFB', // gray-50
+				'gray-border': '#E5E7EB', // gray-200
 				// Cores de contraste garantido
 				'contrast-text': '#111827',
 				'contrast-bg': '#FFFFFF',

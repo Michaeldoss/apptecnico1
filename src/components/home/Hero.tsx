@@ -44,7 +44,7 @@ const Hero = () => {
             
             <div className="flex flex-col justify-end">
               <Link to="/find-technician">
-                <Button className="w-full h-12 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold text-lg shadow-lg transition-all duration-200 border-0 rounded-lg group">
+                <Button className="w-full h-12 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 font-bold text-lg shadow-lg transition-all duration-200 border-0 rounded-lg group">
                   Buscar Técnicos
                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Button>

@@ -34,12 +34,12 @@ const SidebarItem = ({ to, icon: Icon, children, active, onClick }: SidebarItemP
     <Link
       to={to}
       className={cn(
-        "flex items-center gap-3 rounded-lg px-4 py-3 text-base transition-all duration-200 hover:bg-gray-light font-inter font-medium",
-        active ? "bg-tech-primary text-white shadow-sm" : "text-gray-primary hover:text-tech-primary"
+        "flex items-center gap-3 rounded-lg px-4 py-3 text-base transition-all duration-200 hover:bg-gray-50 font-inter font-medium",
+        active ? "bg-blue-600 text-white shadow-sm" : "text-gray-900 hover:text-blue-600"
       )}
       onClick={onClick}
     >
-      <Icon className={cn("h-5 w-5", active ? "text-white" : "text-tech-primary")} />
+      <Icon className={cn("h-5 w-5", active ? "text-white" : "text-blue-600")} />
       <span>{children}</span>
     </Link>
   );
@@ -84,7 +84,7 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
         {isMobile && (
           <button 
             onClick={toggleMenu}
-            className="fixed top-20 left-4 z-40 bg-tech-primary text-white p-3 rounded-full shadow-lg md:hidden hover:bg-tech-primary-hover transition-colors duration-200"
+            className="fixed top-20 left-4 z-40 bg-blue-600 text-white p-3 rounded-full shadow-lg md:hidden hover:bg-blue-700 transition-colors duration-200"
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -101,7 +101,7 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
         {/* Sidebar */}
         <aside 
           className={cn(
-            "w-64 shrink-0 border-r border-gray-border pr-6 transition-all duration-300",
+            "w-64 shrink-0 border-r border-gray-200 pr-6 transition-all duration-300",
             isMobile ? "fixed left-0 top-16 bottom-0 bg-white z-30 h-[calc(100vh-4rem)] px-4 pt-16 pb-6 shadow-xl overflow-y-auto" : "hidden md:block",
             isMobile && !isMenuOpen ? "-translate-x-full" : isMobile && isMenuOpen ? "translate-x-0" : ""
           )}
@@ -177,15 +177,15 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
             </SidebarItem>
           </div>
           
-          <div className="pt-6 mt-6 border-t border-gray-border">
+          <div className="pt-6 mt-6 border-t border-gray-200">
             <button 
               onClick={() => {
                 handleLogout();
                 closeMenu();
               }}
-              className="flex items-center gap-3 rounded-lg px-4 py-3 text-base transition-all duration-200 hover:bg-gray-light text-gray-primary hover:text-tech-primary w-full text-left font-inter font-medium"
+              className="flex items-center gap-3 rounded-lg px-4 py-3 text-base transition-all duration-200 hover:bg-gray-50 text-gray-900 hover:text-blue-600 w-full text-left font-inter font-medium"
             >
-              <LogOut className="h-5 w-5 text-tech-primary" />
+              <LogOut className="h-5 w-5 text-blue-600" />
               <span>Sair</span>
             </button>
           </div>
@@ -201,7 +201,7 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
             isMobile ? "flex-col gap-4 items-start" : ""
           )}>
             <h1 className={cn(
-              "text-3xl font-bold text-tech-primary font-inter",
+              "text-3xl font-bold text-blue-600 font-inter",
               isMobile ? "text-2xl pl-12" : ""
             )}>{title}</h1>
           </div>

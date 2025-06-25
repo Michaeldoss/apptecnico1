@@ -16,24 +16,24 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222 84% 4.9%;
 
-    --primary: 217 91% 42%;
+    --primary: 221 83% 53%; /* blue-600 */
     --primary-foreground: 0 0% 98%;
 
-    --secondary: 210 40% 96%;
+    --secondary: 220 14% 96%;
     --secondary-foreground: 222 84% 4.9%;
 
-    --muted: 210 40% 96%;
+    --muted: 220 14% 96%;
     --muted-foreground: 215 16% 47%;
 
-    --accent: 210 40% 96%;
+    --accent: 45 93% 47%; /* yellow-500 */
     --accent-foreground: 222 84% 4.9%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 217 91% 42%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 221 83% 53%;
 
     --radius: 1rem;
 
@@ -57,7 +57,7 @@
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 217 91% 60%;
+    --primary: 221 83% 53%;
     --primary-foreground: 0 0% 98%;
 
     --secondary: 240 3.7% 15.9%;
@@ -66,7 +66,7 @@
     --muted: 240 3.7% 15.9%;
     --muted-foreground: 240 5% 64.9%;
 
-    --accent: 240 3.7% 15.9%;
+    --accent: 45 93% 47%;
     --accent-foreground: 0 0% 98%;
 
     --destructive: 0 62.8% 30.6%;
@@ -106,55 +106,46 @@
     font-family: 'Inter', sans-serif;
   }
 
-  /* Tipografia global com contraste melhorado */
+  /* Tipografia global com cores da home */
   h1, .text-3xl, .text-4xl, .text-5xl {
-    @apply font-bold text-gray-900;
+    @apply font-bold;
     font-weight: 700;
-    color: #111827;
+    color: #111827; /* gray-900 */
   }
 
   h2, h3, .text-xl, .text-2xl {
-    @apply font-semibold text-gray-900;
+    @apply font-semibold;
     font-weight: 600;
-    color: #111827;
+    color: #111827; /* gray-900 */
   }
 
   p, span, div {
-    @apply text-gray-800;
     font-weight: 400;
-    color: #1F2937;
+    color: #374151; /* gray-700 */
   }
 
   .text-muted-foreground {
-    @apply text-gray-600;
-    color: #4B5563;
+    color: #6B7280; /* gray-500 */
   }
 
-  /* Garantir contraste adequado em textos */
+  /* Cores primárias consistentes */
   .text-primary {
-    color: #1D4ED8 !important;
+    color: #2563EB !important; /* blue-600 */
   }
 
   .text-secondary {
-    color: #4B5563 !important;
+    color: #4B5563 !important; /* gray-600 */
+  }
+
+  .text-accent {
+    color: #EAB308 !important; /* yellow-500 */
   }
 
   .text-white {
     color: #FFFFFF !important;
   }
 
-  /* Melhor contraste para textos sobre fundos escuros */
-  .text-light {
-    color: #F9FAFB !important;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  }
-
-  .text-light-secondary {
-    color: #E5E7EB !important;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  }
-
-  /* Botões globais com melhor contraste */
+  /* Botões com cores da home */
   .btn-primary {
     @apply bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:bg-blue-700 hover:shadow-lg hover:scale-105;
     background-color: #2563EB;
@@ -163,6 +154,13 @@
   }
 
   .btn-secondary {
+    @apply bg-yellow-500 text-gray-900 font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:bg-yellow-600 hover:shadow-lg;
+    background-color: #EAB308;
+    color: #111827;
+    font-weight: 600;
+  }
+
+  .btn-outline {
     @apply bg-white text-blue-600 border-2 border-blue-600 font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:bg-blue-600 hover:text-white hover:shadow-lg;
     background-color: #FFFFFF;
     color: #2563EB;
@@ -170,20 +168,7 @@
     font-weight: 600;
   }
 
-  /* Botões de segurança para pagamentos */
-  .btn-secure {
-    @apply bg-green-600 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:bg-green-700 hover:shadow-lg flex items-center gap-2;
-    background-color: #059669;
-    color: #FFFFFF;
-    font-weight: 600;
-  }
-
-  .btn-secure::before {
-    content: "🔒";
-    margin-right: 4px;
-  }
-
-  /* Cards globais com melhor contraste */
+  /* Cards com cores consistentes */
   .card-standard {
     @apply bg-white border-2 border-gray-200 rounded-lg shadow-sm p-6 transition-all duration-200 hover:shadow-md hover:border-gray-300;
     background-color: #FFFFFF;
@@ -191,81 +176,7 @@
     color: #111827;
   }
 
-  /* Cards de segurança */
-  .card-secure {
-    @apply bg-white border-2 border-green-500 rounded-lg shadow-sm p-6 transition-all duration-200 hover:shadow-md;
-    background-color: #FFFFFF;
-    border-color: #10B981;
-    border-width: 2px;
-  }
-
-  /* Ícones globais */
-  .icon-standard {
-    @apply text-blue-600 transition-all duration-200 hover:text-blue-700 hover:scale-105;
-    color: #2563EB;
-  }
-
-  .icon-secure {
-    @apply text-green-600 transition-all duration-200 hover:text-green-700 hover:scale-105;
-    color: #059669;
-  }
-
-  /* Animações suaves */
-  .hover-scale {
-    @apply transition-transform duration-200 hover:scale-105;
-  }
-
-  .link-underline {
-    @apply relative after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-blue-600 after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left;
-  }
-
-  /* Layout padronizado */
-  .section-padding {
-    @apply py-16 px-4;
-  }
-
-  .container-standard {
-    @apply max-w-7xl mx-auto;
-  }
-
-  .grid-standard {
-    @apply grid gap-6;
-  }
-
-  /* Melhorias de responsividade */
-  @media (max-width: 768px) {
-    .section-padding {
-      @apply py-8 px-4;
-    }
-    
-    .grid-standard {
-      @apply grid gap-4;
-    }
-    
-    .btn-primary,
-    .btn-secondary,
-    .btn-secure {
-      @apply px-4 py-2 text-sm;
-    }
-  }
-
-  /* Indicadores de segurança */
-  .security-badge {
-    @apply inline-flex items-center gap-1 px-3 py-1 bg-green-600 text-white text-xs font-semibold rounded-full;
-    background-color: #059669;
-    color: #FFFFFF;
-  }
-
-  .ssl-indicator {
-    @apply flex items-center gap-2 text-green-600 font-medium text-sm;
-    color: #059669;
-  }
-
-  .ssl-indicator::before {
-    content: "🔒";
-  }
-
-  /* Melhor contraste para inputs */
+  /* Inputs com cores da home */
   input, textarea, select {
     @apply bg-white text-gray-900 border-2 border-gray-300 focus:border-blue-600 focus:ring-blue-600;
     background-color: #FFFFFF;
@@ -279,48 +190,14 @@
     font-weight: 400;
   }
 
-  /* Labels com melhor contraste */
+  /* Labels */
   label {
     @apply text-gray-800 font-semibold;
     color: #1F2937;
     font-weight: 600;
   }
 
-  /* Dropdowns com melhor contraste */
-  .dropdown-content {
-    @apply bg-white border-2 border-gray-200 shadow-xl;
-    background-color: #FFFFFF;
-    border-color: #E5E7EB;
-    color: #111827;
-  }
-
-  /* Contraste para textos sobre fundos coloridos */
-  .bg-blue-600 .text-white,
-  .bg-blue-700 .text-white,
-  .bg-blue-800 .text-white {
-    color: #FFFFFF !important;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  }
-
-  .bg-green-600 .text-white,
-  .bg-green-700 .text-white {
-    color: #FFFFFF !important;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  }
-
-  .bg-purple-600 .text-white,
-  .bg-purple-700 .text-white {
-    color: #FFFFFF !important;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  }
-
-  /* Melhor legibilidade para badges e elementos pequenos */
-  .badge {
-    @apply font-medium;
-    font-weight: 500;
-  }
-
-  /* Estados de hover e foco mais visíveis */
+  /* Estados de foco */
   button:focus-visible,
   input:focus-visible,
   textarea:focus-visible,
@@ -329,7 +206,7 @@
     outline: none;
   }
 
-  /* Links com melhor contraste */
+  /* Links */
   a {
     @apply text-blue-600 hover:text-blue-700 transition-colors duration-200;
     color: #2563EB;
@@ -337,6 +214,26 @@
 
   a:hover {
     color: #1D4ED8;
+  }
+
+  /* Badges */
+  .badge-primary {
+    @apply bg-blue-600 text-white;
+    background-color: #2563EB;
+    color: #FFFFFF;
+  }
+
+  .badge-secondary {
+    @apply bg-yellow-500 text-gray-900;
+    background-color: #EAB308;
+    color: #111827;
+  }
+
+  .badge-outline {
+    @apply bg-white text-blue-600 border border-blue-600;
+    background-color: #FFFFFF;
+    color: #2563EB;
+    border-color: #2563EB;
   }
 }
 
@@ -363,7 +260,7 @@
   transition: opacity 300ms, transform 300ms;
 }
 
-/* Scrollbar customizada */
+/* Scrollbar customizada com cores da home */
 .scroll-container {
   overflow-y: auto;
   scroll-behavior: smooth;
@@ -378,29 +275,40 @@
 }
 
 .scroll-container::-webkit-scrollbar-thumb {
-  background-color: rgba(37, 99, 235, 0.3);
+  background-color: rgba(37, 99, 235, 0.3); /* blue-600 */
   border-radius: 4px;
 }
 
 .scroll-container::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(37, 99, 235, 0.5);
+  background-color: rgba(37, 99, 235, 0.5); /* blue-600 */
 }
 
-/* Melhorias de contraste para elementos específicos */
-.bg-muted {
-  background-color: #F3F4F6 !important;
-  color: #111827 !important;
+/* Layout padronizado */
+.section-padding {
+  @apply py-16 px-4;
 }
 
-.text-muted {
-  color: #4B5563 !important;
+.container-standard {
+  @apply max-w-7xl mx-auto;
 }
 
-/* Sombras de texto para melhor legibilidade */
-.text-shadow {
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+.grid-standard {
+  @apply grid gap-6;
 }
 
-.text-shadow-strong {
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+/* Melhorias de responsividade */
+@media (max-width: 768px) {
+  .section-padding {
+    @apply py-8 px-4;
+  }
+  
+  .grid-standard {
+    @apply grid gap-4;
+  }
+  
+  .btn-primary,
+  .btn-secondary,
+  .btn-outline {
+    @apply px-4 py-2 text-sm;
+  }
 }
