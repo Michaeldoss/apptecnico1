@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { toast } from '@/hooks/use-toast';
 
@@ -21,7 +22,21 @@ const AuthContext = createContext<AuthContextType>({
   isLoading: true,
 });
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    console.warn('useAuth deve ser usado dentro de AuthProvider');
+    return {
+      isAuthenticated: false,
+      userType: null,
+      user: null,
+      login: async () => false,
+      logout: () => {},
+      isLoading: false,
+    };
+  }
+  return context;
+};
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<any | null>(null);
@@ -41,16 +56,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           const userData = JSON.parse(storedUser);
           console.log('AuthProvider - Dados do usuário carregados:', userData);
           
-          setUser(userData);
-          setUserType(userData.type as UserType);
-          setIsAuthenticated(true);
-          
-          console.log('AuthProvider - Estado definido como autenticado');
+          // Verificação de segurança para dados válidos
+          if (userData && (userData.type || userData.tipo)) {
+            setUser(userData);
+            setUserType(userData.type as UserType);
+            setIsAuthenticated(true);
+            
+            console.log('AuthProvider - Estado definido como autenticado');
+          } else {
+            console.log('AuthProvider - Dados de usuário inválidos');
+            localStorage.removeItem('techSupportUser');
+          }
         } else {
           console.log('AuthProvider - Nenhum usuário encontrado');
-          setUser(null);
-          setUserType(null);
-          setIsAuthenticated(false);
         }
       } catch (error) {
         console.error('AuthProvider - Erro ao carregar dados:', error);
@@ -177,7 +195,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   console.log('AuthProvider - Estado atual:', { 
     isAuthenticated, 
     userType, 
-    user: user?.name,
+    user: user?.name || user?.email,
     isLoading 
   });
 

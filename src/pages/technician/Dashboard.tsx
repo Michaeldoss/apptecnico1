@@ -4,17 +4,31 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Calendar, Wrench, MapPin, DollarSign } from 'lucide-react';
 import TechnicianLayout from '@/components/layout/TechnicianLayout';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 
 const TechnicianDashboard = () => {
-  const { user, isAuthenticated, userType } = useAuth();
+  const { user, isAuthenticated, userType, isLoading } = useAuth();
   
   console.log('TechnicianDashboard - Renderizando');
   console.log('TechnicianDashboard - isAuthenticated:', isAuthenticated);
   console.log('TechnicianDashboard - userType:', userType);
   console.log('TechnicianDashboard - user:', user?.name);
+  console.log('TechnicianDashboard - isLoading:', isLoading);
   
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-2 text-gray-600">Carregando...</p>
+        </div>
+      </div>
+    );
+  }
+  
+  // Access control with safe fallbacks
   if (!isAuthenticated || userType !== 'technician') {
     console.log('TechnicianDashboard - Acesso negado');
     return (
@@ -22,6 +36,9 @@ const TechnicianDashboard = () => {
         <div className="text-center">
           <h2 className="text-xl font-semibold text-gray-700">Acesso negado</h2>
           <p className="text-gray-500 mt-2">Você precisa estar logado como técnico para acessar esta página.</p>
+          <Link href="/login" className="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            Fazer Login
+          </Link>
         </div>
       </div>
     );
@@ -30,13 +47,14 @@ const TechnicianDashboard = () => {
   const todayServices = 3;
   const weeklyEarnings = 2450.00;
   const pendingServices = 5;
+  const userName = user?.name || user?.email?.split('@')[0] || 'Técnico';
 
   return (
     <TechnicianLayout title="Dashboard do Técnico">
       <div className="space-y-6">
         <div className="mb-4">
           <p className="text-gray-600">
-            Bem-vindo, {user?.name || 'Técnico'}! Aqui está um resumo das suas atividades.
+            Bem-vindo, {userName}! Aqui está um resumo das suas atividades.
           </p>
         </div>
         
@@ -113,7 +131,7 @@ const TechnicianDashboard = () => {
                 </li>
               </ul>
               <Button variant="outline" className="w-full mt-4" asChild>
-                <Link to="/tecnico/servicos">Ver todos os serviços</Link>
+                <Link href="/tecnico/servicos">Ver todos os serviços</Link>
               </Button>
             </CardContent>
           </Card>
@@ -125,13 +143,13 @@ const TechnicianDashboard = () => {
             <CardContent>
               <div className="space-y-2">
                 <Button className="w-full" asChild>
-                  <Link to="/tecnico/agenda">Ver Agenda</Link>
+                  <Link href="/tecnico/agenda">Ver Agenda</Link>
                 </Button>
                 <Button variant="outline" className="w-full" asChild>
-                  <Link to="/tecnico/perfil">Atualizar Perfil</Link>
+                  <Link href="/tecnico/perfil">Atualizar Perfil</Link>
                 </Button>
                 <Button variant="outline" className="w-full" asChild>
-                  <Link to="/tecnico/pecas">Gerenciar Peças</Link>
+                  <Link href="/tecnico/pecas">Gerenciar Peças</Link>
                 </Button>
               </div>
             </CardContent>

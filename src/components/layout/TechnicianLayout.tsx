@@ -1,6 +1,7 @@
 
 import React, { ReactNode, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -21,7 +22,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 type SidebarItemProps = {
-  to: string;
+  href: string;
   icon: React.ElementType;
   children: ReactNode;
   active?: boolean;
@@ -29,10 +30,10 @@ type SidebarItemProps = {
   onClick?: () => void;
 };
 
-const SidebarItem = ({ to, icon: Icon, children, active, badge, onClick }: SidebarItemProps) => {
+const SidebarItem = ({ href, icon: Icon, children, active, badge, onClick }: SidebarItemProps) => {
   return (
     <Link
-      to={to}
+      href={href}
       className={cn(
         "flex items-center gap-3 rounded-lg px-4 py-3 text-base transition-all duration-200 hover:bg-gray-light font-inter font-medium relative",
         active ? "bg-tech-primary text-white shadow-sm" : "text-gray-primary hover:text-tech-primary"
@@ -60,8 +61,7 @@ type TechnicianLayoutProps = {
 };
 
 const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) => {
-  const location = useLocation();
-  const path = location.pathname;
+  const pathname = usePathname();
   const { unreadCount } = useNotifications();
   const { logout } = useAuth();
   const isMobile = useIsMobile();
@@ -111,50 +111,50 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
         )}>
           <div className="space-y-2 py-4">
             <SidebarItem 
-              to={`${pathPrefix}/painel`} 
+              href={`${pathPrefix}/painel`} 
               icon={LayoutDashboard} 
-              active={path.includes('/painel') || path.includes('/dashboard')}
+              active={pathname?.includes('/painel') || pathname?.includes('/dashboard')}
               onClick={closeMenu}
             >
               Painel
             </SidebarItem>
             <SidebarItem 
-              to={`${pathPrefix}/perfil`} 
+              href={`${pathPrefix}/perfil`} 
               icon={User} 
-              active={path.includes('/perfil') || path.includes('/profile')}
+              active={pathname?.includes('/perfil') || pathname?.includes('/profile')}
               onClick={closeMenu}
             >
               Meu Perfil
             </SidebarItem>
             <SidebarItem 
-              to={`${pathPrefix}/servicos`} 
+              href={`${pathPrefix}/servicos`} 
               icon={Wrench} 
-              active={path.includes('/servicos') || path.includes('/services')}
+              active={pathname?.includes('/servicos') || pathname?.includes('/services')}
               onClick={closeMenu}
             >
               Serviços
             </SidebarItem>
             <SidebarItem 
-              to={`${pathPrefix}/chat`} 
+              href={`${pathPrefix}/chat`} 
               icon={MessageSquare} 
-              active={path.includes('/chat')}
+              active={pathname?.includes('/chat')}
               badge={unreadCount}
               onClick={closeMenu}
             >
               Mensagens
             </SidebarItem>
             <SidebarItem 
-              to={`${pathPrefix}/pecas`} 
+              href={`${pathPrefix}/pecas`} 
               icon={Package} 
-              active={path.includes('/pecas') || path.includes('/parts')}
+              active={pathname?.includes('/pecas') || pathname?.includes('/parts')}
               onClick={closeMenu}
             >
               Peças
             </SidebarItem>
             <SidebarItem 
-              to={`${pathPrefix}/agenda`} 
+              href={`${pathPrefix}/agenda`} 
               icon={Calendar} 
-              active={path.includes('/agenda') || path.includes('/schedule')}
+              active={pathname?.includes('/agenda') || pathname?.includes('/schedule')}
               onClick={closeMenu}
             >
               Agenda
