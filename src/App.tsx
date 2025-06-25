@@ -23,6 +23,7 @@ const CompanySettings = React.lazy(() => import("@/pages/store/CompanySettings")
 const CompanyProducts = React.lazy(() => import("@/pages/store/CompanyProducts"));
 const CompanyList = React.lazy(() => import("@/pages/store/CompanyList"));
 const CategoryPage = React.lazy(() => import("@/pages/store/CategoryPage"));
+const CustomerServiceRequest = React.lazy(() => import("@/pages/customer/ServiceRequest"));
 const NotFound = React.lazy(() => import("@/pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -46,6 +47,9 @@ function App() {
                 {/* Sell Equipment routes */}
                 <Route path="/sell-equipment" element={<SellEquipment />} />
                 <Route path="/sell-equipment/create" element={<SellEquipmentCreate />} />
+                
+                {/* Customer routes */}
+                <Route path="/customer/service-request" element={<CustomerServiceRequest />} />
                 
                 {/* Store routes */}
                 <Route path="/store" element={<Store />} />
