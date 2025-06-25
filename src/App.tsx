@@ -31,6 +31,14 @@ const CompanySettings = React.lazy(() => import("@/pages/store/CompanySettings")
 const CompanyProducts = React.lazy(() => import("@/pages/store/CompanyProducts"));
 const CompanyList = React.lazy(() => import("@/pages/store/CompanyList"));
 const CategoryPage = React.lazy(() => import("@/pages/store/CategoryPage"));
+const CustomerDashboard = React.lazy(() => import("@/pages/customer/Dashboard"));
+const CustomerServices = React.lazy(() => import("@/pages/customer/Services"));
+const CustomerEquipment = React.lazy(() => import("@/pages/customer/Equipment"));
+const CustomerProfile = React.lazy(() => import("@/pages/customer/Profile"));
+const CustomerPayments = React.lazy(() => import("@/pages/customer/Payments"));
+const CustomerServiceOrders = React.lazy(() => import("@/pages/customer/ServiceOrders"));
+const CustomerTracking = React.lazy(() => import("@/pages/customer/Tracking"));
+const CustomerSchedule = React.lazy(() => import("@/pages/customer/Schedule"));
 const CustomerServiceRequest = React.lazy(() => import("@/pages/customer/ServiceRequest"));
 const NotFound = React.lazy(() => import("@/pages/NotFound"));
 
@@ -51,6 +59,24 @@ function App() {
                 <Route path="/register" element={<Register />} />
                 <Route path="/find-technician" element={<FindTechnician />} />
                 <Route path="/services" element={<Services />} />
+                
+                {/* Customer routes */}
+                <Route path="/cliente/painel" element={<CustomerDashboard />} />
+                <Route path="/cliente/dashboard" element={<CustomerDashboard />} />
+                <Route path="/cliente/servicos" element={<CustomerServices />} />
+                <Route path="/cliente/services" element={<CustomerServices />} />
+                <Route path="/cliente/equipamentos" element={<CustomerEquipment />} />
+                <Route path="/cliente/equipment" element={<CustomerEquipment />} />
+                <Route path="/cliente/perfil" element={<CustomerProfile />} />
+                <Route path="/cliente/profile" element={<CustomerProfile />} />
+                <Route path="/cliente/pagamentos" element={<CustomerPayments />} />
+                <Route path="/cliente/payments" element={<CustomerPayments />} />
+                <Route path="/cliente/ordens" element={<CustomerServiceOrders />} />
+                <Route path="/cliente/orders" element={<CustomerServiceOrders />} />
+                <Route path="/cliente/rastreamento" element={<CustomerTracking />} />
+                <Route path="/cliente/tracking" element={<CustomerTracking />} />
+                <Route path="/cliente/agenda" element={<CustomerSchedule />} />
+                <Route path="/cliente/schedule" element={<CustomerSchedule />} />
                 
                 {/* Technician routes (English) */}
                 <Route path="/technician" element={<TechnicianLanding />} />
