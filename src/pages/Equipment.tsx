@@ -1,13 +1,18 @@
-
 import React from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Wrench, Printer, Scissors, Settings, Plus } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Equipment = () => {
+  const navigate = useNavigate();
+
+  const handleCadastrarEquipamento = () => {
+    navigate('/sell-equipment/create');
+  };
+
   const equipmentCategories = [
     {
       id: "printers",
@@ -53,7 +58,11 @@ const Equipment = () => {
             <p className="text-xl mb-8 max-w-2xl mx-auto">
               Encontre técnicos especializados para todos os tipos de equipamentos
             </p>
-            <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100">
+            <Button 
+              size="lg" 
+              className="bg-white text-blue-600 hover:bg-gray-100"
+              onClick={handleCadastrarEquipamento}
+            >
               <Plus className="mr-2 h-5 w-5" />
               Cadastrar Equipamento
             </Button>
@@ -102,9 +111,9 @@ const Equipment = () => {
               Cadastre seu equipamento e encontre técnicos especializados
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/register">
-                <Button size="lg">Cadastrar Equipamento</Button>
-              </Link>
+              <Button size="lg" onClick={handleCadastrarEquipamento}>
+                Cadastrar Equipamento
+              </Button>
               <Link to="/find-technician">
                 <Button variant="outline" size="lg">Buscar Técnicos</Button>
               </Link>
