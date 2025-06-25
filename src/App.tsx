@@ -18,6 +18,12 @@ const SellEquipment = React.lazy(() => import("@/pages/SellEquipment"));
 const SellEquipmentCreate = React.lazy(() => import("@/pages/SellEquipmentCreate"));
 const TechnicianLanding = React.lazy(() => import("@/pages/technician/Landing"));
 const TechnicianDashboard = React.lazy(() => import("@/pages/technician/Dashboard"));
+const TechnicianServices = React.lazy(() => import("@/pages/technician/Services"));
+const TechnicianProfile = React.lazy(() => import("@/pages/technician/Profile"));
+const TechnicianParts = React.lazy(() => import("@/pages/technician/Parts"));
+const TechnicianSchedule = React.lazy(() => import("@/pages/technician/Schedule"));
+const TechnicianChat = React.lazy(() => import("@/pages/technician/Chat"));
+const TechnicianServiceOrder = React.lazy(() => import("@/pages/technician/ServiceOrder"));
 const CompanyRegister = React.lazy(() => import("@/pages/store/CompanyRegister"));
 const CompanyDashboard = React.lazy(() => import("@/pages/store/CompanyDashboard"));
 const CompanyProfile = React.lazy(() => import("@/pages/store/CompanyProfile"));
@@ -46,9 +52,24 @@ function App() {
                 <Route path="/find-technician" element={<FindTechnician />} />
                 <Route path="/services" element={<Services />} />
                 
-                {/* Technician routes */}
+                {/* Technician routes (English) */}
                 <Route path="/technician" element={<TechnicianLanding />} />
                 <Route path="/technician/dashboard" element={<TechnicianDashboard />} />
+                
+                {/* Technician routes (Portuguese) */}
+                <Route path="/tecnico" element={<TechnicianLanding />} />
+                <Route path="/tecnico/painel" element={<TechnicianDashboard />} />
+                <Route path="/tecnico/dashboard" element={<TechnicianDashboard />} />
+                <Route path="/tecnico/servicos" element={<TechnicianServices />} />
+                <Route path="/tecnico/services" element={<TechnicianServices />} />
+                <Route path="/tecnico/perfil" element={<TechnicianProfile />} />
+                <Route path="/tecnico/profile" element={<TechnicianProfile />} />
+                <Route path="/tecnico/pecas" element={<TechnicianParts />} />
+                <Route path="/tecnico/parts" element={<TechnicianParts />} />
+                <Route path="/tecnico/agenda" element={<TechnicianSchedule />} />
+                <Route path="/tecnico/schedule" element={<TechnicianSchedule />} />
+                <Route path="/tecnico/chat" element={<TechnicianChat />} />
+                <Route path="/tecnico/servicos/:id/os" element={<TechnicianServiceOrder />} />
                 
                 {/* Sell Equipment routes */}
                 <Route path="/sell-equipment" element={<SellEquipment />} />
