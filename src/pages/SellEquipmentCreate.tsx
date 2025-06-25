@@ -1,380 +1,294 @@
 
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { toast } from '@/hooks/use-toast';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Upload, X, DollarSign, MapPin, Phone, Mail, Camera, FileText, AlertCircle } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import { Camera, Upload, X, CheckCircle, AlertCircle } from 'lucide-react';
 import { equipmentTypeLabels } from '@/types/equipment';
-import { equipmentConditionLabels } from '@/types/sellEquipment';
-import { useNavigate } from 'react-router-dom';
-
-const sellEquipmentSchema = z.object({
-  title: z.string().min(10, {
-    message: "O título deve ter pelo menos 10 caracteres.",
-  }).max(100, {
-    message: "O título não pode exceder 100 caracteres.",
-  }),
-  type: z.string().min(1, {
-    message: "Selecione o tipo do equipamento.",
-  }),
-  brand: z.string().min(2, {
-    message: "A marca deve ter pelo menos 2 caracteres.",
-  }),
-  model: z.string().min(2, {
-    message: "O modelo deve ter pelo menos 2 caracteres.",
-  }),
-  year: z.string().optional(),
-  condition: z.enum(['novo', 'seminovo', 'usado', 'para-pecas'], {
-    required_error: "Selecione o estado do equipamento.",
-  }),
-  price: z.string().min(1, {
-    message: "O preço é obrigatório.",
-  }),
-  description: z.string().min(50, {
-    message: "A descrição deve ter pelo menos 50 caracteres.",
-  }).max(1000, {
-    message: "A descrição não pode exceder 1000 caracteres.",
-  }),
-  city: z.string().min(2, {
-    message: "A cidade é obrigatória.",
-  }),
-  state: z.string().length(2, {
-    message: "Informe a sigla do estado (ex: SP).",
-  }),
-  contactName: z.string().min(3, {
-    message: "O nome do contato é obrigatório.",
-  }),
-  contactPhone: z.string().min(10, {
-    message: "O telefone deve ter pelo menos 10 dígitos.",
-  }),
-  contactEmail: z.string().email({
-    message: "E-mail inválido.",
-  }),
-  contactWhatsapp: z.string().optional(),
-});
-
-type SellEquipmentFormValues = z.infer<typeof sellEquipmentSchema>;
+import { SellEquipmentCondition, equipmentConditionLabels } from '@/types/sellEquipment';
+import { useToast } from '@/hooks/use-toast';
 
 const SellEquipmentCreate = () => {
-  const navigate = useNavigate();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [selectedImages, setSelectedImages] = useState<File[]>([]);
-  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
-
-  const form = useForm<SellEquipmentFormValues>({
-    resolver: zodResolver(sellEquipmentSchema),
-    defaultValues: {
-      title: "",
-      type: "",
-      brand: "",
-      model: "",
-      year: "",
-      condition: undefined,
-      price: "",
-      description: "",
-      city: "",
-      state: "",
-      contactName: "",
-      contactPhone: "",
-      contactEmail: "",
-      contactWhatsapp: "",
-    },
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+  const [images, setImages] = useState<File[]>([]);
+  const [formData, setFormData] = useState({
+    title: '',
+    type: '',
+    brand: '',
+    model: '',
+    year: '',
+    condition: '' as SellEquipmentCondition | '',
+    price: '',
+    description: '',
+    city: '',
+    state: '',
+    contactName: '',
+    contactPhone: '',
+    contactEmail: '',
+    contactWhatsapp: ''
   });
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files || []);
-    
-    if (selectedImages.length + files.length > 6) {
-      toast({
-        variant: "destructive",
-        title: "Limite excedido",
-        description: "Você pode adicionar no máximo 6 fotos.",
-      });
-      return;
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const newImages = Array.from(e.target.files);
+      if (images.length + newImages.length > 6) {
+        toast({
+          title: "Limite excedido",
+          description: "Você pode adicionar no máximo 6 imagens.",
+          variant: "destructive"
+        });
+        return;
+      }
+      setImages(prev => [...prev, ...newImages]);
     }
-
-    const newImages = [...selectedImages, ...files];
-    setSelectedImages(newImages);
-
-    // Create previews
-    const newPreviews = [...imagePreviews];
-    files.forEach(file => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        newPreviews.push(e.target?.result as string);
-        if (newPreviews.length === newImages.length) {
-          setImagePreviews(newPreviews);
-        }
-      };
-      reader.readAsDataURL(file);
-    });
   };
 
   const removeImage = (index: number) => {
-    const newImages = selectedImages.filter((_, i) => i !== index);
-    const newPreviews = imagePreviews.filter((_, i) => i !== index);
-    setSelectedImages(newImages);
-    setImagePreviews(newPreviews);
+    setImages(prev => prev.filter((_, i) => i !== index));
   };
 
-  const onSubmit = async (data: SellEquipmentFormValues) => {
-    if (selectedImages.length === 0) {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    // Validação básica
+    if (!formData.title || !formData.type || !formData.brand || !formData.condition || !formData.price) {
       toast({
-        variant: "destructive",
-        title: "Fotos obrigatórias",
-        description: "Adicione pelo menos uma foto do equipamento.",
+        title: "Campos obrigatórios",
+        description: "Preencha todos os campos obrigatórios.",
+        variant: "destructive"
       });
+      setIsLoading(false);
       return;
     }
 
-    setIsSubmitting(true);
-    try {
-      console.log('Dados do anúncio:', data);
-      console.log('Imagens selecionadas:', selectedImages);
-      
-      // Simulando upload e criação do anúncio
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+    if (images.length === 0) {
+      toast({
+        title: "Imagens necessárias",
+        description: "Adicione pelo menos uma foto do equipamento.",
+        variant: "destructive"
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    // Simular criação do anúncio
+    setTimeout(() => {
+      setIsLoading(false);
       toast({
         title: "Anúncio criado com sucesso!",
-        description: "Seu equipamento foi adicionado à plataforma.",
+        description: "Seu equipamento foi anunciado e está aguardando aprovação.",
       });
       
-      navigate('/sell-equipment');
-    } catch (error) {
-      console.error('Erro ao criar anúncio:', error);
-      toast({
-        variant: "destructive",
-        title: "Erro ao criar anúncio",
-        description: "Ocorreu um erro. Tente novamente.",
+      // Reset form
+      setFormData({
+        title: '',
+        type: '',
+        brand: '',
+        model: '',
+        year: '',
+        condition: '',
+        price: '',
+        description: '',
+        city: '',
+        state: '',
+        contactName: '',
+        contactPhone: '',
+        contactEmail: '',
+        contactWhatsapp: ''
       });
-    } finally {
-      setIsSubmitting(false);
-    }
+      setImages([]);
+    }, 2000);
   };
 
-  const formatPrice = (value: string) => {
-    // Remove non-digits
-    const numbers = value.replace(/\D/g, '');
-    // Add thousands separators
-    return numbers.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
   };
 
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
       
-      <main className="flex-grow container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="mb-8 text-center">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Anunciar Equipamento
+      <main className="flex-grow bg-gray-50 py-8">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Vender Meu Equipamento
             </h1>
-            <p className="text-gray-600">
-              Preencha as informações abaixo para criar seu anúncio
+            <p className="text-lg text-gray-600">
+              Anuncie seu equipamento gráfico de forma rápida e segura. 
+              Alcance milhares de compradores interessados!
             </p>
           </div>
 
-          <div className="bg-white rounded-lg border shadow-sm p-6">
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                {/* Informações Básicas */}
-                <div className="space-y-4">
-                  <h2 className="text-xl font-semibold border-b pb-2">
-                    Informações do Equipamento
-                  </h2>
+          <form onSubmit={handleSubmit} className="space-y-8">
+            {/* Informações do Equipamento */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <FileText className="h-5 w-5" />
+                  Informações do Equipamento
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="title">Título do Anúncio *</Label>
+                    <Input
+                      id="title"
+                      placeholder="Ex: Plotter Roland VersaCAMM VS-640i"
+                      value={formData.title}
+                      onChange={(e) => handleInputChange('title', e.target.value)}
+                      required
+                    />
+                  </div>
                   
-                  <FormField
-                    control={form.control}
-                    name="title"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Título do Anúncio</FormLabel>
-                        <FormControl>
-                          <Input 
-                            placeholder="Ex: Plotter Roland VersaCAMM VS-640i Seminovo"
-                            {...field} 
-                          />
-                        </FormControl>
-                        <FormDescription>
-                          Seja específico e inclua marca, modelo e características principais
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <FormField
-                      control={form.control}
-                      name="type"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Tipo de Equipamento</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Selecione o tipo" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {Object.entries(equipmentTypeLabels).map(([value, label]) => (
-                                <SelectItem key={value} value={value}>
-                                  {label}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="condition"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Estado</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Selecione o estado" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {Object.entries(equipmentConditionLabels).map(([value, label]) => (
-                                <SelectItem key={value} value={value}>
-                                  {label}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                  <div className="space-y-2">
+                    <Label htmlFor="type">Tipo de Equipamento *</Label>
+                    <Select value={formData.type} onValueChange={(value) => handleInputChange('type', value)}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione o tipo" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {Object.entries(equipmentTypeLabels).map(([key, label]) => (
+                          <SelectItem key={key} value={key}>
+                            {label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
-
-                  <div className="grid md:grid-cols-3 gap-6">
-                    <FormField
-                      control={form.control}
-                      name="brand"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Marca</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Ex: Roland, Epson, HP" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="model"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Modelo</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Ex: VersaCAMM VS-640i" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="year"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Ano (Opcional)</FormLabel>
-                          <FormControl>
-                            <Input 
-                              type="number" 
-                              placeholder="2023" 
-                              min="1990"
-                              max={new Date().getFullYear()}
-                              {...field} 
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  <FormField
-                    control={form.control}
-                    name="price"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Preço (R$)</FormLabel>
-                        <FormControl>
-                          <Input 
-                            placeholder="50.000"
-                            value={field.value}
-                            onChange={(e) => {
-                              const formatted = formatPrice(e.target.value);
-                              field.onChange(formatted);
-                            }}
-                          />
-                        </FormControl>
-                        <FormDescription>
-                          Digite apenas números (ex: 50000 para R$ 50.000)
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="description"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Descrição</FormLabel>
-                        <FormControl>
-                          <Textarea 
-                            placeholder="Descreva detalhadamente o equipamento, estado de conservação, acessórios inclusos, histórico de uso, motivo da venda, etc."
-                            className="min-h-[120px]"
-                            {...field} 
-                          />
-                        </FormControl>
-                        <FormDescription>
-                          Seja detalhado para atrair mais interessados
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
                 </div>
 
-                {/* Fotos */}
-                <div className="space-y-4">
-                  <h2 className="text-xl font-semibold border-b pb-2">Fotos</h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="brand">Marca *</Label>
+                    <Input
+                      id="brand"
+                      placeholder="Ex: Roland, Mimaki, HP"
+                      value={formData.brand}
+                      onChange={(e) => handleInputChange('brand', e.target.value)}
+                      required
+                    />
+                  </div>
                   
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-4">
-                      <label className="cursor-pointer">
+                  <div className="space-y-2">
+                    <Label htmlFor="model">Modelo *</Label>
+                    <Input
+                      id="model"
+                      placeholder="Ex: VersaCAMM VS-640i"
+                      value={formData.model}
+                      onChange={(e) => handleInputChange('model', e.target.value)}
+                      required
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="year">Ano (opcional)</Label>
+                    <Input
+                      id="year"
+                      type="number"
+                      placeholder="2023"
+                      value={formData.year}
+                      onChange={(e) => handleInputChange('year', e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="condition">Estado de Conservação *</Label>
+                    <Select value={formData.condition} onValueChange={(value) => handleInputChange('condition', value as SellEquipmentCondition)}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione o estado" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {Object.entries(equipmentConditionLabels).map(([key, label]) => (
+                          <SelectItem key={key} value={key}>
+                            {label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="price">Preço (R$) *</Label>
+                    <div className="relative">
+                      <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                      <Input
+                        id="price"
+                        type="number"
+                        placeholder="50000"
+                        className="pl-10"
+                        value={formData.price}
+                        onChange={(e) => handleInputChange('price', e.target.value)}
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="description">Descrição *</Label>
+                  <Textarea
+                    id="description"
+                    placeholder="Descreva as condições do equipamento, histórico de uso, inclusos, etc..."
+                    rows={4}
+                    value={formData.description}
+                    onChange={(e) => handleInputChange('description', e.target.value)}
+                    required
+                  />
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Fotos */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Camera className="h-5 w-5" />
+                  Fotos do Equipamento
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2 p-4 bg-blue-50 rounded-lg">
+                    <AlertCircle className="h-5 w-5 text-blue-600" />
+                    <p className="text-sm text-blue-700">
+                      Adicione fotos nítidas e bem iluminadas. Anúncios com mais fotos recebem 3x mais contatos!
+                    </p>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {images.map((image, index) => (
+                      <div key={index} className="relative">
+                        <img
+                          src={URL.createObjectURL(image)}
+                          alt={`Foto ${index + 1}`}
+                          className="w-full h-32 object-cover rounded-lg border"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeImage(index)}
+                          className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+                    ))}
+                    
+                    {images.length < 6 && (
+                      <label className="w-full h-32 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition-colors">
+                        <Upload className="h-8 w-8 text-gray-400 mb-2" />
+                        <span className="text-sm text-gray-500">Adicionar foto</span>
                         <input
                           type="file"
                           multiple
@@ -382,202 +296,161 @@ const SellEquipmentCreate = () => {
                           onChange={handleImageUpload}
                           className="hidden"
                         />
-                        <div className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                          <Camera className="h-4 w-4" />
-                          Adicionar Fotos
-                        </div>
                       </label>
-                      <span className="text-sm text-gray-500">
-                        {selectedImages.length}/6 fotos
-                      </span>
-                    </div>
-
-                    {imagePreviews.length > 0 && (
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                        {imagePreviews.map((preview, index) => (
-                          <div key={index} className="relative group">
-                            <img
-                              src={preview}
-                              alt={`Preview ${index + 1}`}
-                              className="w-full h-32 object-cover rounded-lg border"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => removeImage(index)}
-                              className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                            >
-                              <X className="h-4 w-4" />
-                            </button>
-                            {index === 0 && (
-                              <div className="absolute bottom-2 left-2 bg-blue-600 text-white text-xs px-2 py-1 rounded">
-                                Principal
-                              </div>
-                            )}
-                          </div>
-                        ))}
-                      </div>
                     )}
+                  </div>
+                  
+                  <p className="text-xs text-gray-500">
+                    Máximo 6 fotos. Formatos aceitos: JPG, PNG, WebP
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
 
-                    <div className="flex items-start gap-2 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                      <AlertCircle className="h-5 w-5 text-yellow-600 mt-0.5" />
-                      <div className="text-sm text-yellow-800">
-                        <strong>Dicas para boas fotos:</strong>
-                        <ul className="mt-1 list-disc list-inside space-y-1">
-                          <li>Use boa iluminação natural</li>
-                          <li>Mostre diferentes ângulos do equipamento</li>
-                          <li>Inclua fotos dos detalhes e possíveis defeitos</li>
-                          <li>A primeira foto será a principal do anúncio</li>
-                        </ul>
-                      </div>
+            {/* Localização */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <MapPin className="h-5 w-5" />
+                  Localização
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="city">Cidade *</Label>
+                    <Input
+                      id="city"
+                      placeholder="São Paulo"
+                      value={formData.city}
+                      onChange={(e) => handleInputChange('city', e.target.value)}
+                      required
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="state">Estado *</Label>
+                    <Input
+                      id="state"
+                      placeholder="SP"
+                      value={formData.state}
+                      onChange={(e) => handleInputChange('state', e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Contato */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Phone className="h-5 w-5" />
+                  Informações de Contato
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="contactName">Nome para Contato *</Label>
+                    <Input
+                      id="contactName"
+                      placeholder="João Silva"
+                      value={formData.contactName}
+                      onChange={(e) => handleInputChange('contactName', e.target.value)}
+                      required
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="contactEmail">E-mail *</Label>
+                    <Input
+                      id="contactEmail"
+                      type="email"
+                      placeholder="joao@exemplo.com"
+                      value={formData.contactEmail}
+                      onChange={(e) => handleInputChange('contactEmail', e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="contactPhone">Telefone *</Label>
+                    <Input
+                      id="contactPhone"
+                      placeholder="(11) 99999-9999"
+                      value={formData.contactPhone}
+                      onChange={(e) => handleInputChange('contactPhone', e.target.value)}
+                      required
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="contactWhatsapp">WhatsApp (opcional)</Label>
+                    <Input
+                      id="contactWhatsapp"
+                      placeholder="11999999999"
+                      value={formData.contactWhatsapp}
+                      onChange={(e) => handleInputChange('contactWhatsapp', e.target.value)}
+                    />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Resumo e Envio */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Resumo do Anúncio</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="bg-gray-50 p-4 rounded-lg space-y-2">
+                  <p><strong>Equipamento:</strong> {formData.title || 'Não informado'}</p>
+                  <p><strong>Marca/Modelo:</strong> {formData.brand} {formData.model}</p>
+                  <p><strong>Estado:</strong> {formData.condition ? equipmentConditionLabels[formData.condition] : 'Não informado'}</p>
+                  <p><strong>Preço:</strong> {formData.price ? `R$ ${parseFloat(formData.price).toLocaleString('pt-BR')}` : 'Não informado'}</p>
+                  <p><strong>Localização:</strong> {formData.city}, {formData.state}</p>
+                  <p><strong>Fotos:</strong> {images.length} foto(s) adicionada(s)</p>
+                </div>
+                
+                <div className="mt-6 space-y-4">
+                  <div className="flex items-start gap-2 p-4 bg-yellow-50 rounded-lg">
+                    <AlertCircle className="h-5 w-5 text-yellow-600 mt-0.5" />
+                    <div className="text-sm text-yellow-700">
+                      <p className="font-medium mb-1">Importante:</p>
+                      <ul className="list-disc list-inside space-y-1">
+                        <li>Seu anúncio será analisado antes de ser publicado</li>
+                        <li>Mantenha seu telefone/WhatsApp disponível para contato</li>
+                        <li>Seja honesto sobre o estado do equipamento</li>
+                      </ul>
                     </div>
                   </div>
-                </div>
-
-                {/* Localização */}
-                <div className="space-y-4">
-                  <h2 className="text-xl font-semibold border-b pb-2">Localização</h2>
                   
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <FormField
-                      control={form.control}
-                      name="city"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Cidade</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Ex: São Paulo" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="state"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Estado</FormLabel>
-                          <FormControl>
-                            <Input 
-                              placeholder="SP" 
-                              maxLength={2}
-                              style={{ textTransform: 'uppercase' }}
-                              {...field} 
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
-
-                {/* Contato */}
-                <div className="space-y-4">
-                  <h2 className="text-xl font-semibold border-b pb-2">Informações de Contato</h2>
-                  
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <FormField
-                      control={form.control}
-                      name="contactName"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Nome do Contato</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Seu nome" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="contactEmail"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>E-mail</FormLabel>
-                          <FormControl>
-                            <Input 
-                              type="email" 
-                              placeholder="seu@email.com" 
-                              {...field} 
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <FormField
-                      control={form.control}
-                      name="contactPhone"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Telefone</FormLabel>
-                          <FormControl>
-                            <Input placeholder="(11) 99999-9999" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="contactWhatsapp"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>WhatsApp (Opcional)</FormLabel>
-                          <FormControl>
-                            <Input placeholder="11999999999" {...field} />
-                          </FormControl>
-                          <FormDescription>
-                            Apenas números (ex: 11999999999)
-                          </FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
-
-                <div className="flex gap-4 pt-6">
-                  <Button 
-                    type="button" 
-                    variant="outline" 
-                    onClick={() => navigate('/sell-equipment')}
-                    className="flex-1"
-                  >
-                    Cancelar
-                  </Button>
                   <Button 
                     type="submit" 
-                    disabled={isSubmitting}
-                    className="flex-1 bg-blue-600 hover:bg-blue-700"
+                    size="lg" 
+                    className="w-full"
+                    disabled={isLoading}
                   >
-                    {isSubmitting ? (
+                    {isLoading ? (
                       <span className="flex items-center">
                         <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
-                        Publicando...
+                        Publicando anúncio...
                       </span>
                     ) : (
-                      <>
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        Publicar Anúncio
-                      </>
+                      'Publicar Anúncio'
                     )}
                   </Button>
                 </div>
-              </form>
-            </Form>
-          </div>
+              </CardContent>
+            </Card>
+          </form>
         </div>
       </main>
 
