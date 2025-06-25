@@ -15,9 +15,14 @@ const mockTechnicians: Technician[] = [
     location: "São Paulo, SP",
     state: "SP",
     city: "São Paulo",
-    coordinates: { lat: -23.5505, lng: -46.6333 },
+    coordinates: [-23.5505, -46.6333],
     availability: ["Segunda-Feira", "Terça-Feira", "Quinta-Feira", "Sexta-Feira"],
-    equipmentTypes: ["eco-solvent", "uv-flexible"]
+    equipmentTypes: ["eco-solvent", "uv-flexible"],
+    pricing: {
+      quotePrice: 0,
+      visitPrice: 80,
+      laborPrice: 120
+    }
   },
   {
     id: 2,
@@ -29,9 +34,14 @@ const mockTechnicians: Technician[] = [
     location: "São Paulo, SP",
     state: "SP",
     city: "São Paulo",
-    coordinates: { lat: -23.5605, lng: -46.6233 },
+    coordinates: [-23.5605, -46.6233],
     availability: ["Segunda-Feira", "Quarta-Feira", "Sexta-Feira"],
-    equipmentTypes: ["sublimation", "sublimation-calander", "thermal-press"]
+    equipmentTypes: ["sublimation", "sublimation-calander", "thermal-press"],
+    pricing: {
+      quotePrice: 0,
+      visitPrice: 75,
+      laborPrice: 110
+    }
   },
   {
     id: 3,
@@ -43,9 +53,14 @@ const mockTechnicians: Technician[] = [
     location: "Guarulhos, SP",
     state: "SP",
     city: "Guarulhos",
-    coordinates: { lat: -23.4543, lng: -46.5337 },
+    coordinates: [-23.4543, -46.5337],
     availability: ["Terça-Feira", "Quarta-Feira", "Quinta-Feira", "Sábado"],
-    equipmentTypes: ["dtf-textile", "dtf-uv", "dtf-carousel", "mixed-carousel"]
+    equipmentTypes: ["dtf-textile", "dtf-uv", "dtf-carousel", "mixed-carousel"],
+    pricing: {
+      quotePrice: 0,
+      visitPrice: 90,
+      laborPrice: 130
+    }
   },
   {
     id: 4,
@@ -57,9 +72,14 @@ const mockTechnicians: Technician[] = [
     location: "Osasco, SP",
     state: "SP",
     city: "Osasco",
-    coordinates: { lat: -23.5324, lng: -46.7916 },
+    coordinates: [-23.5324, -46.7916],
     availability: ["Segunda-Feira", "Terça-Feira", "Quarta-Feira", "Quinta-Feira", "Sexta-Feira"],
-    equipmentTypes: ["cnc-co2", "cnc-router", "laser-engraver"]
+    equipmentTypes: ["cnc-co2", "cnc-router", "laser-engraver"],
+    pricing: {
+      quotePrice: 0,
+      visitPrice: 85,
+      laborPrice: 140
+    }
   },
   {
     id: 5,
@@ -71,9 +91,14 @@ const mockTechnicians: Technician[] = [
     location: "São Bernardo do Campo, SP",
     state: "SP",
     city: "São Bernardo do Campo",
-    coordinates: { lat: -23.6944, lng: -46.5654 },
+    coordinates: [-23.6944, -46.5654],
     availability: ["Segunda-Feira", "Quarta-Feira", "Sexta-Feira", "Sábado"],
-    equipmentTypes: ["cutting", "uv-flatbed"]
+    equipmentTypes: ["cutting", "uv-flatbed"],
+    pricing: {
+      quotePrice: 0,
+      visitPrice: 95,
+      laborPrice: 125
+    }
   },
   {
     id: 6,
@@ -85,9 +110,14 @@ const mockTechnicians: Technician[] = [
     location: "Santo André, SP",
     state: "SP",
     city: "Santo André",
-    coordinates: { lat: -23.6639, lng: -46.5383 },
+    coordinates: [-23.6639, -46.5383],
     availability: ["Terça-Feira", "Quinta-Feira", "Sábado"],
-    equipmentTypes: ["offset", "sewing-machine"]
+    equipmentTypes: ["offset", "sewing-machine"],
+    pricing: {
+      quotePrice: 0,
+      visitPrice: 70,
+      laborPrice: 115
+    }
   },
   {
     id: 7,
@@ -99,9 +129,14 @@ const mockTechnicians: Technician[] = [
     location: "Taboão da Serra, SP",
     state: "SP",
     city: "Taboão da Serra",
-    coordinates: { lat: -23.6019, lng: -46.7526 },
+    coordinates: [-23.6019, -46.7526],
     availability: ["Segunda-Feira", "Terça-Feira", "Quarta-Feira", "Quinta-Feira", "Sexta-Feira"],
-    equipmentTypes: ["cylindrical-uv", "solvent"]
+    equipmentTypes: ["cylindrical-uv", "solvent"],
+    pricing: {
+      quotePrice: 0,
+      visitPrice: 100,
+      laborPrice: 135
+    }
   },
   {
     id: 8,
@@ -113,9 +148,14 @@ const mockTechnicians: Technician[] = [
     location: "Diadema, SP",
     state: "SP",
     city: "Diadema",
-    coordinates: { lat: -23.6813, lng: -46.6205 },
+    coordinates: [-23.6813, -46.6205],
     availability: ["Segunda-Feira", "Quarta-Feira", "Sexta-Feira"],
-    equipmentTypes: ["silk-carousel", "dtf-carousel", "mixed-carousel"]
+    equipmentTypes: ["silk-carousel", "dtf-carousel", "mixed-carousel"],
+    pricing: {
+      quotePrice: 0,
+      visitPrice: 80,
+      laborPrice: 120
+    }
   }
 ];
 
