@@ -1,21 +1,17 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-import CompanyValues from "@/components/home/CompanyValues";
 import MainServices from "@/components/home/MainServices";
 import MainCities from "@/components/home/MainCities";
-import ServiceCategories from "@/components/home/ServiceCategories";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
     <footer className="bg-white border-t border-gray-border">
-      {/* Seções principais - nossa equipe, serviços, cidades */}
-      <CompanyValues />
+      {/* Seções principais - serviços e cidades */}
       <MainServices />
       <MainCities />
-      <ServiceCategories />
       
       {/* Footer principal */}
       <div className="py-12">
