@@ -1,135 +1,200 @@
 
-import React from 'react';
-import Navbar from '@/components/layout/Navbar';
-import Footer from '@/components/layout/Footer';
-import AnimatedContainer from '@/components/ui/AnimatedContainer';
-import BlurContainer from '@/components/ui/BlurContainer';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { cn } from '@/lib/utils';
+import React from "react";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Users, Target, Award, Heart, CheckCircle, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const About = () => {
-  const isMobile = useIsMobile();
+  const values = [
+    {
+      icon: Target,
+      title: "Missão",
+      description: "Conectar clientes e técnicos especializados de forma eficiente e confiável"
+    },
+    {
+      icon: Heart,
+      title: "Valores",
+      description: "Transparência, qualidade e compromisso com a satisfação do cliente"
+    },
+    {
+      icon: Award,
+      title: "Visão",
+      description: "Ser a principal plataforma de serviços técnicos do Brasil"
+    }
+  ];
+
+  const team = [
+    {
+      name: "João Silva",
+      role: "CEO & Fundador",
+      description: "15 anos de experiência no setor de tecnologia"
+    },
+    {
+      name: "Maria Santos",
+      role: "CTO",
+      description: "Especialista em desenvolvimento de plataformas digitais"
+    },
+    {
+      name: "Pedro Costa",
+      role: "Head de Operações",
+      description: "Experiência em gestão de redes de prestadores de serviços"
+    }
+  ];
+
+  const achievements = [
+    "Mais de 10.000 técnicos cadastrados",
+    "50.000+ serviços realizados",
+    "Presença em 200+ cidades",
+    "95% de satisfação dos clientes"
+  ];
 
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="flex-grow container mx-auto px-4 py-8 md:py-12">
-        <AnimatedContainer animation="fade" className="mb-8 md:mb-12">
-          <h1 className={cn(
-            "font-bold mb-4 md:mb-6 text-center",
-            isMobile ? "text-3xl" : "text-4xl"
-          )}>Sobre a TechSupport</h1>
-          <p className={cn(
-            "text-muted-foreground mb-6 md:mb-8 text-center max-w-3xl mx-auto",
-            isMobile ? "text-base px-4" : "text-lg"
-          )}>
-            Conheça mais sobre nossa missão, visão e história.
-          </p>
-        </AnimatedContainer>
-
-        <div className={cn(
-          "grid gap-8 md:gap-12 mb-12 md:mb-16",
-          isMobile ? "grid-cols-1" : "grid-cols-1 md:grid-cols-2"
-        )}>
-          <AnimatedContainer animation="slide-right" delay={0.2}>
-            <BlurContainer className={cn(
-              isMobile ? "p-6" : "p-8"
-            )}>
-              <h2 className={cn(
-                "font-semibold mb-4",
-                isMobile ? "text-xl" : "text-2xl"
-              )}>Nossa Missão</h2>
-              <p className="text-muted-foreground mb-4">
-                A TechSupport nasceu com o objetivo de conectar pessoas que precisam de suporte técnico
-                com os melhores profissionais disponíveis. Nossa missão é tornar o suporte técnico
-                acessível, confiável e eficiente para todos.
-              </p>
-              <p className="text-muted-foreground">
-                Acreditamos que todos merecem ter acesso a serviços técnicos de qualidade,
-                independentemente de sua localização ou conhecimento prévio.
-              </p>
-            </BlurContainer>
-          </AnimatedContainer>
-
-          <AnimatedContainer animation="slide-left" delay={0.4}>
-            <BlurContainer className={cn(
-              isMobile ? "p-6" : "p-8"
-            )}>
-              <h2 className={cn(
-                "font-semibold mb-4",
-                isMobile ? "text-xl" : "text-2xl"
-              )}>Nossa Visão</h2>
-              <p className="text-muted-foreground mb-4">
-                Queremos ser a principal plataforma de conexão entre técnicos e clientes no Brasil,
-                revolucionando a maneira como as pessoas resolvem seus problemas tecnológicos.
-              </p>
-              <p className="text-muted-foreground">
-                Buscamos criar um ecossistema onde técnicos possam prosperar e clientes possam
-                encontrar soluções rápidas e confiáveis para seus problemas.
-              </p>
-            </BlurContainer>
-          </AnimatedContainer>
-        </div>
-
-        <AnimatedContainer animation="fade" delay={0.6} className="mb-12 md:mb-16">
-          <BlurContainer className={cn(
-            isMobile ? "p-6" : "p-8"
-          )}>
-            <h2 className={cn(
-              "font-semibold mb-4",
-              isMobile ? "text-xl" : "text-2xl"
-            )}>Nossa História</h2>
-            <p className="text-muted-foreground mb-4">
-              Fundada em 2023, a TechSupport começou como uma startup com apenas 5 técnicos
-              cadastrados. Hoje, contamos com uma rede de mais de 1.000 profissionais qualificados
-              em todo o Brasil, atendendo milhares de clientes mensalmente.
+      
+      <main className="flex-grow">
+        {/* Hero Section */}
+        <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-20">
+          <div className="container mx-auto px-4 text-center">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 text-white">
+              Sobre a DGSoluções
+            </h1>
+            <p className="text-xl mb-8 max-w-2xl mx-auto text-white">
+              Revolucionando a forma como você encontra e contrata serviços técnicos especializados
             </p>
-            <p className="text-muted-foreground">
-              Nosso crescimento é impulsionado pelo compromisso com a qualidade e pela satisfação
-              de nossos usuários. Continuamos inovando para melhorar a experiência de todos que
-              utilizam nossa plataforma.
-            </p>
-          </BlurContainer>
-        </AnimatedContainer>
-
-        <AnimatedContainer animation="scale" delay={0.8}>
-          <div className={cn(
-            "grid gap-6 md:gap-8",
-            isMobile ? "grid-cols-1" : "grid-cols-1 md:grid-cols-3"
-          )}>
-            <BlurContainer className={cn(
-              "text-center",
-              isMobile ? "p-4" : "p-6"
-            )}>
-              <div className={cn(
-                "text-primary font-bold mb-2",
-                isMobile ? "text-3xl" : "text-4xl"
-              )}>1000+</div>
-              <div className="font-medium">Técnicos Cadastrados</div>
-            </BlurContainer>
-            <BlurContainer className={cn(
-              "text-center",
-              isMobile ? "p-4" : "p-6"
-            )}>
-              <div className={cn(
-                "text-primary font-bold mb-2",
-                isMobile ? "text-3xl" : "text-4xl"
-              )}>10k+</div>
-              <div className="font-medium">Serviços Realizados</div>
-            </BlurContainer>
-            <BlurContainer className={cn(
-              "text-center",
-              isMobile ? "p-4" : "p-6"
-            )}>
-              <div className={cn(
-                "text-primary font-bold mb-2",
-                isMobile ? "text-3xl" : "text-4xl"
-              )}>98%</div>
-              <div className="font-medium">Clientes Satisfeitos</div>
-            </BlurContainer>
+            <Link to="/contact">
+              <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100">
+                Entre em Contato
+              </Button>
+            </Link>
           </div>
-        </AnimatedContainer>
+        </section>
+
+        {/* Story Section */}
+        <section className="py-16">
+          <div className="container mx-auto px-4">
+            <div className="max-w-3xl mx-auto text-center">
+              <h2 className="text-3xl font-bold mb-6">Nossa História</h2>
+              <p className="text-lg text-gray-600 mb-8">
+                A DGSoluções nasceu da necessidade de conectar pessoas que precisam de serviços técnicos 
+                especializados com profissionais qualificados de forma rápida e segura. Fundada em 2020, 
+                nossa plataforma já facilitou milhares de conexões entre clientes e técnicos.
+              </p>
+              <p className="text-lg text-gray-600">
+                Acreditamos que todo problema técnico tem uma solução, e nossa missão é garantir que 
+                você encontre o profissional certo para resolver suas necessidades com eficiência e qualidade.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Values Section */}
+        <section className="bg-gray-50 py-16">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold mb-4">Nossos Valores</h2>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                Os princípios que guiam nossa empresa e nosso compromisso com a excelência
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {values.map((value, index) => (
+                <Card key={index} className="text-center hover:shadow-lg transition-shadow">
+                  <CardHeader>
+                    <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                      <value.icon className="h-8 w-8 text-blue-600" />
+                    </div>
+                    <CardTitle className="text-xl">{value.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <CardDescription className="text-center">{value.description}</CardDescription>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Team Section */}
+        <section className="py-16">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold mb-4">Nossa Equipe</h2>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                Profissionais experientes dedicados a oferecer a melhor experiência
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {team.map((member, index) => (
+                <Card key={index} className="text-center hover:shadow-lg transition-shadow">
+                  <CardHeader>
+                    <div className="mx-auto w-20 h-20 bg-gray-300 rounded-full mb-4 flex items-center justify-center">
+                      <Users className="h-10 w-10 text-gray-600" />
+                    </div>
+                    <CardTitle className="text-xl">{member.name}</CardTitle>
+                    <CardDescription className="text-blue-600 font-semibold">{member.role}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600">{member.description}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Achievements Section */}
+        <section className="bg-blue-600 text-white py-16">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold mb-4 text-white">Nossos Números</h2>
+              <p className="text-white max-w-2xl mx-auto">
+                Resultados que demonstram nosso compromisso com a excelência
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {achievements.map((achievement, index) => (
+                <div key={index} className="text-center">
+                  <div className="flex items-center justify-center mb-4">
+                    <CheckCircle className="h-8 w-8 text-yellow-400" />
+                  </div>
+                  <p className="text-lg font-semibold text-white">{achievement}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="py-16">
+          <div className="container mx-auto px-4 text-center">
+            <h2 className="text-3xl font-bold mb-4">Faça Parte da Nossa Comunidade</h2>
+            <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
+              Junte-se a milhares de clientes satisfeitos e técnicos qualificados
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link to="/register">
+                <Button size="lg">
+                  Cadastre-se como Cliente
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+              <Link to="/technician">
+                <Button size="lg" variant="outline">
+                  Seja um Técnico Parceiro
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
       </main>
+      
       <Footer />
     </div>
   );
