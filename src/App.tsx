@@ -1,3 +1,4 @@
+
 import React, { Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/context/AuthContext";
@@ -7,15 +8,10 @@ import { Toaster } from "@/components/ui/toaster";
 // Lazy load components
 const Index = React.lazy(() => import("@/pages/Index"));
 const About = React.lazy(() => import("@/pages/About"));
-const Services = React.lazy(() => import("@/pages/Services"));
 const Contact = React.lazy(() => import("@/pages/Contact"));
 const Login = React.lazy(() => import("@/pages/Login"));
 const Register = React.lazy(() => import("@/pages/Register"));
-const Dashboard = React.lazy(() => import("@/pages/Dashboard"));
 const FindTechnician = React.lazy(() => import("@/pages/FindTechnician"));
-const Technician = React.lazy(() => import("@/pages/Technician"));
-const TechnicianProfile = React.lazy(() => import("@/pages/TechnicianProfile"));
-const TechnicianDashboard = React.lazy(() => import("@/pages/TechnicianDashboard"));
 const Store = React.lazy(() => import("@/pages/Store"));
 const CompanyRegister = React.lazy(() => import("@/pages/store/CompanyRegister"));
 const CompanyDashboard = React.lazy(() => import("@/pages/store/CompanyDashboard"));
@@ -37,15 +33,10 @@ function App() {
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/about" element={<About />} />
-                <Route path="/services" element={<Services />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
-                <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/find-technician" element={<FindTechnician />} />
-                <Route path="/technician" element={<Technician />} />
-                <Route path="/technician/profile" element={<TechnicianProfile />} />
-                <Route path="/technician/dashboard" element={<TechnicianDashboard />} />
                 
                 {/* Store routes */}
                 <Route path="/store" element={<Store />} />
