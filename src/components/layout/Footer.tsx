@@ -1,7 +1,5 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
-import MainServices from "@/components/home/MainServices";
 import MainCities from "@/components/home/MainCities";
 
 const Footer = () => {
@@ -9,8 +7,7 @@ const Footer = () => {
 
   return (
     <footer className="bg-white border-t border-gray-border">
-      {/* Seções principais - serviços e cidades */}
-      <MainServices />
+      {/* Seções principais - cidades */}
       <MainCities />
       
       {/* Footer principal */}

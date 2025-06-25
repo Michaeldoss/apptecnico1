@@ -112,15 +112,15 @@ const Features = () => {
         {/* Seção de Cadastros */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
           {/* Cliente */}
-          <div className="bg-white rounded-2xl p-8 shadow-xl border-2 border-blue-200 hover:border-blue-400 transition-all duration-300 text-center group hover:shadow-2xl">
+          <div className="bg-white rounded-2xl p-8 shadow-xl border-2 border-blue-200 hover:border-blue-400 transition-all duration-300 text-center group hover:shadow-2xl flex flex-col">
             <div className="bg-blue-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
               <User className="h-10 w-10 text-white" />
             </div>
             <h3 className="text-2xl font-bold mb-4 text-gray-900">Cadastro de Cliente</h3>
-            <p className="text-gray-700 mb-6 font-medium">
+            <p className="text-gray-700 mb-6 font-medium flex-grow">
               Encontre os melhores técnicos para seus equipamentos
             </p>
-            <Link to="/register">
+            <Link to="/register" className="mt-auto">
               <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 text-lg shadow-lg transition-all duration-200 hover:scale-105">
                 Cadastrar como Cliente
               </Button>
@@ -128,15 +128,15 @@ const Features = () => {
           </div>
 
           {/* Técnico */}
-          <div className="bg-white rounded-2xl p-8 shadow-xl border-2 border-green-200 hover:border-green-400 transition-all duration-300 text-center group hover:shadow-2xl">
+          <div className="bg-white rounded-2xl p-8 shadow-xl border-2 border-green-200 hover:border-green-400 transition-all duration-300 text-center group hover:shadow-2xl flex flex-col">
             <div className="bg-green-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
               <Wrench className="h-10 w-10 text-white" />
             </div>
             <h3 className="text-2xl font-bold mb-4 text-gray-900">Cadastro de Técnico</h3>
-            <p className="text-gray-700 mb-6 font-medium">
+            <p className="text-gray-700 mb-6 font-medium flex-grow">
               Conecte-se com clientes e expanda seus negócios
             </p>
-            <Link to="/technician">
+            <Link to="/technician" className="mt-auto">
               <Button className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 text-lg shadow-lg transition-all duration-200 hover:scale-105">
                 Cadastrar como Técnico
               </Button>
@@ -144,15 +144,15 @@ const Features = () => {
           </div>
 
           {/* Lojista */}
-          <div className="bg-white rounded-2xl p-8 shadow-xl border-2 border-purple-200 hover:border-purple-400 transition-all duration-300 text-center group hover:shadow-2xl">
+          <div className="bg-white rounded-2xl p-8 shadow-xl border-2 border-purple-200 hover:border-purple-400 transition-all duration-300 text-center group hover:shadow-2xl flex flex-col">
             <div className="bg-purple-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
               <Store className="h-10 w-10 text-white" />
             </div>
             <h3 className="text-2xl font-bold mb-4 text-gray-900">Cadastro de Lojista</h3>
-            <p className="text-gray-700 mb-6 font-medium">
+            <p className="text-gray-700 mb-6 font-medium flex-grow">
               Venda produtos e peças para técnicos e clientes
             </p>
-            <Link to="/store/company-register">
+            <Link to="/store/company-register" className="mt-auto">
               <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 text-lg shadow-lg transition-all duration-200 hover:scale-105">
                 Cadastrar como Lojista
               </Button>
