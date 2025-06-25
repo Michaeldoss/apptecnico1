@@ -175,7 +175,7 @@ const TechnicianCarousel = () => {
                         </div>
 
                         {/* Botão sempre no final - posição fixa */}
-                        <Link to={`/find-technician?technicianId=${technician.id}`} className="w-full">
+                        <Link to={`/technician/profile/${technician.id}`} className="w-full">
                           <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 font-inter">
                             Ver Perfil
                           </Button>

@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -168,14 +167,14 @@ const Features = () => {
         {/* CTA para Comunidade */}
         <div className="bg-gradient-to-r from-blue-700 to-blue-800 rounded-2xl p-12 text-center text-white shadow-2xl">
           <h3 className="text-3xl md:text-4xl font-bold mb-6 drop-shadow-lg">
-            Comunidade de Profissionais
+            Comunidade DGSoluções
           </h3>
           <p className="text-xl mb-8 text-blue-100 font-medium max-w-2xl mx-auto drop-shadow-sm">
-            Junte-se a milhares de profissionais e empresas que confiam na nossa plataforma
+            Participe das nossas comunidades e conecte-se com outros profissionais
           </p>
           
           {/* Links de Comunidade */}
-          <div className="flex flex-wrap justify-center gap-4 mb-8">
+          <div className="flex flex-wrap justify-center gap-4">
             <a href="#" className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition-colors">
               <MessageCircle className="h-5 w-5" />
               WhatsApp
@@ -196,21 +195,6 @@ const Features = () => {
               <Instagram className="h-5 w-5" />
               Instagram
             </a>
-          </div>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/technician">
-              <Button className="bg-white text-blue-700 hover:bg-gray-100 font-bold px-8 py-4 text-lg rounded-lg shadow-lg transition-all duration-200 border-0 hover:scale-105">
-                <Users className="mr-3 h-6 w-6" />
-                Seja um Técnico
-              </Button>
-            </Link>
-            <Link to="/store/company-register">
-              <Button className="bg-green-600 text-white hover:bg-green-700 font-bold px-8 py-4 text-lg rounded-lg shadow-lg transition-all duration-200 border-0 hover:scale-105">
-                <Store className="mr-3 h-6 w-6" />
-                Seja um Lojista
-              </Button>
-            </Link>
           </div>
         </div>
       </div>
