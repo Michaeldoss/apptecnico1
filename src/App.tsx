@@ -1,4 +1,3 @@
-
 import React, { Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/context/AuthContext";
@@ -15,6 +14,7 @@ const Register = React.lazy(() => import("@/pages/Register"));
 const FindTechnician = React.lazy(() => import("@/pages/FindTechnician"));
 const Store = React.lazy(() => import("@/pages/Store"));
 const Services = React.lazy(() => import("@/pages/Services"));
+const Terms = React.lazy(() => import("@/pages/Terms"));
 const SellEquipment = React.lazy(() => import("@/pages/SellEquipment"));
 const SellEquipmentCreate = React.lazy(() => import("@/pages/SellEquipmentCreate"));
 const TechnicianLanding = React.lazy(() => import("@/pages/technician/Landing"));
@@ -60,6 +60,7 @@ function App() {
                 <Route path="/register" element={<Register />} />
                 <Route path="/find-technician" element={<FindTechnician />} />
                 <Route path="/services" element={<Services />} />
+                <Route path="/terms" element={<Terms />} />
                 
                 {/* Customer routes */}
                 <Route path="/cliente/painel" element={
