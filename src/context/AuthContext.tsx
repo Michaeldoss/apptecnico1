@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { toast } from '@/hooks/use-toast';
 
@@ -74,15 +73,37 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     
     try {
       const mockUsers = [
-        { id: 1, name: 'Técnico Demo', email: 'tecnico@exemplo.com', password: '123456', type: 'technician' },
-        { id: 2, name: 'Cliente Demo', email: 'cliente@exemplo.com', password: '123456', type: 'customer' },
-        { id: 3, name: 'Admin Demo', email: 'admin@exemplo.com', password: '123456', type: 'admin' },
+        { 
+          id: 1, 
+          name: 'Técnico Demo', 
+          email: 'tecnico@exemplo.com', 
+          password: '123456', 
+          type: 'technician',
+          tipo: 'tecnico' // Adicionado para compatibilidade
+        },
+        { 
+          id: 2, 
+          name: 'Cliente Demo', 
+          email: 'cliente@exemplo.com', 
+          password: '123456', 
+          type: 'customer',
+          tipo: 'cliente' // Adicionado para compatibilidade
+        },
+        { 
+          id: 3, 
+          name: 'Admin Demo', 
+          email: 'admin@exemplo.com', 
+          password: '123456', 
+          type: 'admin',
+          tipo: 'admin' // Adicionado para compatibilidade
+        },
         { 
           id: 4, 
           name: 'Doss Group', 
           email: 'loja@exemplo.com', 
           password: '123456', 
           type: 'company',
+          tipo: 'loja', // Adicionado para compatibilidade
           description: 'Peças originais e componentes para impressoras industriais.',
           location: 'Rio de Janeiro, RJ',
           logo: '/placeholder.svg',

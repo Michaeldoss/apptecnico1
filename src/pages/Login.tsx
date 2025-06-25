@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -36,10 +35,10 @@ const Login = () => {
         navigate('/technician/dashboard');
       } else if (userType === 'customer') {
         console.log('Login - Redirecionando para painel do cliente');
-        navigate('/cliente/painel');
+        navigate('/cliente/dashboard');
       } else if (userType === 'company') {
         console.log('Login - Redirecionando para dashboard da empresa');
-        navigate('/store/company-dashboard');
+        navigate('/loja/dashboard');
       } else if (userType === 'admin') {
         console.log('Login - Redirecionando para admin');
         navigate('/admin');
@@ -59,18 +58,68 @@ const Login = () => {
     setIsLoading(true);
     
     try {
-      console.log('Login - Chamando função de login');
-      const success = await login(email, password);
-      console.log('Login - Resultado do login:', success);
+      console.log('Login - Fazendo requisição para API');
       
-      if (success) {
-        console.log('Login - Login bem-sucedido, aguardando redirecionamento...');
-        // O redirecionamento será feito pelo useEffect
+      // Fazer requisição para API de login
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      console.log('Login - Resposta da API recebida:', response.status);
+
+      if (!response.ok) {
+        throw new Error('Falha na requisição de login');
+      }
+
+      const data = await response.json();
+      console.log('Login - Dados retornados:', data);
+
+      // Verificar se o login foi bem-sucedido
+      if (data.status === 'ok' && data.user) {
+        console.log('Login - Login bem-sucedido, tipo de usuário:', data.user.tipo);
+        
+        // Atualizar o contexto de autenticação
+        const success = await login(email, password);
+        
+        if (success) {
+          // Redirecionar baseado no tipo de usuário
+          const userTipo = data.user.tipo;
+          
+          if (userTipo === 'loja') {
+            console.log('Login - Redirecionando para dashboard da loja');
+            navigate('/loja/dashboard');
+          } else if (userTipo === 'tecnico') {
+            console.log('Login - Redirecionando para dashboard do técnico');
+            navigate('/technician/dashboard');
+          } else if (userTipo === 'cliente') {
+            console.log('Login - Redirecionando para dashboard do cliente');
+            navigate('/cliente/dashboard');
+          } else {
+            console.log('Login - Tipo de usuário desconhecido, redirecionando para home');
+            navigate('/');
+          }
+        }
       } else {
-        console.log('Login - Login falhou');
+        console.log('Login - Login falhou:', data.message || 'Erro desconhecido');
+        throw new Error(data.message || 'Falha no login');
       }
     } catch (error) {
       console.error('Login - Erro durante login:', error);
+      
+      // Fallback para o sistema de login mock existente
+      console.log('Login - Tentando sistema de login mock como fallback');
+      const success = await login(email, password);
+      
+      if (success) {
+        console.log('Login - Login mock bem-sucedido, aguardando redirecionamento...');
+        // O redirecionamento será feito pelo useEffect
+      } else {
+        console.log('Login - Login mock também falhou');
+      }
     } finally {
       setIsLoading(false);
     }

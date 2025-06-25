@@ -230,6 +230,15 @@ function App() {
                     <CompanyDashboard />
                   </ProtectedRoute>
                 } />
+                
+                {/* Loja routes - Nova rota para empresas */}
+                <Route path="/loja/dashboard" element={
+                  <ProtectedRoute allowedUserTypes={['company']}>
+                    <CompanyDashboard />
+                  </ProtectedRoute>
+                } />
+                
+                {/* ... keep existing code (remaining store routes) */}
                 <Route path="/store/company-profile" element={
                   <ProtectedRoute allowedUserTypes={['company']}>
                     <CompanyProfile />
