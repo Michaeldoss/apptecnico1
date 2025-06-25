@@ -53,8 +53,8 @@ const FindTechnician = () => {
         variant: "destructive",
       });
     } else {
-      // Redirecionar para a página de solicitação de serviço
-      window.location.href = `/cliente/solicitar?technician=${technicianId}`;
+      // Redirect to service request page (this route needs to exist)
+      window.location.href = `/customer/service-request?technician=${technicianId}`;
     }
   };
 
@@ -73,10 +73,10 @@ const FindTechnician = () => {
       <Navbar />
 
       {/* Header */}
-      <header className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white p-6">
-        <div className="container mx-auto">
-          <h1 className="text-3xl font-bold mb-2 text-white">Encontre Técnicos Especializados</h1>
-          <p className="text-lg opacity-90 mb-6 text-white">Localize profissionais qualificados para seus equipamentos</p>
+      <header className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-16">
+        <div className="container mx-auto px-4">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">Encontre Técnicos Especializados</h1>
+          <p className="text-xl mb-8 text-white opacity-90">Localize profissionais qualificados para seus equipamentos</p>
           
           {/* Search Filters */}
           <TechnicianFilters 
@@ -97,39 +97,41 @@ const FindTechnician = () => {
       </header>
 
       {/* Equipment Categories Filter */}
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex flex-wrap gap-2">
-          <Button 
-            variant={selectedCategory === null ? "default" : "outline"}
-            size="sm"
-            onClick={() => setSelectedCategory(null)}
-          >
-            Todos
-          </Button>
-          
-          {equipmentCategories.map(category => (
-            <Button
-              key={category.id}
-              variant={selectedCategory === category.id ? "default" : "outline"}
+      <div className="bg-white border-b">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex flex-wrap gap-2">
+            <Button 
+              variant={selectedCategory === null ? "default" : "outline"}
               size="sm"
-              onClick={() => setSelectedCategory(category.id)}
-              className="flex items-center"
+              onClick={() => setSelectedCategory(null)}
             >
-              {category.id === 'printers' && <Printer className="h-4 w-4 mr-2" />}
-              {category.id === 'finishing' && <Scissors className="h-4 w-4 mr-2" />}
-              {category.id === 'cnc' && <Wrench className="h-4 w-4 mr-2" />}
-              {category.label}
+              Todos
             </Button>
-          ))}
+            
+            {equipmentCategories.map(category => (
+              <Button
+                key={category.id}
+                variant={selectedCategory === category.id ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSelectedCategory(category.id)}
+                className="flex items-center gap-2"
+              >
+                {category.id === 'printers' && <Printer className="h-4 w-4" />}
+                {category.id === 'finishing' && <Scissors className="h-4 w-4" />}
+                {category.id === 'cnc' && <Wrench className="h-4 w-4" />}
+                {category.label}
+              </Button>
+            ))}
+          </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <main className="container mx-auto p-4 md:p-6">
+      <main className="container mx-auto px-4 py-8">
         <Tabs defaultValue="map" className="w-full">
           <TabsList className="grid w-full grid-cols-2 mb-6">
-            <TabsTrigger value="map">Mapa</TabsTrigger>
-            <TabsTrigger value="list">Lista</TabsTrigger>
+            <TabsTrigger value="map">Visualização em Mapa</TabsTrigger>
+            <TabsTrigger value="list">Lista de Técnicos</TabsTrigger>
           </TabsList>
           
           <TabsContent value="map" className="w-full">
@@ -144,40 +146,40 @@ const FindTechnician = () => {
                   />
                 </BlurContainer>
                 
-                {/* Mobile Technician Detail (shows when technician is selected on mobile) */}
+                {/* Mobile Technician Detail */}
                 {selectedTechnician && (
                   <div className="lg:hidden mt-4">
                     <Card>
                       <CardHeader>
                         <div className="flex justify-between items-start">
                           <div>
-                            <CardTitle>{selectedTechnician.name}</CardTitle>
+                            <CardTitle className="text-blue-600">{selectedTechnician.name}</CardTitle>
                             <CardDescription className="flex items-center mt-1">
-                              <MapPin className="h-4 w-4 mr-1 text-muted-foreground" />
+                              <MapPin className="h-4 w-4 mr-1" />
                               {selectedTechnician.location}
                             </CardDescription>
                           </div>
                           <div className="flex items-center">
                             <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                             <span className="ml-1 font-medium">{selectedTechnician.rating}</span>
-                            <span className="text-xs text-muted-foreground ml-1">({selectedTechnician.reviewCount})</span>
+                            <span className="text-xs text-gray-500 ml-1">({selectedTechnician.reviewCount})</span>
                           </div>
                         </div>
                       </CardHeader>
                       <CardContent>
                         <div className="mb-4">
-                          <h4 className="font-medium mb-2">Especialidades</h4>
+                          <h4 className="font-semibold mb-2 text-gray-800">Especialidades</h4>
                           <div className="flex flex-wrap gap-2">
                             {selectedTechnician.specialties.map((specialty, index) => (
                               <Badge key={index} variant="outline">{specialty}</Badge>
                             ))}
                           </div>
                         </div>
-                        <p className="text-sm text-muted-foreground">{selectedTechnician.description}</p>
+                        <p className="text-sm text-gray-600">{selectedTechnician.description}</p>
                       </CardContent>
                       <CardFooter>
                         <Button 
-                          className="w-full" 
+                          className="w-full bg-blue-600 hover:bg-blue-700" 
                           onClick={() => handleContactRequest(selectedTechnician.id)}
                         >
                           Solicitar Serviço
@@ -188,45 +190,45 @@ const FindTechnician = () => {
                 )}
               </div>
               
-              {/* Technicians List - Desktop */}
+              {/* Technicians Detail - Desktop */}
               <div className="hidden lg:block">
                 {selectedTechnician ? (
                   <Card>
                     <CardHeader>
                       <div className="flex justify-between items-start">
                         <div>
-                          <CardTitle>{selectedTechnician.name}</CardTitle>
+                          <CardTitle className="text-blue-600">{selectedTechnician.name}</CardTitle>
                           <CardDescription className="flex items-center mt-1">
-                            <MapPin className="h-4 w-4 mr-1 text-muted-foreground" />
+                            <MapPin className="h-4 w-4 mr-1" />
                             {selectedTechnician.location}
                           </CardDescription>
                         </div>
                         <div className="flex items-center">
                           <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                           <span className="ml-1 font-medium">{selectedTechnician.rating}</span>
-                          <span className="text-xs text-muted-foreground ml-1">({selectedTechnician.reviewCount})</span>
+                          <span className="text-xs text-gray-500 ml-1">({selectedTechnician.reviewCount})</span>
                         </div>
                       </div>
                     </CardHeader>
                     <CardContent>
                       <div className="mb-4">
-                        <h4 className="font-medium mb-2">Especialidades</h4>
+                        <h4 className="font-semibold mb-2 text-gray-800">Especialidades</h4>
                         <div className="flex flex-wrap gap-2">
                           {selectedTechnician.specialties.map((specialty, index) => (
                             <Badge key={index} variant="outline">{specialty}</Badge>
                           ))}
                         </div>
                       </div>
-                      <p className="text-sm text-muted-foreground mb-4">{selectedTechnician.description}</p>
+                      <p className="text-sm text-gray-600 mb-4">{selectedTechnician.description}</p>
                       <div>
-                        <h4 className="font-medium mb-2">Horários Disponíveis</h4>
-                        <p className="text-sm text-muted-foreground">Segunda à Sexta: 8h às 18h</p>
-                        <p className="text-sm text-muted-foreground">Sábado: 8h às 12h</p>
+                        <h4 className="font-semibold mb-2 text-gray-800">Horários Disponíveis</h4>
+                        <p className="text-sm text-gray-600">Segunda à Sexta: 8h às 18h</p>
+                        <p className="text-sm text-gray-600">Sábado: 8h às 12h</p>
                       </div>
                     </CardContent>
                     <CardFooter>
                       <Button 
-                        className="w-full" 
+                        className="w-full bg-blue-600 hover:bg-blue-700" 
                         onClick={() => handleContactRequest(selectedTechnician.id)}
                       >
                         Solicitar Serviço
@@ -236,14 +238,14 @@ const FindTechnician = () => {
                 ) : (
                   <Card>
                     <CardHeader>
-                      <CardTitle>Detalhes do Técnico</CardTitle>
+                      <CardTitle className="text-blue-600">Detalhes do Técnico</CardTitle>
                       <CardDescription>
                         Selecione um técnico no mapa para ver mais informações
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="flex flex-col items-center justify-center py-8">
                       <MapPin className="h-12 w-12 text-gray-300 mb-4" />
-                      <p className="text-center text-muted-foreground">
+                      <p className="text-center text-gray-500">
                         Clique em um marcador no mapa para ver os detalhes do técnico
                       </p>
                     </CardContent>
@@ -254,33 +256,33 @@ const FindTechnician = () => {
                 <Card className="mt-4">
                   <CardHeader className="pb-2">
                     <div className="flex items-center">
-                      <AlertCircle className="h-5 w-5 mr-2 text-primary" />
-                      <CardTitle className="text-lg">Como funciona</CardTitle>
+                      <AlertCircle className="h-5 w-5 mr-2 text-blue-600" />
+                      <CardTitle className="text-lg text-blue-600">Como funciona</CardTitle>
                     </div>
                   </CardHeader>
                   <CardContent>
                     <ul className="text-sm space-y-2">
                       <li className="flex gap-2">
-                        <span className="text-primary font-bold">1.</span>
-                        <span>Encontre um técnico especializado em seu tipo de equipamento</span>
+                        <span className="text-blue-600 font-bold">1.</span>
+                        <span className="text-gray-700">Encontre um técnico especializado em seu tipo de equipamento</span>
                       </li>
                       <li className="flex gap-2">
-                        <span className="text-primary font-bold">2.</span>
-                        <span>Verifique suas especialidades e disponibilidade</span>
+                        <span className="text-blue-600 font-bold">2.</span>
+                        <span className="text-gray-700">Verifique suas especialidades e disponibilidade</span>
                       </li>
                       <li className="flex gap-2">
-                        <span className="text-primary font-bold">3.</span>
-                        <span>Solicite um serviço diretamente pela plataforma</span>
+                        <span className="text-blue-600 font-bold">3.</span>
+                        <span className="text-gray-700">Solicite um serviço diretamente pela plataforma</span>
                       </li>
                       <li className="flex gap-2">
-                        <span className="text-primary font-bold">4.</span>
-                        <span>Toda comunicação acontece dentro do aplicativo</span>
+                        <span className="text-blue-600 font-bold">4.</span>
+                        <span className="text-gray-700">Toda comunicação acontece dentro do aplicativo</span>
                       </li>
                     </ul>
                   </CardContent>
                   <CardFooter>
                     <Link to="/register" className="w-full">
-                      <Button variant="outline" className="w-full">
+                      <Button variant="outline" className="w-full border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white">
                         Cadastre-se para solicitar serviços
                         <ArrowRight className="ml-2 h-4 w-4" />
                       </Button>
@@ -292,16 +294,16 @@ const FindTechnician = () => {
           </TabsContent>
           
           <TabsContent value="list">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredTechnicians.map((technician) => (
                 <Card 
                   key={technician.id} 
-                  className={`cursor-pointer transition-all ${selectedTechnician?.id === technician.id ? 'ring-2 ring-primary' : ''}`}
+                  className={`cursor-pointer transition-all hover:shadow-lg ${selectedTechnician?.id === technician.id ? 'ring-2 ring-blue-600' : ''}`}
                   onClick={() => setSelectedTechnician(technician)}
                 >
                   <CardHeader className="pb-2">
                     <div className="flex justify-between">
-                      <CardTitle>{technician.name}</CardTitle>
+                      <CardTitle className="text-blue-600">{technician.name}</CardTitle>
                       <div className="flex items-center">
                         <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                         <span className="ml-1 font-medium">{technician.rating}</span>
@@ -321,11 +323,11 @@ const FindTechnician = () => {
                         <Badge variant="outline" className="text-xs">+{technician.specialties.length - 3}</Badge>
                       )}
                     </div>
-                    <p className="text-sm text-muted-foreground line-clamp-2">{technician.description}</p>
+                    <p className="text-sm text-gray-600 line-clamp-2">{technician.description}</p>
                   </CardContent>
                   <CardFooter>
                     <Button 
-                      className="w-full" 
+                      className="w-full bg-blue-600 hover:bg-blue-700" 
                       onClick={(e) => {
                         e.stopPropagation();
                         handleContactRequest(technician.id);
@@ -345,33 +347,33 @@ const FindTechnician = () => {
           <Card>
             <CardHeader className="pb-2">
               <div className="flex items-center">
-                <AlertCircle className="h-5 w-5 mr-2 text-primary" />
-                <CardTitle className="text-lg">Como funciona</CardTitle>
+                <AlertCircle className="h-5 w-5 mr-2 text-blue-600" />
+                <CardTitle className="text-lg text-blue-600">Como funciona</CardTitle>
               </div>
             </CardHeader>
             <CardContent>
               <ul className="text-sm space-y-2">
                 <li className="flex gap-2">
-                  <span className="text-primary font-bold">1.</span>
-                  <span>Encontre um técnico especializado em seu tipo de equipamento</span>
+                  <span className="text-blue-600 font-bold">1.</span>
+                  <span className="text-gray-700">Encontre um técnico especializado em seu tipo de equipamento</span>
                 </li>
                 <li className="flex gap-2">
-                  <span className="text-primary font-bold">2.</span>
-                  <span>Verifique suas especialidades e disponibilidade</span>
+                  <span className="text-blue-600 font-bold">2.</span>
+                  <span className="text-gray-700">Verifique suas especialidades e disponibilidade</span>
                 </li>
                 <li className="flex gap-2">
-                  <span className="text-primary font-bold">3.</span>
-                  <span>Solicite um serviço diretamente pela plataforma</span>
+                  <span className="text-blue-600 font-bold">3.</span>
+                  <span className="text-gray-700">Solicite um serviço diretamente pela plataforma</span>
                 </li>
                 <li className="flex gap-2">
-                  <span className="text-primary font-bold">4.</span>
-                  <span>Toda comunicação acontece dentro do aplicativo</span>
+                  <span className="text-blue-600 font-bold">4.</span>
+                  <span className="text-gray-700">Toda comunicação acontece dentro do aplicativo</span>
                 </li>
               </ul>
             </CardContent>
             <CardFooter>
               <Link to="/register" className="w-full">
-                <Button variant="outline" className="w-full">
+                <Button variant="outline" className="w-full border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white">
                   Cadastre-se para solicitar serviços
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
