@@ -1,4 +1,3 @@
-
 import React, { ReactNode, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -51,12 +50,19 @@ type CustomerLayoutProps = {
 };
 
 const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
+  console.log('CustomerLayout - Renderizando layout do cliente');
+  console.log('CustomerLayout - title:', title);
+  
   const location = useLocation();
   const path = location.pathname;
   const navigate = useNavigate();
   const { logout, isAuthenticated, userType } = useAuth();
   const isMobile = useIsMobile();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  console.log('CustomerLayout - path:', path);
+  console.log('CustomerLayout - isAuthenticated:', isAuthenticated);
+  console.log('CustomerLayout - userType:', userType);
 
   const handleLogout = () => {
     logout();
@@ -74,6 +80,8 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
   };
 
   const isCustomerLoggedIn = isAuthenticated && userType === 'customer';
+
+  console.log('CustomerLayout - isCustomerLoggedIn:', isCustomerLoggedIn);
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -115,6 +123,7 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
             >
               Painel
             </SidebarItem>
+            
             <SidebarItem 
               to="/cliente/servicos" 
               icon={Wrench} 
@@ -192,24 +201,12 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
         </aside>
         
         {/* Conteúdo principal */}
-        <main className={cn(
-          "flex-1 min-w-0",
-          isMobile ? "pl-0" : ""
-        )}>
-          <div className={cn(
-            "flex items-center justify-between mb-6",
-            isMobile ? "flex-col gap-4 items-start" : ""
-          )}>
-            <h1 className={cn(
-              "text-3xl font-bold text-blue-600 font-inter",
-              isMobile ? "text-2xl pl-12" : ""
-            )}>{title}</h1>
+        <main className={cn("flex-1 min-w-0", isMobile ? "pl-0" : "")}>
+          <div className={cn("flex items-center justify-between mb-6", isMobile ? "flex-col gap-4 items-start" : "")}>
+            <h1 className={cn("text-3xl font-bold text-blue-600 font-inter", isMobile ? "text-2xl pl-12" : "")}>{title}</h1>
           </div>
           
-          <div className={cn(
-            "w-full",
-            isMobile ? "px-2" : ""
-          )}>
+          <div className={cn("w-full", isMobile ? "px-2" : "")}>
             {children}
           </div>
         </main>
