@@ -12,19 +12,18 @@ const Hero = () => {
         {/* Título Principal */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight text-white drop-shadow-lg">
-            Encontre o <span className="text-yellow-200 bg-yellow-200/20 px-3 py-2 rounded-lg border border-yellow-200/30">técnico ideal</span><br />
+            Encontre o <span className="text-yellow-300 bg-yellow-300/20 px-3 py-2 rounded-lg border border-yellow-300/30">técnico ideal</span><br />
             para seu equipamento
           </h1>
           
-          <p className="text-xl md:text-2xl mb-8 text-gray-50 max-w-3xl mx-auto font-medium leading-relaxed drop-shadow-md">
+          <p className="text-xl md:text-2xl mb-8 text-gray-100 max-w-3xl mx-auto font-medium leading-relaxed drop-shadow-md">
             Conectamos você com profissionais qualificados para manutenção e reparo de equipamentos industriais
           </p>
         </div>
 
-        {/* Formulário de Busca Melhorado */}
+        {/* Formulário de Busca */}
         <div className="bg-white rounded-2xl p-8 shadow-2xl max-w-4xl mx-auto mb-12 border border-blue-200">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Campo de Serviço */}
             <div className="relative group">
               <label className="block text-sm font-semibold text-gray-800 mb-2">Tipo de equipamento</label>
               <Search className="absolute left-4 top-11 transform text-gray-500 h-5 w-5 group-focus-within:text-blue-600 transition-colors" />
@@ -34,7 +33,6 @@ const Hero = () => {
               />
             </div>
             
-            {/* Campo de Localização */}
             <div className="relative group">
               <label className="block text-sm font-semibold text-gray-800 mb-2">Localização</label>
               <MapPin className="absolute left-4 top-11 transform text-gray-500 h-5 w-5 group-focus-within:text-blue-600 transition-colors" />
@@ -44,7 +42,6 @@ const Hero = () => {
               />
             </div>
             
-            {/* Botão de Busca */}
             <div className="flex flex-col justify-end">
               <Link to="/find-technician">
                 <Button className="w-full h-12 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold text-lg shadow-lg transition-all duration-200 border-0 rounded-lg group">
@@ -56,7 +53,7 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* Badges de Benefícios Melhorados */}
+        {/* Badges de Benefícios */}
         <div className="flex flex-wrap justify-center gap-6 mb-12">
           <div className="bg-white/20 backdrop-blur-lg px-6 py-4 rounded-full border border-white/30 flex items-center gap-3 hover:bg-white/25 transition-all duration-200 shadow-lg">
             <CheckCircle2 className="h-5 w-5 text-green-200" />
