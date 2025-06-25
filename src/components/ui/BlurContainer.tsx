@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 interface BlurContainerProps {
   children: React.ReactNode;
   className?: string;
+  style?: React.CSSProperties;
   intensity?: 'light' | 'medium' | 'strong';
   dark?: boolean;
 }
@@ -12,6 +13,7 @@ interface BlurContainerProps {
 const BlurContainer = ({
   children,
   className,
+  style,
   intensity = 'medium',
   dark = false,
 }: BlurContainerProps) => {
@@ -38,6 +40,7 @@ const BlurContainer = ({
         borderColor,
         className
       )}
+      style={style}
     >
       {children}
     </div>
