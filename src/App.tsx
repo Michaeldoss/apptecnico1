@@ -1,229 +1,153 @@
 
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Index from "./pages/Index";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import NotFound from "./pages/NotFound";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
-import FindTechnician from "./pages/FindTechnician";
-import CustomerDashboard from "./pages/customer/Dashboard";
-import TechnicianDashboard from "./pages/technician/Dashboard";
-import TechnicianLanding from "./pages/technician/Landing";
-import TechnicianChat from "./pages/technician/Chat";
-import TechnicianSchedule from "./pages/technician/Schedule";
-import TechnicianServices from "./pages/technician/Services";
-import TechnicianParts from "./pages/technician/Parts";
-import TechnicianProfile from "./pages/technician/Profile";
-import TechnicianServiceOrder from "./pages/technician/ServiceOrder";
-import CustomerLayout from "./components/layout/CustomerLayout";
-import TechnicianLayout from "./components/layout/TechnicianLayout";
-import CustomerEquipment from "./pages/customer/Equipment";
-import CustomerServiceRequest from "./pages/customer/ServiceRequest";
-import CustomerServices from "./pages/customer/Services";
-import CustomerTracking from "./pages/customer/Tracking";
-import CustomerServiceOrders from "./pages/customer/ServiceOrders";
-import CustomerServiceDetails from "./pages/customer/ServiceDetails";
-import CustomerPaymentDetails from "./pages/customer/PaymentDetails";
-import CustomerPayments from "./pages/customer/Payments";
-import CustomerProfile from "./pages/customer/Profile";
-import Store from "./pages/Store";
-import { AuthProvider } from "./context/AuthContext";
-import { Toaster } from "./components/ui/toaster";
-import { Toaster as Sonner } from "./components/ui/sonner";
-import CategoryPage from "./pages/store/CategoryPage";
-import CompanyList from "./pages/store/CompanyList";
-import CompanyRegister from "./pages/store/CompanyRegister";
-import CompanyDashboard from "./pages/store/CompanyDashboard";
-import CompanyProfile from "./pages/store/CompanyProfile";
-import CompanyProducts from "./pages/store/CompanyProducts";
+import { Suspense, lazy } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from '@/context/AuthContext';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Toaster } from '@/components/ui/sonner';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
+
+// Lazy load components
+const Index = lazy(() => import('@/pages/Index'));
+const About = lazy(() => import('@/pages/About'));
+const Contact = lazy(() => import('@/pages/Contact'));
+const Login = lazy(() => import('@/pages/Login'));
+const Register = lazy(() => import('@/pages/Register'));
+const FindTechnician = lazy(() => import('@/pages/FindTechnician'));
+const Store = lazy(() => import('@/pages/Store'));
+const NotFound = lazy(() => import('@/pages/NotFound'));
+
+// New pages
+const ServicesMaintenancePage = lazy(() => import('@/pages/ServicesMaintenancePage'));
+const SearchPage = lazy(() => import('@/pages/SearchPage'));
+const TechniciansPage = lazy(() => import('@/pages/TechniciansPage'));
+const ShopPage = lazy(() => import('@/pages/ShopPage'));
+
+// Customer pages
+const CustomerDashboard = lazy(() => import('@/pages/customer/Dashboard'));
+const CustomerProfile = lazy(() => import('@/pages/customer/Profile'));
+const CustomerServices = lazy(() => import('@/pages/customer/Services'));
+const CustomerServiceRequest = lazy(() => import('@/pages/customer/ServiceRequest'));
+const CustomerServiceDetails = lazy(() => import('@/pages/customer/ServiceDetails'));
+const CustomerServiceOrders = lazy(() => import('@/pages/customer/ServiceOrders'));
+const CustomerPayments = lazy(() => import('@/pages/customer/Payments'));
+const CustomerPaymentDetails = lazy(() => import('@/pages/customer/PaymentDetails'));
+const CustomerEquipment = lazy(() => import('@/pages/customer/Equipment'));
+const CustomerSchedule = lazy(() => import('@/pages/customer/Schedule'));
+const CustomerTracking = lazy(() => import('@/pages/customer/Tracking'));
+
+// Technician pages
+const TechnicianLanding = lazy(() => import('@/pages/technician/Landing'));
+const TechnicianDashboard = lazy(() => import('@/pages/technician/Dashboard'));
+const TechnicianProfile = lazy(() => import('@/pages/technician/Profile'));
+const TechnicianServices = lazy(() => import('@/pages/technician/Services'));
+const TechnicianServiceOrder = lazy(() => import('@/pages/technician/ServiceOrder'));
+const TechnicianParts = lazy(() => import('@/pages/technician/Parts'));
+const TechnicianSchedule = lazy(() => import('@/pages/technician/Schedule'));
+const TechnicianChat = lazy(() => import('@/pages/technician/Chat'));
+
+// Store pages
+const CategoryPage = lazy(() => import('@/pages/store/CategoryPage'));
+const CompanyRegister = lazy(() => import('@/pages/store/CompanyRegister'));
+const CompanyList = lazy(() => import('@/pages/store/CompanyList'));
+const CompanyProducts = lazy(() => import('@/pages/store/CompanyProducts'));
+const CompanyProfile = lazy(() => import('@/pages/store/CompanyProfile'));
+const CompanyDashboard = lazy(() => import('@/pages/store/CompanyDashboard'));
+
+const queryClient = new QueryClient();
 
 function App() {
   return (
-    <Router>
+    <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<Index />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/find-technician" element={<FindTechnician />} />
-          <Route path="/store" element={<Store />} />
-          <Route path="/store/category/:slug" element={<CategoryPage />} />
-          <Route path="/store/companies" element={<CompanyList />} />
-          <Route path="/store/company-register" element={<CompanyRegister />} />
-          <Route path="/store/company-dashboard" element={<CompanyDashboard />} />
-          <Route path="/store/company-profile" element={<CompanyProfile />} />
-          <Route path="/store/company-products" element={<CompanyProducts />} />
+        <Router>
+          <div className="min-h-screen bg-background">
+            <Suspense fallback={
+              <div className="flex items-center justify-center min-h-screen">
+                <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+              </div>
+            }>
+              <Routes>
+                {/* Public routes */}
+                <Route path="/" element={<Index />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/find-technician" element={<FindTechnician />} />
+                <Route path="/store" element={<Store />} />
+                
+                {/* New temporary pages */}
+                <Route path="/servicos/manutencao" element={<ServicesMaintenancePage />} />
+                <Route path="/busca" element={<SearchPage />} />
+                <Route path="/tecnicos" element={<TechniciansPage />} />
+                <Route path="/loja" element={<ShopPage />} />
 
-          {/* Technician Routes - Using only /tecnico/ for consistency */}
-          <Route path="/technician" element={<Navigate to="/tecnico" replace />} />
-          <Route path="/tecnico" element={<TechnicianLanding />} />
-          
-          <Route
-            path="/tecnico/painel"
-            element={
-              <TechnicianLayout title="Dashboard">
-                <TechnicianDashboard />
-              </TechnicianLayout>
-            }
-          />
-          
-          <Route
-            path="/tecnico/chat"
-            element={
-              <TechnicianLayout title="Chat">
-                <TechnicianChat />
-              </TechnicianLayout>
-            }
-          />
-          
-          <Route
-            path="/tecnico/agenda"
-            element={
-              <TechnicianLayout title="Agenda">
-                <TechnicianSchedule />
-              </TechnicianLayout>
-            }
-          />
-          
-          <Route
-            path="/tecnico/servicos"
-            element={
-              <TechnicianLayout title="Serviços">
-                <TechnicianServices />
-              </TechnicianLayout>
-            }
-          />
-          
-          <Route
-            path="/tecnico/pecas"
-            element={
-              <TechnicianLayout title="Peças">
-                <TechnicianParts />
-              </TechnicianLayout>
-            }
-          />
-          
-          <Route
-            path="/tecnico/perfil"
-            element={
-              <TechnicianLayout title="Perfil">
-                <TechnicianProfile />
-              </TechnicianLayout>
-            }
-          />
-          
-          <Route
-            path="/tecnico/servico/:id"
-            element={
-              <TechnicianLayout title="Ordem de Serviço">
-                <TechnicianServiceOrder />
-              </TechnicianLayout>
-            }
-          />
+                {/* Technician public route */}
+                <Route path="/technician" element={<TechnicianLanding />} />
 
-          {/* Redirect old English routes to Portuguese routes */}
-          <Route path="/technician/dashboard" element={<Navigate to="/tecnico/painel" replace />} />
-          <Route path="/technician/chat" element={<Navigate to="/tecnico/chat" replace />} />
-          <Route path="/technician/schedule" element={<Navigate to="/tecnico/agenda" replace />} />
-          <Route path="/technician/services" element={<Navigate to="/tecnico/servicos" replace />} />
-          <Route path="/technician/parts" element={<Navigate to="/tecnico/pecas" replace />} />
-          <Route path="/technician/profile" element={<Navigate to="/tecnico/perfil" replace />} />
-          <Route path="/technician/service/:id" element={<Navigate to="/tecnico/servico/:id" replace />} />
+                {/* Protected Customer routes */}
+                <Route path="/cliente/*" element={
+                  <ProtectedRoute>
+                    <Routes>
+                      <Route path="painel" element={<CustomerDashboard />} />
+                      <Route path="perfil" element={<CustomerProfile />} />
+                      <Route path="servicos" element={<CustomerServices />} />
+                      <Route path="solicitar" element={<CustomerServiceRequest />} />
+                      <Route path="servicos/:id" element={<CustomerServiceDetails />} />
+                      <Route path="ordens" element={<CustomerServiceOrders />} />
+                      <Route path="pagamentos" element={<CustomerPayments />} />
+                      <Route path="pagamentos/:id" element={<CustomerPaymentDetails />} />
+                      <Route path="equipamentos" element={<CustomerEquipment />} />
+                      <Route path="agenda" element={<CustomerSchedule />} />
+                      <Route path="acompanhamento" element={<CustomerTracking />} />
+                    </Routes>
+                  </ProtectedRoute>
+                } />
 
-          {/* Customer Routes - Updated to use "/cliente/" path prefix */}
-          <Route
-            path="/cliente/painel"
-            element={
-              <CustomerLayout title="Dashboard">
-                <CustomerDashboard />
-              </CustomerLayout>
-            }
-          />
-          <Route
-            path="/cliente/equipamentos"
-            element={
-              <CustomerLayout title="Equipamentos">
-                <CustomerEquipment />
-              </CustomerLayout>
-            }
-          />
-          <Route
-            path="/cliente/servico"
-            element={
-              <CustomerLayout title="Solicitar Serviço">
-                <CustomerServiceRequest />
-              </CustomerLayout>
-            }
-          />
-          <Route
-            path="/cliente/servicos"
-            element={
-              <CustomerLayout title="Serviços">
-                <CustomerServices />
-              </CustomerLayout>
-            }
-          />
-          <Route
-            path="/cliente/rastreamento/:id"
-            element={
-              <CustomerLayout title="Acompanhamento">
-                <CustomerTracking />
-              </CustomerLayout>
-            }
-          />
-          <Route
-            path="/cliente/ordens"
-            element={
-              <CustomerLayout title="Ordens de Serviço">
-                <CustomerServiceOrders />
-              </CustomerLayout>
-            }
-          />
-          <Route
-            path="/cliente/servico/:id"
-            element={
-              <CustomerLayout title="Detalhes do Serviço">
-                <CustomerServiceDetails />
-              </CustomerLayout>
-            }
-          />
-          <Route
-            path="/cliente/pagamentos"
-            element={
-              <CustomerLayout title="Pagamentos">
-                <CustomerPayments />
-              </CustomerLayout>
-            }
-          />
-          <Route
-            path="/cliente/pagamento/:id"
-            element={
-              <CustomerLayout title="Detalhes do Pagamento">
-                <CustomerPaymentDetails />
-              </CustomerLayout>
-            }
-          />
-          <Route
-            path="/cliente/perfil"
-            element={
-              <CustomerLayout title="Perfil">
-                <CustomerProfile />
-              </CustomerLayout>
-            }
-          />
+                {/* Protected Technician routes */}
+                <Route path="/tecnico/*" element={
+                  <ProtectedRoute>
+                    <Routes>
+                      <Route path="painel" element={<TechnicianDashboard />} />
+                      <Route path="dashboard" element={<TechnicianDashboard />} />
+                      <Route path="perfil" element={<TechnicianProfile />} />
+                      <Route path="profile" element={<TechnicianProfile />} />
+                      <Route path="servicos" element={<TechnicianServices />} />
+                      <Route path="services" element={<TechnicianServices />} />
+                      <Route path="servicos/:id" element={<TechnicianServiceOrder />} />
+                      <Route path="services/:id" element={<TechnicianServiceOrder />} />
+                      <Route path="pecas" element={<TechnicianParts />} />
+                      <Route path="parts" element={<TechnicianParts />} />
+                      <Route path="agenda" element={<TechnicianSchedule />} />
+                      <Route path="schedule" element={<TechnicianSchedule />} />
+                      <Route path="chat" element={<TechnicianChat />} />
+                    </Routes>
+                  </ProtectedRoute>
+                } />
 
-          {/* Fallback Routes */}
-          <Route path="/dashboard" element={<Navigate to="/cliente/painel" />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        <Toaster />
-        <Sonner />
+                {/* Store routes */}
+                <Route path="/store/category/:categoryId" element={<CategoryPage />} />
+                <Route path="/store/company-register" element={<CompanyRegister />} />
+                <Route path="/store/companies" element={<CompanyList />} />
+                <Route path="/store/company/:companyId" element={<CompanyProducts />} />
+                <Route path="/store/company/:companyId/profile" element={<CompanyProfile />} />
+
+                {/* Protected Store Company routes */}
+                <Route path="/store/dashboard" element={
+                  <ProtectedRoute>
+                    <CompanyDashboard />
+                  </ProtectedRoute>
+                } />
+
+                {/* 404 route */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+            <Toaster />
+          </div>
+        </Router>
       </AuthProvider>
-    </Router>
+    </QueryClientProvider>
   );
 }
 

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -54,26 +53,26 @@ const Index = () => {
                   "font-bold leading-tight",
                   isMobile ? "text-2xl md:text-3xl" : "text-4xl md:text-5xl"
                 )}>
-                  Conecte-se com <span className="text-primary">especialistas técnicos</span> instantaneamente
+                  Precisando de suporte técnico? <span className="text-primary">Nós conectamos você ao especialista certo.</span>
                 </h1>
                 <p className={cn(
                   "text-muted-foreground",
                   isMobile ? "text-base" : "text-lg"
                 )}>
-                  Plataforma avançada para conectar técnicos qualificados e clientes para serviços especializados em equipamentos industriais.
+                  Soluções rápidas com técnicos certificados em manutenção, instalação e suporte em equipamentos industriais e de impressão.
                 </p>
                 <div className={cn(
                   "flex gap-4 pt-2",
                   isMobile ? "flex-col" : "flex-wrap"
                 )}>
-                  <Link to="/register">
-                    <Button size={isMobile ? "default" : "lg"} className="rounded-full w-full md:w-auto">
-                      Comece Agora
+                  <Link to="/find-technician">
+                    <Button size={isMobile ? "default" : "lg"} className="rounded-full w-full md:w-auto shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
+                      Buscar Técnico Agora
                     </Button>
                   </Link>
                   <Link to="/technician">
-                    <Button size={isMobile ? "default" : "lg"} variant="outline" className="rounded-full w-full md:w-auto">
-                      Para Técnicos
+                    <Button size={isMobile ? "default" : "lg"} variant="outline" className="rounded-full w-full md:w-auto shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300">
+                      Quero Prestar Serviços
                     </Button>
                   </Link>
                 </div>
@@ -93,16 +92,16 @@ const Index = () => {
                   )}>
                     <TooltipProvider>
                       {[
-                        { icon: <Wrench className={cn(isMobile ? "h-5 w-5" : "h-6 w-6", "text-primary")} />, title: "Manutenção Especializada", path: "/cliente/solicitar", tooltip: "Solicite serviços de manutenção" },
-                        { icon: <Search className={cn(isMobile ? "h-5 w-5" : "h-6 w-6", "text-primary")} />, title: "Busca Inteligente", path: "/find-technician", tooltip: "Encontre técnicos na sua região" },
-                        { icon: <ShieldCheck className={cn(isMobile ? "h-5 w-5" : "h-6 w-6", "text-primary")} />, title: "Técnicos Verificados", path: "/technician", tooltip: "Todos os técnicos são verificados" },
-                        { icon: <StoreIcon className={cn(isMobile ? "h-5 w-5" : "h-6 w-6", "text-primary")} />, title: "Loja de Peças", path: "/store", tooltip: "Acesse nossa loja de peças especializada" }
+                        { icon: <Wrench className={cn(isMobile ? "h-5 w-5" : "h-6 w-6", "text-primary")} />, title: "Manutenção Especializada", path: "/servicos/manutencao", tooltip: "Solicite serviços de manutenção especializada" },
+                        { icon: <Search className={cn(isMobile ? "h-5 w-5" : "h-6 w-6", "text-primary")} />, title: "Busca Inteligente", path: "/busca", tooltip: "Encontre técnicos especializados rapidamente" },
+                        { icon: <ShieldCheck className={cn(isMobile ? "h-5 w-5" : "h-6 w-6", "text-primary")} />, title: "Técnicos Verificados", path: "/tecnicos", tooltip: "Todos os técnicos são verificados e certificados" },
+                        { icon: <StoreIcon className={cn(isMobile ? "h-5 w-5" : "h-6 w-6", "text-primary")} />, title: "Loja de Peças", path: "/loja", tooltip: "Acesse nossa loja de peças especializada" }
                       ].map((feature, index) => (
                         <Link to={feature.path} key={index}>
                           <Tooltip>
                             <TooltipTrigger asChild>
                               <Card className={cn(
-                                "hover:bg-white/5 transition-all duration-300 backdrop-blur-md border border-white/10 cursor-pointer",
+                                "hover:bg-white/5 hover:shadow-lg hover:scale-105 transition-all duration-300 backdrop-blur-md border border-white/10 cursor-pointer",
                                 isMobile ? "p-3" : "p-4"
                               )}>
                                 <div className="flex flex-col items-center text-center gap-2">
