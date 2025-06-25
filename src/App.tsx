@@ -13,6 +13,9 @@ const Login = React.lazy(() => import("@/pages/Login"));
 const Register = React.lazy(() => import("@/pages/Register"));
 const FindTechnician = React.lazy(() => import("@/pages/FindTechnician"));
 const Store = React.lazy(() => import("@/pages/Store"));
+const Equipment = React.lazy(() => import("@/pages/Equipment"));
+const Services = React.lazy(() => import("@/pages/Services"));
+const Machines = React.lazy(() => import("@/pages/Machines"));
 const CompanyRegister = React.lazy(() => import("@/pages/store/CompanyRegister"));
 const CompanyDashboard = React.lazy(() => import("@/pages/store/CompanyDashboard"));
 const CompanyProfile = React.lazy(() => import("@/pages/store/CompanyProfile"));
@@ -37,6 +40,9 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/find-technician" element={<FindTechnician />} />
+                <Route path="/equipment" element={<Equipment />} />
+                <Route path="/services" element={<Services />} />
+                <Route path="/machines" element={<Machines />} />
                 
                 {/* Store routes */}
                 <Route path="/store" element={<Store />} />
