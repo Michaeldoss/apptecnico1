@@ -96,7 +96,7 @@ const Login = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       
-      <main className="flex-grow flex items-center justify-center px-6 py-24">
+      <main className="flex-grow flex items-center justify-center px-6 py-32">
         <div className="w-full max-w-md">
           <AnimatedContainer animation="scale" className="text-center mb-8">
             <h1 className="text-3xl font-bold">Bem-vindo de Volta</h1>
@@ -150,12 +150,17 @@ const Login = () => {
               
               <Button 
                 type="submit" 
-                className="w-full rounded-lg bg-tech-accent hover:bg-tech-accent-hover text-gray-900 font-semibold" 
+                className="w-full rounded-lg"
+                style={{
+                  backgroundColor: '#EAB308',
+                  color: '#111827',
+                  fontWeight: '600'
+                }}
                 disabled={isLoading || !email || !password}
               >
                 {isLoading ? (
                   <span className="flex items-center">
-                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-gray-900" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4" style={{ color: '#111827' }} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
@@ -191,7 +196,7 @@ const Login = () => {
               <p className="text-sm font-medium text-gray-700 mb-2">Credenciais de teste:</p>
               <div className="text-xs text-gray-600 space-y-1">
                 <p><strong>Cliente:</strong> cliente@exemplo.com / 123456</p>
-                <p><strong className="font-bold">Técnico:</strong> tecnico@exemplo.com / 123456</p>
+                <p><strong style={{ fontWeight: '700' }}>Técnico:</strong> tecnico@exemplo.com / 123456</p>
                 <p><strong>Empresa:</strong> loja@exemplo.com / 123456</p>
                 <p><strong>Admin:</strong> admin@exemplo.com / 123456</p>
               </div>
