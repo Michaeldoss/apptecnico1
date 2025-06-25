@@ -5,9 +5,15 @@ import { Button } from '@/components/ui/button';
 import { Wrench, MapPin, CreditCard, Clock } from 'lucide-react';
 import CustomerLayout from '@/components/layout/CustomerLayout';
 import { Link } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
 
 const CustomerDashboard = () => {
+  const { user, isAuthenticated, userType } = useAuth();
+  
   console.log('CustomerDashboard - Renderizando painel do cliente');
+  console.log('CustomerDashboard - isAuthenticated:', isAuthenticated);
+  console.log('CustomerDashboard - userType:', userType);
+  console.log('CustomerDashboard - user:', user?.name);
   
   // Dados de exemplo
   const activeServices = 2;
@@ -16,6 +22,12 @@ const CustomerDashboard = () => {
   
   return (
     <CustomerLayout title="Painel do Cliente">
+      <div className="mb-4">
+        <p className="text-gray-600">
+          Bem-vindo, {user?.name || 'Cliente'}! Aqui você pode gerenciar seus serviços e acompanhar o andamento dos atendimentos.
+        </p>
+      </div>
+      
       {/* Cards principais */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 mb-6">
         <Card>

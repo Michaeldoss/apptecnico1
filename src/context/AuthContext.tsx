@@ -29,32 +29,36 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    console.log('AuthProvider - useEffect iniciado');
+    console.log('AuthProvider - Verificando autenticação inicial');
     // Verificar se o usuário está logado ao carregar a aplicação
     const storedUser = localStorage.getItem('techSupportUser');
-    console.log('AuthProvider - storedUser:', storedUser);
+    console.log('AuthProvider - storedUser do localStorage:', storedUser);
     
     if (storedUser) {
       try {
         const userData = JSON.parse(storedUser);
-        console.log('AuthProvider - userData:', userData);
+        console.log('AuthProvider - userData parseado:', userData);
+        console.log('AuthProvider - userType do userData:', userData.type);
+        
         setUser(userData);
         setUserType(userData.type);
         setIsAuthenticated(true);
-        console.log('AuthProvider - Usuario autenticado automaticamente');
+        console.log('AuthProvider - Estado definido - autenticado:', true, 'tipo:', userData.type);
       } catch (error) {
-        console.error('Erro ao carregar dados do usuário:', error);
+        console.error('AuthProvider - Erro ao carregar dados do usuário:', error);
         localStorage.removeItem('techSupportUser');
       }
+    } else {
+      console.log('AuthProvider - Nenhum usuário encontrado no localStorage');
     }
     setIsLoading(false);
+    console.log('AuthProvider - Carregamento finalizado');
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
-      console.log('AuthProvider - login tentativa:', email);
-      // Simular verificação de credenciais (em produção, isso seria uma chamada de API)
-      // Dados mockados para simulação:
+      console.log('AuthProvider - Tentativa de login para:', email);
+      
       const mockUsers = [
         { id: 1, name: 'Técnico Demo', email: 'tecnico@exemplo.com', password: '123456', type: 'technician' },
         { id: 2, name: 'Cliente Demo', email: 'cliente@exemplo.com', password: '123456', type: 'customer' },
@@ -85,12 +89,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       );
 
       if (foundUser) {
-        console.log('AuthProvider - usuario encontrado:', foundUser);
+        console.log('AuthProvider - Usuário encontrado:', foundUser);
+        
         // Simular um pequeno atraso para dar feedback visual
         await new Promise(resolve => setTimeout(resolve, 500));
         
         // Remover senha antes de armazenar
         const { password: _, ...userWithoutPassword } = foundUser;
+        console.log('AuthProvider - Dados do usuário sem senha:', userWithoutPassword);
         
         // Armazenar dados do usuário
         setUser(userWithoutPassword);
@@ -99,7 +105,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         
         // Persistir dados de autenticação
         localStorage.setItem('techSupportUser', JSON.stringify(userWithoutPassword));
-        console.log('AuthProvider - dados salvos no localStorage');
+        console.log('AuthProvider - Dados salvos no localStorage');
+        console.log('AuthProvider - Estado atual após login:', {
+          isAuthenticated: true,
+          userType: foundUser.type,
+          user: userWithoutPassword.name
+        });
         
         toast({
           title: "Login realizado com sucesso",
@@ -108,7 +119,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         
         return true;
       } else {
-        console.log('AuthProvider - credenciais inválidas');
+        console.log('AuthProvider - Credenciais inválidas para:', email);
         toast({
           variant: "destructive",
           title: "Falha na autenticação",
@@ -117,7 +128,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         return false;
       }
     } catch (error) {
-      console.error('Erro no login:', error);
+      console.error('AuthProvider - Erro no login:', error);
       toast({
         variant: "destructive",
         title: "Erro no login",
@@ -128,7 +139,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const logout = () => {
-    console.log('AuthProvider - logout');
+    console.log('AuthProvider - Fazendo logout');
     setUser(null);
     setUserType(null);
     setIsAuthenticated(false);
@@ -140,11 +151,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   if (isLoading) {
-    console.log('AuthProvider - carregando...');
+    console.log('AuthProvider - Ainda carregando...');
     return <div className="flex items-center justify-center h-screen">Carregando...</div>;
   }
 
-  console.log('AuthProvider - estado atual:', { isAuthenticated, userType, user: user?.name });
+  console.log('AuthProvider - Estado final:', { 
+    isAuthenticated, 
+    userType, 
+    user: user?.name,
+    userId: user?.id 
+  });
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, userType, user, login, logout }}>
