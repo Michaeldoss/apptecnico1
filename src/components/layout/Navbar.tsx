@@ -51,11 +51,13 @@ const Navbar = () => {
   };
 
   const menuItems = [
+    { label: "Técnicos", path: "/find-technician" },
+    { label: "Lojas", path: "/store" },
+    { label: "Máquinas", path: "/machines" },
+    { label: "Equipamentos", path: "/equipment" },
     { label: "Serviços", path: "/services" },
-    { label: "Buscar Técnicos", path: "/find-technician" },
-    { label: "Loja", path: "/store" },
-    { label: "Sobre", path: "/about" },
-    { label: "Contato", path: "/contact" },
+    { label: "Quem Somos", path: "/about" },
+    { label: "Contatos", path: "/contact" },
   ];
 
   return (
