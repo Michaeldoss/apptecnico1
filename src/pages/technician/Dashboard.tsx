@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Calendar, Wrench, MapPin, DollarSign } from 'lucide-react';
 import TechnicianLayout from '@/components/layout/TechnicianLayout';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 
 const TechnicianDashboard = () => {
@@ -36,7 +36,7 @@ const TechnicianDashboard = () => {
         <div className="text-center">
           <h2 className="text-xl font-semibold text-gray-700">Acesso negado</h2>
           <p className="text-gray-500 mt-2">Você precisa estar logado como técnico para acessar esta página.</p>
-          <Link href="/login" className="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+          <Link to="/login" className="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
             Fazer Login
           </Link>
         </div>
@@ -131,7 +131,7 @@ const TechnicianDashboard = () => {
                 </li>
               </ul>
               <Button variant="outline" className="w-full mt-4" asChild>
-                <Link href="/tecnico/servicos">Ver todos os serviços</Link>
+                <Link to="/technician/services">Ver todos os serviços</Link>
               </Button>
             </CardContent>
           </Card>
@@ -143,13 +143,13 @@ const TechnicianDashboard = () => {
             <CardContent>
               <div className="space-y-2">
                 <Button className="w-full" asChild>
-                  <Link href="/tecnico/agenda">Ver Agenda</Link>
+                  <Link to="/technician/schedule">Ver Agenda</Link>
                 </Button>
                 <Button variant="outline" className="w-full" asChild>
-                  <Link href="/tecnico/perfil">Atualizar Perfil</Link>
+                  <Link to="/technician/profile">Atualizar Perfil</Link>
                 </Button>
                 <Button variant="outline" className="w-full" asChild>
-                  <Link href="/tecnico/pecas">Gerenciar Peças</Link>
+                  <Link to="/technician/parts">Gerenciar Peças</Link>
                 </Button>
               </div>
             </CardContent>

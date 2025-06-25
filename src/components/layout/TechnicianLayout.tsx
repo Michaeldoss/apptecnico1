@@ -1,7 +1,6 @@
 
 import React, { ReactNode, useState } from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -33,7 +32,7 @@ type SidebarItemProps = {
 const SidebarItem = ({ href, icon: Icon, children, active, badge, onClick }: SidebarItemProps) => {
   return (
     <Link
-      href={href}
+      to={href}
       className={cn(
         "flex items-center gap-3 rounded-lg px-4 py-3 text-base transition-all duration-200 hover:bg-gray-light font-inter font-medium relative",
         active ? "bg-tech-primary text-white shadow-sm" : "text-gray-primary hover:text-tech-primary"
@@ -61,13 +60,13 @@ type TechnicianLayoutProps = {
 };
 
 const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) => {
-  const pathname = usePathname();
+  const location = useLocation();
   const { unreadCount } = useNotifications();
   const { logout } = useAuth();
   const isMobile = useIsMobile();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   
-  const pathPrefix = '/tecnico';
+  const pathPrefix = '/technician';
   
   const handleLogout = () => {
     logout();
@@ -111,25 +110,25 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
         )}>
           <div className="space-y-2 py-4">
             <SidebarItem 
-              href={`${pathPrefix}/painel`} 
+              href={`${pathPrefix}/dashboard`} 
               icon={LayoutDashboard} 
-              active={pathname?.includes('/painel') || pathname?.includes('/dashboard')}
+              active={location.pathname?.includes('/dashboard')}
               onClick={closeMenu}
             >
               Painel
             </SidebarItem>
             <SidebarItem 
-              href={`${pathPrefix}/perfil`} 
+              href={`${pathPrefix}/profile`} 
               icon={User} 
-              active={pathname?.includes('/perfil') || pathname?.includes('/profile')}
+              active={location.pathname?.includes('/profile')}
               onClick={closeMenu}
             >
               Meu Perfil
             </SidebarItem>
             <SidebarItem 
-              href={`${pathPrefix}/servicos`} 
+              href={`${pathPrefix}/services`} 
               icon={Wrench} 
-              active={pathname?.includes('/servicos') || pathname?.includes('/services')}
+              active={location.pathname?.includes('/services')}
               onClick={closeMenu}
             >
               Serviços
@@ -137,24 +136,24 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
             <SidebarItem 
               href={`${pathPrefix}/chat`} 
               icon={MessageSquare} 
-              active={pathname?.includes('/chat')}
+              active={location.pathname?.includes('/chat')}
               badge={unreadCount}
               onClick={closeMenu}
             >
               Mensagens
             </SidebarItem>
             <SidebarItem 
-              href={`${pathPrefix}/pecas`} 
+              href={`${pathPrefix}/parts`} 
               icon={Package} 
-              active={pathname?.includes('/pecas') || pathname?.includes('/parts')}
+              active={location.pathname?.includes('/parts')}
               onClick={closeMenu}
             >
               Peças
             </SidebarItem>
             <SidebarItem 
-              href={`${pathPrefix}/agenda`} 
+              href={`${pathPrefix}/schedule`} 
               icon={Calendar} 
-              active={pathname?.includes('/agenda') || pathname?.includes('/schedule')}
+              active={location.pathname?.includes('/schedule')}
               onClick={closeMenu}
             >
               Agenda
