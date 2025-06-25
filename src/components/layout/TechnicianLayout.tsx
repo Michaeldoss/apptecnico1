@@ -13,7 +13,8 @@ import {
   LogOut,
   MessageSquare,
   Menu,
-  X
+  X,
+  CreditCard
 } from 'lucide-react';
 import { useNotifications } from '@/hooks/useNotifications';
 import { Badge } from '@/components/ui/badge';
@@ -149,6 +150,14 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
               onClick={closeMenu}
             >
               Peças
+            </SidebarItem>
+            <SidebarItem 
+              href={`${pathPrefix}/payments`} 
+              icon={CreditCard} 
+              active={location.pathname?.includes('/payments')}
+              onClick={closeMenu}
+            >
+              Pagamentos
             </SidebarItem>
             <SidebarItem 
               href={`${pathPrefix}/schedule`} 

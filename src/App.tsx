@@ -42,6 +42,7 @@ const CustomerTracking = React.lazy(() => import("@/pages/customer/Tracking"));
 const CustomerSchedule = React.lazy(() => import("@/pages/customer/Schedule"));
 const CustomerServiceRequest = React.lazy(() => import("@/pages/customer/ServiceRequest"));
 const NotFound = React.lazy(() => import("@/pages/NotFound"));
+const TechnicianPayments = React.lazy(() => import("@/pages/technician/Payments"));
 
 const queryClient = new QueryClient();
 
@@ -151,6 +152,36 @@ function App() {
                     <TechnicianDashboard />
                   </ProtectedRoute>
                 } />
+                <Route path="/technician/services" element={
+                  <ProtectedRoute allowedUserTypes={['technician']}>
+                    <TechnicianServices />
+                  </ProtectedRoute>
+                } />
+                <Route path="/technician/profile" element={
+                  <ProtectedRoute allowedUserTypes={['technician']}>
+                    <TechnicianProfile />
+                  </ProtectedRoute>
+                } />
+                <Route path="/technician/parts" element={
+                  <ProtectedRoute allowedUserTypes={['technician']}>
+                    <TechnicianParts />
+                  </ProtectedRoute>
+                } />
+                <Route path="/technician/schedule" element={
+                  <ProtectedRoute allowedUserTypes={['technician']}>
+                    <TechnicianSchedule />
+                  </ProtectedRoute>
+                } />
+                <Route path="/technician/chat" element={
+                  <ProtectedRoute allowedUserTypes={['technician']}>
+                    <TechnicianChat />
+                  </ProtectedRoute>
+                } />
+                <Route path="/technician/payments" element={
+                  <ProtectedRoute allowedUserTypes={['technician']}>
+                    <TechnicianPayments />
+                  </ProtectedRoute>
+                } />
                 
                 {/* Technician routes (Portuguese) */}
                 <Route path="/tecnico" element={<TechnicianLanding />} />
@@ -207,6 +238,16 @@ function App() {
                 <Route path="/tecnico/chat" element={
                   <ProtectedRoute allowedUserTypes={['technician']}>
                     <TechnicianChat />
+                  </ProtectedRoute>
+                } />
+                <Route path="/tecnico/pagamentos" element={
+                  <ProtectedRoute allowedUserTypes={['technician']}>
+                    <TechnicianPayments />
+                  </ProtectedRoute>
+                } />
+                <Route path="/tecnico/payments" element={
+                  <ProtectedRoute allowedUserTypes={['technician']}>
+                    <TechnicianPayments />
                   </ProtectedRoute>
                 } />
                 <Route path="/tecnico/servicos/:id/os" element={
