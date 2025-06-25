@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { CheckCircle, Calculator, MapPin, Wrench } from 'lucide-react';
+import { CheckCircle, Calculator, MapPin, Wrench, Star } from 'lucide-react';
 import { getAllEquipmentTypes } from '@/types/equipment';
 import { serviceTypeLabels } from '@/types/technician';
 import { useToast } from '@/hooks/use-toast';
@@ -29,6 +29,17 @@ const TechnicianProfile = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
   
+  // Estado para dados do perfil
+  const [profileData, setProfileData] = useState({
+    name: 'Ricardo Oliveira',
+    email: 'ricardo.oliveira@exemplo.com',
+    phone: '(11) 98765-4321',
+    document: '123.456.789-00',
+    description: 'Técnico especializado em manutenção de plotters e equipamentos gráficos. Mais de 5 anos de experiência no mercado.',
+    address: 'Av. Paulista, 1000, São Paulo - SP',
+    serviceArea: 10,
+  });
+  
   // Estado para preços
   const [pricing, setPricing] = useState({
     visitPrice: 80,
@@ -39,13 +50,6 @@ const TechnicianProfile = () => {
   
   // Dados de exemplo do perfil
   const profile = {
-    name: 'Ricardo Oliveira',
-    email: 'ricardo.oliveira@exemplo.com',
-    phone: '(11) 98765-4321',
-    document: '123.456.789-00',
-    specialty: 'eco-solvent',
-    description: 'Técnico especializado em manutenção de plotters e equipamentos gráficos. Mais de 5 anos de experiência no mercado.',
-    address: 'Av. Paulista, 1000, São Paulo - SP',
     rating: 4.8,
     reviewCount: 36,
   };
@@ -73,24 +77,36 @@ const TechnicianProfile = () => {
     if (file) {
       toast({
         title: "Foto carregada",
-        description: `Arquivo "${file.name}" foi carregado com sucesso.`
+        description: `Arquivo "${file.name}" foi carregado com sucesso.`,
       });
     }
+  };
+
+  const handleInputChange = (field: string, value: string) => {
+    setProfileData(prev => ({
+      ...prev,
+      [field]: value
+    }));
   };
   
   const handleSaveProfile = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Aqui você faria o upload da imagem para o servidor
-    console.log('Salvando perfil...', { profileImageFile, profileImage });
+    console.log('Salvando perfil...', { 
+      profileData, 
+      profileImageFile, 
+      profileImage,
+      selectedEquipment,
+      selectedServices 
+    });
     
     // Simulação de envio
     setTimeout(() => {
       setIsLoading(false);
       toast({
-        title: "Perfil atualizado",
-        description: "Suas informações foram atualizadas com sucesso."
+        title: "Perfil atualizado!",
+        description: "Suas informações foram atualizadas com sucesso.",
       });
     }, 1500);
   };
@@ -98,12 +114,15 @@ const TechnicianProfile = () => {
   const handleSavePricing = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    
+    console.log('Salvando preços...', pricing);
+    
     // Simulação de envio
     setTimeout(() => {
       setIsLoading(false);
       toast({
-        title: "Preços atualizados",
-        description: "Sua tabela de preços foi atualizada com sucesso."
+        title: "Preços atualizados!",
+        description: "Sua tabela de preços foi atualizada com sucesso.",
       });
     }, 1500);
   };
@@ -111,283 +130,356 @@ const TechnicianProfile = () => {
   const equipmentOptions = getAllEquipmentTypes();
   
   return (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader className="flex flex-row items-start justify-between">
-          <div className="flex items-center space-x-4">
-            <Avatar className="h-20 w-20">
-              <AvatarImage 
-                src={profileImage || ""} 
-                alt={profile.name} 
-              />
-              <AvatarFallback className="text-lg">
-                {profile.name.split(' ').map(n => n[0]).join('')}
-              </AvatarFallback>
-            </Avatar>
-            <div>
-              <CardTitle>{profile.name}</CardTitle>
-              <CardDescription>
-                <div className="flex items-center mt-1">
-                  <span className="flex items-center">
-                    <span className="text-yellow-500 mr-1">★</span>
-                    <span className="font-medium">{profile.rating}</span>
-                  </span>
-                  <span className="mx-2">•</span>
-                  <span>{profile.reviewCount} avaliações</span>
-                </div>
-              </CardDescription>
+    <TechnicianLayout title="Meu Perfil">
+      <div className="space-y-6 font-inter">
+        {/* Header do Perfil */}
+        <Card className="bg-white border-2 border-gray-border shadow-sm hover:shadow-md transition-all duration-200">
+          <CardHeader className="flex flex-row items-start justify-between bg-gradient-to-r from-tech-primary to-blue-500 text-white rounded-t-lg">
+            <div className="flex items-center space-x-6">
+              <Avatar className="h-24 w-24 border-4 border-white shadow-lg">
+                <AvatarImage 
+                  src={profileImage || ""} 
+                  alt={profileData.name} 
+                />
+                <AvatarFallback className="text-xl bg-white text-tech-primary font-bold">
+                  {profileData.name.split(' ').map(n => n[0]).join('')}
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <CardTitle className="text-2xl font-bold text-white">{profileData.name}</CardTitle>
+                <CardDescription className="text-blue-100">
+                  <div className="flex items-center mt-2">
+                    <span className="flex items-center bg-white/20 px-3 py-1 rounded-full">
+                      <Star className="h-4 w-4 text-tech-accent mr-1 fill-current" />
+                      <span className="font-semibold text-white">{profile.rating}</span>
+                    </span>
+                    <span className="mx-3 text-blue-200">•</span>
+                    <span className="text-blue-100">{profile.reviewCount} avaliações</span>
+                  </div>
+                </CardDescription>
+              </div>
             </div>
-          </div>
+            
+            <div className="space-y-4">
+              <ImageUpload
+                currentImage={profileImage || undefined}
+                onImageChange={handleImageChange}
+                size="md"
+              />
+            </div>
+          </CardHeader>
+          <CardContent className="pt-6">
+            <p className="text-gray-secondary text-base leading-relaxed">{profileData.description}</p>
+            <div className="flex items-center mt-4 bg-green-50 p-3 rounded-lg border border-green-200">
+              <CheckCircle className="h-5 w-5 text-success mr-3" />
+              <span className="text-success font-medium">Perfil verificado</span>
+            </div>
+          </CardContent>
+        </Card>
+        
+        {/* Tabs */}
+        <Tabs defaultValue="personal" className="w-full">
+          <TabsList className="grid w-full grid-cols-3 bg-gray-light border border-gray-border">
+            <TabsTrigger 
+              value="personal" 
+              className="font-semibold text-gray-primary data-[state=active]:bg-tech-primary data-[state=active]:text-white"
+            >
+              Informações Pessoais
+            </TabsTrigger>
+            <TabsTrigger 
+              value="professional"
+              className="font-semibold text-gray-primary data-[state=active]:bg-tech-primary data-[state=active]:text-white"
+            >
+              Informações Profissionais
+            </TabsTrigger>
+            <TabsTrigger 
+              value="pricing"
+              className="font-semibold text-gray-primary data-[state=active]:bg-tech-primary data-[state=active]:text-white"
+            >
+              Preços
+            </TabsTrigger>
+          </TabsList>
           
-          <div className="space-y-4">
-            <ImageUpload
-              currentImage={profileImage || undefined}
-              onImageChange={handleImageChange}
-              size="md"
-            />
-          </div>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground">{profile.description}</p>
-          <div className="flex items-center mt-4">
-            <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-            <span className="text-sm">Perfil verificado</span>
-          </div>
-        </CardContent>
-      </Card>
-      
-      <Tabs defaultValue="personal">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="personal">Informações Pessoais</TabsTrigger>
-          <TabsTrigger value="professional">Informações Profissionais</TabsTrigger>
-          <TabsTrigger value="pricing">Preços</TabsTrigger>
-        </TabsList>
-        
-        <TabsContent value="personal" className="mt-4">
-          <Card>
-            <form onSubmit={handleSaveProfile}>
-              <CardHeader>
-                <CardTitle>Dados Pessoais</CardTitle>
-                <CardDescription>
-                  Atualize suas informações pessoais
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="full-name">Nome Completo</Label>
-                    <Input id="full-name" defaultValue={profile.name} />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" defaultValue={profile.email} />
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="phone">Telefone</Label>
-                    <Input id="phone" defaultValue={profile.phone} />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="document">CNPJ</Label>
-                    <Input id="document" defaultValue={profile.document} />
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="address">Endereço completo</Label>
-                  <Input id="address" defaultValue={profile.address} />
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Button type="submit" disabled={isLoading}>
-                  {isLoading ? 'Salvando...' : 'Salvar Alterações'}
-                </Button>
-              </CardFooter>
-            </form>
-          </Card>
-        </TabsContent>
-        
-        <TabsContent value="professional" className="mt-4">
-          <Card>
-            <form onSubmit={handleSaveProfile}>
-              <CardHeader>
-                <CardTitle>Perfil Profissional</CardTitle>
-                <CardDescription>
-                  Atualize suas informações profissionais e especialidades
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="space-y-4">
-                  <Label className="text-lg">Tipos de Equipamentos</Label>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                    {equipmentOptions.map((equipment) => (
-                      <div key={equipment.value} className="flex items-center space-x-2">
-                        <Checkbox 
-                          id={`equipment-${equipment.value}`}
-                          checked={selectedEquipment.includes(equipment.value)}
-                          onCheckedChange={() => handleEquipmentChange(equipment.value)}
-                        />
-                        <Label 
-                          htmlFor={`equipment-${equipment.value}`}
-                          className="text-sm"
-                        >
-                          {equipment.label}
-                        </Label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                
-                <div className="space-y-4 border-t pt-4">
-                  <Label className="text-lg">Tipos de Serviços</Label>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {Object.entries(serviceTypeLabels).map(([value, label]) => (
-                      <div key={value} className="flex items-center space-x-2">
-                        <Checkbox 
-                          id={`service-${value}`}
-                          checked={selectedServices.includes(value)}
-                          onCheckedChange={() => handleServiceChange(value)}
-                        />
-                        <Label 
-                          htmlFor={`service-${value}`}
-                          className="text-sm"
-                        >
-                          {label}
-                        </Label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="description">Descrição profissional</Label>
-                  <Textarea 
-                    id="description" 
-                    placeholder="Descreva sua experiência, habilidades e serviços oferecidos" 
-                    defaultValue={profile.description}
-                    rows={4}
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="service-area">Área de atendimento (raio em km)</Label>
-                  <Input id="service-area" type="number" placeholder="10" />
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Button type="submit" disabled={isLoading}>
-                  {isLoading ? 'Salvando...' : 'Salvar Alterações'}
-                </Button>
-              </CardFooter>
-            </form>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="pricing" className="mt-4">
-          <div className="grid md:grid-cols-2 gap-6">
-            <Card>
-              <form onSubmit={handleSavePricing}>
-                <CardHeader>
-                  <CardTitle>Configurar Preços</CardTitle>
-                  <CardDescription>
-                    Defina os valores para seus serviços
+          <TabsContent value="personal" className="mt-6">
+            <Card className="bg-white border-2 border-gray-border shadow-sm">
+              <form onSubmit={handleSaveProfile}>
+                <CardHeader className="bg-gray-light border-b border-gray-border">
+                  <CardTitle className="text-xl font-bold text-tech-primary">Dados Pessoais</CardTitle>
+                  <CardDescription className="text-gray-secondary">
+                    Atualize suas informações pessoais
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-6">
-                  {/* Orçamento - sempre gratuito */}
-                  <div className="flex items-center justify-between p-4 bg-green-50 rounded-lg border border-green-200">
-                    <div className="flex items-center gap-3">
-                      <Calculator className="h-5 w-5 text-green-600" />
-                      <div>
-                        <h4 className="font-medium text-green-800">Orçamento</h4>
-                        <p className="text-sm text-green-600">Estimativa detalhada</p>
-                      </div>
-                    </div>
-                    <span className="text-green-800 font-medium">Gratuito</span>
-                  </div>
-
-                  {/* Visita Técnica */}
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3">
-                      <MapPin className="h-5 w-5 text-blue-600" />
-                      <Label htmlFor="visit-price" className="text-base font-medium">
-                        Taxa de Visita Técnica
-                      </Label>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm">R$</span>
-                      <Input
-                        id="visit-price"
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        value={pricing.visitPrice}
-                        onChange={(e) => setPricing({...pricing, visitPrice: Number(e.target.value)})}
-                        className="max-w-32"
+                <CardContent className="space-y-6 p-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="full-name" className="text-gray-800 font-semibold">Nome Completo</Label>
+                      <Input 
+                        id="full-name" 
+                        value={profileData.name}
+                        onChange={(e) => handleInputChange('name', e.target.value)}
+                        className="border-2 border-gray-300 focus:border-tech-primary focus:ring-tech-primary"
                       />
                     </div>
-                    <p className="text-sm text-muted-foreground">
-                      Custo de deslocamento para visita técnica
-                    </p>
-                  </div>
-
-                  {/* Mão de Obra */}
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3">
-                      <Wrench className="h-5 w-5 text-orange-600" />
-                      <Label htmlFor="labor-price" className="text-base font-medium">
-                        Valor da Mão de Obra (por hora)
-                      </Label>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm">R$</span>
-                      <Input
-                        id="labor-price"
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        value={pricing.laborPrice}
-                        onChange={(e) => setPricing({...pricing, laborPrice: Number(e.target.value)})}
-                        className="max-w-32"
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="email" className="text-gray-800 font-semibold">Email</Label>
+                      <Input 
+                        id="email" 
+                        type="email" 
+                        value={profileData.email}
+                        onChange={(e) => handleInputChange('email', e.target.value)}
+                        className="border-2 border-gray-300 focus:border-tech-primary focus:ring-tech-primary"
                       />
-                      <span className="text-sm">/hora</span>
                     </div>
-                    <p className="text-sm text-muted-foreground">
-                      Valor cobrado por hora de trabalho
-                    </p>
                   </div>
-
-                  <div className="text-xs text-gray-500 p-3 bg-gray-50 rounded">
-                    * Materiais e peças são cobrados à parte conforme necessário
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="phone" className="text-gray-800 font-semibold">Telefone</Label>
+                      <Input 
+                        id="phone" 
+                        value={profileData.phone}
+                        onChange={(e) => handleInputChange('phone', e.target.value)}
+                        className="border-2 border-gray-300 focus:border-tech-primary focus:ring-tech-primary"
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="document" className="text-gray-800 font-semibold">CNPJ</Label>
+                      <Input 
+                        id="document" 
+                        value={profileData.document}
+                        onChange={(e) => handleInputChange('document', e.target.value)}
+                        className="border-2 border-gray-300 focus:border-tech-primary focus:ring-tech-primary"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="address" className="text-gray-800 font-semibold">Endereço completo</Label>
+                    <Input 
+                      id="address" 
+                      value={profileData.address}
+                      onChange={(e) => handleInputChange('address', e.target.value)}
+                      className="border-2 border-gray-300 focus:border-tech-primary focus:ring-tech-primary"
+                    />
                   </div>
                 </CardContent>
-                <CardFooter>
-                  <Button type="submit" disabled={isLoading}>
-                    {isLoading ? 'Salvando...' : 'Salvar Preços'}
+                <CardFooter className="bg-gray-light border-t border-gray-border">
+                  <Button 
+                    type="submit" 
+                    disabled={isLoading}
+                    className="bg-tech-primary hover:bg-tech-primary-hover text-white font-semibold px-8 py-3 transition-all duration-200 hover:shadow-lg hover:scale-105"
+                  >
+                    {isLoading ? 'Salvando...' : 'Salvar Alterações'}
                   </Button>
                 </CardFooter>
               </form>
             </Card>
+          </TabsContent>
+          
+          <TabsContent value="professional" className="mt-6">
+            <Card className="bg-white border-2 border-gray-border shadow-sm">
+              <form onSubmit={handleSaveProfile}>
+                <CardHeader className="bg-gray-light border-b border-gray-border">
+                  <CardTitle className="text-xl font-bold text-tech-primary">Perfil Profissional</CardTitle>
+                  <CardDescription className="text-gray-secondary">
+                    Atualize suas informações profissionais e especialidades
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-8 p-6">
+                  <div className="space-y-4">
+                    <Label className="text-lg font-bold text-tech-primary">Tipos de Equipamentos</Label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {equipmentOptions.map((equipment) => (
+                        <div key={equipment.value} className="flex items-center space-x-3 p-3 border border-gray-border rounded-lg hover:bg-gray-50 transition-colors">
+                          <Checkbox 
+                            id={`equipment-${equipment.value}`}
+                            checked={selectedEquipment.includes(equipment.value)}
+                            onCheckedChange={() => handleEquipmentChange(equipment.value)}
+                            className="border-2 border-tech-primary data-[state=checked]:bg-tech-primary"
+                          />
+                          <Label 
+                            htmlFor={`equipment-${equipment.value}`}
+                            className="text-sm font-medium text-gray-700 cursor-pointer"
+                          >
+                            {equipment.label}
+                          </Label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4 border-t border-gray-border pt-6">
+                    <Label className="text-lg font-bold text-tech-primary">Tipos de Serviços</Label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {Object.entries(serviceTypeLabels).map(([value, label]) => (
+                        <div key={value} className="flex items-center space-x-3 p-3 border border-gray-border rounded-lg hover:bg-gray-50 transition-colors">
+                          <Checkbox 
+                            id={`service-${value}`}
+                            checked={selectedServices.includes(value)}
+                            onCheckedChange={() => handleServiceChange(value)}
+                            className="border-2 border-tech-primary data-[state=checked]:bg-tech-primary"
+                          />
+                          <Label 
+                            htmlFor={`service-${value}`}
+                            className="text-sm font-medium text-gray-700 cursor-pointer"
+                          >
+                            {label}
+                          </Label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2 border-t border-gray-border pt-6">
+                    <Label htmlFor="description" className="text-gray-800 font-semibold">Descrição profissional</Label>
+                    <Textarea 
+                      id="description" 
+                      placeholder="Descreva sua experiência, habilidades e serviços oferecidos" 
+                      value={profileData.description}
+                      onChange={(e) => handleInputChange('description', e.target.value)}
+                      rows={4}
+                      className="border-2 border-gray-300 focus:border-tech-primary focus:ring-tech-primary"
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="service-area" className="text-gray-800 font-semibold">Área de atendimento (raio em km)</Label>
+                    <Input 
+                      id="service-area" 
+                      type="number" 
+                      value={profileData.serviceArea}
+                      onChange={(e) => handleInputChange('serviceArea', e.target.value)}
+                      className="border-2 border-gray-300 focus:border-tech-primary focus:ring-tech-primary max-w-32"
+                    />
+                  </div>
+                </CardContent>
+                <CardFooter className="bg-gray-light border-t border-gray-border">
+                  <Button 
+                    type="submit" 
+                    disabled={isLoading}
+                    className="bg-tech-primary hover:bg-tech-primary-hover text-white font-semibold px-8 py-3 transition-all duration-200 hover:shadow-lg hover:scale-105"
+                  >
+                    {isLoading ? 'Salvando...' : 'Salvar Alterações'}
+                  </Button>
+                </CardFooter>
+              </form>
+            </Card>
+          </TabsContent>
 
-            {/* Preview da tabela de preços */}
-            <div>
-              <h3 className="text-lg font-medium mb-4">Preview da Tabela de Preços</h3>
-              <TechnicianPricing 
-                pricing={{
-                  quotePrice: 0,
-                  visitPrice: pricing.visitPrice,
-                  laborPrice: pricing.laborPrice
-                }} 
-              />
+          <TabsContent value="pricing" className="mt-6">
+            <div className="grid md:grid-cols-2 gap-6">
+              <Card className="bg-white border-2 border-gray-border shadow-sm">
+                <form onSubmit={handleSavePricing}>
+                  <CardHeader className="bg-gray-light border-b border-gray-border">
+                    <CardTitle className="text-xl font-bold text-tech-primary">Configurar Preços</CardTitle>
+                    <CardDescription className="text-gray-secondary">
+                      Defina os valores para seus serviços
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-8 p-6">
+                    {/* Orçamento - sempre gratuito */}
+                    <div className="flex items-center justify-between p-4 bg-success-light rounded-lg border-2 border-success">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 bg-success rounded-lg">
+                          <Calculator className="h-5 w-5 text-white" />
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-success">Orçamento</h4>
+                          <p className="text-sm text-success">Estimativa detalhada</p>
+                        </div>
+                      </div>
+                      <span className="text-success font-bold text-lg">Gratuito</span>
+                    </div>
+
+                    {/* Visita Técnica */}
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 bg-tech-primary rounded-lg">
+                          <MapPin className="h-5 w-5 text-white" />
+                        </div>
+                        <Label htmlFor="visit-price" className="text-base font-bold text-tech-primary">
+                          Taxa de Visita Técnica
+                        </Label>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium">R$</span>
+                        <Input
+                          id="visit-price"
+                          type="number"
+                          min="0"
+                          step="0.01"
+                          value={pricing.visitPrice}
+                          onChange={(e) => setPricing({...pricing, visitPrice: Number(e.target.value)})}
+                          className="max-w-32 border-2 border-gray-300 focus:border-tech-primary focus:ring-tech-primary"
+                        />
+                      </div>
+                      <p className="text-sm text-gray-secondary">
+                        Custo de deslocamento para visita técnica
+                      </p>
+                    </div>
+
+                    {/* Mão de Obra */}
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 bg-tech-accent rounded-lg">
+                          <Wrench className="h-5 w-5 text-white" />
+                        </div>
+                        <Label htmlFor="labor-price" className="text-base font-bold text-tech-primary">
+                          Valor da Mão de Obra (por hora)
+                        </Label>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium">R$</span>
+                        <Input
+                          id="labor-price"
+                          type="number"
+                          min="0"
+                          step="0.01"
+                          value={pricing.laborPrice}
+                          onChange={(e) => setPricing({...pricing, laborPrice: Number(e.target.value)})}
+                          className="max-w-32 border-2 border-gray-300 focus:border-tech-primary focus:ring-tech-primary"
+                        />
+                        <span className="text-sm font-medium">/hora</span>
+                      </div>
+                      <p className="text-sm text-gray-secondary">
+                        Valor cobrado por hora de trabalho
+                      </p>
+                    </div>
+
+                    <div className="text-xs text-gray-500 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                      * Materiais e peças são cobrados à parte conforme necessário
+                    </div>
+                  </CardContent>
+                  <CardFooter className="bg-gray-light border-t border-gray-border">
+                    <Button 
+                      type="submit" 
+                      disabled={isLoading}
+                      className="bg-tech-primary hover:bg-tech-primary-hover text-white font-semibold px-8 py-3 transition-all duration-200 hover:shadow-lg hover:scale-105"
+                    >
+                      {isLoading ? 'Salvando...' : 'Salvar Preços'}
+                    </Button>
+                  </CardFooter>
+                </form>
+              </Card>
+
+              {/* Preview da tabela de preços */}
+              <div>
+                <h3 className="text-lg font-bold mb-4 text-tech-primary">Preview da Tabela de Preços</h3>
+                <TechnicianPricing 
+                  pricing={{
+                    quotePrice: 0,
+                    visitPrice: pricing.visitPrice,
+                    laborPrice: pricing.laborPrice
+                  }} 
+                />
+              </div>
             </div>
-          </div>
-        </TabsContent>
-      </Tabs>
-    </div>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </TechnicianLayout>
   );
 };
 
