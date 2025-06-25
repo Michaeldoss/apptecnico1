@@ -1,4 +1,3 @@
-
 import React, { ReactNode, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -67,7 +66,8 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
   const isMobile = useIsMobile();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   
-  const pathPrefix = '/technician';
+  // Usar rotas em português que estão funcionando
+  const pathPrefix = '/tecnico';
   
   const handleLogout = () => {
     logout();
@@ -113,23 +113,23 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
             <SidebarItem 
               href={`${pathPrefix}/dashboard`} 
               icon={LayoutDashboard} 
-              active={location.pathname?.includes('/dashboard')}
+              active={location.pathname?.includes('/dashboard') || location.pathname?.includes('/painel')}
               onClick={closeMenu}
             >
               Painel
             </SidebarItem>
             <SidebarItem 
-              href={`${pathPrefix}/profile`} 
+              href={`${pathPrefix}/perfil`} 
               icon={User} 
-              active={location.pathname?.includes('/profile')}
+              active={location.pathname?.includes('/profile') || location.pathname?.includes('/perfil')}
               onClick={closeMenu}
             >
               Meu Perfil
             </SidebarItem>
             <SidebarItem 
-              href={`${pathPrefix}/services`} 
+              href={`${pathPrefix}/servicos`} 
               icon={Wrench} 
-              active={location.pathname?.includes('/services')}
+              active={location.pathname?.includes('/services') || location.pathname?.includes('/servicos')}
               onClick={closeMenu}
             >
               Serviços
@@ -144,25 +144,25 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
               Mensagens
             </SidebarItem>
             <SidebarItem 
-              href={`${pathPrefix}/parts`} 
+              href={`${pathPrefix}/pecas`} 
               icon={Package} 
-              active={location.pathname?.includes('/parts')}
+              active={location.pathname?.includes('/parts') || location.pathname?.includes('/pecas')}
               onClick={closeMenu}
             >
               Peças
             </SidebarItem>
             <SidebarItem 
-              href={`${pathPrefix}/payments`} 
+              href={`${pathPrefix}/pagamentos`} 
               icon={CreditCard} 
-              active={location.pathname?.includes('/payments')}
+              active={location.pathname?.includes('/payments') || location.pathname?.includes('/pagamentos')}
               onClick={closeMenu}
             >
               Pagamentos
             </SidebarItem>
             <SidebarItem 
-              href={`${pathPrefix}/schedule`} 
+              href={`${pathPrefix}/agenda`} 
               icon={Calendar} 
-              active={location.pathname?.includes('/schedule')}
+              active={location.pathname?.includes('/schedule') || location.pathname?.includes('/agenda')}
               onClick={closeMenu}
             >
               Agenda
