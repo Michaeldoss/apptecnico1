@@ -37,7 +37,7 @@ const statusOptions = [
 const EquipmentForm: React.FC<EquipmentFormProps> = ({ isOpen, onClose, onSave, equipment }) => {
   const [formData, setFormData] = useState<Partial<Equipment>>({
     name: '',
-    type: 'other',
+    type: 'eco-solvent',
     model: '',
     brand: '',
     serialNumber: '',
@@ -59,7 +59,7 @@ const EquipmentForm: React.FC<EquipmentFormProps> = ({ isOpen, onClose, onSave, 
       // Reset form when adding new equipment
       setFormData({
         name: '',
-        type: 'other',
+        type: 'eco-solvent',
         model: '',
         brand: '',
         serialNumber: '',

@@ -8,7 +8,12 @@ export type EquipmentType =
   | 'laser'
   | 'cnc'
   | 'industrial'
-  | 'finishing';
+  | 'finishing'
+  | 'cnc-router'
+  | 'uv-flatbed'
+  | 'laser-engraver'
+  | 'thermal-press'
+  | 'silk-carousel';
 
 export type Equipment = {
   id: number;
@@ -33,24 +38,29 @@ export const equipmentTypeLabels: Record<EquipmentType, string> = {
   'laser': 'Laser',
   'cnc': 'CNC',
   'industrial': 'Industrial',
-  'finishing': 'Acabamento'
+  'finishing': 'Acabamento',
+  'cnc-router': 'CNC Router',
+  'uv-flatbed': 'UV Flatbed',
+  'laser-engraver': 'Laser Engraver',
+  'thermal-press': 'Prensa Térmica',
+  'silk-carousel': 'Carrossel Seda'
 };
 
 export const equipmentCategories = [
   { 
     id: 'printers', 
     label: 'Plotters', 
-    types: ['eco-solvent', 'uv-flexible', 'sublimation', 'dtf-textile', 'cutting'] 
+    types: ['eco-solvent', 'uv-flexible', 'sublimation', 'dtf-textile', 'cutting', 'uv-flatbed'] 
   },
   { 
     id: 'finishing', 
     label: 'Acabamento', 
-    types: ['finishing'] 
+    types: ['finishing', 'thermal-press', 'silk-carousel'] 
   },
   { 
     id: 'cnc', 
     label: 'Máquinas CNC', 
-    types: ['cnc', 'laser', 'industrial'] 
+    types: ['cnc', 'laser', 'industrial', 'cnc-router', 'laser-engraver'] 
   },
 ];
 
