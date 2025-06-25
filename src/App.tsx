@@ -19,6 +19,7 @@ const SellEquipmentCreate = React.lazy(() => import("@/pages/SellEquipmentCreate
 const CompanyRegister = React.lazy(() => import("@/pages/store/CompanyRegister"));
 const CompanyDashboard = React.lazy(() => import("@/pages/store/CompanyDashboard"));
 const CompanyProfile = React.lazy(() => import("@/pages/store/CompanyProfile"));
+const CompanySettings = React.lazy(() => import("@/pages/store/CompanySettings"));
 const CompanyProducts = React.lazy(() => import("@/pages/store/CompanyProducts"));
 const CompanyList = React.lazy(() => import("@/pages/store/CompanyList"));
 const CategoryPage = React.lazy(() => import("@/pages/store/CategoryPage"));
@@ -51,6 +52,7 @@ function App() {
                 <Route path="/store/company-register" element={<CompanyRegister />} />
                 <Route path="/store/company-dashboard" element={<CompanyDashboard />} />
                 <Route path="/store/company-profile" element={<CompanyProfile />} />
+                <Route path="/store/company-settings" element={<CompanySettings />} />
                 <Route path="/store/company-products" element={<CompanyProducts />} />
                 <Route path="/store/companies" element={<CompanyList />} />
                 <Route path="/store/category/:categorySlug" element={<CategoryPage />} />

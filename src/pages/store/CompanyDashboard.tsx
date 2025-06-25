@@ -131,10 +131,12 @@ const CompanyDashboard = () => {
                   Meu Perfil
                 </Button>
               </Link>
-              <Button variant="secure" showLock>
-                <Settings className="mr-2 h-4 w-4" />
-                Configurações
-              </Button>
+              <Link to="/store/company-settings">
+                <Button variant="secure" showLock>
+                  <Settings className="mr-2 h-4 w-4" />
+                  Configurações
+                </Button>
+              </Link>
             </div>
           </div>
           
