@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -106,7 +105,7 @@ const Navbar = () => {
                   <ChevronDown className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-white border-gray-200 shadow-xl">
+              <DropdownMenuContent align="end" side="bottom" className="bg-white border-gray-200 shadow-xl mr-4">
                 <DropdownMenuItem asChild>
                   <Link to={getDashboardLink()} className="font-inter font-medium text-gray-800">Painel</Link>
                 </DropdownMenuItem>
@@ -148,7 +147,7 @@ const Navbar = () => {
                     <ChevronDown className="h-4 w-4 ml-2" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="bg-white border-gray-200 shadow-xl w-52">
+                <DropdownMenuContent align="end" side="bottom" className="bg-white border-gray-200 shadow-xl w-52 mr-4">
                   <DropdownMenuItem asChild>
                     <Link to="/register" className="font-inter font-medium flex items-center gap-3 p-3">
                       <User className="h-4 w-4 text-blue-600" />
