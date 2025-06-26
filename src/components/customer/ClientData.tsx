@@ -15,8 +15,8 @@ interface ClientDataProps {
 const ClientData = ({ clientData }: ClientDataProps) => {
   return (
     <div className="space-y-6">
-      <Card className="border border-yellow-200 bg-white shadow-md">
-        <CardHeader className="bg-gradient-to-r from-yellow-500 to-yellow-400 text-white rounded-t-lg">
+      <Card className="border border-blue-200 bg-white shadow-md">
+        <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-t-lg">
           <CardTitle className="flex items-center gap-3 text-xl">
             <Building2 className="h-6 w-6" />
             Informações da Empresa
@@ -25,63 +25,63 @@ const ClientData = ({ clientData }: ClientDataProps) => {
         <CardContent className="space-y-6 pt-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <Label className="text-yellow-700 font-semibold">Razão Social</Label>
+              <Label className="text-blue-700 font-semibold">Razão Social</Label>
               <Input 
                 value={clientData.name} 
                 readOnly 
-                className="border border-yellow-300 bg-white focus:border-yellow-500 mt-1"
+                className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
               />
             </div>
             <div>
-              <Label className="text-yellow-700 font-semibold">Tipo</Label>
+              <Label className="text-blue-700 font-semibold">Tipo</Label>
               <div className="mt-1">
-                <Badge variant="outline" className="border border-yellow-600 text-yellow-800 bg-yellow-50">
+                <Badge variant="outline" className="border border-blue-600 text-blue-800 bg-blue-50">
                   {clientData.type === 'juridica' ? 'Pessoa Jurídica' : 'Pessoa Física'}
                 </Badge>
               </div>
             </div>
             <div>
-              <Label className="text-yellow-700 font-semibold">CNPJ</Label>
+              <Label className="text-blue-700 font-semibold">CNPJ</Label>
               <Input 
                 value={clientData.cnpj} 
                 readOnly 
-                className="border border-yellow-300 bg-white focus:border-yellow-500 mt-1"
+                className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
               />
             </div>
             <div>
-              <Label className="text-yellow-700 font-semibold">Inscrição Estadual</Label>
+              <Label className="text-blue-700 font-semibold">Inscrição Estadual</Label>
               <Input 
                 value={clientData.ie} 
                 readOnly 
-                className="border border-yellow-300 bg-white focus:border-yellow-500 mt-1"
+                className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
               />
             </div>
             <div>
-              <Label className="text-yellow-700 font-semibold flex items-center gap-2">
+              <Label className="text-blue-700 font-semibold flex items-center gap-2">
                 <Mail className="h-4 w-4" />
                 E-mail
               </Label>
               <Input 
                 value={clientData.email} 
                 readOnly 
-                className="border border-yellow-300 bg-white focus:border-yellow-500 mt-1"
+                className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
               />
             </div>
             <div>
-              <Label className="text-yellow-700 font-semibold flex items-center gap-2">
+              <Label className="text-blue-700 font-semibold flex items-center gap-2">
                 <Phone className="h-4 w-4" />
                 WhatsApp
               </Label>
               <Input 
                 value={clientData.whatsapp} 
                 readOnly 
-                className="border border-yellow-300 bg-white focus:border-yellow-500 mt-1"
+                className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
               />
             </div>
           </div>
           
           <div>
-            <Label className="text-yellow-700 font-semibold flex items-center gap-2">
+            <Label className="text-blue-700 font-semibold flex items-center gap-2">
               <MapPin className="h-4 w-4" />
               Endereço Completo
             </Label>
@@ -89,12 +89,12 @@ const ClientData = ({ clientData }: ClientDataProps) => {
               <Input 
                 value={`${clientData.address.street}, ${clientData.address.neighborhood}, ${clientData.address.city} - ${clientData.address.state}, ${clientData.address.zipCode}`} 
                 readOnly 
-                className="flex-1 border border-yellow-300 bg-white focus:border-yellow-500"
+                className="flex-1 border border-blue-300 bg-white focus:border-blue-500"
               />
               <Button 
                 variant="outline" 
                 size="icon" 
-                className="border border-yellow-600 text-yellow-700 hover:bg-yellow-600 hover:text-white"
+                className="border border-blue-600 text-blue-700 hover:bg-blue-600 hover:text-white"
               >
                 <ExternalLink className="h-4 w-4" />
               </Button>
@@ -103,8 +103,8 @@ const ClientData = ({ clientData }: ClientDataProps) => {
         </CardContent>
       </Card>
 
-      <Card className="border border-yellow-200 bg-white shadow-md">
-        <CardHeader className="bg-gradient-to-r from-yellow-500 to-yellow-400 text-white rounded-t-lg">
+      <Card className="border border-blue-200 bg-white shadow-md">
+        <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-t-lg">
           <CardTitle className="flex items-center gap-3 text-xl">
             <User className="h-6 w-6" />
             Pessoas Responsáveis
@@ -114,23 +114,23 @@ const ClientData = ({ clientData }: ClientDataProps) => {
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="border-b border-yellow-200">
-                  <TableHead className="text-yellow-700 font-semibold">Nome</TableHead>
-                  <TableHead className="text-yellow-700 font-semibold">Cargo</TableHead>
-                  <TableHead className="text-yellow-700 font-semibold">Telefone</TableHead>
-                  <TableHead className="text-yellow-700 font-semibold">E-mail</TableHead>
-                  <TableHead className="text-yellow-700 font-semibold">Tipo</TableHead>
+                <TableRow className="border-b border-blue-200">
+                  <TableHead className="text-blue-700 font-semibold">Nome</TableHead>
+                  <TableHead className="text-blue-700 font-semibold">Cargo</TableHead>
+                  <TableHead className="text-blue-700 font-semibold">Telefone</TableHead>
+                  <TableHead className="text-blue-700 font-semibold">E-mail</TableHead>
+                  <TableHead className="text-blue-700 font-semibold">Tipo</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {clientData.contacts.map((contact: any, index: number) => (
-                  <TableRow key={index} className="border-b border-yellow-100 hover:bg-yellow-50">
-                    <TableCell className="text-yellow-800 font-medium">{contact.name}</TableCell>
-                    <TableCell className="text-yellow-800">{contact.position}</TableCell>
-                    <TableCell className="text-yellow-800">{contact.phone}</TableCell>
-                    <TableCell className="text-yellow-800 break-all">{contact.email}</TableCell>
+                  <TableRow key={index} className="border-b border-blue-100 hover:bg-blue-50">
+                    <TableCell className="text-blue-800 font-medium">{contact.name}</TableCell>
+                    <TableCell className="text-blue-800">{contact.position}</TableCell>
+                    <TableCell className="text-blue-800">{contact.phone}</TableCell>
+                    <TableCell className="text-blue-800 break-all">{contact.email}</TableCell>
                     <TableCell>
-                      <Badge className={contact.type === 'tecnico' ? 'bg-yellow-100 text-yellow-800 border-yellow-300' : 'bg-green-100 text-green-800 border-green-300'}>
+                      <Badge className={contact.type === 'tecnico' ? 'bg-blue-100 text-blue-800 border-blue-300' : 'bg-green-100 text-green-800 border-green-300'}>
                         {contact.type === 'tecnico' ? 'Técnico' : 'Financeiro'}
                       </Badge>
                     </TableCell>

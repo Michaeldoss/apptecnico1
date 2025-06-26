@@ -2,6 +2,12 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
+import CustomerLayout from '@/components/layout/CustomerLayout';
+import CustomerFinancialSummary from '@/components/customer/CustomerFinancialSummary';
+import CustomerServiceMetricsComponent from '@/components/customer/CustomerServiceMetrics';
+import CustomerEquipmentOverview from '@/components/customer/CustomerEquipmentOverview';
+import CustomerQuickActions from '@/components/customer/CustomerQuickActions';
+import { useCustomerDashboard } from '@/hooks/useCustomerDashboard';
 
 const CustomerDashboard = () => {
   const navigate = useNavigate();
@@ -11,6 +17,13 @@ const CustomerDashboard = () => {
   console.log('[DEBUG] isAuthenticated:', isAuthenticated);
   console.log('[DEBUG] userType:', userType);
   console.log('[DEBUG] isLoading:', isLoading);
+
+  const {
+    stats,
+    serviceMetrics,
+    equipment,
+    weeklyPayments
+  } = useCustomerDashboard();
   
   useEffect(() => {
     console.log('[DEBUG] CustomerDashboard useEffect executado');
@@ -31,9 +44,6 @@ const CustomerDashboard = () => {
       navigate('/', { replace: true });
       return;
     }
-    
-    console.log('[DEBUG] Redirecionando para perfil unificado');
-    navigate('/cliente/perfil', { replace: true });
   }, [isAuthenticated, userType, isLoading, navigate]);
   
   if (isLoading) {
@@ -46,13 +56,36 @@ const CustomerDashboard = () => {
       </div>
     );
   }
+
+  if (!isAuthenticated || userType !== 'customer') {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <p className="text-gray-600">Redirecionando...</p>
+        </div>
+      </div>
+    );
+  }
   
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="text-center">
-        <p className="text-gray-600">Redirecionando para o painel...</p>
+    <CustomerLayout title="Painel de Controle">
+      <div className="space-y-6 font-inter">
+        {/* Primeira linha - Resumo Financeiro */}
+        <CustomerFinancialSummary 
+          stats={stats} 
+          weeklyPayments={weeklyPayments}
+        />
+
+        {/* Segunda linha - Métricas de Serviço e Equipamentos */}
+        <div className="grid lg:grid-cols-2 gap-6 h-[400px]">
+          <CustomerServiceMetricsComponent metrics={serviceMetrics} />
+          <CustomerEquipmentOverview equipment={equipment} />
+        </div>
+
+        {/* Terceira linha - Ações Rápidas */}
+        <CustomerQuickActions />
       </div>
-    </div>
+    </CustomerLayout>
   );
 };
 
