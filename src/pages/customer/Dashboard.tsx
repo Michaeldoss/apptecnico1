@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
@@ -7,6 +6,7 @@ import CustomerFinancialSummary from '@/components/customer/CustomerFinancialSum
 import CustomerServiceMetricsComponent from '@/components/customer/CustomerServiceMetrics';
 import CustomerEquipmentOverview from '@/components/customer/CustomerEquipmentOverview';
 import CustomerQuickActions from '@/components/customer/CustomerQuickActions';
+import CustomerBusinessAnalytics from '@/components/customer/CustomerBusinessAnalytics';
 import { useCustomerDashboard } from '@/hooks/useCustomerDashboard';
 
 const CustomerDashboard = () => {
@@ -22,7 +22,10 @@ const CustomerDashboard = () => {
     stats,
     serviceMetrics,
     equipment,
-    weeklyPayments
+    weeklyPayments,
+    financialBreakdown,
+    mostUsedParts,
+    equipmentCosts
   } = useCustomerDashboard();
   
   useEffect(() => {
@@ -68,12 +71,19 @@ const CustomerDashboard = () => {
   }
   
   return (
-    <CustomerLayout title="Painel de Controle do Cliente">
+    <CustomerLayout title="Centro de Controle Empresarial">
       <div className="space-y-8 font-inter">
         {/* Resumo Financeiro com Gráfico */}
         <CustomerFinancialSummary 
           stats={stats} 
           weeklyPayments={weeklyPayments}
+        />
+
+        {/* Nova Análise de Negócios */}
+        <CustomerBusinessAnalytics 
+          financialBreakdown={financialBreakdown}
+          mostUsedParts={mostUsedParts}
+          equipmentCosts={equipmentCosts}
         />
 
         {/* Métricas de Serviço com Gráfico de Pizza */}

@@ -9,6 +9,8 @@ interface CustomerStats {
     name: string;
     amount: number;
   };
+  monthlyOperatingCosts: number;
+  averageCallCost: number;
 }
 
 interface CustomerServiceMetrics {
@@ -18,6 +20,8 @@ interface CustomerServiceMetrics {
   totalSpent: number;
   averageResponseTime: string;
   equipmentCount: number;
+  emergencyCalls: number;
+  preventiveMaintenance: number;
 }
 
 interface Equipment {
@@ -28,6 +32,25 @@ interface Equipment {
   status: 'active' | 'maintenance' | 'inactive';
   location: string;
   lastMaintenance: string;
+  totalCost: number;
+  partsUsed: number;
+  laborHours: number;
+  mostUsedPart: string;
+}
+
+interface FinancialBreakdown {
+  category: string;
+  amount: number;
+  percentage: number;
+  trend: 'up' | 'down' | 'stable';
+}
+
+interface MostUsedPart {
+  name: string;
+  quantity: number;
+  totalCost: number;
+  equipment: string;
+  lastUsed: string;
 }
 
 const mockEquipment: Equipment[] = [
@@ -38,7 +61,11 @@ const mockEquipment: Equipment[] = [
     model: 'F570',
     status: 'active',
     location: 'Galpão Principal',
-    lastMaintenance: '15/12/2024'
+    lastMaintenance: '15/12/2024',
+    totalCost: 2850.00,
+    partsUsed: 12,
+    laborHours: 8,
+    mostUsedPart: 'Cabeçote DX5'
   },
   {
     id: 2,
@@ -47,7 +74,11 @@ const mockEquipment: Equipment[] = [
     model: 'RT-640',
     status: 'maintenance',
     location: 'Sala 2',
-    lastMaintenance: '10/12/2024'
+    lastMaintenance: '10/12/2024',
+    totalCost: 4200.00,
+    partsUsed: 18,
+    laborHours: 12,
+    mostUsedPart: 'Damper'
   },
   {
     id: 3,
@@ -56,7 +87,11 @@ const mockEquipment: Equipment[] = [
     model: 'IQ HTS',
     status: 'active',
     location: 'Oficina',
-    lastMaintenance: '08/12/2024'
+    lastMaintenance: '08/12/2024',
+    totalCost: 1650.00,
+    partsUsed: 6,
+    laborHours: 4,
+    mostUsedPart: 'Broca Router'
   },
   {
     id: 4,
@@ -65,41 +100,74 @@ const mockEquipment: Equipment[] = [
     model: 'Auto Open',
     status: 'active',
     location: 'Acabamento',
-    lastMaintenance: '20/11/2024'
+    lastMaintenance: '20/11/2024',
+    totalCost: 850.00,
+    partsUsed: 3,
+    laborHours: 2,
+    mostUsedPart: 'Resistência'
   }
+];
+
+const mockFinancialBreakdown: FinancialBreakdown[] = [
+  { category: 'Peças e Componentes', amount: 4850.00, percentage: 45, trend: 'up' },
+  { category: 'Mão de Obra', amount: 3200.00, percentage: 30, trend: 'stable' },
+  { category: 'Deslocamento', amount: 1450.00, percentage: 13, trend: 'down' },
+  { category: 'Manutenção Preventiva', amount: 1300.00, percentage: 12, trend: 'up' }
+];
+
+const mockMostUsedParts: MostUsedPart[] = [
+  { name: 'Cabeçote DX5', quantity: 8, totalCost: 1600.00, equipment: 'DTF Epson F570', lastUsed: '15/12/2024' },
+  { name: 'Damper Epson', quantity: 12, totalCost: 960.00, equipment: 'Sublimática Roland', lastUsed: '12/12/2024' },
+  { name: 'Correia Motor', quantity: 6, totalCost: 720.00, equipment: 'CNC Router', lastUsed: '08/12/2024' },
+  { name: 'Resistência 220V', quantity: 4, totalCost: 320.00, equipment: 'Prensa Térmica', lastUsed: '05/12/2024' },
+  { name: 'Sensor Papel', quantity: 3, totalCost: 450.00, equipment: 'DTF Epson F570', lastUsed: '10/12/2024' }
 ];
 
 export const useCustomerDashboard = () => {
   const [stats] = useState<CustomerStats>({
-    totalPaid: 3250.00,
-    pendingPayments: 850.00,
-    weeklyGrowth: 12.5,
+    totalPaid: 10800.00,
+    pendingPayments: 1850.00,
+    weeklyGrowth: 8.5,
     favoredTechnician: {
       name: 'Carlos Silva',
-      amount: 1200.00
-    }
+      amount: 4200.00
+    },
+    monthlyOperatingCosts: 3600.00,
+    averageCallCost: 275.00
   });
 
   const [serviceMetrics] = useState<CustomerServiceMetrics>({
-    activeServices: 2,
-    pendingQuotes: 3,
-    completedThisMonth: 8,
-    totalSpent: 15750,
-    averageResponseTime: '2h 30min',
-    equipmentCount: 4
+    activeServices: 3,
+    pendingQuotes: 2,
+    completedThisMonth: 12,
+    totalSpent: 28950,
+    averageResponseTime: '1h 45min',
+    equipmentCount: 4,
+    emergencyCalls: 5,
+    preventiveMaintenance: 7
   });
 
   const weeklyPayments = [
-    { week: 'Sem 1', payments: 800 },
-    { week: 'Sem 2', payments: 1200 },
-    { week: 'Sem 3', payments: 950 },
-    { week: 'Sem 4', payments: 1450 }
+    { week: 'Sem 1', payments: 2400 },
+    { week: 'Sem 2', payments: 3200 },
+    { week: 'Sem 3', payments: 2850 },
+    { week: 'Sem 4', payments: 3350 }
   ];
+
+  const equipmentCosts = mockEquipment.map(eq => ({
+    name: eq.type,
+    cost: eq.totalCost,
+    parts: eq.partsUsed,
+    hours: eq.laborHours
+  }));
 
   return {
     stats,
     serviceMetrics,
     equipment: mockEquipment,
-    weeklyPayments
+    weeklyPayments,
+    financialBreakdown: mockFinancialBreakdown,
+    mostUsedParts: mockMostUsedParts,
+    equipmentCosts
   };
 };
