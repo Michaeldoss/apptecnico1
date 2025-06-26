@@ -17,7 +17,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { MoreVertical, Package, AlertTriangle, Edit, Trash2, Eye } from 'lucide-react';
+import { MoreVertical, Package, AlertTriangle, Edit, Trash2, Eye, Plus } from 'lucide-react';
 import { formatCurrency } from '@/lib/format';
 
 interface Part {
