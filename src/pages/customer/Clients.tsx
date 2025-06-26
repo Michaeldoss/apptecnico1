@@ -46,19 +46,19 @@ const CustomerClients = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-yellow-400 via-yellow-300 to-yellow-200">
       <CustomerLayout title="Prontuário Técnico - Clientes">
-        <div className="space-y-8 p-6">
+        <div className="space-y-6 p-6">
           {/* Dashboard Cards */}
-          <div className="mb-8">
+          <div className="mb-6">
             <ClientDashboard clientData={clientData} />
           </div>
 
-          {/* Main Content Tabs */}
-          <Card className="border-0 shadow-2xl bg-white/95 backdrop-blur-sm">
+          {/* Main Content Card */}
+          <Card className="border-0 shadow-xl bg-white/95 backdrop-blur-sm">
             <Tabs defaultValue="cadastral" className="w-full">
-              <TabsList className="grid w-full grid-cols-6 bg-white border-2 border-yellow-500 shadow-lg rounded-xl p-2 mb-6">
+              <TabsList className="grid w-full grid-cols-6 bg-gradient-to-r from-yellow-500 to-yellow-400 shadow-lg rounded-t-xl p-1 mb-0">
                 <TabsTrigger 
                   value="cadastral" 
-                  className="data-[state=active]:bg-yellow-500 data-[state=active]:text-white data-[state=active]:shadow-md text-yellow-700 hover:bg-yellow-100 font-semibold transition-all duration-300 rounded-lg px-4 py-3"
+                  className="data-[state=active]:bg-white data-[state=active]:text-yellow-700 data-[state=active]:shadow-md text-white hover:bg-white/20 font-semibold transition-all duration-300 rounded-lg px-3 py-2"
                 >
                   <User className="h-4 w-4 mr-2" />
                   <span className="hidden sm:inline">Dados Cadastrais</span>
@@ -66,7 +66,7 @@ const CustomerClients = () => {
                 </TabsTrigger>
                 <TabsTrigger 
                   value="local" 
-                  className="data-[state=active]:bg-yellow-500 data-[state=active]:text-white data-[state=active]:shadow-md text-yellow-700 hover:bg-yellow-100 font-semibold transition-all duration-300 rounded-lg px-4 py-3"
+                  className="data-[state=active]:bg-white data-[state=active]:text-yellow-700 data-[state=active]:shadow-md text-white hover:bg-white/20 font-semibold transition-all duration-300 rounded-lg px-3 py-2"
                 >
                   <Factory className="h-4 w-4 mr-2" />
                   <span className="hidden sm:inline">Estrutura Local</span>
@@ -74,7 +74,7 @@ const CustomerClients = () => {
                 </TabsTrigger>
                 <TabsTrigger 
                   value="equipment" 
-                  className="data-[state=active]:bg-yellow-500 data-[state=active]:text-white data-[state=active]:shadow-md text-yellow-700 hover:bg-yellow-100 font-semibold transition-all duration-300 rounded-lg px-4 py-3"
+                  className="data-[state=active]:bg-white data-[state=active]:text-yellow-700 data-[state=active]:shadow-md text-white hover:bg-white/20 font-semibold transition-all duration-300 rounded-lg px-3 py-2"
                 >
                   <Printer className="h-4 w-4 mr-2" />
                   <span className="hidden sm:inline">Equipamentos</span>
@@ -82,7 +82,7 @@ const CustomerClients = () => {
                 </TabsTrigger>
                 <TabsTrigger 
                   value="history" 
-                  className="data-[state=active]:bg-yellow-500 data-[state=active]:text-white data-[state=active]:shadow-md text-yellow-700 hover:bg-yellow-100 font-semibold transition-all duration-300 rounded-lg px-4 py-3"
+                  className="data-[state=active]:bg-white data-[state=active]:text-yellow-700 data-[state=active]:shadow-md text-white hover:bg-white/20 font-semibold transition-all duration-300 rounded-lg px-3 py-2"
                 >
                   <History className="h-4 w-4 mr-2" />
                   <span className="hidden sm:inline">Histórico</span>
@@ -90,7 +90,7 @@ const CustomerClients = () => {
                 </TabsTrigger>
                 <TabsTrigger 
                   value="documents" 
-                  className="data-[state=active]:bg-yellow-500 data-[state=active]:text-white data-[state=active]:shadow-md text-yellow-700 hover:bg-yellow-100 font-semibold transition-all duration-300 rounded-lg px-4 py-3"
+                  className="data-[state=active]:bg-white data-[state=active]:text-yellow-700 data-[state=active]:shadow-md text-white hover:bg-white/20 font-semibold transition-all duration-300 rounded-lg px-3 py-2"
                 >
                   <FileText className="h-4 w-4 mr-2" />
                   <span className="hidden sm:inline">Documentos</span>
@@ -98,7 +98,7 @@ const CustomerClients = () => {
                 </TabsTrigger>
                 <TabsTrigger 
                   value="actions" 
-                  className="data-[state=active]:bg-yellow-500 data-[state=active]:text-white data-[state=active]:shadow-md text-yellow-700 hover:bg-yellow-100 font-semibold transition-all duration-300 rounded-lg px-4 py-3"
+                  className="data-[state=active]:bg-white data-[state=active]:text-yellow-700 data-[state=active]:shadow-md text-white hover:bg-white/20 font-semibold transition-all duration-300 rounded-lg px-3 py-2"
                 >
                   <Settings className="h-4 w-4 mr-2" />
                   <span className="hidden sm:inline">Ações</span>
@@ -106,14 +106,14 @@ const CustomerClients = () => {
                 </TabsTrigger>
               </TabsList>
 
-              <div className="px-6 py-4">
+              <div className="p-6 bg-white rounded-b-xl">
                 <TabsContent value="cadastral" className="mt-0">
                   <ClientData clientData={clientData} />
                 </TabsContent>
 
                 <TabsContent value="local" className="mt-0">
-                  <Card className="border-2 border-yellow-400 bg-white shadow-xl">
-                    <CardHeader className="bg-gradient-to-r from-yellow-500 to-yellow-400 text-white border-b-2 border-yellow-600">
+                  <Card className="border border-yellow-200 bg-white shadow-md">
+                    <CardHeader className="bg-gradient-to-r from-yellow-500 to-yellow-400 text-white rounded-t-lg">
                       <CardTitle className="flex items-center gap-3 text-xl">
                         <Factory className="h-6 w-6" />
                         Estrutura de Instalação
@@ -129,7 +129,7 @@ const CustomerClients = () => {
                           <Input 
                             value={clientData.location.equipmentLocation} 
                             readOnly 
-                            className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
+                            className="border border-yellow-300 bg-white focus:border-yellow-500 mt-1"
                           />
                         </div>
                         <div>
@@ -140,7 +140,7 @@ const CustomerClients = () => {
                           <Input 
                             value={clientData.location.employees.toString()} 
                             readOnly 
-                            className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
+                            className="border border-yellow-300 bg-white focus:border-yellow-500 mt-1"
                           />
                         </div>
                         <div>
@@ -151,7 +151,7 @@ const CustomerClients = () => {
                           <Input 
                             value={clientData.location.electricalInstallation} 
                             readOnly 
-                            className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
+                            className="border border-yellow-300 bg-white focus:border-yellow-500 mt-1"
                           />
                         </div>
                         <div>
@@ -162,43 +162,43 @@ const CustomerClients = () => {
                           <Input 
                             value={clientData.location.environmentalConditions} 
                             readOnly 
-                            className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
+                            className="border border-yellow-300 bg-white focus:border-yellow-500 mt-1"
                           />
                         </div>
                       </div>
 
-                      <Separator className="bg-yellow-400 h-0.5 my-6" />
+                      <Separator className="bg-yellow-300 h-px my-6" />
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="flex items-center justify-between p-4 border-2 border-yellow-300 rounded-lg bg-yellow-50">
+                        <div className="flex items-center justify-between p-4 border border-yellow-300 rounded-lg bg-yellow-50">
                           <span className="text-yellow-700 font-semibold">Aterramento</span>
                           {clientData.location.grounding ? 
-                            <Badge className="bg-green-100 text-green-800 border border-green-300">✔ Presente</Badge> : 
-                            <Badge className="bg-red-100 text-red-800 border border-red-300">⚠ Ausente</Badge>
+                            <Badge className="bg-green-100 text-green-700 border-green-200">✔ Presente</Badge> : 
+                            <Badge className="bg-red-100 text-red-700 border-red-200">⚠ Ausente</Badge>
                           }
                         </div>
                         
-                        <div className="flex items-center justify-between p-4 border-2 border-yellow-300 rounded-lg bg-yellow-50">
+                        <div className="flex items-center justify-between p-4 border border-yellow-300 rounded-lg bg-yellow-50">
                           <span className="text-yellow-700 font-semibold">Ar-condicionado</span>
                           {clientData.location.airConditioning ? 
-                            <Badge className="bg-green-100 text-green-800 border border-green-300">✔ Presente</Badge> : 
-                            <Badge className="bg-red-100 text-red-800 border border-red-300">❌ Ausente</Badge>
+                            <Badge className="bg-green-100 text-green-700 border-green-200">✔ Presente</Badge> : 
+                            <Badge className="bg-red-100 text-red-700 border-red-200">❌ Ausente</Badge>
                           }
                         </div>
                         
-                        <div className="flex items-center justify-between p-4 border-2 border-yellow-300 rounded-lg bg-yellow-50">
+                        <div className="flex items-center justify-between p-4 border border-yellow-300 rounded-lg bg-yellow-50">
                           <span className="text-yellow-700 font-semibold">Nobreaks</span>
                           {clientData.location.hasNobreak ? 
-                            <Badge className="bg-green-100 text-green-800 border border-green-300">Sim</Badge> : 
-                            <Badge className="bg-red-100 text-red-800 border border-red-300">Não</Badge>
+                            <Badge className="bg-green-100 text-green-700 border-green-200">Sim</Badge> : 
+                            <Badge className="bg-red-100 text-red-700 border-red-200">Não</Badge>
                           }
                         </div>
                         
-                        <div className="flex items-center justify-between p-4 border-2 border-yellow-300 rounded-lg bg-yellow-50">
+                        <div className="flex items-center justify-between p-4 border border-yellow-300 rounded-lg bg-yellow-50">
                           <span className="text-yellow-700 font-semibold">Filtros/Estabilizadores</span>
                           {clientData.location.hasFilters ? 
-                            <Badge className="bg-green-100 text-green-800 border border-green-300">Sim</Badge> : 
-                            <Badge className="bg-red-100 text-red-800 border border-red-300">Não</Badge>
+                            <Badge className="bg-green-100 text-green-700 border-green-200">Sim</Badge> : 
+                            <Badge className="bg-red-100 text-red-700 border-red-200">Não</Badge>
                           }
                         </div>
                       </div>
@@ -207,8 +207,8 @@ const CustomerClients = () => {
                 </TabsContent>
 
                 <TabsContent value="equipment" className="mt-0">
-                  <Card className="border-2 border-yellow-400 bg-white shadow-xl">
-                    <CardHeader className="bg-gradient-to-r from-yellow-500 to-yellow-400 text-white border-b-2 border-yellow-600">
+                  <Card className="border border-yellow-200 bg-white shadow-md">
+                    <CardHeader className="bg-gradient-to-r from-yellow-500 to-yellow-400 text-white rounded-t-lg">
                       <CardTitle className="flex items-center justify-between text-xl">
                         <div className="flex items-center gap-3">
                           <Printer className="h-6 w-6" />
@@ -216,7 +216,7 @@ const CustomerClients = () => {
                         </div>
                         <Button 
                           size="sm" 
-                          className="bg-white hover:bg-gray-100 text-yellow-700 border-2 border-white shadow-md font-semibold"
+                          className="bg-white hover:bg-gray-100 text-yellow-700 border-0 shadow-sm font-semibold"
                         >
                           <Plus className="h-4 w-4 mr-2" />
                           Novo Equipamento
@@ -228,8 +228,8 @@ const CustomerClients = () => {
                         {clientData.equipment.map((equipment) => {
                           const StatusIcon = getStatusIcon(equipment.status);
                           return (
-                            <Card key={equipment.id} className="border-2 border-yellow-300 bg-white shadow-lg hover:shadow-xl transition-all duration-300">
-                              <CardHeader className="pb-3 bg-yellow-50 border-b border-yellow-200">
+                            <Card key={equipment.id} className="border border-yellow-300 bg-white shadow-sm hover:shadow-md transition-shadow">
+                              <CardHeader className="pb-3 bg-yellow-50 border-b border-yellow-200 rounded-t-lg">
                                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                                   <CardTitle className="text-lg text-yellow-700 flex items-center gap-3">
                                     <Printer className="h-6 w-6 text-yellow-600" />
@@ -242,7 +242,7 @@ const CustomerClients = () => {
                                   </Badge>
                                 </div>
                               </CardHeader>
-                              <CardContent className="space-y-4">
+                              <CardContent className="space-y-4 p-4">
                                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
                                   <div>
                                     <Label className="text-yellow-700 font-semibold">Série</Label>
@@ -262,7 +262,7 @@ const CustomerClients = () => {
                                   </div>
                                 </div>
                                 
-                                <Separator className="bg-yellow-400 h-0.5" />
+                                <Separator className="bg-yellow-300 h-px" />
                                 
                                 <ClientEquipmentDetails equipment={equipment} />
                                 
@@ -270,7 +270,7 @@ const CustomerClients = () => {
                                   <Button 
                                     size="sm" 
                                     variant="outline" 
-                                    className="border-2 border-yellow-600 text-yellow-700 hover:bg-yellow-600 hover:text-white font-semibold"
+                                    className="border border-yellow-600 text-yellow-700 hover:bg-yellow-600 hover:text-white font-semibold"
                                   >
                                     <Eye className="h-4 w-4 mr-2" />
                                     Ver Detalhes
@@ -278,7 +278,7 @@ const CustomerClients = () => {
                                   <Button 
                                     size="sm" 
                                     variant="outline" 
-                                    className="border-2 border-yellow-600 text-yellow-700 hover:bg-yellow-600 hover:text-white font-semibold"
+                                    className="border border-yellow-600 text-yellow-700 hover:bg-yellow-600 hover:text-white font-semibold"
                                   >
                                     <History className="h-4 w-4 mr-2" />
                                     Histórico
@@ -286,7 +286,7 @@ const CustomerClients = () => {
                                   <Button 
                                     size="sm" 
                                     variant="outline" 
-                                    className="border-2 border-yellow-600 text-yellow-700 hover:bg-yellow-600 hover:text-white font-semibold"
+                                    className="border border-yellow-600 text-yellow-700 hover:bg-yellow-600 hover:text-white font-semibold"
                                   >
                                     <Wrench className="h-4 w-4 mr-2" />
                                     Manutenção
@@ -303,8 +303,8 @@ const CustomerClients = () => {
 
                 <TabsContent value="history" className="mt-0">
                   <div className="grid gap-6 lg:grid-cols-2">
-                    <Card className="border-2 border-yellow-400 bg-white shadow-xl">
-                      <CardHeader className="bg-gradient-to-r from-yellow-500 to-yellow-400 text-white border-b-2 border-yellow-600">
+                    <Card className="border border-yellow-200 bg-white shadow-md">
+                      <CardHeader className="bg-gradient-to-r from-yellow-500 to-yellow-400 text-white rounded-t-lg">
                         <CardTitle className="text-white flex items-center gap-3">
                           <User className="h-6 w-6" />
                           Técnicos Mais Frequentes
@@ -313,7 +313,7 @@ const CustomerClients = () => {
                       <CardContent className="pt-6">
                         <div className="space-y-4">
                           {clientData.technicians.map((tech, index) => (
-                            <div key={index} className="flex items-center gap-4 p-4 border-2 border-yellow-200 rounded-lg bg-yellow-50 hover:bg-yellow-100 transition-colors">
+                            <div key={index} className="flex items-center gap-4 p-4 border border-yellow-200 rounded-lg bg-yellow-50 hover:bg-yellow-100 transition-colors">
                               <Avatar className="h-12 w-12">
                                 <AvatarImage src={tech.photo} />
                                 <AvatarFallback className="bg-yellow-100 text-yellow-700 font-semibold">
@@ -335,8 +335,8 @@ const CustomerClients = () => {
                       </CardContent>
                     </Card>
 
-                    <Card className="border-2 border-yellow-400 bg-white shadow-xl">
-                      <CardHeader className="bg-gradient-to-r from-yellow-500 to-yellow-400 text-white border-b-2 border-yellow-600">
+                    <Card className="border border-yellow-200 bg-white shadow-md">
+                      <CardHeader className="bg-gradient-to-r from-yellow-500 to-yellow-400 text-white rounded-t-lg">
                         <CardTitle className="text-white flex items-center gap-3">
                           <FileText className="h-6 w-6" />
                           Resumo de Atendimentos
@@ -344,21 +344,21 @@ const CustomerClients = () => {
                       </CardHeader>
                       <CardContent className="pt-6">
                         <div className="space-y-4">
-                          <div className="flex justify-between items-center p-4 border-2 border-yellow-300 rounded-lg bg-yellow-50">
+                          <div className="flex justify-between items-center p-4 border border-yellow-300 rounded-lg bg-yellow-50">
                             <div>
                               <p className="font-semibold text-yellow-700">Chamados/Mês</p>
                               <p className="text-2xl font-bold text-yellow-800">{clientData.history.monthlyCallFrequency}</p>
                             </div>
                             <Calendar className="h-8 w-8 text-yellow-600" />
                           </div>
-                          <div className="flex justify-between items-center p-4 border-2 border-yellow-300 rounded-lg bg-yellow-50">
+                          <div className="flex justify-between items-center p-4 border border-yellow-300 rounded-lg bg-yellow-50">
                             <div>
                               <p className="font-semibold text-yellow-700">Tempo Médio Resposta</p>
                               <p className="text-2xl font-bold text-yellow-800">{clientData.history.responseTime}</p>
                             </div>
                             <AlertTriangle className="h-8 w-8 text-yellow-600" />
                           </div>
-                          <Button className="w-full bg-yellow-500 hover:bg-yellow-600 text-white shadow-lg font-semibold">
+                          <Button className="w-full bg-yellow-500 hover:bg-yellow-600 text-white shadow-md font-semibold">
                             <FileText className="h-5 w-5 mr-2" />
                             Ver Histórico Completo
                           </Button>
@@ -369,8 +369,8 @@ const CustomerClients = () => {
                 </TabsContent>
 
                 <TabsContent value="documents" className="mt-0">
-                  <Card className="border-2 border-yellow-400 bg-white shadow-xl">
-                    <CardHeader className="bg-gradient-to-r from-yellow-500 to-yellow-400 text-white border-b-2 border-yellow-600">
+                  <Card className="border border-yellow-200 bg-white shadow-md">
+                    <CardHeader className="bg-gradient-to-r from-yellow-500 to-yellow-400 text-white rounded-t-lg">
                       <CardTitle className="flex items-center gap-3 text-xl">
                         <FileText className="h-6 w-6" />
                         Anexos e Documentos
@@ -379,7 +379,7 @@ const CustomerClients = () => {
                     <CardContent className="space-y-6 pt-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {clientData.documents.map((doc, index) => (
-                          <Card key={index} className="border-2 border-yellow-300 bg-white shadow-md hover:shadow-lg transition-shadow">
+                          <Card key={index} className="border border-yellow-300 bg-white shadow-sm hover:shadow-md transition-shadow">
                             <CardContent className="p-4">
                               <div className="flex items-center justify-between">
                                 <div className="min-w-0 flex-1">
@@ -389,7 +389,7 @@ const CustomerClients = () => {
                                 <Button 
                                   size="sm" 
                                   variant="outline" 
-                                  className="border-2 border-yellow-600 text-yellow-700 hover:bg-yellow-600 hover:text-white ml-3"
+                                  className="border border-yellow-600 text-yellow-700 hover:bg-yellow-600 hover:text-white ml-3"
                                 >
                                   <Eye className="h-4 w-4" />
                                 </Button>
@@ -400,13 +400,13 @@ const CustomerClients = () => {
                       </div>
 
                       <div className="flex flex-wrap gap-3">
-                        <Button className="bg-yellow-500 hover:bg-yellow-600 text-white shadow-lg font-semibold">
+                        <Button className="bg-yellow-500 hover:bg-yellow-600 text-white shadow-md font-semibold">
                           <Upload className="h-5 w-5 mr-2" />
                           Upload Documentos
                         </Button>
                         <Button 
                           variant="outline" 
-                          className="border-2 border-yellow-600 text-yellow-700 hover:bg-yellow-600 hover:text-white font-semibold"
+                          className="border border-yellow-600 text-yellow-700 hover:bg-yellow-600 hover:text-white font-semibold"
                         >
                           <Camera className="h-5 w-5 mr-2" />
                           Fotos do Local
@@ -417,8 +417,8 @@ const CustomerClients = () => {
                 </TabsContent>
 
                 <TabsContent value="actions" className="mt-0">
-                  <Card className="border-2 border-yellow-400 bg-white shadow-xl">
-                    <CardHeader className="bg-gradient-to-r from-yellow-500 to-yellow-400 text-white border-b-2 border-yellow-600">
+                  <Card className="border border-yellow-200 bg-white shadow-md">
+                    <CardHeader className="bg-gradient-to-r from-yellow-500 to-yellow-400 text-white rounded-t-lg">
                       <CardTitle className="flex items-center gap-3 text-xl">
                         <Settings className="h-6 w-6" />
                         Ações Disponíveis
@@ -426,47 +426,47 @@ const CustomerClients = () => {
                     </CardHeader>
                     <CardContent className="space-y-6 pt-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <Button className="bg-yellow-500 hover:bg-yellow-600 text-white h-20 flex-col shadow-lg font-semibold">
+                        <Button className="bg-yellow-500 hover:bg-yellow-600 text-white h-20 flex-col shadow-md font-semibold">
                           <Plus className="h-6 w-6 mb-2" />
                           Abrir Novo Chamado
                         </Button>
                         <Button 
                           variant="outline" 
-                          className="border-2 border-yellow-600 text-yellow-700 hover:bg-yellow-600 hover:text-white h-20 flex-col font-semibold"
+                          className="border border-yellow-600 text-yellow-700 hover:bg-yellow-600 hover:text-white h-20 flex-col font-semibold"
                         >
                           <FileText className="h-6 w-6 mb-2" />
                           Visualizar OSs
                         </Button>
                         <Button 
                           variant="outline" 
-                          className="border-2 border-yellow-600 text-yellow-700 hover:bg-yellow-600 hover:text-white h-20 flex-col font-semibold"
+                          className="border border-yellow-600 text-yellow-700 hover:bg-yellow-600 hover:text-white h-20 flex-col font-semibold"
                         >
                           <Download className="h-6 w-6 mb-2" />
                           Exportar Dados
                         </Button>
                         <Button 
                           variant="outline" 
-                          className="border-2 border-yellow-600 text-yellow-700 hover:bg-yellow-600 hover:text-white h-20 flex-col font-semibold"
+                          className="border border-yellow-600 text-yellow-700 hover:bg-yellow-600 hover:text-white h-20 flex-col font-semibold"
                         >
                           <Edit className="h-6 w-6 mb-2" />
                           Atualizar Informações
                         </Button>
                       </div>
 
-                      <Separator className="bg-yellow-400 h-0.5" />
+                      <Separator className="bg-yellow-300 h-px" />
 
                       <div>
                         <Label className="text-yellow-700 font-semibold">Checklist de Instalação</Label>
                         <div className="flex flex-wrap items-center gap-3 mt-2">
                           {clientData.installationChecklist ? (
-                            <Badge className="bg-green-100 text-green-800 border border-green-300">✔ Preenchido</Badge>
+                            <Badge className="bg-green-100 text-green-700 border-green-200">✔ Preenchido</Badge>
                           ) : (
-                            <Badge className="bg-red-100 text-red-800 border border-red-300">⚠ Pendente</Badge>
+                            <Badge className="bg-red-100 text-red-700 border-red-200">⚠ Pendente</Badge>
                           )}
                           <Button 
                             size="sm" 
                             variant="outline" 
-                            className="border-2 border-yellow-600 text-yellow-700 hover:bg-yellow-600 hover:text-white font-semibold"
+                            className="border border-yellow-600 text-yellow-700 hover:bg-yellow-600 hover:text-white font-semibold"
                           >
                             Ver Checklist
                           </Button>

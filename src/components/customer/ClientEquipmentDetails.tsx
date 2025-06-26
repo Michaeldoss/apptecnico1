@@ -22,7 +22,7 @@ const ClientEquipmentDetails = ({ equipment }: ClientEquipmentDetailsProps) => {
                 <Input 
                   value={equipment.width} 
                   readOnly 
-                  className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
+                  className="border border-yellow-300 bg-white focus:border-yellow-500 mt-1"
                 />
               </div>
               <div>
@@ -30,11 +30,11 @@ const ClientEquipmentDetails = ({ equipment }: ClientEquipmentDetailsProps) => {
                 <Input 
                   value={equipment.heads} 
                   readOnly 
-                  className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
+                  className="border border-yellow-300 bg-white focus:border-yellow-500 mt-1"
                 />
               </div>
             </div>
-            <Separator className="bg-yellow-400 h-0.5" />
+            <Separator className="bg-yellow-300 h-px" />
             <div>
               <Label className="text-yellow-700 font-semibold flex items-center gap-2">
                 <Settings className="h-5 w-5" />
@@ -46,7 +46,7 @@ const ClientEquipmentDetails = ({ equipment }: ClientEquipmentDetailsProps) => {
                   <Input 
                     value={equipment.oven?.model} 
                     readOnly 
-                    className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
+                    className="border border-yellow-300 bg-white focus:border-yellow-500 mt-1"
                   />
                 </div>
                 <div>
@@ -57,7 +57,7 @@ const ClientEquipmentDetails = ({ equipment }: ClientEquipmentDetailsProps) => {
                   <Input 
                     value={equipment.oven?.temperature} 
                     readOnly 
-                    className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
+                    className="border border-yellow-300 bg-white focus:border-yellow-500 mt-1"
                   />
                 </div>
                 <div>
@@ -65,7 +65,7 @@ const ClientEquipmentDetails = ({ equipment }: ClientEquipmentDetailsProps) => {
                   <Input 
                     value={equipment.oven?.belt} 
                     readOnly 
-                    className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
+                    className="border border-yellow-300 bg-white focus:border-yellow-500 mt-1"
                   />
                 </div>
                 <div>
@@ -76,7 +76,7 @@ const ClientEquipmentDetails = ({ equipment }: ClientEquipmentDetailsProps) => {
                   <Input 
                     value={equipment.oven?.power} 
                     readOnly 
-                    className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
+                    className="border border-yellow-300 bg-white focus:border-yellow-500 mt-1"
                   />
                 </div>
               </div>
@@ -92,7 +92,7 @@ const ClientEquipmentDetails = ({ equipment }: ClientEquipmentDetailsProps) => {
                 <Input 
                   value={equipment.area} 
                   readOnly 
-                  className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
+                  className="border border-yellow-300 bg-white focus:border-yellow-500 mt-1"
                 />
               </div>
               <div>
@@ -100,7 +100,7 @@ const ClientEquipmentDetails = ({ equipment }: ClientEquipmentDetailsProps) => {
                 <Input 
                   value={equipment.motorType} 
                   readOnly 
-                  className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
+                  className="border border-yellow-300 bg-white focus:border-yellow-500 mt-1"
                 />
               </div>
               <div>
@@ -108,7 +108,7 @@ const ClientEquipmentDetails = ({ equipment }: ClientEquipmentDetailsProps) => {
                 <Input 
                   value={equipment.control} 
                   readOnly 
-                  className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
+                  className="border border-yellow-300 bg-white focus:border-yellow-500 mt-1"
                 />
               </div>
               <div>
@@ -116,7 +116,7 @@ const ClientEquipmentDetails = ({ equipment }: ClientEquipmentDetailsProps) => {
                 <Input 
                   value={equipment.software} 
                   readOnly 
-                  className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
+                  className="border border-yellow-300 bg-white focus:border-yellow-500 mt-1"
                 />
               </div>
               <div>
@@ -124,7 +124,7 @@ const ClientEquipmentDetails = ({ equipment }: ClientEquipmentDetailsProps) => {
                 <Input 
                   value={equipment.lubrication} 
                   readOnly 
-                  className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
+                  className="border border-yellow-300 bg-white focus:border-yellow-500 mt-1"
                 />
               </div>
               <div>
@@ -133,7 +133,7 @@ const ClientEquipmentDetails = ({ equipment }: ClientEquipmentDetailsProps) => {
                   Frequência de Uso
                 </Label>
                 <div className="mt-1">
-                  <Badge className="bg-yellow-100 text-yellow-800 border-2 border-yellow-300">{equipment.usage}</Badge>
+                  <Badge className="bg-yellow-100 text-yellow-800 border border-yellow-300">{equipment.usage}</Badge>
                 </div>
               </div>
             </div>
@@ -148,7 +148,7 @@ const ClientEquipmentDetails = ({ equipment }: ClientEquipmentDetailsProps) => {
                 <Input 
                   value={equipment.activation} 
                   readOnly 
-                  className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
+                  className="border border-yellow-300 bg-white focus:border-yellow-500 mt-1"
                 />
               </div>
               <div>
@@ -159,7 +159,7 @@ const ClientEquipmentDetails = ({ equipment }: ClientEquipmentDetailsProps) => {
                 <Input 
                   value={equipment.voltage} 
                   readOnly 
-                  className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
+                  className="border border-yellow-300 bg-white focus:border-yellow-500 mt-1"
                 />
               </div>
             </div>

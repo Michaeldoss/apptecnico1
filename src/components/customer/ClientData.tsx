@@ -15,8 +15,8 @@ interface ClientDataProps {
 const ClientData = ({ clientData }: ClientDataProps) => {
   return (
     <div className="space-y-6">
-      <Card className="border-2 border-yellow-400 bg-white shadow-xl">
-        <CardHeader className="bg-gradient-to-r from-yellow-500 to-yellow-400 text-white border-b-2 border-yellow-600">
+      <Card className="border border-yellow-200 bg-white shadow-md">
+        <CardHeader className="bg-gradient-to-r from-yellow-500 to-yellow-400 text-white rounded-t-lg">
           <CardTitle className="flex items-center gap-3 text-xl">
             <Building2 className="h-6 w-6" />
             Informações da Empresa
@@ -29,13 +29,13 @@ const ClientData = ({ clientData }: ClientDataProps) => {
               <Input 
                 value={clientData.name} 
                 readOnly 
-                className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
+                className="border border-yellow-300 bg-white focus:border-yellow-500 mt-1"
               />
             </div>
             <div>
               <Label className="text-yellow-700 font-semibold">Tipo</Label>
               <div className="mt-1">
-                <Badge variant="outline" className="border-2 border-yellow-600 text-yellow-800 bg-yellow-50">
+                <Badge variant="outline" className="border border-yellow-600 text-yellow-800 bg-yellow-50">
                   {clientData.type === 'juridica' ? 'Pessoa Jurídica' : 'Pessoa Física'}
                 </Badge>
               </div>
@@ -45,7 +45,7 @@ const ClientData = ({ clientData }: ClientDataProps) => {
               <Input 
                 value={clientData.cnpj} 
                 readOnly 
-                className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
+                className="border border-yellow-300 bg-white focus:border-yellow-500 mt-1"
               />
             </div>
             <div>
@@ -53,7 +53,7 @@ const ClientData = ({ clientData }: ClientDataProps) => {
               <Input 
                 value={clientData.ie} 
                 readOnly 
-                className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
+                className="border border-yellow-300 bg-white focus:border-yellow-500 mt-1"
               />
             </div>
             <div>
@@ -64,7 +64,7 @@ const ClientData = ({ clientData }: ClientDataProps) => {
               <Input 
                 value={clientData.email} 
                 readOnly 
-                className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
+                className="border border-yellow-300 bg-white focus:border-yellow-500 mt-1"
               />
             </div>
             <div>
@@ -75,7 +75,7 @@ const ClientData = ({ clientData }: ClientDataProps) => {
               <Input 
                 value={clientData.whatsapp} 
                 readOnly 
-                className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
+                className="border border-yellow-300 bg-white focus:border-yellow-500 mt-1"
               />
             </div>
           </div>
@@ -89,12 +89,12 @@ const ClientData = ({ clientData }: ClientDataProps) => {
               <Input 
                 value={`${clientData.address.street}, ${clientData.address.neighborhood}, ${clientData.address.city} - ${clientData.address.state}, ${clientData.address.zipCode}`} 
                 readOnly 
-                className="flex-1 border-2 border-yellow-300 bg-white focus:border-yellow-500"
+                className="flex-1 border border-yellow-300 bg-white focus:border-yellow-500"
               />
               <Button 
                 variant="outline" 
                 size="icon" 
-                className="border-2 border-yellow-600 text-yellow-700 hover:bg-yellow-600 hover:text-white"
+                className="border border-yellow-600 text-yellow-700 hover:bg-yellow-600 hover:text-white"
               >
                 <ExternalLink className="h-4 w-4" />
               </Button>
@@ -103,8 +103,8 @@ const ClientData = ({ clientData }: ClientDataProps) => {
         </CardContent>
       </Card>
 
-      <Card className="border-2 border-yellow-400 bg-white shadow-xl">
-        <CardHeader className="bg-gradient-to-r from-yellow-500 to-yellow-400 text-white border-b-2 border-yellow-600">
+      <Card className="border border-yellow-200 bg-white shadow-md">
+        <CardHeader className="bg-gradient-to-r from-yellow-500 to-yellow-400 text-white rounded-t-lg">
           <CardTitle className="flex items-center gap-3 text-xl">
             <User className="h-6 w-6" />
             Pessoas Responsáveis
@@ -114,7 +114,7 @@ const ClientData = ({ clientData }: ClientDataProps) => {
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="border-b-2 border-yellow-200">
+                <TableRow className="border-b border-yellow-200">
                   <TableHead className="text-yellow-700 font-semibold">Nome</TableHead>
                   <TableHead className="text-yellow-700 font-semibold">Cargo</TableHead>
                   <TableHead className="text-yellow-700 font-semibold">Telefone</TableHead>
@@ -130,7 +130,7 @@ const ClientData = ({ clientData }: ClientDataProps) => {
                     <TableCell className="text-yellow-800">{contact.phone}</TableCell>
                     <TableCell className="text-yellow-800 break-all">{contact.email}</TableCell>
                     <TableCell>
-                      <Badge className={contact.type === 'tecnico' ? 'bg-yellow-100 text-yellow-800 border border-yellow-300' : 'bg-green-100 text-green-800 border border-green-300'}>
+                      <Badge className={contact.type === 'tecnico' ? 'bg-yellow-100 text-yellow-800 border-yellow-300' : 'bg-green-100 text-green-800 border-green-300'}>
                         {contact.type === 'tecnico' ? 'Técnico' : 'Financeiro'}
                       </Badge>
                     </TableCell>

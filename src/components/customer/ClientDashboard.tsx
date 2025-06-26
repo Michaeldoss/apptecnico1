@@ -10,12 +10,12 @@ interface ClientDashboardProps {
 const ClientDashboard = ({ clientData }: ClientDashboardProps) => {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-      <Card className="border-2 border-yellow-500 bg-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+      <Card className="border border-yellow-300 bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-yellow-800 font-semibold">Total de Atendimentos</p>
-              <p className="text-3xl font-bold text-yellow-900">{clientData.history.totalServices}</p>
+              <p className="text-sm text-yellow-700 font-semibold">Total de Atendimentos</p>
+              <p className="text-3xl font-bold text-yellow-800">{clientData.history.totalServices}</p>
             </div>
             <div className="p-3 bg-yellow-100 rounded-full">
               <FileText className="h-8 w-8 text-yellow-600" />
@@ -24,12 +24,12 @@ const ClientDashboard = ({ clientData }: ClientDashboardProps) => {
         </CardContent>
       </Card>
 
-      <Card className="border-2 border-yellow-500 bg-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+      <Card className="border border-yellow-300 bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-yellow-800 font-semibold">Equipamentos Ativos</p>
-              <p className="text-3xl font-bold text-yellow-900">{clientData.history.activeEquipment}</p>
+              <p className="text-sm text-yellow-700 font-semibold">Equipamentos Ativos</p>
+              <p className="text-3xl font-bold text-yellow-800">{clientData.history.activeEquipment}</p>
             </div>
             <div className="p-3 bg-yellow-100 rounded-full">
               <Printer className="h-8 w-8 text-yellow-600" />
@@ -38,12 +38,12 @@ const ClientDashboard = ({ clientData }: ClientDashboardProps) => {
         </CardContent>
       </Card>
 
-      <Card className="border-2 border-yellow-500 bg-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+      <Card className="border border-yellow-300 bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-yellow-800 font-semibold">Valor Total Investido</p>
-              <p className="text-3xl font-bold text-yellow-900">{clientData.history.totalValue}</p>
+              <p className="text-sm text-yellow-700 font-semibold">Valor Total Investido</p>
+              <p className="text-3xl font-bold text-yellow-800">{clientData.history.totalValue}</p>
             </div>
             <div className="p-3 bg-yellow-100 rounded-full">
               <DollarSign className="h-8 w-8 text-yellow-600" />
@@ -52,13 +52,13 @@ const ClientDashboard = ({ clientData }: ClientDashboardProps) => {
         </CardContent>
       </Card>
 
-      <Card className="border-2 border-yellow-500 bg-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+      <Card className="border border-yellow-300 bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-yellow-800 font-semibold">Avaliação Geral</p>
+              <p className="text-sm text-yellow-700 font-semibold">Avaliação Geral</p>
               <div className="flex items-center gap-2">
-                <p className="text-3xl font-bold text-yellow-900">{clientData.history.overallRating}</p>
+                <p className="text-3xl font-bold text-yellow-800">{clientData.history.overallRating}</p>
                 <Star className="h-6 w-6 fill-yellow-400 text-yellow-400" />
               </div>
             </div>
