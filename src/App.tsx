@@ -1,323 +1,242 @@
 
-import React, { Suspense } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "@/context/AuthContext";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "@/components/ui/toaster";
-import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from '@/context/AuthContext';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
+import { Toaster } from '@/components/ui/toaster';
 
-// Lazy load components
-const Index = React.lazy(() => import("@/pages/Index"));
-const About = React.lazy(() => import("@/pages/About"));
-const Contact = React.lazy(() => import("@/pages/Contact"));
-const Login = React.lazy(() => import("@/pages/Login"));
-const Register = React.lazy(() => import("@/pages/Register"));
-const FindTechnician = React.lazy(() => import("@/pages/FindTechnician"));
-const Store = React.lazy(() => import("@/pages/Store"));
-const Services = React.lazy(() => import("@/pages/Services"));
-const Terms = React.lazy(() => import("@/pages/Terms"));
-const SellEquipment = React.lazy(() => import("@/pages/SellEquipment"));
-const SellEquipmentCreate = React.lazy(() => import("@/pages/SellEquipmentCreate"));
-const TechnicianLanding = React.lazy(() => import("@/pages/technician/Landing"));
-const TechnicianDashboard = React.lazy(() => import("@/pages/technician/Dashboard"));
-const TechnicianServices = React.lazy(() => import("@/pages/technician/Services"));
-const TechnicianProfile = React.lazy(() => import("@/pages/technician/Profile"));
-const TechnicianParts = React.lazy(() => import("@/pages/technician/Parts"));
-const TechnicianSchedule = React.lazy(() => import("@/pages/technician/Schedule"));
-const TechnicianChat = React.lazy(() => import("@/pages/technician/Chat"));
-const TechnicianServiceOrder = React.lazy(() => import("@/pages/technician/ServiceOrder"));
-const TechnicianPayments = React.lazy(() => import("@/pages/technician/Payments"));
-const CompanyRegister = React.lazy(() => import("@/pages/store/CompanyRegister"));
-const CompanyDashboard = React.lazy(() => import("@/pages/store/CompanyDashboard"));
-const CompanyProfile = React.lazy(() => import("@/pages/store/CompanyProfile"));
-const CompanySettings = React.lazy(() => import("@/pages/store/CompanySettings"));
-const CompanyProducts = React.lazy(() => import("@/pages/store/CompanyProducts"));
-const CompanyList = React.lazy(() => import("@/pages/store/CompanyList"));
-const CategoryPage = React.lazy(() => import("@/pages/store/CategoryPage"));
-const CustomerDashboard = React.lazy(() => import("@/pages/customer/Dashboard"));
-const CustomerServices = React.lazy(() => import("@/pages/customer/Services"));
-const CustomerEquipment = React.lazy(() => import("@/pages/customer/Equipment"));
-const CustomerProfile = React.lazy(() => import("@/pages/customer/Profile"));
-const CustomerPayments = React.lazy(() => import("@/pages/customer/Payments"));
-const CustomerServiceOrders = React.lazy(() => import("@/pages/customer/ServiceOrders"));
-const CustomerTracking = React.lazy(() => import("@/pages/customer/Tracking"));
-const CustomerSchedule = React.lazy(() => import("@/pages/customer/Schedule"));
-const CustomerServiceRequest = React.lazy(() => import("@/pages/customer/ServiceRequest"));
-const NotFound = React.lazy(() => import("@/pages/NotFound"));
+// Pages
+import Index from '@/pages/Index';
+import Login from '@/pages/Login';
+import Register from '@/pages/Register';
+import Services from '@/pages/Services';
+import Equipment from '@/pages/Equipment';
+import FindTechnician from '@/pages/FindTechnician';
+import About from '@/pages/About';
+import Contact from '@/pages/Contact';
+import FAQ from '@/pages/FAQ';
+import Support from '@/pages/Support';
+import HelpCenter from '@/pages/HelpCenter';
+import Privacy from '@/pages/Privacy';
+import Terms from '@/pages/Terms';
+import Cookies from '@/pages/Cookies';
+import NotFound from '@/pages/NotFound';
+import SearchPage from '@/pages/SearchPage';
+import TechniciansPage from '@/pages/TechniciansPage';
+import ServicesMaintenancePage from '@/pages/ServicesMaintenancePage';
+import SellEquipment from '@/pages/SellEquipment';
+import SellEquipmentCreate from '@/pages/SellEquipmentCreate';
+import Store from '@/pages/Store';
+import ShopPage from '@/pages/ShopPage';
 
-const queryClient = new QueryClient();
+// Customer Pages
+import CustomerDashboard from '@/pages/customer/Dashboard';
+import CustomerProfile from '@/pages/customer/Profile';
+import CustomerServices from '@/pages/customer/Services';
+import CustomerServiceDetails from '@/pages/customer/ServiceDetails';
+import CustomerServiceOrders from '@/pages/customer/ServiceOrders';
+import CustomerServiceRequest from '@/pages/customer/ServiceRequest';
+import CustomerTracking from '@/pages/customer/Tracking';
+import CustomerEquipment from '@/pages/customer/Equipment';
+import CustomerSchedule from '@/pages/customer/Schedule';
+import CustomerPayments from '@/pages/customer/Payments';
+import CustomerPaymentDetails from '@/pages/customer/PaymentDetails';
+
+// Store Pages
+import CompanyDashboard from '@/pages/store/CompanyDashboard';
+import CompanyList from '@/pages/store/CompanyList';
+import CompanyProfile from '@/pages/store/CompanyProfile';
+import CompanyProducts from '@/pages/store/CompanyProducts';
+import CompanyRegister from '@/pages/store/CompanyRegister';
+import CompanySettings from '@/pages/store/CompanySettings';
+import CategoryPage from '@/pages/store/CategoryPage';
+
+// Technician Pages
+import TechnicianDashboard from '@/pages/technician/Dashboard';
+import TechnicianProfile from '@/pages/technician/Profile';
+import TechnicianServices from '@/pages/technician/Services';
+import TechnicianServiceOrder from '@/pages/technician/ServiceOrder';
+import TechnicianServiceOrders from '@/pages/technician/ServiceOrders';
+import TechnicianParts from '@/pages/technician/Parts';
+import TechnicianSchedule from '@/pages/technician/Schedule';
+import TechnicianPayments from '@/pages/technician/Payments';
+import TechnicianChat from '@/pages/technician/Chat';
+import TechnicianLanding from '@/pages/technician/Landing';
+
+import './App.css';
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <Router>
-          <div className="App">
-            <Suspense fallback={
-              <div className="flex items-center justify-center min-h-screen">
-                <div className="text-center">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-                  <p className="mt-2 text-gray-600">Carregando...</p>
-                </div>
-              </div>
-            }>
-              <Routes>
-                {/* Public Routes */}
-                <Route path="/" element={<Index />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/cadastro" element={<Register />} />
-                <Route path="/find-technician" element={<FindTechnician />} />
-                <Route path="/services" element={<Services />} />
-                <Route path="/terms" element={<Terms />} />
-                <Route path="/sell-equipment" element={<SellEquipment />} />
-                <Route path="/sell-equipment/create" element={<SellEquipmentCreate />} />
-                <Route path="/customer/service-request" element={<CustomerServiceRequest />} />
-                
-                {/* Store Public Routes */}
-                <Route path="/store" element={<Store />} />
-                <Route path="/store/company-register" element={<CompanyRegister />} />
-                <Route path="/store/companies" element={<CompanyList />} />
-                <Route path="/store/category/:categorySlug" element={<CategoryPage />} />
-                
-                {/* Customer Routes */}
-                <Route path="/cliente/dashboard" element={
-                  <ProtectedRoute allowedUserTypes={['customer']}>
-                    <CustomerDashboard />
-                  </ProtectedRoute>
-                } />
-                <Route path="/cliente/painel" element={
-                  <ProtectedRoute allowedUserTypes={['customer']}>
-                    <CustomerDashboard />
-                  </ProtectedRoute>
-                } />
-                <Route path="/cliente/servicos" element={
-                  <ProtectedRoute allowedUserTypes={['customer']}>
-                    <CustomerServices />
-                  </ProtectedRoute>
-                } />
-                <Route path="/cliente/services" element={
-                  <ProtectedRoute allowedUserTypes={['customer']}>
-                    <CustomerServices />
-                  </ProtectedRoute>
-                } />
-                <Route path="/cliente/equipamentos" element={
-                  <ProtectedRoute allowedUserTypes={['customer']}>
-                    <CustomerEquipment />
-                  </ProtectedRoute>
-                } />
-                <Route path="/cliente/equipment" element={
-                  <ProtectedRoute allowedUserTypes={['customer']}>
-                    <CustomerEquipment />
-                  </ProtectedRoute>
-                } />
-                <Route path="/cliente/perfil" element={
-                  <ProtectedRoute allowedUserTypes={['customer']}>
-                    <CustomerProfile />
-                  </ProtectedRoute>
-                } />
-                <Route path="/cliente/profile" element={
-                  <ProtectedRoute allowedUserTypes={['customer']}>
-                    <CustomerProfile />
-                  </ProtectedRoute>
-                } />
-                <Route path="/cliente/pagamentos" element={
-                  <ProtectedRoute allowedUserTypes={['customer']}>
-                    <CustomerPayments />
-                  </ProtectedRoute>
-                } />
-                <Route path="/cliente/payments" element={
-                  <ProtectedRoute allowedUserTypes={['customer']}>
-                    <CustomerPayments />
-                  </ProtectedRoute>
-                } />
-                <Route path="/cliente/ordens" element={
-                  <ProtectedRoute allowedUserTypes={['customer']}>
-                    <CustomerServiceOrders />
-                  </ProtectedRoute>
-                } />
-                <Route path="/cliente/orders" element={
-                  <ProtectedRoute allowedUserTypes={['customer']}>
-                    <CustomerServiceOrders />
-                  </ProtectedRoute>
-                } />
-                <Route path="/cliente/rastreamento" element={
-                  <ProtectedRoute allowedUserTypes={['customer']}>
-                    <CustomerTracking />
-                  </ProtectedRoute>
-                } />
-                <Route path="/cliente/tracking" element={
-                  <ProtectedRoute allowedUserTypes={['customer']}>
-                    <CustomerTracking />
-                  </ProtectedRoute>
-                } />
-                <Route path="/cliente/agenda" element={
-                  <ProtectedRoute allowedUserTypes={['customer']}>
-                    <CustomerSchedule />
-                  </ProtectedRoute>
-                } />
-                <Route path="/cliente/schedule" element={
-                  <ProtectedRoute allowedUserTypes={['customer']}>
-                    <CustomerSchedule />
-                  </ProtectedRoute>
-                } />
-                
-                {/* Technician Routes - Portuguese */}
-                <Route path="/tecnico" element={<TechnicianLanding />} />
-                <Route path="/tecnico/dashboard" element={
-                  <ProtectedRoute allowedUserTypes={['technician']}>
-                    <TechnicianDashboard />
-                  </ProtectedRoute>
-                } />
-                <Route path="/tecnico/painel" element={
-                  <ProtectedRoute allowedUserTypes={['technician']}>
-                    <TechnicianDashboard />
-                  </ProtectedRoute>
-                } />
-                <Route path="/tecnico/servicos" element={
-                  <ProtectedRoute allowedUserTypes={['technician']}>
-                    <TechnicianServices />
-                  </ProtectedRoute>
-                } />
-                <Route path="/tecnico/services" element={
-                  <ProtectedRoute allowedUserTypes={['technician']}>
-                    <TechnicianServices />
-                  </ProtectedRoute>
-                } />
-                <Route path="/tecnico/perfil" element={
-                  <ProtectedRoute allowedUserTypes={['technician']}>
-                    <TechnicianProfile />
-                  </ProtectedRoute>
-                } />
-                <Route path="/tecnico/profile" element={
-                  <ProtectedRoute allowedUserTypes={['technician']}>
-                    <TechnicianProfile />
-                  </ProtectedRoute>
-                } />
-                <Route path="/tecnico/pecas" element={
-                  <ProtectedRoute allowedUserTypes={['technician']}>
-                    <TechnicianParts />
-                  </ProtectedRoute>
-                } />
-                <Route path="/tecnico/parts" element={
-                  <ProtectedRoute allowedUserTypes={['technician']}>
-                    <TechnicianParts />
-                  </ProtectedRoute>
-                } />
-                <Route path="/tecnico/agenda" element={
-                  <ProtectedRoute allowedUserTypes={['technician']}>
-                    <TechnicianSchedule />
-                  </ProtectedRoute>
-                } />
-                <Route path="/tecnico/schedule" element={
-                  <ProtectedRoute allowedUserTypes={['technician']}>
-                    <TechnicianSchedule />
-                  </ProtectedRoute>
-                } />
-                <Route path="/tecnico/chat" element={
-                  <ProtectedRoute allowedUserTypes={['technician']}>
-                    <TechnicianChat />
-                  </ProtectedRoute>
-                } />
-                <Route path="/tecnico/pagamentos" element={
-                  <ProtectedRoute allowedUserTypes={['technician']}>
-                    <TechnicianPayments />
-                  </ProtectedRoute>
-                } />
-                <Route path="/tecnico/payments" element={
-                  <ProtectedRoute allowedUserTypes={['technician']}>
-                    <TechnicianPayments />
-                  </ProtectedRoute>
-                } />
-                <Route path="/tecnico/servicos/:id/os" element={
-                  <ProtectedRoute allowedUserTypes={['technician']}>
-                    <TechnicianServiceOrder />
-                  </ProtectedRoute>
-                } />
-                
-                {/* Technician Routes - English (redirect to Portuguese) */}
-                <Route path="/technician" element={<TechnicianLanding />} />
-                <Route path="/technician/dashboard" element={
-                  <ProtectedRoute allowedUserTypes={['technician']}>
-                    <TechnicianDashboard />
-                  </ProtectedRoute>
-                } />
-                <Route path="/technician/services" element={
-                  <ProtectedRoute allowedUserTypes={['technician']}>
-                    <TechnicianServices />
-                  </ProtectedRoute>
-                } />
-                <Route path="/technician/profile" element={
-                  <ProtectedRoute allowedUserTypes={['technician']}>
-                    <TechnicianProfile />
-                  </ProtectedRoute>
-                } />
-                <Route path="/technician/parts" element={
-                  <ProtectedRoute allowedUserTypes={['technician']}>
-                    <TechnicianParts />
-                  </ProtectedRoute>
-                } />
-                <Route path="/technician/schedule" element={
-                  <ProtectedRoute allowedUserTypes={['technician']}>
-                    <TechnicianSchedule />
-                  </ProtectedRoute>
-                } />
-                <Route path="/technician/chat" element={
-                  <ProtectedRoute allowedUserTypes={['technician']}>
-                    <TechnicianChat />
-                  </ProtectedRoute>
-                } />
-                <Route path="/technician/payments" element={
-                  <ProtectedRoute allowedUserTypes={['technician']}>
-                    <TechnicianPayments />
-                  </ProtectedRoute>
-                } />
-                
-                {/* Company/Store Routes */}
-                <Route path="/loja/dashboard" element={
-                  <ProtectedRoute allowedUserTypes={['company']}>
-                    <CompanyDashboard />
-                  </ProtectedRoute>
-                } />
-                <Route path="/store/company-dashboard" element={
-                  <ProtectedRoute allowedUserTypes={['company']}>
-                    <CompanyDashboard />
-                  </ProtectedRoute>
-                } />
-                <Route path="/store/company-profile" element={
-                  <ProtectedRoute allowedUserTypes={['company']}>
-                    <CompanyProfile />
-                  </ProtectedRoute>
-                } />
-                <Route path="/store/company-settings" element={
-                  <ProtectedRoute allowedUserTypes={['company']}>
-                    <CompanySettings />
-                  </ProtectedRoute>
-                } />
-                <Route path="/store/company-products" element={
-                  <ProtectedRoute allowedUserTypes={['company']}>
-                    <CompanyProducts />
-                  </ProtectedRoute>
-                } />
-                
-                {/* Dashboard routes for direct access */}
-                <Route path="/dashboard" element={
-                  <ProtectedRoute allowedUserTypes={['customer', 'technician', 'company']}>
-                    <CustomerDashboard />
-                  </ProtectedRoute>
-                } />
-                
-                {/* 404 - Not Found */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Suspense>
-            <Toaster />
-          </div>
-        </Router>
-      </AuthProvider>
-    </QueryClientProvider>
+    <AuthProvider>
+      <Router>
+        <div className="App">
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<Index />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/equipment" element={<Equipment />} />
+            <Route path="/find-technician" element={<FindTechnician />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/support" element={<Support />} />
+            <Route path="/help" element={<HelpCenter />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/cookies" element={<Cookies />} />
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/technicians" element={<TechniciansPage />} />
+            <Route path="/services/maintenance" element={<ServicesMaintenancePage />} />
+            <Route path="/sell-equipment" element={<SellEquipment />} />
+            <Route path="/sell-equipment/create" element={<SellEquipmentCreate />} />
+            <Route path="/store" element={<Store />} />
+            <Route path="/shop" element={<ShopPage />} />
+            <Route path="/category/:category" element={<CategoryPage />} />
+
+            {/* Customer Routes */}
+            <Route path="/customer/dashboard" element={
+              <ProtectedRoute allowedUserTypes={['customer']}>
+                <CustomerDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/customer/profile" element={
+              <ProtectedRoute allowedUserTypes={['customer']}>
+                <CustomerProfile />
+              </ProtectedRoute>
+            } />
+            <Route path="/customer/services" element={
+              <ProtectedRoute allowedUserTypes={['customer']}>
+                <CustomerServices />
+              </ProtectedRoute>
+            } />
+            <Route path="/customer/services/:id" element={
+              <ProtectedRoute allowedUserTypes={['customer']}>
+                <CustomerServiceDetails />
+              </ProtectedRoute>
+            } />
+            <Route path="/customer/service-orders" element={
+              <ProtectedRoute allowedUserTypes={['customer']}>
+                <CustomerServiceOrders />
+              </ProtectedRoute>
+            } />
+            <Route path="/customer/service-request" element={
+              <ProtectedRoute allowedUserTypes={['customer']}>
+                <CustomerServiceRequest />
+              </ProtectedRoute>
+            } />
+            <Route path="/customer/tracking" element={
+              <ProtectedRoute allowedUserTypes={['customer']}>
+                <CustomerTracking />
+              </ProtectedRoute>
+            } />
+            <Route path="/customer/equipment" element={
+              <ProtectedRoute allowedUserTypes={['customer']}>
+                <CustomerEquipment />
+              </ProtectedRoute>
+            } />
+            <Route path="/customer/schedule" element={
+              <ProtectedRoute allowedUserTypes={['customer']}>
+                <CustomerSchedule />
+              </ProtectedRoute>
+            } />
+            <Route path="/customer/payments" element={
+              <ProtectedRoute allowedUserTypes={['customer']}>
+                <CustomerPayments />
+              </ProtectedRoute>
+            } />
+            <Route path="/customer/payments/:id" element={
+              <ProtectedRoute allowedUserTypes={['customer']}>
+                <CustomerPaymentDetails />
+              </ProtectedRoute>
+            } />
+
+            {/* Store Routes */}
+            <Route path="/store/dashboard" element={
+              <ProtectedRoute allowedUserTypes={['store']}>
+                <CompanyDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/store/companies" element={<CompanyList />} />
+            <Route path="/store/profile" element={
+              <ProtectedRoute allowedUserTypes={['store']}>
+                <CompanyProfile />
+              </ProtectedRoute>
+            } />
+            <Route path="/store/products" element={
+              <ProtectedRoute allowedUserTypes={['store']}>
+                <CompanyProducts />
+              </ProtectedRoute>
+            } />
+            <Route path="/store/register" element={<CompanyRegister />} />
+            <Route path="/store/settings" element={
+              <ProtectedRoute allowedUserTypes={['store']}>
+                <CompanySettings />
+              </ProtectedRoute>
+            } />
+
+            {/* Technician Public Routes */}
+            <Route path="/tecnico" element={<TechnicianLanding />} />
+
+            {/* Technician Protected Routes */}
+            <Route path="/tecnico/dashboard" element={
+              <ProtectedRoute allowedUserTypes={['technician']}>
+                <TechnicianDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/tecnico/painel" element={
+              <ProtectedRoute allowedUserTypes={['technician']}>
+                <TechnicianDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/tecnico/perfil" element={
+              <ProtectedRoute allowedUserTypes={['technician']}>
+                <TechnicianProfile />
+              </ProtectedRoute>
+            } />
+            <Route path="/tecnico/servicos" element={
+              <ProtectedRoute allowedUserTypes={['technician']}>
+                <TechnicianServices />
+              </ProtectedRoute>
+            } />
+            <Route path="/tecnico/ordem-servico/:id" element={
+              <ProtectedRoute allowedUserTypes={['technician']}>
+                <TechnicianServiceOrder />
+              </ProtectedRoute>
+            } />
+            <Route path="/tecnico/ordens-servico" element={
+              <ProtectedRoute allowedUserTypes={['technician']}>
+                <TechnicianServiceOrders />
+              </ProtectedRoute>
+            } />
+            <Route path="/tecnico/pecas" element={
+              <ProtectedRoute allowedUserTypes={['technician']}>
+                <TechnicianParts />
+              </ProtectedRoute>
+            } />
+            <Route path="/tecnico/agenda" element={
+              <ProtectedRoute allowedUserTypes={['technician']}>
+                <TechnicianSchedule />
+              </ProtectedRoute>
+            } />
+            <Route path="/tecnico/pagamentos" element={
+              <ProtectedRoute allowedUserTypes={['technician']}>
+                <TechnicianPayments />
+              </ProtectedRoute>
+            } />
+            <Route path="/tecnico/chat" element={
+              <ProtectedRoute allowedUserTypes={['technician']}>
+                <TechnicianChat />
+              </ProtectedRoute>
+            } />
+
+            {/* 404 Route */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+          <Toaster />
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
 
