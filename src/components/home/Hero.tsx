@@ -3,107 +3,134 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
-import { Search, MapPin, ArrowRight, Star, Users, CheckCircle2, Wrench, Zap } from "lucide-react";
+import { Search, MapPin, ArrowRight, Star, Users, CheckCircle2, Wrench, Zap, Phone, MessageCircle, Calendar } from "lucide-react";
 
 const Hero = () => {
   return (
-    <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-16 px-4 min-h-[70vh] flex items-center">
-      <div className="max-w-6xl mx-auto w-full">
-        {/* Botões de ação rápida no topo */}
-        <div className="flex flex-wrap justify-center gap-4 mb-8">
+    <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-20 px-4 min-h-[80vh] flex items-center relative overflow-hidden">
+      {/* Elementos decorativos de fundo */}
+      <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-transparent to-purple-600/20"></div>
+      <div className="absolute top-20 left-20 w-72 h-72 bg-white/5 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-20 right-20 w-96 h-96 bg-yellow-300/10 rounded-full blur-3xl"></div>
+      
+      <div className="max-w-7xl mx-auto w-full relative z-10">
+        {/* Botões de ação rápida no topo - Modo Deus */}
+        <div className="flex flex-wrap justify-center gap-6 mb-12">
           <Link to="/find-technician">
-            <Button className="bg-white/20 backdrop-blur-lg border border-white/30 text-white hover:bg-white/30 transition-all duration-200 shadow-lg flex items-center gap-2">
-              <Search className="h-4 w-4" />
+            <Button className="bg-white/15 backdrop-blur-xl border-2 border-white/30 text-white hover:bg-white/25 hover:border-white/50 transition-all duration-300 shadow-2xl flex items-center gap-3 px-8 py-4 text-lg font-bold rounded-2xl hover:scale-105 hover:shadow-3xl">
+              <Search className="h-6 w-6" />
               Encontrar Técnico
             </Button>
           </Link>
           <Link to="/services">
-            <Button className="bg-white/20 backdrop-blur-lg border border-white/30 text-white hover:bg-white/30 transition-all duration-200 shadow-lg flex items-center gap-2">
-              <Wrench className="h-4 w-4" />
+            <Button className="bg-white/15 backdrop-blur-xl border-2 border-white/30 text-white hover:bg-white/25 hover:border-white/50 transition-all duration-300 shadow-2xl flex items-center gap-3 px-8 py-4 text-lg font-bold rounded-2xl hover:scale-105 hover:shadow-3xl">
+              <Wrench className="h-6 w-6" />
               Solicitar Serviço
             </Button>
           </Link>
+          <Link to="/contact">
+            <Button className="bg-white/15 backdrop-blur-xl border-2 border-white/30 text-white hover:bg-white/25 hover:border-white/50 transition-all duration-300 shadow-2xl flex items-center gap-3 px-8 py-4 text-lg font-bold rounded-2xl hover:scale-105 hover:shadow-3xl">
+              <Phone className="h-6 w-6" />
+              Contato Direto
+            </Button>
+          </Link>
           <Link to="/technician/landing">
-            <Button className="bg-yellow-500/90 hover:bg-yellow-600 text-gray-900 font-semibold transition-all duration-200 shadow-lg flex items-center gap-2">
-              <Zap className="h-4 w-4" />
+            <Button className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 font-bold transition-all duration-300 shadow-2xl flex items-center gap-3 px-8 py-4 text-lg rounded-2xl hover:scale-105 hover:shadow-3xl border-2 border-yellow-400">
+              <Zap className="h-6 w-6" />
               Seja um Técnico
             </Button>
           </Link>
         </div>
 
-        {/* Título Principal */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight text-white drop-shadow-lg">
-            Encontre o <span className="text-yellow-300 bg-yellow-300/20 px-3 py-2 rounded-lg border border-yellow-300/30">técnico ideal</span><br />
-            para seu equipamento
+        {/* Título Principal - Modo Deus */}
+        <div className="text-center mb-16">
+          <h1 className="text-5xl md:text-7xl font-black mb-8 leading-tight text-white drop-shadow-2xl">
+            Encontre o <span className="text-yellow-300 bg-gradient-to-r from-yellow-300/30 to-yellow-400/30 px-6 py-3 rounded-2xl border-2 border-yellow-300/50 backdrop-blur-sm">técnico ideal</span><br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-white">para seu equipamento</span>
           </h1>
           
-          <p className="text-xl md:text-2xl mb-8 text-gray-100 max-w-3xl mx-auto font-medium leading-relaxed drop-shadow-md">
+          <p className="text-2xl md:text-3xl mb-12 text-gray-100 max-w-4xl mx-auto font-bold leading-relaxed drop-shadow-lg">
             Conectamos você com profissionais qualificados para manutenção e reparo de equipamentos industriais
           </p>
         </div>
 
-        {/* Formulário de Busca */}
-        <div className="bg-white rounded-2xl p-8 shadow-2xl max-w-4xl mx-auto mb-12 border border-blue-200">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Formulário de Busca - Modo Deus */}
+        <div className="bg-white/95 backdrop-blur-xl rounded-3xl p-10 shadow-3xl max-w-5xl mx-auto mb-16 border-2 border-white/30 hover:shadow-4xl transition-all duration-300">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="relative group">
-              <label className="block text-sm font-semibold text-gray-800 mb-2">Tipo de equipamento</label>
-              <Search className="absolute left-4 top-11 transform text-gray-500 h-5 w-5 group-focus-within:text-blue-600 transition-colors" />
+              <label className="block text-lg font-black text-gray-900 mb-3">Tipo de equipamento</label>
+              <Search className="absolute left-5 top-14 transform text-gray-500 h-6 w-6 group-focus-within:text-blue-600 transition-colors" />
               <Input 
                 placeholder="Ex: Impressora, CNC, Torno..." 
-                className="pl-12 h-12 text-gray-900 border-2 border-gray-300 focus:border-blue-600 text-base font-medium rounded-lg shadow-sm hover:border-gray-400 transition-all"
+                className="pl-14 h-14 text-gray-900 border-3 border-gray-300 focus:border-blue-600 text-lg font-bold rounded-xl shadow-lg hover:border-gray-400 transition-all hover:shadow-xl"
               />
             </div>
             
             <div className="relative group">
-              <label className="block text-sm font-semibold text-gray-800 mb-2">Localização</label>
-              <MapPin className="absolute left-4 top-11 transform text-gray-500 h-5 w-5 group-focus-within:text-blue-600 transition-colors" />
+              <label className="block text-lg font-black text-gray-900 mb-3">Localização</label>
+              <MapPin className="absolute left-5 top-14 transform text-gray-500 h-6 w-6 group-focus-within:text-blue-600 transition-colors" />
               <Input 
                 placeholder="Cidade, estado ou CEP" 
-                className="pl-12 h-12 text-gray-900 border-2 border-gray-300 focus:border-blue-600 text-base font-medium rounded-lg shadow-sm hover:border-gray-400 transition-all"
+                className="pl-14 h-14 text-gray-900 border-3 border-gray-300 focus:border-blue-600 text-lg font-bold rounded-xl shadow-lg hover:border-gray-400 transition-all hover:shadow-xl"
               />
             </div>
             
             <div className="flex flex-col justify-end">
               <Link to="/find-technician">
-                <Button className="w-full h-12 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 font-bold text-lg shadow-lg transition-all duration-200 border-0 rounded-lg group">
+                <Button className="w-full h-14 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 font-black text-xl shadow-2xl transition-all duration-300 border-0 rounded-xl group hover:scale-105 hover:shadow-3xl">
                   Buscar Técnicos
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-2 transition-transform" />
                 </Button>
               </Link>
             </div>
           </div>
         </div>
 
-        {/* Badges de Benefícios */}
-        <div className="flex flex-wrap justify-center gap-6 mb-12">
-          <div className="bg-white/20 backdrop-blur-lg px-6 py-4 rounded-full border border-white/30 flex items-center gap-3 hover:bg-white/25 transition-all duration-200 shadow-lg">
-            <CheckCircle2 className="h-5 w-5 text-green-200" />
-            <span className="text-white font-semibold text-base drop-shadow-sm">Técnicos Verificados</span>
+        {/* Badges de Benefícios - Modo Deus */}
+        <div className="flex flex-wrap justify-center gap-8 mb-16">
+          <div className="bg-white/20 backdrop-blur-xl px-8 py-6 rounded-2xl border-2 border-white/30 flex items-center gap-4 hover:bg-white/30 transition-all duration-300 shadow-2xl hover:scale-105 hover:shadow-3xl">
+            <CheckCircle2 className="h-7 w-7 text-green-300" />
+            <span className="text-white font-black text-xl drop-shadow-lg">Técnicos Verificados</span>
           </div>
-          <div className="bg-white/20 backdrop-blur-lg px-6 py-4 rounded-full border border-white/30 flex items-center gap-3 hover:bg-white/25 transition-all duration-200 shadow-lg">
-            <Star className="h-5 w-5 text-yellow-200" />
-            <span className="text-white font-semibold text-base drop-shadow-sm">Orçamento Grátis</span>
+          <div className="bg-white/20 backdrop-blur-xl px-8 py-6 rounded-2xl border-2 border-white/30 flex items-center gap-4 hover:bg-white/30 transition-all duration-300 shadow-2xl hover:scale-105 hover:shadow-3xl">
+            <Star className="h-7 w-7 text-yellow-300" />
+            <span className="text-white font-black text-xl drop-shadow-lg">Orçamento Grátis</span>
           </div>
-          <div className="bg-white/20 backdrop-blur-lg px-6 py-4 rounded-full border border-white/30 flex items-center gap-3 hover:bg-white/25 transition-all duration-200 shadow-lg">
-            <Users className="h-5 w-5 text-blue-200" />
-            <span className="text-white font-semibold text-base drop-shadow-sm">+5.000 Profissionais</span>
+          <div className="bg-white/20 backdrop-blur-xl px-8 py-6 rounded-2xl border-2 border-white/30 flex items-center gap-4 hover:bg-white/30 transition-all duration-300 shadow-2xl hover:scale-105 hover:shadow-3xl">
+            <Users className="h-7 w-7 text-blue-300" />
+            <span className="text-white font-black text-xl drop-shadow-lg">+5.000 Profissionais</span>
           </div>
         </div>
 
-        {/* Estatísticas */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-          <div className="bg-white/15 backdrop-blur-sm rounded-xl p-6 border border-white/25 shadow-lg">
-            <div className="text-3xl font-bold text-yellow-200 mb-2 drop-shadow-sm">98%</div>
-            <div className="text-gray-100 font-medium drop-shadow-sm">Taxa de Satisfação</div>
+        {/* Botões de Ação Adicional - Modo Deus */}
+        <div className="flex flex-wrap justify-center gap-6 mb-16">
+          <Link to="/services">
+            <Button className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold px-8 py-4 text-lg rounded-2xl shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-3xl flex items-center gap-3">
+              <Calendar className="h-6 w-6" />
+              Agendar Visita
+            </Button>
+          </Link>
+          <Link to="/contact">
+            <Button className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold px-8 py-4 text-lg rounded-2xl shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-3xl flex items-center gap-3">
+              <MessageCircle className="h-6 w-6" />
+              Chat Online
+            </Button>
+          </Link>
+        </div>
+
+        {/* Estatísticas - Modo Deus */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
+          <div className="bg-white/20 backdrop-blur-xl rounded-2xl p-8 border-2 border-white/30 shadow-2xl hover:bg-white/25 transition-all duration-300 hover:scale-105 hover:shadow-3xl">
+            <div className="text-5xl font-black text-yellow-300 mb-4 drop-shadow-lg">98%</div>
+            <div className="text-gray-100 font-bold text-xl drop-shadow-lg">Taxa de Satisfação</div>
           </div>
-          <div className="bg-white/15 backdrop-blur-sm rounded-xl p-6 border border-white/25 shadow-lg">
-            <div className="text-3xl font-bold text-yellow-200 mb-2 drop-shadow-sm">24h</div>
-            <div className="text-gray-100 font-medium drop-shadow-sm">Tempo Médio de Resposta</div>
+          <div className="bg-white/20 backdrop-blur-xl rounded-2xl p-8 border-2 border-white/30 shadow-2xl hover:bg-white/25 transition-all duration-300 hover:scale-105 hover:shadow-3xl">
+            <div className="text-5xl font-black text-yellow-300 mb-4 drop-shadow-lg">24h</div>
+            <div className="text-gray-100 font-bold text-xl drop-shadow-lg">Tempo Médio de Resposta</div>
           </div>
-          <div className="bg-white/15 backdrop-blur-sm rounded-xl p-6 border border-white/25 shadow-lg">
-            <div className="text-3xl font-bold text-yellow-200 mb-2 drop-shadow-sm">15K+</div>
-            <div className="text-gray-100 font-medium drop-shadow-sm">Serviços Realizados</div>
+          <div className="bg-white/20 backdrop-blur-xl rounded-2xl p-8 border-2 border-white/30 shadow-2xl hover:bg-white/25 transition-all duration-300 hover:scale-105 hover:shadow-3xl">
+            <div className="text-5xl font-black text-yellow-300 mb-4 drop-shadow-lg">15K+</div>
+            <div className="text-gray-100 font-bold text-xl drop-shadow-lg">Serviços Realizados</div>
           </div>
         </div>
       </div>
