@@ -1,129 +1,64 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import TechnicianLayout from '@/components/layout/TechnicianLayout';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { Search, Printer, Scissors, Wrench } from 'lucide-react';
-import { Service } from '@/types/service';
-import ServicesList from '@/components/services/ServicesList';
-import TrackingDialog from '@/components/services/TrackingDialog';
-import { useServices } from '@/hooks/useServices';
-import { equipmentCategories } from '@/types/equipment';
+import { useServiceCalls } from '@/hooks/useServiceCalls';
+import ServiceCallsFilters from '@/components/services/ServiceCallsFilters';
+import ServiceCallsPanel from '@/components/services/ServiceCallsPanel';
+import ServiceCallDetailsModal from '@/components/services/ServiceCallDetailsModal';
 
 const TechnicianServices = () => {
-  const { services, searchQuery, setSearchQuery, handleTrackingAction } = useServices();
-  
-  // States for tracking dialog
-  const [isTrackingDialogOpen, setIsTrackingDialogOpen] = useState(false);
-  const [selectedService, setSelectedService] = useState<Service | null>(null);
-  const [trackingAction, setTrackingAction] = useState<'checkin' | 'checkout' | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  
-  const handleShowTrackingDialog = (service: Service, action: 'checkin' | 'checkout') => {
-    setSelectedService(service);
-    setTrackingAction(action);
-    setIsTrackingDialogOpen(true);
-  };
-  
-  const handleConfirmTracking = () => {
-    if (!selectedService || !trackingAction) return;
-    
-    handleTrackingAction(selectedService, trackingAction);
-    setIsTrackingDialogOpen(false);
-  };
+  const {
+    callsByStatus,
+    filters,
+    setFilters,
+    selectedCall,
+    isDetailsModalOpen,
+    addTechnicianNotes,
+    openCallDetails,
+    closeCallDetails
+  } = useServiceCalls();
 
-  // Filter services by equipment category if selected
-  const filteredServices = selectedCategory 
-    ? services.filter(service => {
-        const category = equipmentCategories.find(cat => cat.id === selectedCategory);
-        if (!category) return true;
-        
-        return category.types.some(type => 
-          service.equipmentType?.includes(type) || 
-          service.description?.toLowerCase().includes(type)
-        );
-      })
-    : services;
-  
   return (
     <TechnicianLayout title="Gerenciamento de Serviços">
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div className="relative w-full max-w-sm">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Buscar por cliente, tipo ou descrição"
-              className="pl-8"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
+        {/* Informativo sobre o sistema */}
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <h3 className="font-semibold text-blue-900 mb-2">
+            🛠️ Central de Chamados Técnicos
+          </h3>
+          <p className="text-blue-700 text-sm mb-3">
+            Gerencie todos os seus chamados organizados por status. Cada categoria pode ser expandida 
+            ou recolhida para melhor visualização. Clique em "Ver Detalhes" para acessar informações 
+            completas do cliente e histórico de atendimentos.
+          </p>
+          <div className="flex gap-4 text-xs text-blue-600">
+            <span>✓ Acesso rápido aos contatos</span>
+            <span>✓ Navegação GPS integrada</span>
+            <span>✓ Timeline completa do atendimento</span>
+            <span>✓ Histórico do cliente</span>
           </div>
-          <Button>Novo Serviço</Button>
         </div>
 
-        {/* Equipment Categories Filter */}
-        <div className="flex flex-wrap gap-2">
-          <Button 
-            variant={selectedCategory === null ? "default" : "outline"}
-            size="sm"
-            onClick={() => setSelectedCategory(null)}
-          >
-            Todos
-          </Button>
-          
-          {equipmentCategories.map(category => (
-            <Button
-              key={category.id}
-              variant={selectedCategory === category.id ? "default" : "outline"}
-              size="sm"
-              onClick={() => setSelectedCategory(category.id)}
-              className="flex items-center"
-            >
-              {category.id === 'printers' && <Printer className="h-4 w-4 mr-2" />}
-              {category.id === 'finishing' && <Scissors className="h-4 w-4 mr-2" />}
-              {category.id === 'cnc' && <Wrench className="h-4 w-4 mr-2" />}
-              {category.label}
-            </Button>
-          ))}
-        </div>
-        
-        <Tabs defaultValue="all">
-          <TabsList>
-            <TabsTrigger value="all">Todos</TabsTrigger>
-            <TabsTrigger value="pending">Pendentes</TabsTrigger>
-            <TabsTrigger value="in-progress">Em Andamento</TabsTrigger>
-            <TabsTrigger value="completed">Concluídos</TabsTrigger>
-            <TabsTrigger value="canceled">Cancelados</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="all" className="mt-4">
-            <ServicesList 
-              services={filteredServices} 
-              onShowTrackingDialog={handleShowTrackingDialog} 
-            />
-          </TabsContent>
-          
-          {['pending', 'in-progress', 'completed', 'canceled'].map((tab) => (
-            <TabsContent key={tab} value={tab} className="mt-4">
-              <ServicesList 
-                services={filteredServices.filter(service => service.status === tab)} 
-                statusFilter={tab} 
-                onShowTrackingDialog={handleShowTrackingDialog} 
-              />
-            </TabsContent>
-          ))}
-        </Tabs>
+        {/* Filtros */}
+        <ServiceCallsFilters
+          filters={filters}
+          onFiltersChange={setFilters}
+        />
+
+        {/* Painel de Chamados */}
+        <ServiceCallsPanel
+          callsByStatus={callsByStatus}
+          onOpenDetails={openCallDetails}
+        />
+
+        {/* Modal de Detalhes */}
+        <ServiceCallDetailsModal
+          call={selectedCall}
+          isOpen={isDetailsModalOpen}
+          onClose={closeCallDetails}
+          onAddNotes={addTechnicianNotes}
+        />
       </div>
-      
-      {/* Tracking Dialog */}
-      <TrackingDialog
-        isOpen={isTrackingDialogOpen}
-        onOpenChange={setIsTrackingDialogOpen}
-        selectedService={selectedService}
-        trackingAction={trackingAction}
-        onConfirm={handleConfirmTracking}
-      />
     </TechnicianLayout>
   );
 };
