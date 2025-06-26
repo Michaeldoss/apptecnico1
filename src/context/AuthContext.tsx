@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { toast } from '@/hooks/use-toast';
 
@@ -11,6 +10,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
   isLoading: boolean;
+  getSession: () => Promise<{ user: any } | null>;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -20,6 +20,7 @@ const AuthContext = createContext<AuthContextType>({
   login: async () => false,
   logout: () => {},
   isLoading: true,
+  getSession: async () => null,
 });
 
 export const useAuth = () => {
@@ -33,6 +34,7 @@ export const useAuth = () => {
       login: async () => false,
       logout: () => {},
       isLoading: false,
+      getSession: async () => null,
     };
   }
   return context;
@@ -44,41 +46,55 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  const getSession = async () => {
+    console.log('[DEBUG] getSession chamado');
+    try {
+      const storedUser = localStorage.getItem('techSupportUser');
+      if (storedUser) {
+        const userData = JSON.parse(storedUser);
+        console.log('[DEBUG] Sessão encontrada:', userData);
+        return { user: userData };
+      }
+      console.log('[DEBUG] Nenhuma sessão encontrada');
+      return null;
+    } catch (error) {
+      console.error('[DEBUG] Erro ao obter sessão:', error);
+      return null;
+    }
+  };
+
   useEffect(() => {
-    console.log('AuthProvider - Inicializando autenticação');
+    console.log('[DEBUG] AuthProvider - Inicializando autenticação');
     
-    const initAuth = () => {
+    const initAuth = async () => {
       try {
-        const storedUser = localStorage.getItem('techSupportUser');
-        console.log('AuthProvider - Dados no localStorage:', storedUser);
+        const session = await getSession();
         
-        if (storedUser) {
-          const userData = JSON.parse(storedUser);
-          console.log('AuthProvider - Dados do usuário carregados:', userData);
+        if (session?.user) {
+          const userData = session.user;
+          console.log('[DEBUG] Dados do usuário carregados:', userData);
           
-          // Verificação de segurança para dados válidos
           if (userData && (userData.type || userData.tipo)) {
             setUser(userData);
             setUserType(userData.type as UserType);
             setIsAuthenticated(true);
-            
-            console.log('AuthProvider - Estado definido como autenticado');
+            console.log('[DEBUG] Estado definido como autenticado');
           } else {
-            console.log('AuthProvider - Dados de usuário inválidos');
+            console.log('[DEBUG] Dados de usuário inválidos');
             localStorage.removeItem('techSupportUser');
           }
         } else {
-          console.log('AuthProvider - Nenhum usuário encontrado');
+          console.log('[DEBUG] Nenhum usuário encontrado');
         }
       } catch (error) {
-        console.error('AuthProvider - Erro ao carregar dados:', error);
+        console.error('[DEBUG] Erro ao carregar dados:', error);
         localStorage.removeItem('techSupportUser');
         setUser(null);
         setUserType(null);
         setIsAuthenticated(false);
       } finally {
         setIsLoading(false);
-        console.log('AuthProvider - Inicialização concluída');
+        console.log('[DEBUG] Inicialização concluída');
       }
     };
 
@@ -87,7 +103,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
-    console.log('AuthProvider - Iniciando login para:', email);
+    console.log('[DEBUG] Iniciando login para:', email);
     
     try {
       const mockUsers = [
@@ -97,7 +113,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           email: 'tecnico@exemplo.com', 
           password: '123456', 
           type: 'technician',
-          tipo: 'tecnico' // Adicionado para compatibilidade
+          tipo: 'tecnico'
         },
         { 
           id: 2, 
@@ -105,7 +121,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           email: 'cliente@exemplo.com', 
           password: '123456', 
           type: 'customer',
-          tipo: 'cliente' // Adicionado para compatibilidade
+          tipo: 'cliente'
         },
         { 
           id: 3, 
@@ -113,7 +129,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           email: 'admin@exemplo.com', 
           password: '123456', 
           type: 'admin',
-          tipo: 'admin' // Adicionado para compatibilidade
+          tipo: 'admin'
         },
         { 
           id: 4, 
@@ -121,7 +137,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           email: 'loja@exemplo.com', 
           password: '123456', 
           type: 'company',
-          tipo: 'loja', // Adicionado para compatibilidade
+          tipo: 'loja',
           description: 'Peças originais e componentes para impressoras industriais.',
           location: 'Rio de Janeiro, RJ',
           logo: '/placeholder.svg',
@@ -140,7 +156,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const foundUser = mockUsers.find(u => u.email === email && u.password === password);
 
       if (!foundUser) {
-        console.log('AuthProvider - Credenciais inválidas');
+        console.log('[DEBUG] Credenciais inválidas');
         toast({
           variant: "destructive",
           title: "Falha na autenticação",
@@ -149,7 +165,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         return false;
       }
 
-      console.log('AuthProvider - Usuário encontrado:', foundUser.name, foundUser.type);
+      console.log('[DEBUG] Usuário encontrado:', foundUser.name, foundUser.type);
 
       const { password: _, ...userWithoutPassword } = foundUser;
       
@@ -159,7 +175,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       
       localStorage.setItem('techSupportUser', JSON.stringify(userWithoutPassword));
       
-      console.log('AuthProvider - Login bem-sucedido, estado atualizado');
+      console.log('[DEBUG] Login bem-sucedido, estado atualizado');
       
       toast({
         title: "Login realizado com sucesso",
@@ -168,7 +184,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       
       return true;
     } catch (error) {
-      console.error('AuthProvider - Erro no login:', error);
+      console.error('[DEBUG] Erro no login:', error);
       toast({
         variant: "destructive",
         title: "Erro no login",
@@ -179,7 +195,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const logout = () => {
-    console.log('AuthProvider - Fazendo logout');
+    console.log('[DEBUG] Fazendo logout');
     
     setUser(null);
     setUserType(null);
@@ -192,7 +208,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
-  console.log('AuthProvider - Estado atual:', { 
+  console.log('[DEBUG] Estado atual:', { 
     isAuthenticated, 
     userType, 
     user: user?.name || user?.email,
@@ -206,7 +222,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       user, 
       login, 
       logout, 
-      isLoading 
+      isLoading,
+      getSession
     }}>
       {children}
     </AuthContext.Provider>
