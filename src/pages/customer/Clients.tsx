@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import CustomerLayout from '@/components/layout/CustomerLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -296,16 +295,6 @@ const CustomerClients = () => {
 
   return (
     <CustomerLayout title="Prontuário Técnico - Clientes">
-      {/* Aplicando esquema de cores amarelo/dourado */}
-      <style jsx>{`
-        .yellow-theme {
-          --primary: #f59e0b;
-          --primary-foreground: #ffffff;
-          --secondary: #fef3c7;
-          --accent: #fbbf24;
-        }
-      `}</style>
-      
       <div className="space-y-6">
         {/* Dashboard do Cliente - Tema Amarelo */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
