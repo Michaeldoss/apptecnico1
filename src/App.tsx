@@ -40,6 +40,7 @@ import CustomerEquipment from '@/pages/customer/Equipment';
 import CustomerSchedule from '@/pages/customer/Schedule';
 import CustomerPayments from '@/pages/customer/Payments';
 import CustomerPaymentDetails from '@/pages/customer/PaymentDetails';
+import CustomerClients from '@/pages/customer/Clients';
 
 // Store Pages
 import CompanyDashboard from '@/pages/store/CompanyDashboard';
@@ -94,7 +95,74 @@ function App() {
             <Route path="/shop" element={<ShopPage />} />
             <Route path="/category/:category" element={<CategoryPage />} />
 
-            {/* Customer Routes */}
+            {/* Customer Routes - seguindo o padrão do técnico */}
+            <Route path="/cliente/dashboard" element={
+              <ProtectedRoute allowedUserTypes={['customer']}>
+                <CustomerDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/cliente/painel" element={
+              <ProtectedRoute allowedUserTypes={['customer']}>
+                <CustomerDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/cliente/perfil" element={
+              <ProtectedRoute allowedUserTypes={['customer']}>
+                <CustomerProfile />
+              </ProtectedRoute>
+            } />
+            <Route path="/cliente/clientes" element={
+              <ProtectedRoute allowedUserTypes={['customer']}>
+                <CustomerClients />
+              </ProtectedRoute>
+            } />
+            <Route path="/cliente/servicos" element={
+              <ProtectedRoute allowedUserTypes={['customer']}>
+                <CustomerServices />
+              </ProtectedRoute>
+            } />
+            <Route path="/cliente/servicos/:id" element={
+              <ProtectedRoute allowedUserTypes={['customer']}>
+                <CustomerServiceDetails />
+              </ProtectedRoute>
+            } />
+            <Route path="/cliente/ordens-servico" element={
+              <ProtectedRoute allowedUserTypes={['customer']}>
+                <CustomerServiceOrders />
+              </ProtectedRoute>
+            } />
+            <Route path="/cliente/solicitacao-servico" element={
+              <ProtectedRoute allowedUserTypes={['customer']}>
+                <CustomerServiceRequest />
+              </ProtectedRoute>
+            } />
+            <Route path="/cliente/rastreamento" element={
+              <ProtectedRoute allowedUserTypes={['customer']}>
+                <CustomerTracking />
+              </ProtectedRoute>
+            } />
+            <Route path="/cliente/equipamentos" element={
+              <ProtectedRoute allowedUserTypes={['customer']}>
+                <CustomerEquipment />
+              </ProtectedRoute>
+            } />
+            <Route path="/cliente/agenda" element={
+              <ProtectedRoute allowedUserTypes={['customer']}>
+                <CustomerSchedule />
+              </ProtectedRoute>
+            } />
+            <Route path="/cliente/pagamentos" element={
+              <ProtectedRoute allowedUserTypes={['customer']}>
+                <CustomerPayments />
+              </ProtectedRoute>
+            } />
+            <Route path="/cliente/pagamentos/:id" element={
+              <ProtectedRoute allowedUserTypes={['customer']}>
+                <CustomerPaymentDetails />
+              </ProtectedRoute>
+            } />
+
+            {/* Customer Routes - English versions for backward compatibility */}
             <Route path="/customer/dashboard" element={
               <ProtectedRoute allowedUserTypes={['customer']}>
                 <CustomerDashboard />
