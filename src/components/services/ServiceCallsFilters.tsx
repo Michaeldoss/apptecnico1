@@ -53,14 +53,14 @@ const ServiceCallsFilters: React.FC<ServiceCallsFiltersProps> = ({
 
           {/* Cidade */}
           <Select
-            value={filters.city || ''}
-            onValueChange={(value) => onFiltersChange({ ...filters, city: value || undefined })}
+            value={filters.city || 'todas'}
+            onValueChange={(value) => onFiltersChange({ ...filters, city: value === 'todas' ? undefined : value })}
           >
             <SelectTrigger>
               <SelectValue placeholder="Cidade" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Todas as cidades</SelectItem>
+              <SelectItem value="todas">Todas as cidades</SelectItem>
               <SelectItem value="São Paulo">São Paulo</SelectItem>
               <SelectItem value="Rio de Janeiro">Rio de Janeiro</SelectItem>
               <SelectItem value="Belo Horizonte">Belo Horizonte</SelectItem>
@@ -70,14 +70,14 @@ const ServiceCallsFilters: React.FC<ServiceCallsFiltersProps> = ({
 
           {/* Tipo de Serviço */}
           <Select
-            value={filters.serviceType || ''}
-            onValueChange={(value) => onFiltersChange({ ...filters, serviceType: value || undefined })}
+            value={filters.serviceType || 'todos'}
+            onValueChange={(value) => onFiltersChange({ ...filters, serviceType: value === 'todos' ? undefined : value })}
           >
             <SelectTrigger>
               <SelectValue placeholder="Tipo de serviço" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Todos os tipos</SelectItem>
+              <SelectItem value="todos">Todos os tipos</SelectItem>
               <SelectItem value="Manutenção">Manutenção</SelectItem>
               <SelectItem value="Instalação">Instalação</SelectItem>
               <SelectItem value="Orçamento">Orçamento</SelectItem>
@@ -88,9 +88,9 @@ const ServiceCallsFilters: React.FC<ServiceCallsFiltersProps> = ({
 
           {/* Faixa de Valor */}
           <Select
-            value={filters.valueRange ? `${filters.valueRange.min}-${filters.valueRange.max}` : ''}
+            value={filters.valueRange ? `${filters.valueRange.min}-${filters.valueRange.max}` : 'todos'}
             onValueChange={(value) => {
-              if (!value) {
+              if (value === 'todos') {
                 onFiltersChange({ ...filters, valueRange: undefined });
               } else {
                 const [min, max] = value.split('-').map(Number);
@@ -102,7 +102,7 @@ const ServiceCallsFilters: React.FC<ServiceCallsFiltersProps> = ({
               <SelectValue placeholder="Faixa de valor" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Todos os valores</SelectItem>
+              <SelectItem value="todos">Todos os valores</SelectItem>
               <SelectItem value="0-100">R$ 0 - R$ 100</SelectItem>
               <SelectItem value="101-250">R$ 101 - R$ 250</SelectItem>
               <SelectItem value="251-500">R$ 251 - R$ 500</SelectItem>
