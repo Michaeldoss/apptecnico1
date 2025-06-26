@@ -3,12 +3,34 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
-import { Search, MapPin, ArrowRight, Star, Users, CheckCircle2 } from "lucide-react";
+import { Search, MapPin, ArrowRight, Star, Users, CheckCircle2, Wrench, Zap } from "lucide-react";
 
 const Hero = () => {
   return (
     <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-16 px-4 min-h-[70vh] flex items-center">
       <div className="max-w-6xl mx-auto w-full">
+        {/* Botões de ação rápida no topo */}
+        <div className="flex flex-wrap justify-center gap-4 mb-8">
+          <Link to="/find-technician">
+            <Button className="bg-white/20 backdrop-blur-lg border border-white/30 text-white hover:bg-white/30 transition-all duration-200 shadow-lg flex items-center gap-2">
+              <Search className="h-4 w-4" />
+              Encontrar Técnico
+            </Button>
+          </Link>
+          <Link to="/services">
+            <Button className="bg-white/20 backdrop-blur-lg border border-white/30 text-white hover:bg-white/30 transition-all duration-200 shadow-lg flex items-center gap-2">
+              <Wrench className="h-4 w-4" />
+              Solicitar Serviço
+            </Button>
+          </Link>
+          <Link to="/technician/landing">
+            <Button className="bg-yellow-500/90 hover:bg-yellow-600 text-gray-900 font-semibold transition-all duration-200 shadow-lg flex items-center gap-2">
+              <Zap className="h-4 w-4" />
+              Seja um Técnico
+            </Button>
+          </Link>
+        </div>
+
         {/* Título Principal */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight text-white drop-shadow-lg">
