@@ -1,4 +1,3 @@
-
 import { useState, useMemo } from 'react';
 
 interface CustomerStats {
@@ -24,6 +23,18 @@ interface CustomerServiceMetrics {
   preventiveMaintenance: number;
 }
 
+interface ServiceOrder {
+  id: string;
+  number: string;
+  date: string;
+  technician: string;
+  status: 'aberta' | 'em_andamento' | 'concluida' | 'cancelada';
+  problem: string;
+  solution?: string;
+  parts: string[];
+  cost: number;
+}
+
 interface Equipment {
   id: number;
   type: string;
@@ -36,6 +47,10 @@ interface Equipment {
   partsUsed: number;
   laborHours: number;
   mostUsedPart: string;
+  image?: string;
+  serialNumber: string;
+  purchaseDate: string;
+  serviceOrders: ServiceOrder[];
 }
 
 interface FinancialBreakdown {
@@ -65,7 +80,34 @@ const mockEquipment: Equipment[] = [
     totalCost: 2850.00,
     partsUsed: 12,
     laborHours: 8,
-    mostUsedPart: 'Cabeçote DX5'
+    mostUsedPart: 'Cabeçote DX5',
+    image: 'https://images.unsplash.com/photo-1612198188060-c7c2a3b66eae?w=400&h=300&fit=crop',
+    serialNumber: 'EP-F570-2024-001',
+    purchaseDate: '15/03/2024',
+    serviceOrders: [
+      {
+        id: '1',
+        number: 'OS-001',
+        date: '15/12/2024',
+        technician: 'Carlos Silva',
+        status: 'concluida',
+        problem: 'Entupimento nos bicos',
+        solution: 'Limpeza completa do sistema de tinta',
+        parts: ['Cabeçote DX5', 'Damper'],
+        cost: 450.00
+      },
+      {
+        id: '2',
+        number: 'OS-002',
+        date: '20/11/2024',
+        technician: 'Ana Santos',
+        status: 'concluida',
+        problem: 'Problema na alimentação de papel',
+        solution: 'Troca dos rolos de alimentação',
+        parts: ['Rolo Alimentador'],
+        cost: 180.00
+      }
+    ]
   },
   {
     id: 2,
@@ -78,7 +120,22 @@ const mockEquipment: Equipment[] = [
     totalCost: 4200.00,
     partsUsed: 18,
     laborHours: 12,
-    mostUsedPart: 'Damper'
+    mostUsedPart: 'Damper',
+    image: 'https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=400&h=300&fit=crop',
+    serialNumber: 'RL-RT640-2024-002',
+    purchaseDate: '10/01/2024',
+    serviceOrders: [
+      {
+        id: '3',
+        number: 'OS-003',
+        date: '10/12/2024',
+        technician: 'Roberto Lima',
+        status: 'em_andamento',
+        problem: 'Falha na impressão de cores',
+        parts: ['Damper', 'Mangueira de Tinta'],
+        cost: 680.00
+      }
+    ]
   },
   {
     id: 3,
@@ -91,7 +148,23 @@ const mockEquipment: Equipment[] = [
     totalCost: 1650.00,
     partsUsed: 6,
     laborHours: 4,
-    mostUsedPart: 'Broca Router'
+    mostUsedPart: 'Broca Router',
+    image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&h=300&fit=crop',
+    serialNumber: 'LG-IQHTS-2024-003',
+    purchaseDate: '05/02/2024',
+    serviceOrders: [
+      {
+        id: '4',
+        number: 'OS-004',
+        date: '08/12/2024',
+        technician: 'Marcos Oliveira',
+        status: 'concluida',
+        problem: 'Desgaste nas brocas',
+        solution: 'Troca completa do conjunto de brocas',
+        parts: ['Broca Router', 'Mandril'],
+        cost: 320.00
+      }
+    ]
   },
   {
     id: 4,
@@ -104,7 +177,23 @@ const mockEquipment: Equipment[] = [
     totalCost: 850.00,
     partsUsed: 3,
     laborHours: 2,
-    mostUsedPart: 'Resistência'
+    mostUsedPart: 'Resistência',
+    image: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=400&h=300&fit=crop',
+    serialNumber: 'HT-AO-2024-004',
+    purchaseDate: '25/04/2024',
+    serviceOrders: [
+      {
+        id: '5',
+        number: 'OS-005',
+        date: '20/11/2024',
+        technician: 'Patricia Costa',
+        status: 'concluida',
+        problem: 'Aquecimento irregular',
+        solution: 'Substituição da resistência principal',
+        parts: ['Resistência'],
+        cost: 150.00
+      }
+    ]
   }
 ];
 

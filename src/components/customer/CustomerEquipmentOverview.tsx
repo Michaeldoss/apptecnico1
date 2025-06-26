@@ -1,10 +1,24 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { Printer, Settings, AlertTriangle, CheckCircle, MapPin, Calendar, BarChart3 } from 'lucide-react';
+import { Printer, Settings, AlertTriangle, CheckCircle, MapPin, Calendar, BarChart3, Eye, FileText } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
+import EquipmentDetailsModal from './EquipmentDetailsModal';
+
+interface ServiceOrder {
+  id: string;
+  number: string;
+  date: string;
+  technician: string;
+  status: 'aberta' | 'em_andamento' | 'concluida' | 'cancelada';
+  problem: string;
+  solution?: string;
+  parts: string[];
+  cost: number;
+}
 
 interface Equipment {
   id: number;
@@ -14,6 +28,14 @@ interface Equipment {
   status: 'active' | 'maintenance' | 'inactive';
   location: string;
   lastMaintenance: string;
+  totalCost: number;
+  partsUsed: number;
+  laborHours: number;
+  mostUsedPart: string;
+  image?: string;
+  serialNumber: string;
+  purchaseDate: string;
+  serviceOrders: ServiceOrder[];
 }
 
 interface CustomerEquipmentOverviewProps {
@@ -21,6 +43,14 @@ interface CustomerEquipmentOverviewProps {
 }
 
 const CustomerEquipmentOverview = ({ equipment }: CustomerEquipmentOverviewProps) => {
+  const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleViewDetails = (equipmentItem: Equipment) => {
+    setSelectedEquipment(equipmentItem);
+    setIsModalOpen(true);
+  };
+
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'active':
@@ -150,7 +180,7 @@ const CustomerEquipmentOverview = ({ equipment }: CustomerEquipmentOverviewProps
         </CardContent>
       </Card>
 
-      {/* Lista Detalhada de Equipamentos */}
+      {/* Lista Detalhada de Equipamentos com Fotos */}
       <Card className="border-0 shadow-lg bg-white/95 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="text-xl font-bold text-gray-800 flex items-center gap-3">
@@ -160,47 +190,100 @@ const CustomerEquipmentOverview = ({ equipment }: CustomerEquipmentOverviewProps
             Inventário Detalhado
           </CardTitle>
           <p className="text-sm text-gray-600 mt-1">
-            Lista completa com informações técnicas e localização
+            Lista completa com informações técnicas, localização e histórico de serviços
           </p>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4 max-h-96 overflow-y-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {equipment.map((item) => (
               <div
                 key={item.id}
-                className="flex items-center justify-between p-4 rounded-xl border-2 border-gray-200 hover:border-blue-300 hover:shadow-md transition-all duration-300 bg-white"
+                className="border-2 border-gray-200 rounded-xl p-4 hover:border-blue-300 hover:shadow-lg transition-all duration-300 bg-white"
               >
-                <div className="flex items-center gap-4 flex-1 min-w-0">
-                  <div className="p-3 rounded-lg bg-blue-50 border border-blue-200">
-                    <Printer className="h-6 w-6 text-blue-600" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="font-bold text-lg text-gray-900 truncate">
-                      {item.brand} {item.model}
+                {/* Imagem do Equipamento */}
+                <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden mb-4">
+                  {item.image ? (
+                    <img 
+                      src={item.image} 
+                      alt={`${item.brand} ${item.model}`}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <Printer className="h-12 w-12 text-gray-400" />
                     </div>
-                    <div className="text-sm text-gray-600 truncate mb-2">
-                      <strong>Tipo:</strong> {item.type}
-                    </div>
-                    <div className="flex items-center gap-4 text-xs text-gray-500">
-                      <div className="flex items-center gap-1">
-                        <MapPin className="h-3 w-3" />
-                        <span>{item.location}</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Calendar className="h-3 w-3" />
-                        <span>Últ. manutenção: {item.lastMaintenance}</span>
-                      </div>
-                    </div>
-                  </div>
+                  )}
                 </div>
-                <div className="ml-4 text-right">
-                  {getStatusBadge(item.status)}
+
+                {/* Informações do Equipamento */}
+                <div className="space-y-3">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="font-bold text-lg text-gray-900">
+                        {item.brand} {item.model}
+                      </h3>
+                      <p className="text-sm text-gray-600 font-medium">{item.type}</p>
+                    </div>
+                    {getStatusBadge(item.status)}
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 text-xs text-gray-600">
+                    <div className="flex items-center gap-1">
+                      <MapPin className="h-3 w-3" />
+                      <span>{item.location}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Calendar className="h-3 w-3" />
+                      <span>{item.lastMaintenance}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <FileText className="h-3 w-3" />
+                      <span>{item.serviceOrders.length} O.S.</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Settings className="h-3 w-3" />
+                      <span>{item.partsUsed} peças</span>
+                    </div>
+                  </div>
+
+                  {/* Custos e Estatísticas */}
+                  <div className="bg-gray-50 rounded-lg p-3">
+                    <div className="grid grid-cols-2 gap-3 text-sm">
+                      <div>
+                        <div className="text-gray-600">Custo Total</div>
+                        <div className="font-bold text-blue-600">
+                          R$ {item.totalCost.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-gray-600">Horas M.O.</div>
+                        <div className="font-bold text-green-600">{item.laborHours}h</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Botão Ver Detalhes */}
+                  <Button 
+                    className="w-full" 
+                    variant="outline"
+                    onClick={() => handleViewDetails(item)}
+                  >
+                    <Eye className="h-4 w-4 mr-2" />
+                    Ver Detalhes e O.S.
+                  </Button>
                 </div>
               </div>
             ))}
           </div>
         </CardContent>
       </Card>
+
+      {/* Modal de Detalhes */}
+      <EquipmentDetailsModal 
+        equipment={selectedEquipment}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 };
