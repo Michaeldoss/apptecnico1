@@ -7,7 +7,6 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -22,18 +21,24 @@ const CustomerPayments = () => {
   const { data: services, isLoading } = useServices();
   
   // Filter services that have payment info or are completed and need payment
-  const paymentServices = services.filter(service => 
+  const paymentServices = services?.filter(service => 
     service.payment || (service.status === 'concluído' && (!service.payment || service.payment?.status !== 'pago'))
-  );
+  ) || [];
+
+  if (isLoading) {
+    return (
+      <CustomerLayout title="Pagamentos">
+        <div className="flex items-center justify-center h-64">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        </div>
+      </CustomerLayout>
+    );
+  }
 
   return (
     <CustomerLayout title="Pagamentos">
       <div className="space-y-6">
-        {isLoading ? (
-          <div className="flex items-center justify-center h-64">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-          </div>
-        ) : paymentServices.length > 0 ? (
+        {paymentServices.length > 0 ? (
           <Card>
             <CardHeader>
               <CardTitle>Histórico de Pagamentos</CardTitle>
