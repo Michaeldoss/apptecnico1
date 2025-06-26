@@ -88,12 +88,12 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
     <div className="min-h-screen flex flex-col bg-blue-600">
       <Navbar />
       
-      <div className="flex-1 flex container mx-auto px-4 py-6 gap-6 max-w-7xl">
-        {/* Mobile menu toggle */}
+      <div className="flex-1 flex container mx-auto px-4 py-8 gap-8 max-w-7xl">
+        {/* Mobile menu toggle - Melhorado */}
         {isMobile && (
           <button 
             onClick={toggleMenu}
-            className="fixed top-20 left-4 z-40 bg-white text-blue-600 p-3 rounded-full shadow-lg md:hidden hover:bg-gray-100 transition-colors duration-200"
+            className="fixed top-24 left-6 z-40 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 p-3 rounded-full shadow-xl md:hidden transition-all duration-200 hover:scale-110"
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -107,15 +107,20 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
           />
         )}
         
-        {/* Sidebar */}
+        {/* Sidebar - Melhorado */}
         <aside 
           className={cn(
-            "w-64 shrink-0 border-r border-blue-500 pr-6 transition-all duration-300",
-            isMobile ? "fixed left-0 top-16 bottom-0 bg-blue-600 z-30 h-[calc(100vh-4rem)] px-4 pt-16 pb-6 shadow-xl overflow-y-auto" : "hidden md:block",
+            "w-72 shrink-0 transition-all duration-300",
+            isMobile ? "fixed left-0 top-16 bottom-0 bg-gradient-to-b from-blue-600 to-blue-700 z-30 h-[calc(100vh-4rem)] px-6 pt-20 pb-6 shadow-2xl overflow-y-auto border-r-4 border-yellow-400" : "hidden md:block bg-gradient-to-b from-blue-600 to-blue-700 rounded-xl p-6 shadow-xl border-4 border-yellow-400",
             isMobile && !isMenuOpen ? "-translate-x-full" : isMobile && isMenuOpen ? "translate-x-0" : ""
           )}
         >
-          <div className="space-y-2 py-4">
+          <div className="space-y-3 py-4">
+            <div className="mb-6 pb-4 border-b border-blue-400">
+              <h2 className="text-xl font-bold text-white">Menu Principal</h2>
+              <p className="text-blue-200 text-sm">Acesse suas funcionalidades</p>
+            </div>
+            
             <SidebarItem 
               to="/cliente/painel" 
               icon={LayoutDashboard} 
@@ -200,13 +205,13 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
             </SidebarItem>
           </div>
           
-          <div className="pt-6 mt-6 border-t border-blue-500">
+          <div className="pt-6 mt-8 border-t border-blue-400">
             <button 
               onClick={() => {
                 handleLogout();
                 closeMenu();
               }}
-              className="flex items-center gap-3 rounded-lg px-4 py-3 text-base transition-all duration-200 hover:bg-blue-500 text-white hover:text-blue-100 w-full text-left font-inter font-medium"
+              className="flex items-center gap-3 rounded-lg px-4 py-3 text-base transition-all duration-200 hover:bg-red-500 text-white hover:text-red-100 w-full text-left font-inter font-medium bg-red-600 shadow-lg"
             >
               <LogOut className="h-5 w-5 text-white" />
               <span>Sair</span>
@@ -214,10 +219,31 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
           </div>
         </aside>
         
-        {/* Main content */}
+        {/* Main content - Melhorado */}
         <main className={cn("flex-1 min-w-0", isMobile ? "pl-0" : "")}>
-          <div className={cn("flex items-center justify-between mb-6", isMobile ? "flex-col gap-4 items-start" : "")}>
-            <h1 className={cn("text-3xl font-bold text-white font-inter", isMobile ? "text-2xl pl-12" : "")}>{title}</h1>
+          {/* Header melhorado */}
+          <div className={cn("bg-white rounded-xl shadow-lg border-4 border-yellow-400 p-6 mb-8", isMobile ? "mx-2" : "")}>
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className={cn("text-3xl font-bold text-gray-800 font-inter", isMobile ? "text-2xl pl-12" : "")}>
+                  {title}
+                </h1>
+                <p className="text-gray-600 mt-2 font-medium">
+                  Gerencie e monitore seus equipamentos
+                </p>
+              </div>
+              <div className="hidden md:flex items-center bg-gradient-to-r from-yellow-100 to-yellow-200 px-4 py-2 rounded-lg border border-yellow-300">
+                <Calendar className="h-5 w-5 text-yellow-700 mr-2" />
+                <span className="text-yellow-800 font-semibold">
+                  {new Date().toLocaleDateString('pt-BR', { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                  })}
+                </span>
+              </div>
+            </div>
           </div>
           
           <div className={cn("w-full", isMobile ? "px-2" : "")}>
