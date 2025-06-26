@@ -2,13 +2,13 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Wrench, RotateCcw, Star, DollarSign, Trophy } from 'lucide-react';
-import { KPIMetrics } from '@/types/dashboard';
+import type { KPIMetrics } from '@/types/dashboard';
 
 interface KPIMetricsProps {
   metrics: KPIMetrics;
 }
 
-const KPIMetrics: React.FC<KPIMetricsProps> = ({ metrics }) => {
+const KPIMetricsComponent: React.FC<KPIMetricsProps> = ({ metrics }) => {
   const kpiItems = [
     {
       label: 'Serviços do Mês',
@@ -74,4 +74,4 @@ const KPIMetrics: React.FC<KPIMetricsProps> = ({ metrics }) => {
   );
 };
 
-export default KPIMetrics;
+export default KPIMetricsComponent;

@@ -3,13 +3,13 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { CheckCircle, Clock, RotateCcw, XCircle, AlertCircle } from 'lucide-react';
-import { ServiceMetrics } from '@/types/dashboard';
+import type { ServiceMetrics } from '@/types/dashboard';
 
 interface ServiceMetricsProps {
   metrics: ServiceMetrics;
 }
 
-const ServiceMetrics: React.FC<ServiceMetricsProps> = ({ metrics }) => {
+const ServiceMetricsComponent: React.FC<ServiceMetricsProps> = ({ metrics }) => {
   const statusItems = [
     {
       label: 'Concluídos Hoje',
@@ -83,4 +83,4 @@ const ServiceMetrics: React.FC<ServiceMetricsProps> = ({ metrics }) => {
   );
 };
 
-export default ServiceMetrics;
+export default ServiceMetricsComponent;

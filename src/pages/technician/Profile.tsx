@@ -9,12 +9,14 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { CheckCircle, Calculator, MapPin, Wrench, Star } from 'lucide-react';
+import { CheckCircle, Calculator, MapPin, Wrench, Star, Settings, FileText, CreditCard } from 'lucide-react';
 import { getAllEquipmentTypes } from '@/types/equipment';
 import { serviceTypeLabels } from '@/types/technician';
 import { useToast } from '@/hooks/use-toast';
 import TechnicianPricing from '@/components/technician/TechnicianPricing';
 import ImageUpload from '@/components/ui/image-upload';
+import FileUploadSection from '@/components/technician/FileUploadSection';
+import AppSettings from '@/components/technician/AppSettings';
 
 const TechnicianProfile = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -38,6 +40,7 @@ const TechnicianProfile = () => {
     description: 'Técnico especializado em manutenção de plotters e equipamentos gráficos. Mais de 5 anos de experiência no mercado.',
     address: 'Av. Paulista, 1000, São Paulo - SP',
     serviceArea: 10,
+    bankAccount: '001 - Banco do Brasil - Ag: 1234-5 - CC: 12345-6'
   });
   
   // Estado para preços
@@ -51,7 +54,7 @@ const TechnicianProfile = () => {
   // Dados de exemplo do perfil
   const profile = {
     rating: 4.8,
-    reviewCount: 36,
+    reviewCount: 36 
   };
   
   const handleEquipmentChange = (equipmentId: string) => {
@@ -159,14 +162,6 @@ const TechnicianProfile = () => {
                 </CardDescription>
               </div>
             </div>
-            
-            <div className="space-y-4">
-              <ImageUpload
-                currentImage={profileImage || undefined}
-                onImageChange={handleImageChange}
-                size="md"
-              />
-            </div>
           </CardHeader>
           <CardContent className="pt-6">
             <p className="text-gray-secondary text-base leading-relaxed">{profileData.description}</p>
@@ -179,24 +174,42 @@ const TechnicianProfile = () => {
         
         {/* Tabs */}
         <Tabs defaultValue="personal" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 bg-gray-light border border-gray-border">
+          <TabsList className="grid w-full grid-cols-6 bg-gray-light border border-gray-border">
             <TabsTrigger 
               value="personal" 
               className="font-semibold text-gray-primary data-[state=active]:bg-tech-primary data-[state=active]:text-white"
             >
-              Informações Pessoais
+              Pessoal
             </TabsTrigger>
             <TabsTrigger 
               value="professional"
               className="font-semibold text-gray-primary data-[state=active]:bg-tech-primary data-[state=active]:text-white"
             >
-              Informações Profissionais
+              Profissional
             </TabsTrigger>
             <TabsTrigger 
               value="pricing"
               className="font-semibold text-gray-primary data-[state=active]:bg-tech-primary data-[state=active]:text-white"
             >
               Preços
+            </TabsTrigger>
+            <TabsTrigger 
+              value="files"
+              className="font-semibold text-gray-primary data-[state=active]:bg-tech-primary data-[state=active]:text-white"
+            >
+              Arquivos
+            </TabsTrigger>
+            <TabsTrigger 
+              value="settings"
+              className="font-semibold text-gray-primary data-[state=active]:bg-tech-primary data-[state=active]:text-white"
+            >
+              Configurações
+            </TabsTrigger>
+            <TabsTrigger 
+              value="photo"
+              className="font-semibold text-gray-primary data-[state=active]:bg-tech-primary data-[state=active]:text-white"
+            >
+              Foto
             </TabsTrigger>
           </TabsList>
           
@@ -245,7 +258,7 @@ const TechnicianProfile = () => {
                     </div>
                     
                     <div className="space-y-2">
-                      <Label htmlFor="document" className="text-gray-800 font-semibold">CNPJ</Label>
+                      <Label htmlFor="document" className="text-gray-800 font-semibold">CPF/CNPJ</Label>
                       <Input 
                         id="document" 
                         value={profileData.document}
@@ -263,6 +276,20 @@ const TechnicianProfile = () => {
                       onChange={(e) => handleInputChange('address', e.target.value)}
                       className="border-2 border-gray-300 focus:border-tech-primary focus:ring-tech-primary"
                     />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="bank-account" className="text-gray-800 font-semibold">Conta Bancária</Label>
+                    <Input 
+                      id="bank-account" 
+                      value={profileData.bankAccount}
+                      onChange={(e) => handleInputChange('bankAccount', e.target.value)}
+                      placeholder="Banco - Agência - Conta"
+                      className="border-2 border-gray-300 focus:border-tech-primary focus:ring-tech-primary"
+                    />
+                    <p className="text-sm text-muted-foreground">
+                      Para recebimento dos pagamentos
+                    </p>
                   </div>
                 </CardContent>
                 <CardFooter className="bg-gray-light border-t border-gray-border">
@@ -341,7 +368,11 @@ const TechnicianProfile = () => {
                       onChange={(e) => handleInputChange('description', e.target.value)}
                       rows={4}
                       className="border-2 border-gray-300 focus:border-tech-primary focus:ring-tech-primary"
+                      maxLength={500}
                     />
+                    <p className="text-sm text-muted-foreground">
+                      {profileData.description.length}/500 caracteres
+                    </p>
                   </div>
                   
                   <div className="space-y-2">
@@ -352,6 +383,8 @@ const TechnicianProfile = () => {
                       value={profileData.serviceArea}
                       onChange={(e) => handleInputChange('serviceArea', e.target.value)}
                       className="border-2 border-gray-300 focus:border-tech-primary focus:ring-tech-primary max-w-32"
+                      min="1"
+                      max="100"
                     />
                   </div>
                 </CardContent>
@@ -476,6 +509,34 @@ const TechnicianProfile = () => {
                 />
               </div>
             </div>
+          </TabsContent>
+
+          <TabsContent value="files" className="mt-6">
+            <FileUploadSection />
+          </TabsContent>
+
+          <TabsContent value="settings" className="mt-6">
+            <AppSettings />
+          </TabsContent>
+
+          <TabsContent value="photo" className="mt-6">
+            <Card className="bg-white border-2 border-gray-border shadow-sm">
+              <CardHeader className="bg-gray-light border-b border-gray-border">
+                <CardTitle className="text-xl font-bold text-tech-primary">Foto do Perfil</CardTitle>
+                <CardDescription className="text-gray-secondary">
+                  Atualize sua foto de perfil profissional
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="py-8">
+                <div className="flex justify-center">
+                  <ImageUpload
+                    currentImage={profileImage || undefined}
+                    onImageChange={handleImageChange}
+                    size="lg"
+                  />
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
         </Tabs>
       </div>
