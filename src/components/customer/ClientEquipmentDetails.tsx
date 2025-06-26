@@ -16,67 +16,67 @@ const ClientEquipmentDetails = ({ equipment }: ClientEquipmentDetailsProps) => {
       case 'DTF':
         return (
           <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <Label className="text-blue-800 font-semibold">Largura</Label>
+                <Label className="text-yellow-700 font-semibold">Largura</Label>
                 <Input 
                   value={equipment.width} 
                   readOnly 
-                  className="border-2 border-blue-300 bg-white focus:border-blue-600 mt-1"
+                  className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
                 />
               </div>
               <div>
-                <Label className="text-blue-800 font-semibold">Cabeças</Label>
+                <Label className="text-yellow-700 font-semibold">Cabeças</Label>
                 <Input 
                   value={equipment.heads} 
                   readOnly 
-                  className="border-2 border-blue-300 bg-white focus:border-blue-600 mt-1"
+                  className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
                 />
               </div>
             </div>
-            <Separator className="bg-blue-300 h-0.5" />
+            <Separator className="bg-yellow-400 h-0.5" />
             <div>
-              <Label className="text-blue-800 font-semibold flex items-center gap-2">
+              <Label className="text-yellow-700 font-semibold flex items-center gap-2">
                 <Settings className="h-5 w-5" />
                 Dados do Forno
               </Label>
-              <div className="grid grid-cols-2 gap-4 mt-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3">
                 <div>
-                  <Label className="text-sm text-blue-700">Modelo</Label>
+                  <Label className="text-sm text-yellow-600">Modelo</Label>
                   <Input 
                     value={equipment.oven?.model} 
                     readOnly 
-                    className="border-2 border-blue-300 bg-white focus:border-blue-600 mt-1"
+                    className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
                   />
                 </div>
                 <div>
-                  <Label className="text-sm text-blue-700 flex items-center gap-1">
+                  <Label className="text-sm text-yellow-600 flex items-center gap-1">
                     <Thermometer className="h-4 w-4" />
                     Temperatura Máx.
                   </Label>
                   <Input 
                     value={equipment.oven?.temperature} 
                     readOnly 
-                    className="border-2 border-blue-300 bg-white focus:border-blue-600 mt-1"
+                    className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
                   />
                 </div>
                 <div>
-                  <Label className="text-sm text-blue-700">Esteira</Label>
+                  <Label className="text-sm text-yellow-600">Esteira</Label>
                   <Input 
                     value={equipment.oven?.belt} 
                     readOnly 
-                    className="border-2 border-blue-300 bg-white focus:border-blue-600 mt-1"
+                    className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
                   />
                 </div>
                 <div>
-                  <Label className="text-sm text-blue-700 flex items-center gap-1">
+                  <Label className="text-sm text-yellow-600 flex items-center gap-1">
                     <Zap className="h-4 w-4" />
                     Alimentação
                   </Label>
                   <Input 
                     value={equipment.oven?.power} 
                     readOnly 
-                    className="border-2 border-blue-300 bg-white focus:border-blue-600 mt-1"
+                    className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
                   />
                 </div>
               </div>
@@ -86,54 +86,54 @@ const ClientEquipmentDetails = ({ equipment }: ClientEquipmentDetailsProps) => {
       case 'CNC Router':
         return (
           <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <Label className="text-blue-800 font-semibold">Área Útil</Label>
+                <Label className="text-yellow-700 font-semibold">Área Útil</Label>
                 <Input 
                   value={equipment.area} 
                   readOnly 
-                  className="border-2 border-blue-300 bg-white focus:border-blue-600 mt-1"
+                  className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
                 />
               </div>
               <div>
-                <Label className="text-blue-800 font-semibold">Tipo de Motor</Label>
+                <Label className="text-yellow-700 font-semibold">Tipo de Motor</Label>
                 <Input 
                   value={equipment.motorType} 
                   readOnly 
-                  className="border-2 border-blue-300 bg-white focus:border-blue-600 mt-1"
+                  className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
                 />
               </div>
               <div>
-                <Label className="text-blue-800 font-semibold">Controle</Label>
+                <Label className="text-yellow-700 font-semibold">Controle</Label>
                 <Input 
                   value={equipment.control} 
                   readOnly 
-                  className="border-2 border-blue-300 bg-white focus:border-blue-600 mt-1"
+                  className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
                 />
               </div>
               <div>
-                <Label className="text-blue-800 font-semibold">Software</Label>
+                <Label className="text-yellow-700 font-semibold">Software</Label>
                 <Input 
                   value={equipment.software} 
                   readOnly 
-                  className="border-2 border-blue-300 bg-white focus:border-blue-600 mt-1"
+                  className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
                 />
               </div>
               <div>
-                <Label className="text-blue-800 font-semibold">Lubrificação</Label>
+                <Label className="text-yellow-700 font-semibold">Lubrificação</Label>
                 <Input 
                   value={equipment.lubrication} 
                   readOnly 
-                  className="border-2 border-blue-300 bg-white focus:border-blue-600 mt-1"
+                  className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
                 />
               </div>
               <div>
-                <Label className="text-blue-800 font-semibold flex items-center gap-2">
+                <Label className="text-yellow-700 font-semibold flex items-center gap-2">
                   <Gauge className="h-5 w-5" />
                   Frequência de Uso
                 </Label>
                 <div className="mt-1">
-                  <Badge className="bg-blue-100 text-blue-800 border-2 border-blue-300">{equipment.usage}</Badge>
+                  <Badge className="bg-yellow-100 text-yellow-800 border-2 border-yellow-300">{equipment.usage}</Badge>
                 </div>
               </div>
             </div>
@@ -142,31 +142,31 @@ const ClientEquipmentDetails = ({ equipment }: ClientEquipmentDetailsProps) => {
       case 'Prensa Térmica':
         return (
           <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <Label className="text-blue-800 font-semibold">Tipo de Acionamento</Label>
+                <Label className="text-yellow-700 font-semibold">Tipo de Acionamento</Label>
                 <Input 
                   value={equipment.activation} 
                   readOnly 
-                  className="border-2 border-blue-300 bg-white focus:border-blue-600 mt-1"
+                  className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
                 />
               </div>
               <div>
-                <Label className="text-blue-800 font-semibold flex items-center gap-2">
+                <Label className="text-yellow-700 font-semibold flex items-center gap-2">
                   <Zap className="h-5 w-5" />
                   Tensão
                 </Label>
                 <Input 
                   value={equipment.voltage} 
                   readOnly 
-                  className="border-2 border-blue-300 bg-white focus:border-blue-600 mt-1"
+                  className="border-2 border-yellow-300 bg-white focus:border-yellow-500 mt-1"
                 />
               </div>
             </div>
           </div>
         );
       default:
-        return <p className="text-blue-700">Detalhes específicos não disponíveis</p>;
+        return <p className="text-yellow-600">Detalhes específicos não disponíveis</p>;
     }
   };
 
