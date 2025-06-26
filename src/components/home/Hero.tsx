@@ -1,13 +1,10 @@
-
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import { Search, MapPin, ArrowRight, Star, Users, CheckCircle2, Wrench, Zap, Phone, MessageCircle, Calendar } from "lucide-react";
-
 const Hero = () => {
-  return (
-    <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-24 px-4 min-h-[80vh] flex items-center relative overflow-hidden">
+  return <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-24 px-4 min-h-[80vh] flex items-center relative overflow-hidden">
       {/* Elementos decorativos de fundo */}
       <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-transparent to-purple-600/20"></div>
       <div className="absolute top-20 left-20 w-72 h-72 bg-white/5 rounded-full blur-3xl"></div>
@@ -17,10 +14,7 @@ const Hero = () => {
         {/* Botões de ação rápida no topo - Modo Deus */}
         <div className="flex flex-wrap justify-center gap-6 mb-12">
           <Link to="/find-technician">
-            <Button className="bg-white/15 backdrop-blur-xl border-2 border-white/30 text-white hover:bg-white/25 hover:border-white/50 transition-all duration-300 shadow-2xl flex items-center gap-3 px-8 py-4 text-lg font-bold rounded-2xl hover:scale-105 hover:shadow-3xl">
-              <Search className="h-6 w-6" />
-              Encontrar Técnico
-            </Button>
+            
           </Link>
           <Link to="/services">
             <Button className="bg-white/15 backdrop-blur-xl border-2 border-white/30 text-white hover:bg-white/25 hover:border-white/50 transition-all duration-300 shadow-2xl flex items-center gap-3 px-8 py-4 text-lg font-bold rounded-2xl hover:scale-105 hover:shadow-3xl">
@@ -60,19 +54,13 @@ const Hero = () => {
             <div className="relative group">
               <label className="block text-lg font-black text-gray-900 mb-3">Tipo de equipamento</label>
               <Search className="absolute left-5 top-14 transform text-gray-500 h-6 w-6 group-focus-within:text-blue-600 transition-colors" />
-              <Input 
-                placeholder="Ex: Impressora, CNC, Torno..." 
-                className="pl-14 h-14 text-gray-900 border-3 border-gray-300 focus:border-blue-600 text-lg font-bold rounded-xl shadow-lg hover:border-gray-400 transition-all hover:shadow-xl"
-              />
+              <Input placeholder="Ex: Impressora, CNC, Torno..." className="pl-14 h-14 text-gray-900 border-3 border-gray-300 focus:border-blue-600 text-lg font-bold rounded-xl shadow-lg hover:border-gray-400 transition-all hover:shadow-xl" />
             </div>
             
             <div className="relative group">
               <label className="block text-lg font-black text-gray-900 mb-3">Localização</label>
               <MapPin className="absolute left-5 top-14 transform text-gray-500 h-6 w-6 group-focus-within:text-blue-600 transition-colors" />
-              <Input 
-                placeholder="Cidade, estado ou CEP" 
-                className="pl-14 h-14 text-gray-900 border-3 border-gray-300 focus:border-blue-600 text-lg font-bold rounded-xl shadow-lg hover:border-gray-400 transition-all hover:shadow-xl"
-              />
+              <Input placeholder="Cidade, estado ou CEP" className="pl-14 h-14 text-gray-900 border-3 border-gray-300 focus:border-blue-600 text-lg font-bold rounded-xl shadow-lg hover:border-gray-400 transition-all hover:shadow-xl" />
             </div>
             
             <div className="flex flex-col justify-end">
@@ -134,8 +122,6 @@ const Hero = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default Hero;
