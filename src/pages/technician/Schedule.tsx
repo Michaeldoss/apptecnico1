@@ -5,28 +5,26 @@ import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { 
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Separator } from '@/components/ui/separator';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { CalendarIcon, Clock, MapPin, Plus, User } from 'lucide-react';
+  CalendarIcon, 
+  Clock, 
+  MapPin, 
+  User, 
+  MessageCircle, 
+  Send,
+  Wrench,
+  DollarSign,
+  Package,
+  CheckCheck
+} from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
 type Appointment = {
   id: number;
@@ -39,9 +37,37 @@ type Appointment = {
   notes?: string;
 };
 
+type ChatMessage = {
+  id: number;
+  senderId: number;
+  senderName: string;
+  content: string;
+  timestamp: string;
+  type: 'text' | 'service_request' | 'quote_request' | 'parts_request';
+  serviceData?: {
+    type: string;
+    equipment: string;
+    urgency: string;
+    preferredDate?: string;
+  };
+  read: boolean;
+};
+
+type ChatConversation = {
+  id: number;
+  clientId: number;
+  clientName: string;
+  avatar: string;
+  lastMessage: string;
+  lastMessageTime: string;
+  unreadCount: number;
+  isOnline: boolean;
+};
+
 const TechnicianSchedule = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [activeChat, setActiveChat] = useState<number | null>(1);
+  const [newMessage, setNewMessage] = useState('');
   const isMobile = useIsMobile();
   
   // Dados de exemplo
@@ -73,16 +99,92 @@ const TechnicianSchedule = () => {
       address: 'Rua Augusta, 1200, São Paulo - SP',
       status: 'agendado',
     },
+  ];
+
+  const conversations: ChatConversation[] = [
     {
-      id: 4,
-      client: 'Fernando Silva',
-      serviceType: 'Configuração de Rede',
-      date: '2023-07-26',
-      time: '16:00',
-      address: 'Rua Oscar Freire, 300, São Paulo - SP',
-      status: 'agendado',
+      id: 1,
+      clientId: 101,
+      clientName: 'Mariana Costa',
+      avatar: 'MC',
+      lastMessage: 'Gostaria de agendar uma manutenção',
+      lastMessageTime: '10:30',
+      unreadCount: 2,
+      isOnline: true,
+    },
+    {
+      id: 2,
+      clientId: 102,
+      clientName: 'Rafael Gomes',
+      avatar: 'RG',
+      lastMessage: 'Quanto custa uma instalação de software?',
+      lastMessageTime: '09:15',
+      unreadCount: 1,
+      isOnline: false,
+    },
+    {
+      id: 3,
+      clientId: 103,
+      clientName: 'Carla Mendes',
+      avatar: 'CM',
+      lastMessage: 'Preciso de peças para meu PC',
+      lastMessageTime: 'Ontem',
+      unreadCount: 0,
+      isOnline: true,
     },
   ];
+
+  const chatMessages: Record<number, ChatMessage[]> = {
+    1: [
+      {
+        id: 1,
+        senderId: 101,
+        senderName: 'Mariana Costa',
+        content: 'Olá! Meu notebook está com problemas na tela. Você poderia me ajudar?',
+        timestamp: '2023-07-24T09:30:00',
+        type: 'text',
+        read: true,
+      },
+      {
+        id: 2,
+        senderId: 1,
+        senderName: 'Técnico',
+        content: 'Claro! Posso ajudá-la. Pode me contar mais detalhes sobre o problema?',
+        timestamp: '2023-07-24T09:35:00',
+        type: 'text',
+        read: true,
+      },
+      {
+        id: 3,
+        senderId: 101,
+        senderName: 'Mariana Costa',
+        content: 'A tela fica piscando e às vezes fica toda preta. Gostaria de agendar uma visita.',
+        timestamp: '2023-07-24T09:40:00',
+        type: 'service_request',
+        serviceData: {
+          type: 'Manutenção de Notebook',
+          equipment: 'Notebook Dell Inspiron 15',
+          urgency: 'normal',
+          preferredDate: '2023-07-25',
+        },
+        read: false,
+      },
+      {
+        id: 4,
+        senderId: 101,
+        senderName: 'Mariana Costa',
+        content: 'Também gostaria de um orçamento para trocar a tela se necessário.',
+        timestamp: '2023-07-24T10:30:00',
+        type: 'quote_request',
+        serviceData: {
+          type: 'Troca de Tela',
+          equipment: 'Notebook Dell Inspiron 15',
+          urgency: 'normal',
+        },
+        read: false,
+      },
+    ]
+  };
   
   // Filtrar compromissos pela data selecionada
   const selectedDateISO = date?.toISOString().split('T')[0];
@@ -95,21 +197,40 @@ const TechnicianSchedule = () => {
     const dateISO = date.toISOString().split('T')[0];
     return appointments.some(app => app.date === dateISO);
   };
-  
-  const handleNewAppointment = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsDialogOpen(false);
+
+  const handleSendMessage = () => {
+    if (!newMessage.trim() || !activeChat) return;
+    
+    const conversation = conversations.find(c => c.id === activeChat);
+    if (!conversation) return;
+
+    // Aqui você adicionaria a lógica para enviar a mensagem
+    console.log('Enviando mensagem:', newMessage, 'para:', conversation.clientName);
+    setNewMessage('');
   };
+
+  const handleAcceptServiceRequest = (message: ChatMessage) => {
+    console.log('Aceitando solicitação de serviço:', message.serviceData);
+    // Aqui você adicionaria a lógica para aceitar e agendar o serviço
+  };
+
+  const handleSendQuote = (message: ChatMessage) => {
+    console.log('Enviando orçamento para:', message.serviceData);
+    // Aqui você adicionaria a lógica para enviar orçamento
+  };
+
+  const activeConversation = conversations.find(c => c.id === activeChat);
+  const messages = activeChat ? chatMessages[activeChat] || [] : [];
   
   return (
-    <TechnicianLayout title="Agenda">
+    <TechnicianLayout title="Agenda & Conversas">
       <div className={cn(
         "w-full max-w-7xl mx-auto",
         isMobile ? "px-2 space-y-4" : "px-4"
       )}>
         <div className={cn(
           "grid gap-6",
-          isMobile ? "grid-cols-1" : "grid-cols-1 lg:grid-cols-3"
+          isMobile ? "grid-cols-1" : "grid-cols-1 lg:grid-cols-4"
         )}>
           {/* Seção do Calendário */}
           <div className={cn(
@@ -117,15 +238,12 @@ const TechnicianSchedule = () => {
           )}>
             <Card>
               <CardHeader>
-                <CardTitle className={cn(
-                  "flex items-center gap-2",
-                  isMobile ? "text-lg" : "text-xl"
-                )}>
+                <CardTitle className="flex items-center gap-2 text-lg">
                   <CalendarIcon className="h-5 w-5" />
                   Calendário
                 </CardTitle>
                 <CardDescription>
-                  Selecione uma data para ver os agendamentos
+                  Seus agendamentos
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -134,7 +252,7 @@ const TechnicianSchedule = () => {
                     mode="single"
                     selected={date}
                     onSelect={setDate}
-                    className="rounded-md border w-full"
+                    className="rounded-md border w-full pointer-events-auto"
                     modifiers={{
                       booked: (date) => hasAppointment(date),
                     }}
@@ -148,229 +266,239 @@ const TechnicianSchedule = () => {
                   />
                 </div>
                 
-                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                  <DialogTrigger asChild>
-                    <Button className="w-full" size={isMobile ? "default" : "lg"}>
-                      <Plus className="h-4 w-4 mr-2" />
-                      Novo Agendamento
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-[425px]">
-                    <form onSubmit={handleNewAppointment}>
-                      <DialogHeader>
-                        <DialogTitle>Agendar Serviço</DialogTitle>
-                        <DialogDescription>
-                          Adicione um novo agendamento à sua agenda
-                        </DialogDescription>
-                      </DialogHeader>
-                      <div className="grid gap-4 py-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="client">Cliente</Label>
-                          <Input id="client" required />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="service-type">Tipo de Serviço</Label>
-                          <Select>
-                            <SelectTrigger id="service-type">
-                              <SelectValue placeholder="Selecione um tipo" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="repair">Reparo</SelectItem>
-                              <SelectItem value="installation">Instalação</SelectItem>
-                              <SelectItem value="maintenance">Manutenção</SelectItem>
-                              <SelectItem value="configuration">Configuração</SelectItem>
-                              <SelectItem value="consultation">Consultoria</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="space-y-2">
-                            <Label htmlFor="date">Data</Label>
-                            <Input 
-                              id="date" 
-                              type="date" 
-                              required 
-                              defaultValue={selectedDateISO}
-                            />
-                          </div>
-                          <div className="space-y-2">
-                            <Label htmlFor="time">Horário</Label>
-                            <Input id="time" type="time" required />
-                          </div>
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="address">Endereço</Label>
-                          <Input id="address" required />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="notes">Observações</Label>
-                          <Textarea 
-                            id="notes" 
-                            placeholder="Detalhes adicionais sobre o serviço"
-                            rows={3}
-                          />
-                        </div>
-                      </div>
-                      <DialogFooter>
-                        <Button type="submit">Agendar</Button>
-                      </DialogFooter>
-                    </form>
-                  </DialogContent>
-                </Dialog>
-              </CardContent>
-            </Card>
-          </div>
-          
-          {/* Seção de Agendamentos */}
-          <div className={cn(
-            isMobile ? "order-2" : "lg:col-span-2"
-          )}>
-            <Card>
-              <CardHeader>
-                <CardTitle className={cn(
-                  isMobile ? "text-lg" : "text-xl"
-                )}>
-                  {date ? (
-                    <span className="flex items-center gap-2">
-                      <Clock className="h-5 w-5" />
-                      Agendamentos para {date.toLocaleDateString('pt-BR', { 
-                        day: '2-digit', 
-                        month: '2-digit', 
-                        year: 'numeric' 
-                      })}
-                    </span>
-                  ) : (
-                    'Agendamentos'
-                  )}
-                </CardTitle>
-                <CardDescription>
-                  {date ? 'Horários e detalhes dos serviços agendados' : 'Selecione uma data no calendário'}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {date && filteredAppointments.length > 0 ? (
-                  <div className="space-y-4">
+                {/* Agendamentos do Dia */}
+                {date && filteredAppointments.length > 0 && (
+                  <div className="space-y-2">
+                    <h4 className="font-medium text-sm">
+                      {format(date, "dd 'de' MMMM", { locale: ptBR })}
+                    </h4>
                     {filteredAppointments.map((appointment) => (
-                      <div 
-                        key={appointment.id} 
-                        className="rounded-lg border bg-card text-card-foreground shadow-sm p-4 hover:shadow-md transition-shadow"
-                      >
-                        <div className={cn(
-                          "flex justify-between",
-                          isMobile ? "flex-col space-y-3" : "items-start"
-                        )}>
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-2 flex-wrap">
-                              <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-100">
-                                {appointment.time}
-                              </Badge>
-                              <Badge variant="outline">{appointment.serviceType}</Badge>
-                            </div>
-                            <h3 className="font-medium flex items-center gap-2 mb-2">
-                              <User className="h-4 w-4 text-muted-foreground" />
-                              {appointment.client}
-                            </h3>
-                            <p className="text-sm flex items-start gap-2 text-muted-foreground">
-                              <MapPin className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                              <span>{appointment.address}</span>
-                            </p>
-                            {appointment.notes && (
-                              <p className="text-sm mt-2 p-2 bg-muted rounded-sm">
-                                {appointment.notes}
-                              </p>
-                            )}
-                          </div>
-                          <div className={cn(
-                            "flex gap-2",
-                            isMobile ? "self-end" : ""
-                          )}>
-                            <Button variant="outline" size="sm">Editar</Button>
-                            <Button variant="outline" size="sm" className="text-red-500 hover:text-red-600">
-                              Cancelar
-                            </Button>
-                          </div>
-                        </div>
+                      <div key={appointment.id} className="bg-muted/50 p-2 rounded text-xs">
+                        <div className="font-medium">{appointment.time} - {appointment.client}</div>
+                        <div className="text-muted-foreground">{appointment.serviceType}</div>
                       </div>
                     ))}
-                  </div>
-                ) : date ? (
-                  <div className="text-center p-8 bg-muted/30 rounded-lg">
-                    <CalendarIcon className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-                    <h3 className="font-medium text-lg mb-2">Sem agendamentos</h3>
-                    <p className="text-muted-foreground mb-4">
-                      Não há serviços agendados para {date.toLocaleDateString('pt-BR')}.
-                    </p>
-                    <Button size="sm" onClick={() => setIsDialogOpen(true)}>
-                      <Plus className="h-4 w-4 mr-2" />
-                      Agendar Serviço
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="text-center p-8 bg-muted/30 rounded-lg">
-                    <CalendarIcon className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-                    <h3 className="font-medium text-lg mb-2">Selecione uma data</h3>
-                    <p className="text-muted-foreground">
-                      Escolha uma data no calendário para ver os agendamentos.
-                    </p>
                   </div>
                 )}
               </CardContent>
             </Card>
-            
-            {/* Próximos Agendamentos */}
-            <Card className="mt-6">
-              <CardHeader>
-                <CardTitle className={cn(
-                  "flex items-center gap-2",
-                  isMobile ? "text-lg" : "text-xl"
-                )}>
-                  <Clock className="h-5 w-5" />
-                  Próximos Agendamentos
-                </CardTitle>
-                <CardDescription>
-                  Seus próximos compromissos agendados
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {appointments
-                    .filter(app => new Date(app.date) >= new Date())
-                    .slice(0, 3)
-                    .map(appointment => (
-                      <div 
-                        key={appointment.id} 
+          </div>
+          
+          {/* Sistema de Chat */}
+          <div className={cn(
+            isMobile ? "order-2" : "lg:col-span-3"
+          )}>
+            <Card className="h-[600px] flex">
+              {/* Lista de Conversas */}
+              <div className="w-1/3 border-r flex flex-col">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <MessageCircle className="h-5 w-5" />
+                    Conversas
+                  </CardTitle>
+                </CardHeader>
+                <ScrollArea className="flex-1 px-3">
+                  <div className="space-y-2">
+                    {conversations.map((conversation) => (
+                      <div
+                        key={conversation.id}
+                        onClick={() => setActiveChat(conversation.id)}
                         className={cn(
-                          "flex justify-between p-3 bg-muted/50 rounded-md hover:bg-muted/70 transition-colors",
-                          isMobile ? "flex-col space-y-2" : "items-center"
+                          "p-3 rounded-lg cursor-pointer transition-colors",
+                          activeChat === conversation.id 
+                            ? "bg-primary/10 border border-primary/20" 
+                            : "hover:bg-muted/50"
                         )}
                       >
                         <div className="flex items-center gap-3">
-                          <div className="bg-primary/10 p-2 rounded-full">
-                            <Clock className="h-4 w-4 text-primary" />
+                          <div className="relative">
+                            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center font-medium text-sm">
+                              {conversation.avatar}
+                            </div>
+                            {conversation.isOnline && (
+                              <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                            )}
                           </div>
-                          <div>
-                            <p className="font-medium">{appointment.client}</p>
-                            <p className="text-sm text-muted-foreground">{appointment.serviceType}</p>
-                            <p className="text-xs text-muted-foreground">
-                              {new Date(appointment.date).toLocaleDateString('pt-BR')} - {appointment.time}
-                            </p>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between">
+                              <div className="font-medium text-sm truncate">
+                                {conversation.clientName}
+                              </div>
+                              <div className="text-xs text-muted-foreground">
+                                {conversation.lastMessageTime}
+                              </div>
+                            </div>
+                            <div className="text-xs text-muted-foreground truncate">
+                              {conversation.lastMessage}
+                            </div>
                           </div>
+                          {conversation.unreadCount > 0 && (
+                            <div className="bg-primary text-primary-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                              {conversation.unreadCount}
+                            </div>
+                          )}
                         </div>
-                        <Button size="sm" variant="outline" className={cn(
-                          isMobile ? "self-end" : ""
-                        )}>
-                          Ver Detalhes
-                        </Button>
                       </div>
                     ))}
-                  
-                  {appointments.filter(app => new Date(app.date) >= new Date()).length === 0 && (
-                    <div className="text-center py-6">
-                      <p className="text-muted-foreground">Nenhum agendamento futuro encontrado.</p>
+                  </div>
+                </ScrollArea>
+              </div>
+
+              {/* Painel de Chat */}
+              <div className="flex-1 flex flex-col">
+                {activeConversation ? (
+                  <>
+                    {/* Header do Chat */}
+                    <div className="border-b p-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center font-medium text-sm">
+                          {activeConversation.avatar}
+                        </div>
+                        <div>
+                          <div className="font-medium">{activeConversation.clientName}</div>
+                          <div className="text-xs text-muted-foreground">
+                            {activeConversation.isOnline ? 'Online' : 'Offline'}
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  )}
-                </div>
-              </CardContent>
+
+                    {/* Mensagens */}
+                    <ScrollArea className="flex-1 p-4">
+                      <div className="space-y-4">
+                        {messages.map((message) => (
+                          <div key={message.id} className={cn(
+                            "flex",
+                            message.senderId === 1 ? "justify-end" : "justify-start"
+                          )}>
+                            <div className={cn(
+                              "max-w-[80%] rounded-lg px-3 py-2",
+                              message.senderId === 1 
+                                ? "bg-primary text-primary-foreground" 
+                                : "bg-muted"
+                            )}>
+                              <div className="text-sm">{message.content}</div>
+                              
+                              {/* Solicitações Especiais */}
+                              {message.type === 'service_request' && message.serviceData && (
+                                <div className="mt-2 p-2 bg-blue-50 dark:bg-blue-900/20 rounded border-l-2 border-blue-500">
+                                  <div className="flex items-center gap-2 text-xs font-medium text-blue-700 dark:text-blue-300 mb-1">
+                                    <Wrench className="h-3 w-3" />
+                                    Solicitação de Serviço
+                                  </div>
+                                  <div className="text-xs space-y-1">
+                                    <div><strong>Serviço:</strong> {message.serviceData.type}</div>
+                                    <div><strong>Equipamento:</strong> {message.serviceData.equipment}</div>
+                                    <div><strong>Urgência:</strong> {message.serviceData.urgency}</div>
+                                    {message.serviceData.preferredDate && (
+                                      <div><strong>Data Preferida:</strong> {new Date(message.serviceData.preferredDate).toLocaleDateString('pt-BR')}</div>
+                                    )}
+                                  </div>
+                                  {message.senderId !== 1 && (
+                                    <Button 
+                                      size="sm" 
+                                      className="mt-2 w-full text-xs"
+                                      onClick={() => handleAcceptServiceRequest(message)}
+                                    >
+                                      Aceitar e Agendar
+                                    </Button>
+                                  )}
+                                </div>
+                              )}
+
+                              {message.type === 'quote_request' && message.serviceData && (
+                                <div className="mt-2 p-2 bg-green-50 dark:bg-green-900/20 rounded border-l-2 border-green-500">
+                                  <div className="flex items-center gap-2 text-xs font-medium text-green-700 dark:text-green-300 mb-1">
+                                    <DollarSign className="h-3 w-3" />
+                                    Solicitação de Orçamento
+                                  </div>
+                                  <div className="text-xs space-y-1">
+                                    <div><strong>Serviço:</strong> {message.serviceData.type}</div>
+                                    <div><strong>Equipamento:</strong> {message.serviceData.equipment}</div>
+                                  </div>
+                                  {message.senderId !== 1 && (
+                                    <Button 
+                                      size="sm" 
+                                      variant="outline"
+                                      className="mt-2 w-full text-xs"
+                                      onClick={() => handleSendQuote(message)}
+                                    >
+                                      Enviar Orçamento
+                                    </Button>
+                                  )}
+                                </div>
+                              )}
+
+                              {message.type === 'parts_request' && message.serviceData && (
+                                <div className="mt-2 p-2 bg-orange-50 dark:bg-orange-900/20 rounded border-l-2 border-orange-500">
+                                  <div className="flex items-center gap-2 text-xs font-medium text-orange-700 dark:text-orange-300 mb-1">
+                                    <Package className="h-3 w-3" />
+                                    Solicitação de Peças
+                                  </div>
+                                  <div className="text-xs space-y-1">
+                                    <div><strong>Equipamento:</strong> {message.serviceData.equipment}</div>
+                                  </div>
+                                  {message.senderId !== 1 && (
+                                    <Button 
+                                      size="sm" 
+                                      variant="outline"
+                                      className="mt-2 w-full text-xs"
+                                    >
+                                      Verificar Disponibilidade
+                                    </Button>
+                                  )}
+                                </div>
+                              )}
+
+                              <div className="flex items-center justify-between mt-1">
+                                <div className="text-xs opacity-70">
+                                  {format(new Date(message.timestamp), 'HH:mm')}
+                                </div>
+                                {message.senderId === 1 && (
+                                  <CheckCheck className={cn(
+                                    "h-3 w-3",
+                                    message.read ? "text-blue-500" : "opacity-50"
+                                  )} />
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </ScrollArea>
+
+                    {/* Input de Mensagem */}
+                    <div className="p-4 border-t">
+                      <div className="flex gap-2">
+                        <Textarea
+                          value={newMessage}
+                          onChange={(e) => setNewMessage(e.target.value)}
+                          placeholder="Digite sua mensagem..."
+                          className="min-h-[60px] resize-none"
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' && !e.shiftKey) {
+                              e.preventDefault();
+                              handleSendMessage();
+                            }
+                          }}
+                        />
+                        <Button 
+                          onClick={handleSendMessage}
+                          disabled={!newMessage.trim()}
+                          size="icon"
+                          className="self-end"
+                        >
+                          <Send className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div className="flex-1 flex items-center justify-center text-muted-foreground">
+                    Selecione uma conversa para começar
+                  </div>
+                )}
+              </div>
             </Card>
           </div>
         </div>
