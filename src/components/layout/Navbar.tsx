@@ -107,14 +107,13 @@ const Navbar = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" side="bottom" className="bg-white border-gray-200 shadow-xl mr-4">
                 <DropdownMenuItem asChild>
-                  <Link to={getDashboardLink()} className="font-inter font-medium text-gray-800">Painel</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
                   <Link
                     to={
                       userType === "customer"
                         ? "/cliente/perfil"
-                        : "/tecnico/perfil"
+                        : userType === "technician"
+                        ? "/tecnico/perfil"
+                        : "/store/profile"
                     }
                     className="font-inter font-medium text-gray-800"
                   >
@@ -217,12 +216,18 @@ const Navbar = () => {
                 {isAuthenticated ? (
                   <>
                     <Link
-                      to={getDashboardLink()}
+                      to={
+                        userType === "customer"
+                          ? "/cliente/perfil"
+                          : userType === "technician"
+                          ? "/tecnico/perfil"
+                          : "/store/profile"
+                      }
                       className="flex items-center p-3 rounded-lg hover:bg-blue-50 w-full mb-3 transition-colors duration-200 font-inter"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       <User className="h-5 w-5 mr-3 text-blue-600" />
-                      <span className="text-gray-800 font-medium">Meu Painel</span>
+                      <span className="text-gray-800 font-medium">Meu Perfil</span>
                     </Link>
                     <Button
                       variant="outline"
