@@ -14,10 +14,10 @@ interface WeeklyAgendaProps {
 
 const WeeklyAgenda: React.FC<WeeklyAgendaProps> = ({ weeklySchedule, totalConflicts }) => {
   return (
-    <Card>
-      <CardHeader>
+    <Card className="h-full">
+      <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 text-lg font-semibold">
             <Calendar className="h-5 w-5" />
             Agenda Semanal
           </CardTitle>
@@ -29,12 +29,21 @@ const WeeklyAgenda: React.FC<WeeklyAgendaProps> = ({ weeklySchedule, totalConfli
           )}
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="pt-0 flex flex-col h-full">
         <div className="h-40 mb-4">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={weeklySchedule}>
-              <XAxis dataKey="day" />
-              <YAxis />
+              <XAxis 
+                dataKey="day" 
+                axisLine={false}
+                tickLine={false}
+                fontSize={12}
+              />
+              <YAxis 
+                axisLine={false}
+                tickLine={false}
+                fontSize={12}
+              />
               <Bar dataKey="appointments" radius={4}>
                 {weeklySchedule.map((entry, index) => (
                   <Cell 
@@ -47,18 +56,19 @@ const WeeklyAgenda: React.FC<WeeklyAgendaProps> = ({ weeklySchedule, totalConfli
           </ResponsiveContainer>
         </div>
         
-        <div className="grid grid-cols-2 gap-2">
-          <Button size="sm" variant="outline" className="flex items-center gap-1">
-            <MapPin className="h-3 w-3" />
-            Rota Otimizada
+        <div className="grid grid-cols-2 gap-3 mb-4">
+          <Button size="sm" variant="outline" className="flex items-center gap-2 h-10">
+            <MapPin className="h-4 w-4" />
+            <span className="text-xs">Rota Otimizada</span>
           </Button>
-          <Button size="sm" variant="outline">
-            Ver Agenda Completa
+          <Button size="sm" variant="outline" className="h-10">
+            <span className="text-xs">Ver Agenda Completa</span>
           </Button>
         </div>
         
         {totalConflicts > 0 && (
-          <div className="mt-3 p-2 bg-red-50 border border-red-200 rounded text-sm text-red-700">
+          <div className="mt-auto p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+            <AlertTriangle className="h-4 w-4 inline mr-2" />
             Atenção: Verifique os conflitos de horário na sua agenda
           </div>
         )}

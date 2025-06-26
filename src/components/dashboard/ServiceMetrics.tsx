@@ -54,12 +54,12 @@ const ServiceMetricsComponent: React.FC<ServiceMetricsProps> = ({ metrics }) => 
   ];
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Chamados em Tempo Real</CardTitle>
+    <Card className="h-full">
+      <CardHeader className="pb-4">
+        <CardTitle className="text-lg font-semibold">Chamados em Tempo Real</CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-3">
+      <CardContent className="pt-0">
+        <div className="space-y-3">
           {statusItems.map((item) => {
             const Icon = item.icon;
             return (
@@ -67,11 +67,11 @@ const ServiceMetricsComponent: React.FC<ServiceMetricsProps> = ({ metrics }) => 
                 key={item.label}
                 className={`flex items-center justify-between p-3 rounded-lg border ${item.bgColor} ${item.borderColor}`}
               >
-                <div className="flex items-center gap-2">
-                  <Icon className={`h-4 w-4 ${item.color}`} />
+                <div className="flex items-center gap-3">
+                  <Icon className={`h-5 w-5 ${item.color}`} />
                   <span className="text-sm font-medium">{item.label}</span>
                 </div>
-                <Badge variant="secondary" className={item.color}>
+                <Badge variant="secondary" className={`${item.color} font-semibold`}>
                   {item.value}
                 </Badge>
               </div>

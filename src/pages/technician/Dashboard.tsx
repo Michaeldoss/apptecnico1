@@ -28,37 +28,39 @@ const TechnicianDashboard = () => {
   return (
     <TechnicianLayout title="Painel de Controle">
       <div className="space-y-6 font-inter">
-        {/* Primeira linha - Resumo Financeiro e Agenda */}
-        <div className="grid lg:grid-cols-2 gap-6">
-          <FinancialSummary 
-            stats={stats} 
-            weeklyEarnings={weeklyEarnings}
-          />
+        {/* Primeira linha - Resumo Financeiro */}
+        <FinancialSummary 
+          stats={stats} 
+          weeklyEarnings={weeklyEarnings}
+        />
+
+        {/* Segunda linha - Agenda e Chamados */}
+        <div className="grid lg:grid-cols-2 gap-6 h-[400px]">
           <WeeklyAgenda 
             weeklySchedule={weeklySchedule}
             totalConflicts={totalConflicts}
           />
+          <ServiceMetricsComponent metrics={serviceMetrics} />
         </div>
 
-        {/* Segunda linha - Chamados e Estoque */}
-        <div className="grid lg:grid-cols-2 gap-6">
-          <ServiceMetricsComponent metrics={serviceMetrics} />
+        {/* Terceira linha - KPIs e Estoque */}
+        <div className="grid lg:grid-cols-2 gap-6 h-[400px]">
+          <KPIMetricsComponent metrics={kpiMetrics} />
           <StockControl 
             stockItems={stockItems} 
             urgentItems={urgentStockItems}
           />
         </div>
 
-        {/* Terceira linha - KPIs e Alertas */}
-        <div className="grid lg:grid-cols-2 gap-6">
-          <KPIMetricsComponent metrics={kpiMetrics} />
+        {/* Quarta linha - Alertas */}
+        <div className="grid lg:grid-cols-1 gap-6 h-[400px]">
           <AlertsPanel 
             alerts={alerts}
             urgentAlerts={urgentAlerts}
           />
         </div>
 
-        {/* Quarta linha - Acessos Rápidos */}
+        {/* Quinta linha - Acessos Rápidos */}
         <QuickActions />
       </div>
     </TechnicianLayout>

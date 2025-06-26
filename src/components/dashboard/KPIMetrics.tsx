@@ -48,20 +48,22 @@ const KPIMetricsComponent: React.FC<KPIMetricsProps> = ({ metrics }) => {
   ];
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Indicadores de Performance</CardTitle>
+    <Card className="h-full">
+      <CardHeader className="pb-4">
+        <CardTitle className="text-lg font-semibold">Indicadores de Performance</CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <CardContent className="pt-0">
+        <div className="grid grid-cols-1 gap-4">
           {kpiItems.map((item) => {
             const Icon = item.icon;
             return (
-              <div key={item.label} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                <Icon className={`h-5 w-5 ${item.color}`} />
-                <div>
-                  <p className="text-sm text-muted-foreground">{item.label}</p>
-                  <p className={`font-bold ${item.color}`}>
+              <div key={item.label} className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg border">
+                <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-white shadow-sm">
+                  <Icon className={`h-5 w-5 ${item.color}`} />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm text-muted-foreground font-medium">{item.label}</p>
+                  <p className={`text-lg font-bold ${item.color}`}>
                     {item.prefix}{item.value}{item.suffix}
                   </p>
                 </div>

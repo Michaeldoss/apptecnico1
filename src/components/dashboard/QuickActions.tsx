@@ -68,10 +68,10 @@ const QuickActions: React.FC = () => {
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Acessos Rápidos</CardTitle>
+      <CardHeader className="pb-4">
+        <CardTitle className="text-lg font-semibold">Acessos Rápidos</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="pt-0">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {actions.map((action) => {
             const Icon = action.icon;
@@ -80,20 +80,20 @@ const QuickActions: React.FC = () => {
               return (
                 <Button 
                   key={action.label}
-                  className={`${action.color} text-white flex flex-col gap-1 h-auto py-3`}
+                  className={`${action.color} text-white flex flex-col gap-2 h-20 p-3 transition-all duration-200`}
                   onClick={() => alert('Funcionalidade em desenvolvimento')}
                 >
-                  <Icon className="h-4 w-4" />
-                  <span className="text-xs">{action.label}</span>
+                  <Icon className="h-5 w-5" />
+                  <span className="text-xs text-center leading-tight">{action.label}</span>
                 </Button>
               );
             }
             
             return (
               <Link key={action.label} to={action.href}>
-                <Button className={`${action.color} text-white flex flex-col gap-1 h-auto py-3 w-full`}>
-                  <Icon className="h-4 w-4" />
-                  <span className="text-xs">{action.label}</span>
+                <Button className={`${action.color} text-white flex flex-col gap-2 h-20 p-3 w-full transition-all duration-200`}>
+                  <Icon className="h-5 w-5" />
+                  <span className="text-xs text-center leading-tight">{action.label}</span>
                 </Button>
               </Link>
             );
