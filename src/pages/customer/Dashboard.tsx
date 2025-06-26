@@ -48,10 +48,10 @@ const CustomerDashboard = () => {
   
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen bg-blue-600">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-2 text-gray-600">Verificando sessão...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto"></div>
+          <p className="mt-2 text-white">Verificando sessão...</p>
         </div>
       </div>
     );
@@ -59,30 +59,30 @@ const CustomerDashboard = () => {
 
   if (!isAuthenticated || userType !== 'customer') {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen bg-blue-600">
         <div className="text-center">
-          <p className="text-gray-600">Redirecionando...</p>
+          <p className="text-white">Redirecionando...</p>
         </div>
       </div>
     );
   }
   
   return (
-    <CustomerLayout title="Painel de Controle">
-      <div className="space-y-6 font-inter">
-        {/* Primeira linha - Resumo Financeiro */}
+    <CustomerLayout title="Painel de Controle do Cliente">
+      <div className="space-y-8 font-inter">
+        {/* Resumo Financeiro com Gráfico */}
         <CustomerFinancialSummary 
           stats={stats} 
           weeklyPayments={weeklyPayments}
         />
 
-        {/* Segunda linha - Métricas de Serviço e Equipamentos */}
-        <div className="grid lg:grid-cols-2 gap-6 h-[400px]">
-          <CustomerServiceMetricsComponent metrics={serviceMetrics} />
-          <CustomerEquipmentOverview equipment={equipment} />
-        </div>
+        {/* Métricas de Serviço com Gráfico de Pizza */}
+        <CustomerServiceMetricsComponent metrics={serviceMetrics} />
 
-        {/* Terceira linha - Ações Rápidas */}
+        {/* Visão Geral dos Equipamentos com Gráficos */}
+        <CustomerEquipmentOverview equipment={equipment} />
+
+        {/* Ações Rápidas Organizadas */}
         <CustomerQuickActions />
       </div>
     </CustomerLayout>
