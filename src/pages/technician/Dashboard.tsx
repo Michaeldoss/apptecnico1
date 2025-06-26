@@ -1,14 +1,31 @@
 
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Calendar, Wrench, MapPin, DollarSign } from 'lucide-react';
 import TechnicianLayout from '@/components/layout/TechnicianLayout';
-import { Link } from 'react-router-dom';
+import FinancialSummary from '@/components/dashboard/FinancialSummary';
+import WeeklyAgenda from '@/components/dashboard/WeeklyAgenda';
+import ServiceMetrics from '@/components/dashboard/ServiceMetrics';
+import StockControl from '@/components/dashboard/StockControl';
+import KPIMetrics from '@/components/dashboard/KPIMetrics';
+import AlertsPanel from '@/components/dashboard/AlertsPanel';
+import QuickActions from '@/components/dashboard/QuickActions';
+import { useDashboard } from '@/hooks/useDashboard';
 import { useAuth } from '@/context/AuthContext';
+import { Link } from 'react-router-dom';
 
 const TechnicianDashboard = () => {
   const { user, isAuthenticated, userType, isLoading } = useAuth();
+  const {
+    stats,
+    weeklyEarnings,
+    weeklySchedule,
+    serviceMetrics,
+    stockItems,
+    urgentStockItems,
+    kpiMetrics,
+    alerts,
+    urgentAlerts,
+    totalConflicts
+  } = useDashboard();
   
   console.log('TechnicianDashboard - Renderizando');
   console.log('TechnicianDashboard - isAuthenticated:', isAuthenticated);
@@ -44,125 +61,62 @@ const TechnicianDashboard = () => {
     );
   }
 
-  const todayServices = 3;
-  const weeklyEarnings = 2450.00;
-  const pendingServices = 5;
   const userName = user?.name || user?.email?.split('@')[0] || 'Técnico';
 
   return (
     <TechnicianLayout title="Dashboard do Técnico">
       <div className="space-y-6">
+        {/* Bem-vindo */}
         <div className="mb-4">
           <p className="text-gray-600">
-            Bem-vindo, {userName}! Aqui está um resumo das suas atividades.
+            Bem-vindo, {userName}! Aqui está um resumo completo das suas atividades e performance.
           </p>
         </div>
         
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Serviços Hoje</CardTitle>
-              <Calendar className="h-4 w-4 text-blue-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{todayServices}</div>
-              <p className="text-xs text-muted-foreground">Agendados para hoje</p>
-            </CardContent>
-          </Card>
+        {/* Resumo Financeiro */}
+        <FinancialSummary 
+          stats={stats}
+          weeklyEarnings={weeklyEarnings}
+        />
+        
+        {/* Grade Principal */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+          {/* Agenda Semanal */}
+          <div className="lg:col-span-1">
+            <WeeklyAgenda 
+              weeklySchedule={weeklySchedule}
+              totalConflicts={totalConflicts}
+            />
+          </div>
           
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Serviços Pendentes</CardTitle>
-              <Wrench className="h-4 w-4 text-orange-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{pendingServices}</div>
-              <p className="text-xs text-muted-foreground">Aguardando atendimento</p>
-            </CardContent>
-          </Card>
+          {/* Métricas de Serviços */}
+          <div className="lg:col-span-1">
+            <ServiceMetrics metrics={serviceMetrics} />
+          </div>
           
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Localização</CardTitle>
-              <MapPin className="h-4 w-4 text-green-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">Ativo</div>
-              <p className="text-xs text-muted-foreground">Disponível para chamados</p>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Ganhos (Semana)</CardTitle>
-              <DollarSign className="h-4 w-4 text-green-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">R$ {weeklyEarnings.toFixed(2)}</div>
-              <p className="text-xs text-muted-foreground">Últimos 7 dias</p>
-            </CardContent>
-          </Card>
+          {/* Controle de Estoque */}
+          <div className="lg:col-span-1 xl:col-span-1">
+            <StockControl 
+              stockItems={stockItems}
+              urgentItems={urgentStockItems}
+            />
+          </div>
         </div>
         
-        <div className="grid gap-4 md:grid-cols-2">
-          <Card>
-            <CardHeader>
-              <CardTitle>Próximos Atendimentos</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2">
-                <li className="flex justify-between items-center">
-                  <div>
-                    <p className="font-medium">Reparo de Impressora</p>
-                    <p className="text-sm text-muted-foreground">14:00 - João Silva</p>
-                  </div>
-                  <span className="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">
-                    Hoje
-                  </span>
-                </li>
-                <li className="flex justify-between items-center">
-                  <div>
-                    <p className="font-medium">Manutenção de PC</p>
-                    <p className="text-sm text-muted-foreground">16:30 - Maria Oliveira</p>
-                  </div>
-                  <span className="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">
-                    Hoje
-                  </span>
-                </li>
-              </ul>
-              <Link to="/tecnico/servicos" className="block mt-4">
-                <Button variant="outline" className="w-full">
-                  Ver todos os serviços
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
+        {/* Segunda Grade */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* KPI Metrics */}
+          <KPIMetrics metrics={kpiMetrics} />
           
-          <Card>
-            <CardHeader>
-              <CardTitle>Ações Rápidas</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <Link to="/tecnico/agenda">
-                  <Button className="w-full">
-                    Ver Agenda
-                  </Button>
-                </Link>
-                <Link to="/tecnico/perfil">
-                  <Button variant="outline" className="w-full">
-                    Atualizar Perfil
-                  </Button>
-                </Link>
-                <Link to="/tecnico/pecas">
-                  <Button variant="outline" className="w-full">
-                    Gerenciar Peças
-                  </Button>
-                </Link>
-              </div>
-            </CardContent>
-          </Card>
+          {/* Alertas */}
+          <AlertsPanel 
+            alerts={alerts}
+            urgentAlerts={urgentAlerts}
+          />
         </div>
+        
+        {/* Acessos Rápidos */}
+        <QuickActions />
       </div>
     </TechnicianLayout>
   );
