@@ -13,7 +13,8 @@ import {
   MessageSquare,
   Menu,
   X,
-  CreditCard
+  CreditCard,
+  FileText
 } from 'lucide-react';
 import { useNotifications } from '@/hooks/useNotifications';
 import { Badge } from '@/components/ui/badge';
@@ -133,6 +134,14 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
               onClick={closeMenu}
             >
               Serviços
+            </SidebarItem>
+            <SidebarItem 
+              href={`${pathPrefix}/ordens-servico`} 
+              icon={FileText} 
+              active={location.pathname?.includes('/ordens-servico')}
+              onClick={closeMenu}
+            >
+              Ordens de Serviço
             </SidebarItem>
             <SidebarItem 
               href={`${pathPrefix}/chat`} 
