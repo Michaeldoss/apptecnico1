@@ -62,15 +62,12 @@ const Navbar = () => {
     { label: "Contatos", path: "/contact" },
   ];
 
-  // Classes dinâmicas baseadas na página
-  const navbarClasses = isHomePage 
-    ? "bg-transparent absolute w-full top-0 z-50"
-    : "bg-white border-b border-gray-200 w-full top-0 z-50 shadow-sm sticky";
-  
-  const textClasses = isHomePage ? "text-white" : "text-gray-800";
-  const logoClasses = isHomePage ? "text-white" : "text-blue-600";
-  const hoverClasses = isHomePage ? "hover:text-blue-200" : "hover:text-blue-600";
-  const buttonClasses = isHomePage ? "text-white hover:text-blue-200 hover:bg-white/10" : "text-gray-800 hover:text-blue-600 hover:bg-blue-50";
+  // Classes dinâmicas baseadas na página - sempre usar estilo da página inicial
+  const navbarClasses = "bg-transparent absolute w-full top-0 z-50";
+  const textClasses = "text-white";
+  const logoClasses = "text-white";
+  const hoverClasses = "hover:text-blue-200";
+  const buttonClasses = "text-white hover:text-blue-200 hover:bg-white/10";
 
   return (
     <nav className={navbarClasses}>
@@ -135,10 +132,7 @@ const Navbar = () => {
                 variant="outline" 
                 size="sm" 
                 onClick={handleLoginClick}
-                className={isHomePage 
-                  ? "border-2 border-white text-white hover:bg-white hover:text-blue-600 font-inter font-semibold transition-all duration-200"
-                  : "border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-inter font-semibold transition-all duration-200"
-                }
+                className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 font-inter font-semibold transition-all duration-200 border-0 shadow-lg"
               >
                 <LogIn className="h-4 w-4 mr-2" /> Entrar
               </Button>
@@ -195,7 +189,7 @@ const Navbar = () => {
             size="icon"
             onClick={toggleMenu}
             aria-label="Toggle Menu"
-            className={isHomePage ? "text-white hover:text-blue-200 hover:bg-white/10" : "text-blue-600 hover:text-blue-700 hover:bg-blue-50"}
+            className="text-white hover:text-blue-200 hover:bg-white/10"
           >
             {isMenuOpen ? (
               <X className="h-6 w-6" />
@@ -247,7 +241,7 @@ const Navbar = () => {
                   <div className="flex flex-col space-y-3">
                     <Button
                       variant="outline"
-                      className="w-full justify-center border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-inter font-semibold"
+                      className="w-full justify-center bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 font-inter font-semibold border-0 shadow-lg"
                       onClick={handleLoginClick}
                     >
                       <LogIn className="h-4 w-4 mr-2" /> Entrar

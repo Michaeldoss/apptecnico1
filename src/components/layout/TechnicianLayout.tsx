@@ -1,3 +1,4 @@
+
 import React, { ReactNode, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -85,14 +86,17 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 relative">
+      {/* Background pattern overlay */}
+      <div className="absolute inset-0 bg-[url('/placeholder.svg')] opacity-5 bg-cover bg-center"></div>
+      
       <Navbar />
       
-      <div className="flex-1 flex container-standard px-4 py-6 gap-6">
+      <div className="flex-1 flex container-standard px-4 py-6 gap-6 relative z-10 mt-16">
         {isMobile && (
           <button 
             onClick={toggleMenu}
-            className="fixed top-20 left-4 z-40 bg-tech-primary text-white p-3 rounded-full shadow-lg md:hidden hover:bg-tech-primary-hover transition-colors duration-200"
+            className="fixed top-20 left-4 z-40 bg-white/20 backdrop-blur-sm text-white p-3 rounded-full shadow-lg md:hidden hover:bg-white/30 transition-colors duration-200"
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -106,9 +110,8 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
         )}
         
         <aside className={cn(
-          "w-64 shrink-0 border-r border-gray-border pr-6 transition-all duration-300",
-          isMobile ? "fixed left-0 top-16 bottom-0 bg-white z-30 h-[calc(100vh-4rem)] px-4 pt-16 pb-6 shadow-xl overflow-y-auto" : "hidden md:block",
-          isMobile && !isMenuOpen ? "-translate-x-full" : isMobile && isMenuOpen ? "translate-x-0" : ""
+          "w-64 shrink-0 transition-all duration-300",
+          isMobile ? "fixed left-0 top-16 bottom-0 bg-white/95 backdrop-blur-sm z-30 h-[calc(100vh-4rem)] px-4 pt-16 pb-6 shadow-xl overflow-y-auto" : "hidden md:block bg-white/10 backdrop-blur-sm rounded-lg p-6"
         )}>
           <div className="space-y-2 py-4">
             <SidebarItem 
@@ -178,15 +181,15 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
             </SidebarItem>
           </div>
           
-          <div className="pt-6 mt-6 border-t border-gray-border">
+          <div className="pt-6 mt-6 border-t border-white/20">
             <button 
               onClick={() => {
                 handleLogout();
                 closeMenu();
               }}
-              className="flex items-center gap-3 rounded-lg px-4 py-3 text-base transition-all duration-200 hover:bg-gray-light text-gray-primary hover:text-tech-primary w-full text-left font-inter font-medium"
+              className="flex items-center gap-3 rounded-lg px-4 py-3 text-base transition-all duration-200 hover:bg-white/10 text-white hover:text-white w-full text-left font-inter font-medium"
             >
-              <LogOut className="h-5 w-5 text-tech-primary" />
+              <LogOut className="h-5 w-5 text-white" />
               <span>Sair</span>
             </button>
           </div>
@@ -201,14 +204,14 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
             isMobile ? "flex-col gap-4 items-start" : ""
           )}>
             <h1 className={cn(
-              "text-3xl font-bold text-tech-primary font-inter",
+              "text-3xl font-bold text-white font-inter drop-shadow-lg",
               isMobile ? "text-2xl pl-12" : ""
             )}>{title}</h1>
           </div>
           
           <div className={cn(
-            "w-full h-full grid-standard",
-            isMobile ? "px-2" : ""
+            "w-full h-full grid-standard bg-white/95 backdrop-blur-sm rounded-lg p-6 shadow-xl",
+            isMobile ? "mx-2" : ""
           )}>
             {children}
           </div>
