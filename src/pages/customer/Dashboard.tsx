@@ -41,9 +41,11 @@ const CustomerDashboard = () => {
             <CardContent>
               <div className="text-2xl font-bold">{activeServices}</div>
               <p className="text-xs text-muted-foreground">Em andamento</p>
-              <Button variant="link" size="sm" asChild className="mt-2 p-0">
-                <Link to="/cliente/servicos">Ver serviços</Link>
-              </Button>
+              <Link to="/cliente/servicos" className="inline-block mt-2">
+                <Button variant="link" size="sm" className="p-0">
+                  Ver serviços
+                </Button>
+              </Link>
             </CardContent>
           </Card>
           
@@ -55,9 +57,11 @@ const CustomerDashboard = () => {
             <CardContent>
               <div className="text-2xl font-bold">1</div>
               <p className="text-xs text-muted-foreground">Atendimento em andamento</p>
-              <Button variant="link" size="sm" asChild className="mt-2 p-0">
-                <Link to="/cliente/rastreamento">Rastrear técnico</Link>
-              </Button>
+              <Link to="/cliente/rastreamento" className="inline-block mt-2">
+                <Button variant="link" size="sm" className="p-0">
+                  Rastrear técnico
+                </Button>
+              </Link>
             </CardContent>
           </Card>
           
@@ -69,9 +73,11 @@ const CustomerDashboard = () => {
             <CardContent>
               <div className="text-2xl font-bold">{pendingPayments}</div>
               <p className="text-xs text-muted-foreground">Pendente de pagamento</p>
-              <Button variant="link" size="sm" asChild className="mt-2 p-0">
-                <Link to="/cliente/pagamentos">Ver pagamentos</Link>
-              </Button>
+              <Link to="/cliente/pagamentos" className="inline-block mt-2">
+                <Button variant="link" size="sm" className="p-0">
+                  Ver pagamentos
+                </Button>
+              </Link>
             </CardContent>
           </Card>
         </div>
@@ -102,9 +108,11 @@ const CustomerDashboard = () => {
                   </span>
                 </li>
               </ul>
-              <Button variant="outline" className="w-full mt-4" asChild>
-                <Link to="/cliente/servicos">Ver todos os serviços</Link>
-              </Button>
+              <Link to="/cliente/servicos" className="block mt-4">
+                <Button variant="outline" className="w-full">
+                  Ver todos os serviços
+                </Button>
+              </Link>
             </CardContent>
           </Card>
           
@@ -133,9 +141,11 @@ const CustomerDashboard = () => {
                   </div>
                 </li>
               </ul>
-              <Button variant="outline" className="w-full mt-4" asChild>
-                <Link to="/cliente/tecnicos">Ver todos os técnicos</Link>
-              </Button>
+              <Link to="/cliente/tecnicos" className="block mt-4">
+                <Button variant="outline" className="w-full">
+                  Ver todos os técnicos
+                </Button>
+              </Link>
             </CardContent>
           </Card>
         </div>
