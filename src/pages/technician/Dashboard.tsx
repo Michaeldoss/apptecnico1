@@ -12,12 +12,14 @@ import { useDashboard } from '@/hooks/useDashboard';
 
 const TechnicianDashboard = () => {
   const {
-    financialData,
+    stats,
     weeklySchedule,
     serviceMetrics,
     stockItems,
+    urgentStockItems,
     kpiMetrics,
     alerts,
+    urgentAlerts,
     weeklyEarnings
   } = useDashboard();
 
@@ -29,7 +31,7 @@ const TechnicianDashboard = () => {
         {/* Primeira linha - Resumo Financeiro e Agenda */}
         <div className="grid lg:grid-cols-2 gap-6">
           <FinancialSummary 
-            stats={financialData} 
+            stats={stats} 
             weeklyEarnings={weeklyEarnings}
           />
           <WeeklyAgenda 
@@ -41,13 +43,19 @@ const TechnicianDashboard = () => {
         {/* Segunda linha - Chamados e Estoque */}
         <div className="grid lg:grid-cols-2 gap-6">
           <ServiceMetricsComponent metrics={serviceMetrics} />
-          <StockControl stockItems={stockItems} />
+          <StockControl 
+            stockItems={stockItems} 
+            urgentItems={urgentStockItems}
+          />
         </div>
 
         {/* Terceira linha - KPIs e Alertas */}
         <div className="grid lg:grid-cols-2 gap-6">
           <KPIMetricsComponent metrics={kpiMetrics} />
-          <AlertsPanel alerts={alerts} />
+          <AlertsPanel 
+            alerts={alerts}
+            urgentAlerts={urgentAlerts}
+          />
         </div>
 
         {/* Quarta linha - Acessos Rápidos */}
