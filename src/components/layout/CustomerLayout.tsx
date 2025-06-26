@@ -116,12 +116,12 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
         >
           <div className="space-y-2 py-4">
             <SidebarItem 
-              to="/cliente/painel" 
+              to="/cliente/perfil" 
               icon={LayoutDashboard} 
-              active={path === '/cliente/painel' || path === '/cliente/dashboard'}
+              active={path === '/cliente/perfil' || path === '/cliente/profile' || path === '/cliente/painel' || path === '/cliente/dashboard'}
               onClick={closeMenu}
             >
-              Painel
+              Meu Painel
             </SidebarItem>
             
             <SidebarItem 
@@ -175,14 +175,6 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
               onClick={closeMenu}
             >
               Ordens de Serviço
-            </SidebarItem>
-            <SidebarItem 
-              to="/cliente/perfil" 
-              icon={User} 
-              active={path === '/cliente/perfil' || path === '/cliente/profile'}
-              onClick={closeMenu}
-            >
-              Minha Conta
             </SidebarItem>
           </div>
           
