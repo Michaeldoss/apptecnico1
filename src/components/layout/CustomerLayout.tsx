@@ -1,3 +1,4 @@
+
 import React, { ReactNode, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -33,12 +34,12 @@ const SidebarItem = ({ to, icon: Icon, children, active, onClick }: SidebarItemP
     <Link
       to={to}
       className={cn(
-        "flex items-center gap-3 rounded-lg px-4 py-3 text-base transition-all duration-200 hover:bg-gray-50 font-inter font-medium",
-        active ? "bg-blue-600 text-white shadow-sm" : "text-gray-900 hover:text-blue-600"
+        "flex items-center gap-3 rounded-lg px-4 py-3 text-base transition-all duration-200 hover:bg-blue-500 font-inter font-medium",
+        active ? "bg-white text-blue-600 shadow-sm" : "text-white hover:text-blue-100"
       )}
       onClick={onClick}
     >
-      <Icon className={cn("h-5 w-5", active ? "text-white" : "text-blue-600")} />
+      <Icon className={cn("h-5 w-5", active ? "text-blue-600" : "text-white")} />
       <span>{children}</span>
     </Link>
   );
@@ -84,7 +85,7 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
   console.log('CustomerLayout - isCustomerLoggedIn:', isCustomerLoggedIn);
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="min-h-screen flex flex-col bg-blue-600">
       <Navbar />
       
       <div className="flex-1 flex container mx-auto px-4 py-6 gap-6 max-w-7xl">
@@ -92,7 +93,7 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
         {isMobile && (
           <button 
             onClick={toggleMenu}
-            className="fixed top-20 left-4 z-40 bg-blue-600 text-white p-3 rounded-full shadow-lg md:hidden hover:bg-blue-700 transition-colors duration-200"
+            className="fixed top-20 left-4 z-40 bg-white text-blue-600 p-3 rounded-full shadow-lg md:hidden hover:bg-gray-100 transition-colors duration-200"
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -109,28 +110,28 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
         {/* Sidebar */}
         <aside 
           className={cn(
-            "w-64 shrink-0 border-r border-gray-200 pr-6 transition-all duration-300",
-            isMobile ? "fixed left-0 top-16 bottom-0 bg-white z-30 h-[calc(100vh-4rem)] px-4 pt-16 pb-6 shadow-xl overflow-y-auto" : "hidden md:block",
+            "w-64 shrink-0 border-r border-blue-500 pr-6 transition-all duration-300",
+            isMobile ? "fixed left-0 top-16 bottom-0 bg-blue-600 z-30 h-[calc(100vh-4rem)] px-4 pt-16 pb-6 shadow-xl overflow-y-auto" : "hidden md:block",
             isMobile && !isMenuOpen ? "-translate-x-full" : isMobile && isMenuOpen ? "translate-x-0" : ""
           )}
         >
           <div className="space-y-2 py-4">
             <SidebarItem 
-              to="/cliente/perfil" 
+              to="/cliente/painel" 
               icon={LayoutDashboard} 
-              active={path === '/cliente/perfil' || path === '/cliente/profile' || path === '/cliente/painel' || path === '/cliente/dashboard'}
+              active={path === '/cliente/painel' || path === '/cliente/dashboard'}
               onClick={closeMenu}
             >
-              Painel / Perfil
+              Painel
             </SidebarItem>
             
             <SidebarItem 
-              to="/cliente/clientes" 
+              to="/cliente/perfil" 
               icon={User} 
-              active={path.startsWith('/cliente/clientes')}
+              active={path === '/cliente/perfil' || path === '/cliente/profile'}
               onClick={closeMenu}
             >
-              Clientes
+              Perfil
             </SidebarItem>
             
             <SidebarItem 
@@ -141,13 +142,32 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
             >
               Meus Serviços
             </SidebarItem>
+            
             <SidebarItem 
               to="/cliente/equipamentos" 
               icon={Printer} 
               active={path.startsWith('/cliente/equipamentos') || path.startsWith('/cliente/equipment')}
               onClick={closeMenu}
             >
-              Meus Equipamentos
+              Equipamentos
+            </SidebarItem>
+            
+            <SidebarItem 
+              to="/cliente/ordens" 
+              icon={FileText} 
+              active={path.startsWith('/cliente/ordens') || path.startsWith('/cliente/orders')}
+              onClick={closeMenu}
+            >
+              Ordens de Serviço
+            </SidebarItem>
+            
+            <SidebarItem 
+              to="/cliente/pagamentos" 
+              icon={CreditCard} 
+              active={path.startsWith('/cliente/pagamentos') || path.startsWith('/cliente/payments')}
+              onClick={closeMenu}
+            >
+              Pagamentos
             </SidebarItem>
             
             {isCustomerLoggedIn && (
@@ -169,42 +189,35 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
             >
               Rastreamento
             </SidebarItem>
+            
             <SidebarItem 
-              to="/cliente/pagamentos" 
-              icon={CreditCard} 
-              active={path.startsWith('/cliente/pagamentos') || path.startsWith('/cliente/payments')}
+              to="/cliente/clientes" 
+              icon={User} 
+              active={path.startsWith('/cliente/clientes')}
               onClick={closeMenu}
             >
-              Pagamentos
-            </SidebarItem>
-            <SidebarItem 
-              to="/cliente/ordens" 
-              icon={FileText} 
-              active={path.startsWith('/cliente/ordens') || path.startsWith('/cliente/orders')}
-              onClick={closeMenu}
-            >
-              Ordens de Serviço
+              Clientes
             </SidebarItem>
           </div>
           
-          <div className="pt-6 mt-6 border-t border-gray-200">
+          <div className="pt-6 mt-6 border-t border-blue-500">
             <button 
               onClick={() => {
                 handleLogout();
                 closeMenu();
               }}
-              className="flex items-center gap-3 rounded-lg px-4 py-3 text-base transition-all duration-200 hover:bg-gray-50 text-gray-900 hover:text-blue-600 w-full text-left font-inter font-medium"
+              className="flex items-center gap-3 rounded-lg px-4 py-3 text-base transition-all duration-200 hover:bg-blue-500 text-white hover:text-blue-100 w-full text-left font-inter font-medium"
             >
-              <LogOut className="h-5 w-5 text-blue-600" />
+              <LogOut className="h-5 w-5 text-white" />
               <span>Sair</span>
             </button>
           </div>
         </aside>
         
-        {/* Conteúdo principal */}
+        {/* Main content */}
         <main className={cn("flex-1 min-w-0", isMobile ? "pl-0" : "")}>
           <div className={cn("flex items-center justify-between mb-6", isMobile ? "flex-col gap-4 items-start" : "")}>
-            <h1 className={cn("text-3xl font-bold text-blue-600 font-inter", isMobile ? "text-2xl pl-12" : "")}>{title}</h1>
+            <h1 className={cn("text-3xl font-bold text-white font-inter", isMobile ? "text-2xl pl-12" : "")}>{title}</h1>
           </div>
           
           <div className={cn("w-full", isMobile ? "px-2" : "")}>
