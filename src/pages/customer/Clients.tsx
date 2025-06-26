@@ -10,6 +10,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
 import { 
   Building2, 
   User, 
@@ -28,100 +30,160 @@ import {
   Star,
   CheckCircle,
   XCircle,
-  AlertTriangle
+  AlertTriangle,
+  Plus,
+  Eye,
+  History,
+  Wrench,
+  Factory,
+  Settings,
+  Upload,
+  ExternalLink
 } from 'lucide-react';
 
 const CustomerClients = () => {
   const [selectedClient, setSelectedClient] = useState(null);
+  const [selectedEquipmentType, setSelectedEquipmentType] = useState('DTF');
 
-  // Dados de exemplo do cliente
+  // Dados completos do cliente conforme especificação
   const clientData = {
     id: 1,
-    name: "Textil Brasil Ltda",
+    name: "ABC Comunicação Visual Ltda",
     type: "juridica",
     cnpj: "12.345.678/0001-90",
     ie: "123.456.789.123",
-    email: "contato@textilbrasil.com.br",
+    cpf: "",
+    email: "contato@abccomunicacao.com.br",
     phoneFixed: "(11) 3456-7890",
     phoneMobile: "(11) 98765-4321",
+    whatsapp: "(11) 98765-4321",
     address: {
-      street: "Rua da Indústria, 1234",
+      street: "Rua das Gráficas, 1234",
       neighborhood: "Distrito Industrial",
       city: "São Paulo",
       state: "SP",
-      zipCode: "01234-567"
+      zipCode: "01234-567",
+      complement: "Galpão B"
     },
     contacts: [
       {
-        name: "Maria Silva",
-        position: "Gerente de Produção",
+        name: "José Silva",
+        position: "Responsável Técnico",
         phone: "(11) 99999-9999",
-        email: "maria@textilbrasil.com.br"
+        email: "jose@abccomunicacao.com.br",
+        type: "tecnico"
       },
       {
-        name: "João Santos",
-        position: "Técnico Responsável",
+        name: "Maria Santos",
+        position: "Responsável Financeiro",
         phone: "(11) 88888-8888",
-        email: "joao@textilbrasil.com.br"
+        email: "financeiro@abccomunicacao.com.br",
+        type: "financeiro"
       }
     ],
     emergencyContact: {
       name: "Pedro Costa",
       phone: "(11) 77777-7777"
     },
-    technicalInfo: {
-      computers: 3,
+    location: {
+      equipmentLocation: "Galpão B - Setor de Produção",
       grounding: true,
       airConditioning: true,
-      dedicatedPanel: true,
-      separateEnvironments: true,
-      protectionEquipment: ["Extintores", "Filtros de linha", "Estabilizadores"]
+      employees: 8,
+      environmentalConditions: "Ambiente controlado, baixa umidade",
+      electricalInstallation: "Trifásico 220V",
+      protectionEquipment: true,
+      hasNobreak: true,
+      hasFilters: true,
+      hasStabilizers: true,
+      photos: ["local1.jpg", "local2.jpg"]
     },
     equipment: [
       {
         id: 1,
         type: "DTF",
-        brand: "Epson",
-        model: "L1800",
+        brand: "Grando",
+        model: "DTF 60cm",
+        width: "60cm",
+        heads: "2x i3200",
         serialNumber: "DTF001234",
+        manufactureYear: "2023",
         installDate: "2023-01-15",
         status: "active",
-        location: "Sala A - Setor 1",
-        maintenanceHistory: 3
+        location: "Galpão B - Setor 1",
+        oven: {
+          model: "Forno Nacional Esteira",
+          temperature: "150°C",
+          belt: "Esteira automática",
+          power: "220V Trifásico"
+        },
+        maintenanceHistory: 3,
+        lastMaintenance: "2023-12-01"
       },
       {
         id: 2,
-        type: "Sublimática",
-        brand: "Canon",
-        model: "Pro-1000",
-        serialNumber: "SUB005678",
+        type: "CNC Router",
+        brand: "CNC Tech",
+        model: "Router 1224",
+        area: "1.2x2.4m",
+        motorType: "Servo motor",
+        control: "Mach3",
+        software: "ArtCAM, Vectric",
+        lubrication: "Manual",
+        usage: "Alta",
+        serialNumber: "CNC005678",
         installDate: "2023-02-20",
-        status: "maintenance",
-        location: "Sala B - Setor 2",
+        status: "active",
+        location: "Galpão B - Setor 2",
+        maintenanceHistory: 2
+      },
+      {
+        id: 3,
+        type: "Prensa Térmica",
+        brand: "Metalnox",
+        model: "Pneumática 40x60",
+        activation: "Pneumático",
+        voltage: "220V",
+        serialNumber: "PRS009876",
+        installDate: "2023-03-10",
+        status: "active",
+        location: "Galpão B - Acabamento",
         maintenanceHistory: 1
       }
     ],
     history: {
-      totalServices: 8,
-      totalValue: "R$ 12.450,00",
-      responseTime: "2.5 horas",
-      activeEquipment: 2,
-      inactiveEquipment: 0
+      totalServices: 12,
+      totalValue: "R$ 18.750,00",
+      responseTime: "1.8 horas",
+      activeEquipment: 3,
+      inactiveEquipment: 0,
+      monthlyCallFrequency: 2.1,
+      overallRating: 4.9
     },
     technicians: [
       {
         name: "Ricardo Silva",
         photo: "",
-        services: 5,
-        rating: 4.8
+        services: 8,
+        rating: 4.9,
+        lastVisit: "2023-12-15"
       },
       {
         name: "Ana Costa",
         photo: "",
-        services: 3,
-        rating: 4.9
+        services: 4,
+        rating: 4.8,
+        lastVisit: "2023-12-01"
       }
-    ]
+    ],
+    documents: [
+      { type: "Fotos do Local", count: 5 },
+      { type: "Laudos de Instalação", count: 2 },
+      { type: "Notas Fiscais", count: 8 },
+      { type: "Contratos", count: 1 },
+      { type: "Vídeos", count: 3 }
+    ],
+    installationChecklist: true
   };
 
   const getStatusColor = (status: string) => {
@@ -142,116 +204,222 @@ const CustomerClients = () => {
     }
   };
 
+  const renderEquipmentDetails = (equipment: any) => {
+    switch (equipment.type) {
+      case 'DTF':
+        return (
+          <div className="space-y-3">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label className="text-yellow-700">Largura</Label>
+                <Input value={equipment.width} readOnly className="border-yellow-200" />
+              </div>
+              <div>
+                <Label className="text-yellow-700">Cabeças</Label>
+                <Input value={equipment.heads} readOnly className="border-yellow-200" />
+              </div>
+            </div>
+            <Separator className="bg-yellow-200" />
+            <div>
+              <Label className="text-yellow-700 font-medium">Dados do Forno</Label>
+              <div className="grid grid-cols-2 gap-3 mt-2">
+                <div>
+                  <Label className="text-sm text-yellow-600">Modelo</Label>
+                  <Input value={equipment.oven?.model} readOnly className="border-yellow-200" />
+                </div>
+                <div>
+                  <Label className="text-sm text-yellow-600">Temperatura Máx.</Label>
+                  <Input value={equipment.oven?.temperature} readOnly className="border-yellow-200" />
+                </div>
+                <div>
+                  <Label className="text-sm text-yellow-600">Esteira</Label>
+                  <Input value={equipment.oven?.belt} readOnly className="border-yellow-200" />
+                </div>
+                <div>
+                  <Label className="text-sm text-yellow-600">Alimentação</Label>
+                  <Input value={equipment.oven?.power} readOnly className="border-yellow-200" />
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      case 'CNC Router':
+        return (
+          <div className="space-y-3">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label className="text-yellow-700">Área Útil</Label>
+                <Input value={equipment.area} readOnly className="border-yellow-200" />
+              </div>
+              <div>
+                <Label className="text-yellow-700">Tipo de Motor</Label>
+                <Input value={equipment.motorType} readOnly className="border-yellow-200" />
+              </div>
+              <div>
+                <Label className="text-yellow-700">Controle</Label>
+                <Input value={equipment.control} readOnly className="border-yellow-200" />
+              </div>
+              <div>
+                <Label className="text-yellow-700">Software</Label>
+                <Input value={equipment.software} readOnly className="border-yellow-200" />
+              </div>
+              <div>
+                <Label className="text-yellow-700">Lubrificação</Label>
+                <Input value={equipment.lubrication} readOnly className="border-yellow-200" />
+              </div>
+              <div>
+                <Label className="text-yellow-700">Frequência de Uso</Label>
+                <Badge className="bg-yellow-100 text-yellow-800">{equipment.usage}</Badge>
+              </div>
+            </div>
+          </div>
+        );
+      case 'Prensa Térmica':
+        return (
+          <div className="space-y-3">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label className="text-yellow-700">Tipo de Acionamento</Label>
+                <Input value={equipment.activation} readOnly className="border-yellow-200" />
+              </div>
+              <div>
+                <Label className="text-yellow-700">Tensão</Label>
+                <Input value={equipment.voltage} readOnly className="border-yellow-200" />
+              </div>
+            </div>
+          </div>
+        );
+      default:
+        return <p className="text-yellow-600">Detalhes específicos não disponíveis</p>;
+    }
+  };
+
   return (
     <CustomerLayout title="Prontuário Técnico - Clientes">
+      {/* Aplicando esquema de cores amarelo/dourado */}
+      <style jsx>{`
+        .yellow-theme {
+          --primary: #f59e0b;
+          --primary-foreground: #ffffff;
+          --secondary: #fef3c7;
+          --accent: #fbbf24;
+        }
+      `}</style>
+      
       <div className="space-y-6">
-        {/* Dashboard do Cliente */}
+        {/* Dashboard do Cliente - Tema Amarelo */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Card>
+          <Card className="border-yellow-200 bg-gradient-to-br from-yellow-50 to-amber-50">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Total de Atendimentos</p>
-                  <p className="text-2xl font-bold">{clientData.history.totalServices}</p>
-                </div>
-                <FileText className="h-8 w-8 text-blue-500" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Equipamentos Ativos</p>
-                  <p className="text-2xl font-bold">{clientData.history.activeEquipment}</p>
-                </div>
-                <Printer className="h-8 w-8 text-green-500" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Valor Total Gasto</p>
-                  <p className="text-2xl font-bold">{clientData.history.totalValue}</p>
+                  <p className="text-sm text-yellow-700">Total de Atendimentos</p>
+                  <p className="text-2xl font-bold text-yellow-800">{clientData.history.totalServices}</p>
                 </div>
                 <FileText className="h-8 w-8 text-yellow-500" />
               </div>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="border-yellow-200 bg-gradient-to-br from-yellow-50 to-amber-50">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Tempo Médio Resposta</p>
-                  <p className="text-2xl font-bold">{clientData.history.responseTime}</p>
+                  <p className="text-sm text-yellow-700">Equipamentos Ativos</p>
+                  <p className="text-2xl font-bold text-yellow-800">{clientData.history.activeEquipment}</p>
                 </div>
-                <Calendar className="h-8 w-8 text-purple-500" />
+                <Printer className="h-8 w-8 text-green-500" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-yellow-200 bg-gradient-to-br from-yellow-50 to-amber-50">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-yellow-700">Valor Total Investido</p>
+                  <p className="text-2xl font-bold text-yellow-800">{clientData.history.totalValue}</p>
+                </div>
+                <FileText className="h-8 w-8 text-yellow-500" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-yellow-200 bg-gradient-to-br from-yellow-50 to-amber-50">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-yellow-700">Avaliação Geral</p>
+                  <div className="flex items-center gap-1">
+                    <p className="text-2xl font-bold text-yellow-800">{clientData.history.overallRating}</p>
+                    <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+                  </div>
+                </div>
+                <Star className="h-8 w-8 text-yellow-500" />
               </div>
             </CardContent>
           </Card>
         </div>
 
         <Tabs defaultValue="cadastral" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="cadastral">Dados Cadastrais</TabsTrigger>
-            <TabsTrigger value="technical">Info. Técnicas</TabsTrigger>
-            <TabsTrigger value="equipment">Equipamentos</TabsTrigger>
-            <TabsTrigger value="history">Histórico</TabsTrigger>
-            <TabsTrigger value="documents">Documentos</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-6 bg-yellow-100">
+            <TabsTrigger value="cadastral" className="data-[state=active]:bg-yellow-500 data-[state=active]:text-white">Dados Cadastrais</TabsTrigger>
+            <TabsTrigger value="local" className="data-[state=active]:bg-yellow-500 data-[state=active]:text-white">Estrutura Local</TabsTrigger>
+            <TabsTrigger value="equipment" className="data-[state=active]:bg-yellow-500 data-[state=active]:text-white">Equipamentos</TabsTrigger>
+            <TabsTrigger value="history" className="data-[state=active]:bg-yellow-500 data-[state=active]:text-white">Histórico</TabsTrigger>
+            <TabsTrigger value="documents" className="data-[state=active]:bg-yellow-500 data-[state=active]:text-white">Documentos</TabsTrigger>
+            <TabsTrigger value="actions" className="data-[state=active]:bg-yellow-500 data-[state=active]:text-white">Ações</TabsTrigger>
           </TabsList>
 
           {/* Dados Cadastrais */}
           <TabsContent value="cadastral" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+            <Card className="border-yellow-200">
+              <CardHeader className="bg-yellow-50">
+                <CardTitle className="flex items-center gap-2 text-yellow-800">
                   <Building2 className="h-5 w-5" />
                   Informações da Empresa
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-4 pt-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label>Razão Social</Label>
-                    <Input value={clientData.name} readOnly />
+                    <Label className="text-yellow-700">Razão Social</Label>
+                    <Input value={clientData.name} readOnly className="border-yellow-200" />
                   </div>
                   <div>
-                    <Label>Tipo</Label>
-                    <Badge variant="outline">{clientData.type === 'juridica' ? 'Pessoa Jurídica' : 'Pessoa Física'}</Badge>
+                    <Label className="text-yellow-700">Tipo</Label>
+                    <Badge variant="outline" className="border-yellow-300 text-yellow-700">
+                      {clientData.type === 'juridica' ? 'Pessoa Jurídica' : 'Pessoa Física'}
+                    </Badge>
                   </div>
                   <div>
-                    <Label>CNPJ</Label>
-                    <Input value={clientData.cnpj} readOnly />
+                    <Label className="text-yellow-700">CNPJ</Label>
+                    <Input value={clientData.cnpj} readOnly className="border-yellow-200" />
                   </div>
                   <div>
-                    <Label>Inscrição Estadual</Label>
-                    <Input value={clientData.ie} readOnly />
+                    <Label className="text-yellow-700">Inscrição Estadual</Label>
+                    <Input value={clientData.ie} readOnly className="border-yellow-200" />
                   </div>
                   <div>
-                    <Label>E-mail</Label>
-                    <Input value={clientData.email} readOnly />
+                    <Label className="text-yellow-700">E-mail</Label>
+                    <Input value={clientData.email} readOnly className="border-yellow-200" />
                   </div>
                   <div>
-                    <Label>Telefone Fixo</Label>
-                    <Input value={clientData.phoneFixed} readOnly />
+                    <Label className="text-yellow-700">WhatsApp</Label>
+                    <Input value={clientData.whatsapp} readOnly className="border-yellow-200" />
                   </div>
                 </div>
                 
                 <div>
-                  <Label>Endereço Completo</Label>
+                  <Label className="text-yellow-700">Endereço Completo</Label>
                   <div className="flex gap-2">
                     <Input 
                       value={`${clientData.address.street}, ${clientData.address.neighborhood}, ${clientData.address.city} - ${clientData.address.state}, ${clientData.address.zipCode}`} 
                       readOnly 
-                      className="flex-1"
+                      className="flex-1 border-yellow-200"
                     />
-                    <Button variant="outline" size="icon">
-                      <MapPin className="h-4 w-4" />
+                    <Button variant="outline" size="icon" className="border-yellow-300 text-yellow-700 hover:bg-yellow-50">
+                      <ExternalLink className="h-4 w-4" />
                     </Button>
                   </div>
                 </div>
@@ -259,21 +427,22 @@ const CustomerClients = () => {
             </Card>
 
             {/* Contatos Responsáveis */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+            <Card className="border-yellow-200">
+              <CardHeader className="bg-yellow-50">
+                <CardTitle className="flex items-center gap-2 text-yellow-800">
                   <User className="h-5 w-5" />
                   Pessoas Responsáveis
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="pt-6">
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Nome</TableHead>
-                      <TableHead>Cargo</TableHead>
-                      <TableHead>Telefone</TableHead>
-                      <TableHead>E-mail</TableHead>
+                      <TableHead className="text-yellow-700">Nome</TableHead>
+                      <TableHead className="text-yellow-700">Cargo</TableHead>
+                      <TableHead className="text-yellow-700">Telefone</TableHead>
+                      <TableHead className="text-yellow-700">E-mail</TableHead>
+                      <TableHead className="text-yellow-700">Tipo</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -283,6 +452,11 @@ const CustomerClients = () => {
                         <TableCell>{contact.position}</TableCell>
                         <TableCell>{contact.phone}</TableCell>
                         <TableCell>{contact.email}</TableCell>
+                        <TableCell>
+                          <Badge className={contact.type === 'tecnico' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'}>
+                            {contact.type === 'tecnico' ? 'Técnico' : 'Financeiro'}
+                          </Badge>
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -291,56 +465,68 @@ const CustomerClients = () => {
             </Card>
           </TabsContent>
 
-          {/* Informações Técnicas */}
-          <TabsContent value="technical" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Zap className="h-5 w-5" />
+          {/* Estrutura do Local */}
+          <TabsContent value="local" className="space-y-4">
+            <Card className="border-yellow-200">
+              <CardHeader className="bg-yellow-50">
+                <CardTitle className="flex items-center gap-2 text-yellow-800">
+                  <Factory className="h-5 w-5" />
                   Estrutura de Instalação
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-4 pt-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="flex items-center justify-between p-4 border rounded-lg">
-                    <span>Computadores no processo</span>
-                    <Badge variant="outline">{clientData.technicalInfo.computers}</Badge>
+                  <div>
+                    <Label className="text-yellow-700">Localização dos Equipamentos</Label>
+                    <Input value={clientData.location.equipmentLocation} readOnly className="border-yellow-200" />
                   </div>
-                  
-                  <div className="flex items-center justify-between p-4 border rounded-lg">
-                    <span>Aterramento</span>
-                    {clientData.technicalInfo.grounding ? 
+                  <div>
+                    <Label className="text-yellow-700">Funcionários no Setor</Label>
+                    <Input value={clientData.location.employees.toString()} readOnly className="border-yellow-200" />
+                  </div>
+                  <div>
+                    <Label className="text-yellow-700">Instalação Elétrica</Label>
+                    <Input value={clientData.location.electricalInstallation} readOnly className="border-yellow-200" />
+                  </div>
+                  <div>
+                    <Label className="text-yellow-700">Condições Ambientais</Label>
+                    <Input value={clientData.location.environmentalConditions} readOnly className="border-yellow-200" />
+                  </div>
+                </div>
+
+                <Separator className="bg-yellow-200" />
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="flex items-center justify-between p-4 border border-yellow-200 rounded-lg">
+                    <span className="text-yellow-700">Aterramento</span>
+                    {clientData.location.grounding ? 
                       <Badge className="bg-green-100 text-green-800">✔ Presente</Badge> : 
                       <Badge className="bg-red-100 text-red-800">⚠ Ausente</Badge>
                     }
                   </div>
                   
-                  <div className="flex items-center justify-between p-4 border rounded-lg">
-                    <span>Ar-condicionado</span>
-                    {clientData.technicalInfo.airConditioning ? 
+                  <div className="flex items-center justify-between p-4 border border-yellow-200 rounded-lg">
+                    <span className="text-yellow-700">Ar-condicionado</span>
+                    {clientData.location.airConditioning ? 
                       <Badge className="bg-green-100 text-green-800">✔ Presente</Badge> : 
                       <Badge className="bg-red-100 text-red-800">❌ Ausente</Badge>
                     }
                   </div>
                   
-                  <div className="flex items-center justify-between p-4 border rounded-lg">
-                    <span>Quadro dedicado</span>
-                    {clientData.technicalInfo.dedicatedPanel ? 
+                  <div className="flex items-center justify-between p-4 border border-yellow-200 rounded-lg">
+                    <span className="text-yellow-700">Nobreaks</span>
+                    {clientData.location.hasNobreak ? 
                       <Badge className="bg-green-100 text-green-800">Sim</Badge> : 
                       <Badge className="bg-red-100 text-red-800">Não</Badge>
                     }
                   </div>
-                </div>
-
-                <div>
-                  <Label>Equipamentos de Proteção</Label>
-                  <div className="flex gap-2 mt-2">
-                    {clientData.technicalInfo.protectionEquipment.map((item, index) => (
-                      <Badge key={index} variant="outline" className="flex items-center gap-1">
-                        <Shield className="h-3 w-3" />
-                        {item}
-                      </Badge>
-                    ))}
+                  
+                  <div className="flex items-center justify-between p-4 border border-yellow-200 rounded-lg">
+                    <span className="text-yellow-700">Filtros/Estabilizadores</span>
+                    {clientData.location.hasFilters ? 
+                      <Badge className="bg-green-100 text-green-800">Sim</Badge> : 
+                      <Badge className="bg-red-100 text-red-800">Não</Badge>
+                    }
                   </div>
                 </div>
               </CardContent>
@@ -349,34 +535,26 @@ const CustomerClients = () => {
 
           {/* Equipamentos */}
           <TabsContent value="equipment" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+            <Card className="border-yellow-200">
+              <CardHeader className="bg-yellow-50">
+                <CardTitle className="flex items-center gap-2 text-yellow-800">
                   <Printer className="h-5 w-5" />
                   Equipamentos Cadastrados
+                  <Button size="sm" className="ml-auto bg-yellow-500 hover:bg-yellow-600 text-white">
+                    <Plus className="h-4 w-4 mr-1" />
+                    Novo Equipamento
+                  </Button>
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Tipo</TableHead>
-                      <TableHead>Marca/Modelo</TableHead>
-                      <TableHead>Série</TableHead>
-                      <TableHead>Instalação</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Localização</TableHead>
-                      <TableHead>Manutenções</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {clientData.equipment.map((equipment) => (
-                      <TableRow key={equipment.id}>
-                        <TableCell>{equipment.type}</TableCell>
-                        <TableCell>{equipment.brand} {equipment.model}</TableCell>
-                        <TableCell>{equipment.serialNumber}</TableCell>
-                        <TableCell>{equipment.installDate}</TableCell>
-                        <TableCell>
+              <CardContent className="pt-6">
+                <div className="space-y-6">
+                  {clientData.equipment.map((equipment) => (
+                    <Card key={equipment.id} className="border-yellow-200 bg-yellow-50/30">
+                      <CardHeader className="pb-3">
+                        <div className="flex items-center justify-between">
+                          <CardTitle className="text-lg text-yellow-800">
+                            {equipment.type} - {equipment.brand} {equipment.model}
+                          </CardTitle>
                           <Badge className={getStatusColor(equipment.status)}>
                             {getStatusIcon(equipment.status)}
                             <span className="ml-1">
@@ -384,17 +562,50 @@ const CustomerClients = () => {
                                equipment.status === 'maintenance' ? 'Manutenção' : 'Inativo'}
                             </span>
                           </Badge>
-                        </TableCell>
-                        <TableCell>{equipment.location}</TableCell>
-                        <TableCell>
-                          <Button variant="link" size="sm">
-                            {equipment.maintenanceHistory} OSs
+                        </div>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                          <div>
+                            <Label className="text-yellow-700">Série</Label>
+                            <p className="font-medium">{equipment.serialNumber}</p>
+                          </div>
+                          <div>
+                            <Label className="text-yellow-700">Instalação</Label>
+                            <p className="font-medium">{equipment.installDate}</p>
+                          </div>
+                          <div>
+                            <Label className="text-yellow-700">Localização</Label>
+                            <p className="font-medium">{equipment.location}</p>
+                          </div>
+                          <div>
+                            <Label className="text-yellow-700">Manutenções</Label>
+                            <p className="font-medium">{equipment.maintenanceHistory} OSs</p>
+                          </div>
+                        </div>
+                        
+                        <Separator className="bg-yellow-200" />
+                        
+                        {renderEquipmentDetails(equipment)}
+                        
+                        <div className="flex gap-2 pt-2">
+                          <Button size="sm" variant="outline" className="border-yellow-300 text-yellow-700 hover:bg-yellow-50">
+                            <Eye className="h-4 w-4 mr-1" />
+                            Ver Detalhes
                           </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                          <Button size="sm" variant="outline" className="border-yellow-300 text-yellow-700 hover:bg-yellow-50">
+                            <History className="h-4 w-4 mr-1" />
+                            Histórico
+                          </Button>
+                          <Button size="sm" variant="outline" className="border-yellow-300 text-yellow-700 hover:bg-yellow-50">
+                            <Wrench className="h-4 w-4 mr-1" />
+                            Manutenção
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
@@ -402,25 +613,28 @@ const CustomerClients = () => {
           {/* Histórico */}
           <TabsContent value="history" className="space-y-4">
             <div className="grid gap-4 md:grid-cols-2">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Técnicos Mais Frequentes</CardTitle>
+              <Card className="border-yellow-200">
+                <CardHeader className="bg-yellow-50">
+                  <CardTitle className="text-yellow-800">Técnicos Mais Frequentes</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="pt-6">
                   <div className="space-y-4">
                     {clientData.technicians.map((tech, index) => (
-                      <div key={index} className="flex items-center gap-3">
+                      <div key={index} className="flex items-center gap-3 p-3 border border-yellow-200 rounded-lg">
                         <Avatar>
                           <AvatarImage src={tech.photo} />
-                          <AvatarFallback>{tech.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                          <AvatarFallback className="bg-yellow-100 text-yellow-700">
+                            {tech.name.split(' ').map(n => n[0]).join('')}
+                          </AvatarFallback>
                         </Avatar>
                         <div className="flex-1">
-                          <p className="font-medium">{tech.name}</p>
-                          <p className="text-sm text-muted-foreground">{tech.services} atendimentos</p>
+                          <p className="font-medium text-yellow-800">{tech.name}</p>
+                          <p className="text-sm text-yellow-600">{tech.services} atendimentos</p>
+                          <p className="text-xs text-yellow-500">Última visita: {tech.lastVisit}</p>
                         </div>
                         <div className="flex items-center gap-1">
                           <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                          <span className="text-sm">{tech.rating}</span>
+                          <span className="text-sm font-medium">{tech.rating}</span>
                         </div>
                       </div>
                     ))}
@@ -428,30 +642,31 @@ const CustomerClients = () => {
                 </CardContent>
               </Card>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle>Serviços Recentes</CardTitle>
+              <Card className="border-yellow-200">
+                <CardHeader className="bg-yellow-50">
+                  <CardTitle className="text-yellow-800">Resumo de Atendimentos</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    <div className="flex justify-between items-center p-3 border rounded">
+                <CardContent className="pt-6">
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center p-3 border border-yellow-200 rounded">
                       <div>
-                        <p className="font-medium">Manutenção Preventiva</p>
-                        <p className="text-sm text-muted-foreground">15/12/2023 - Ricardo Silva</p>
+                        <p className="font-medium text-yellow-800">Chamados/Mês</p>
+                        <p className="text-2xl font-bold text-yellow-700">{clientData.history.monthlyCallFrequency}</p>
                       </div>
-                      <Badge className="bg-green-100 text-green-800">Concluído</Badge>
+                      <Calendar className="h-8 w-8 text-yellow-500" />
                     </div>
-                    <div className="flex justify-between items-center p-3 border rounded">
+                    <div className="flex justify-between items-center p-3 border border-yellow-200 rounded">
                       <div>
-                        <p className="font-medium">Troca de Peças DTF</p>
-                        <p className="text-sm text-muted-foreground">10/12/2023 - Ana Costa</p>
+                        <p className="font-medium text-yellow-800">Tempo Médio Resposta</p>
+                        <p className="text-2xl font-bold text-yellow-700">{clientData.history.responseTime}</p>
                       </div>
-                      <Badge className="bg-green-100 text-green-800">Concluído</Badge>
+                      <AlertTriangle className="h-8 w-8 text-yellow-500" />
                     </div>
+                    <Button className="w-full bg-yellow-500 hover:bg-yellow-600 text-white">
+                      <FileText className="h-4 w-4 mr-2" />
+                      Ver Histórico Completo
+                    </Button>
                   </div>
-                  <Button variant="outline" className="w-full mt-4">
-                    Ver Histórico Completo
-                  </Button>
                 </CardContent>
               </Card>
             </div>
@@ -459,41 +674,87 @@ const CustomerClients = () => {
 
           {/* Documentos e Anexos */}
           <TabsContent value="documents" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+            <Card className="border-yellow-200">
+              <CardHeader className="bg-yellow-50">
+                <CardTitle className="flex items-center gap-2 text-yellow-800">
                   <FileText className="h-5 w-5" />
                   Anexos e Documentos
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-4 pt-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <Button variant="outline" className="flex items-center gap-2 h-20 flex-col">
-                    <Camera className="h-6 w-6" />
-                    <span>Fotos do Local</span>
+                  {clientData.documents.map((doc, index) => (
+                    <Card key={index} className="border-yellow-200 bg-yellow-50/30">
+                      <CardContent className="p-4">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-medium text-yellow-800">{doc.type}</p>
+                            <p className="text-sm text-yellow-600">{doc.count} arquivo(s)</p>
+                          </div>
+                          <Button size="sm" variant="outline" className="border-yellow-300 text-yellow-700">
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+
+                <div className="flex gap-2">
+                  <Button className="bg-yellow-500 hover:bg-yellow-600 text-white">
+                    <Upload className="h-4 w-4 mr-2" />
+                    Upload Documentos
                   </Button>
-                  <Button variant="outline" className="flex items-center gap-2 h-20 flex-col">
-                    <FileText className="h-6 w-6" />
-                    <span>Planta Baixa</span>
+                  <Button variant="outline" className="border-yellow-300 text-yellow-700 hover:bg-yellow-50">
+                    <Camera className="h-4 w-4 mr-2" />
+                    Fotos do Local
                   </Button>
-                  <Button variant="outline" className="flex items-center gap-2 h-20 flex-col">
-                    <Shield className="h-6 w-6" />
-                    <span>Certificados</span>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Ações */}
+          <TabsContent value="actions" className="space-y-4">
+            <Card className="border-yellow-200">
+              <CardHeader className="bg-yellow-50">
+                <CardTitle className="flex items-center gap-2 text-yellow-800">
+                  <Settings className="h-5 w-5" />
+                  Ações Disponíveis
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4 pt-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Button className="bg-yellow-500 hover:bg-yellow-600 text-white h-16 flex-col">
+                    <Plus className="h-6 w-6 mb-1" />
+                    Abrir Novo Chamado
+                  </Button>
+                  <Button variant="outline" className="border-yellow-300 text-yellow-700 hover:bg-yellow-50 h-16 flex-col">
+                    <FileText className="h-6 w-6 mb-1" />
+                    Visualizar OSs
+                  </Button>
+                  <Button variant="outline" className="border-yellow-300 text-yellow-700 hover:bg-yellow-50 h-16 flex-col">
+                    <Download className="h-6 w-6 mb-1" />
+                    Exportar Dados
+                  </Button>
+                  <Button variant="outline" className="border-yellow-300 text-yellow-700 hover:bg-yellow-50 h-16 flex-col">
+                    <Edit className="h-6 w-6 mb-1" />
+                    Atualizar Informações
                   </Button>
                 </div>
 
-                <div className="border-t pt-4">
-                  <div className="flex justify-between items-center mb-4">
-                    <h4 className="font-medium">Ações</h4>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button variant="outline" className="flex items-center gap-2">
-                      <Edit className="h-4 w-4" />
-                      Atualizar Informações
-                    </Button>
-                    <Button variant="outline" className="flex items-center gap-2">
-                      <Download className="h-4 w-4" />
-                      Exportar Dados
+                <Separator className="bg-yellow-200" />
+
+                <div>
+                  <Label className="text-yellow-700 font-medium">Checklist de Instalação</Label>
+                  <div className="flex items-center gap-2 mt-2">
+                    {clientData.installationChecklist ? (
+                      <Badge className="bg-green-100 text-green-800">✔ Preenchido</Badge>
+                    ) : (
+                      <Badge className="bg-red-100 text-red-800">⚠ Pendente</Badge>
+                    )}
+                    <Button size="sm" variant="outline" className="border-yellow-300 text-yellow-700">
+                      Ver Checklist
                     </Button>
                   </div>
                 </div>
