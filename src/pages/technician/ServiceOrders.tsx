@@ -158,10 +158,10 @@ const TechnicianServiceOrders = () => {
             </div>
             
             <Select 
-              value={filters.status} 
+              value={filters.status || "all"} 
               onValueChange={(value) => setFilters(prev => ({ 
                 ...prev, 
-                status: value as ServiceOrderStatus | '' 
+                status: value === "all" ? '' : value as ServiceOrderStatus
               }))}
             >
               <SelectTrigger className="w-full sm:w-48">
@@ -169,7 +169,7 @@ const TechnicianServiceOrders = () => {
                 <SelectValue placeholder="Filtrar por status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Todos os status</SelectItem>
+                <SelectItem value="all">Todos os status</SelectItem>
                 <SelectItem value="aberta">Abertas</SelectItem>
                 <SelectItem value="em_andamento">Em Andamento</SelectItem>
                 <SelectItem value="concluida">Concluídas</SelectItem>
