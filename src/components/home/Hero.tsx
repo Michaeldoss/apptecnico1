@@ -17,29 +17,20 @@ const Hero = () => {
             
           </Link>
           <Link to="/services">
-            <Button className="bg-white/15 backdrop-blur-xl border-2 border-white/30 text-white hover:bg-white/25 hover:border-white/50 transition-all duration-300 shadow-2xl flex items-center gap-3 px-8 py-4 text-lg font-bold rounded-2xl hover:scale-105 hover:shadow-3xl">
-              <Wrench className="h-6 w-6" />
-              Solicitar Serviço
-            </Button>
+            
           </Link>
           <Link to="/contact">
-            <Button className="bg-white/15 backdrop-blur-xl border-2 border-white/30 text-white hover:bg-white/25 hover:border-white/50 transition-all duration-300 shadow-2xl flex items-center gap-3 px-8 py-4 text-lg font-bold rounded-2xl hover:scale-105 hover:shadow-3xl">
-              <Phone className="h-6 w-6" />
-              Contato Direto
-            </Button>
+            
           </Link>
           <Link to="/technician/landing">
-            <Button className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 font-bold transition-all duration-300 shadow-2xl flex items-center gap-3 px-8 py-4 text-lg rounded-2xl hover:scale-105 hover:shadow-3xl border-2 border-yellow-400">
-              <Zap className="h-6 w-6" />
-              Seja um Técnico
-            </Button>
+            
           </Link>
         </div>
 
         {/* Título Principal - Modo Deus */}
         <div className="text-center mb-16">
           <h1 className="text-5xl md:text-7xl font-black mb-8 leading-tight text-white drop-shadow-2xl">
-            Encontre o <span className="text-yellow-300 bg-gradient-to-r from-yellow-300/30 to-yellow-400/30 px-6 py-3 rounded-2xl border-2 border-yellow-300/50 backdrop-blur-sm">técnico ideal</span><br />
+            Encontre o <span className="text-yellow-300 bg-gradient-to-r from-yellow-300/30 to-yellow-400/30 px-6 py-3 rounded-2xl border-2 border-yellow-300/50 backdrop-blur-sm mx-px font-bold text-7xl">técnico ideal</span><br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-white">para seu equipamento</span>
           </h1>
           
