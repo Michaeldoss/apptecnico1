@@ -121,7 +121,16 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
               active={path === '/cliente/perfil' || path === '/cliente/profile' || path === '/cliente/painel' || path === '/cliente/dashboard'}
               onClick={closeMenu}
             >
-              Meu Painel
+              Painel / Perfil
+            </SidebarItem>
+            
+            <SidebarItem 
+              to="/cliente/clientes" 
+              icon={User} 
+              active={path.startsWith('/cliente/clientes')}
+              onClick={closeMenu}
+            >
+              Clientes
             </SidebarItem>
             
             <SidebarItem 
