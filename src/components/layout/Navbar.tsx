@@ -63,7 +63,7 @@ const Navbar = () => {
   ];
 
   // Classes dinâmicas baseadas na página - sempre usar estilo da página inicial
-  const navbarClasses = "bg-transparent absolute w-full top-0 z-50";
+  const navbarClasses = "bg-transparent absolute w-full top-0 z-50 pt-4";
   const textClasses = "text-white";
   const logoClasses = "text-white";
   const hoverClasses = "hover:text-blue-200";
@@ -74,7 +74,7 @@ const Navbar = () => {
       <div className="container flex items-center justify-between h-16 px-4 md:px-6 mx-auto">
         {/* Logo */}
         <Link to="/" className="flex items-center">
-          <span className={`text-2xl font-bold font-inter ${logoClasses}`}>
+          <span className={`text-2xl font-bold font-inter ${logoClasses} drop-shadow-lg`}>
             DGSoluções
           </span>
         </Link>
@@ -85,7 +85,7 @@ const Navbar = () => {
             <Link
               key={item.path}
               to={item.path}
-              className={`text-sm font-medium transition-colors duration-200 font-inter ${textClasses} ${hoverClasses}`}
+              className={`text-sm font-medium transition-colors duration-200 font-inter ${textClasses} ${hoverClasses} drop-shadow-lg`}
             >
               {item.label}
             </Link>
@@ -99,7 +99,7 @@ const Navbar = () => {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className={`flex items-center gap-2 font-inter font-medium ${buttonClasses}`}
+                  className={`flex items-center gap-2 font-inter font-medium ${buttonClasses} drop-shadow-lg`}
                 >
                   <User className="h-4 w-4" />
                   <span className={textClasses}>Minha Conta</span>
@@ -132,7 +132,7 @@ const Navbar = () => {
                 variant="outline" 
                 size="sm" 
                 onClick={handleLoginClick}
-                className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 font-inter font-semibold transition-all duration-200 border-0 shadow-lg"
+                className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 font-inter font-semibold transition-all duration-200 border-0 shadow-lg hover:shadow-xl hover:scale-105"
               >
                 <LogIn className="h-4 w-4 mr-2" /> Entrar
               </Button>
@@ -142,7 +142,7 @@ const Navbar = () => {
                 <DropdownMenuTrigger asChild>
                   <Button 
                     size="sm" 
-                    className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 font-inter font-semibold transition-all duration-200 border-0 shadow-lg"
+                    className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 font-inter font-semibold transition-all duration-200 border-0 shadow-lg hover:shadow-xl hover:scale-105"
                   >
                     <UserPlus className="h-4 w-4 mr-2" /> Cadastre-se
                     <ChevronDown className="h-4 w-4 ml-2" />
@@ -189,7 +189,7 @@ const Navbar = () => {
             size="icon"
             onClick={toggleMenu}
             aria-label="Toggle Menu"
-            className="text-white hover:text-blue-200 hover:bg-white/10"
+            className="text-white hover:text-blue-200 hover:bg-white/10 drop-shadow-lg"
           >
             {isMenuOpen ? (
               <X className="h-6 w-6" />
@@ -201,7 +201,7 @@ const Navbar = () => {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="absolute top-16 left-0 w-full bg-white border-b border-gray-200 shadow-xl z-50 md:hidden">
+          <div className="absolute top-20 left-0 w-full bg-white border-b border-gray-200 shadow-xl z-50 md:hidden">
             <div className="flex flex-col space-y-2 px-4 py-6">
               {menuItems.map((item) => (
                 <Link

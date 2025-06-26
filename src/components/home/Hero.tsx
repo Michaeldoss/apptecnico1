@@ -7,7 +7,7 @@ import { Search, MapPin, ArrowRight, Star, Users, CheckCircle2, Wrench, Zap, Pho
 
 const Hero = () => {
   return (
-    <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-20 px-4 min-h-[80vh] flex items-center relative overflow-hidden">
+    <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-24 px-4 min-h-[80vh] flex items-center relative overflow-hidden">
       {/* Elementos decorativos de fundo */}
       <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-transparent to-purple-600/20"></div>
       <div className="absolute top-20 left-20 w-72 h-72 bg-white/5 rounded-full blur-3xl"></div>
