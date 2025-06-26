@@ -250,6 +250,17 @@ export const useCustomerDashboard = () => {
     hours: eq.laborHours
   }));
 
+  // New function to get equipment by ID
+  const getEquipmentById = (id: number) => {
+    return mockEquipment.find(eq => eq.id === id);
+  };
+
+  // New function to get service orders by equipment
+  const getServiceOrdersByEquipment = (equipmentId: number) => {
+    const equipment = getEquipmentById(equipmentId);
+    return equipment ? equipment.serviceOrders : [];
+  };
+
   return {
     stats,
     serviceMetrics,
@@ -257,6 +268,8 @@ export const useCustomerDashboard = () => {
     weeklyPayments,
     financialBreakdown: mockFinancialBreakdown,
     mostUsedParts: mockMostUsedParts,
-    equipmentCosts
+    equipmentCosts,
+    getEquipmentById,
+    getServiceOrdersByEquipment
   };
 };
