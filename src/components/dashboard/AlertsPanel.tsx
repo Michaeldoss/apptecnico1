@@ -34,12 +34,24 @@ const AlertsPanel: React.FC<AlertsPanelProps> = ({ alerts, urgentAlerts }) => {
     }
   };
 
+  const getBgColor = (type: Alert['type']) => {
+    switch (type) {
+      case 'message': return 'bg-blue-100';
+      case 'stock': return 'bg-orange-100';
+      case 'schedule': return 'bg-purple-100';
+      case 'payment': return 'bg-green-100';
+      default: return 'bg-gray-100';
+    }
+  };
+
   return (
     <Card className="h-full">
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2 text-lg font-semibold">
-            <Bell className="h-5 w-5" />
+          <CardTitle className="flex items-center gap-3 text-lg font-semibold">
+            <div className="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center">
+              <Bell className="h-4 w-4 text-red-600" />
+            </div>
             Alertas e Notificações
           </CardTitle>
           {urgentAlerts.length > 0 && (
@@ -54,6 +66,7 @@ const AlertsPanel: React.FC<AlertsPanelProps> = ({ alerts, urgentAlerts }) => {
           {alerts.slice(0, 5).map((alert) => {
             const Icon = getIcon(alert.type);
             const color = getColor(alert.type, alert.urgent);
+            const bgColor = getBgColor(alert.type);
             
             return (
               <div 
@@ -62,7 +75,9 @@ const AlertsPanel: React.FC<AlertsPanelProps> = ({ alerts, urgentAlerts }) => {
                   alert.urgent ? 'bg-red-50 border-red-200' : 'bg-gray-50 border-gray-200'
                 }`}
               >
-                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-white shadow-sm mt-0.5">
+                <div className={`flex items-center justify-center w-8 h-8 rounded-lg shadow-sm mt-0.5 ${
+                  alert.urgent ? 'bg-red-100' : bgColor
+                }`}>
                   <Icon className={`h-4 w-4 ${color}`} />
                 </div>
                 <div className="flex-1 min-w-0">

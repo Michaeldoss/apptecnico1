@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, Clock, RotateCcw, XCircle, AlertCircle } from 'lucide-react';
+import { CheckCircle, Clock, RotateCcw, XCircle, AlertCircle, Wrench } from 'lucide-react';
 import type { ServiceMetrics } from '@/types/dashboard';
 
 interface ServiceMetricsProps {
@@ -56,7 +56,12 @@ const ServiceMetricsComponent: React.FC<ServiceMetricsProps> = ({ metrics }) => 
   return (
     <Card className="h-full">
       <CardHeader className="pb-4">
-        <CardTitle className="text-lg font-semibold">Chamados em Tempo Real</CardTitle>
+        <CardTitle className="flex items-center gap-3 text-lg font-semibold">
+          <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
+            <Wrench className="h-4 w-4 text-blue-600" />
+          </div>
+          Chamados em Tempo Real
+        </CardTitle>
       </CardHeader>
       <CardContent className="pt-0">
         <div className="space-y-3">
@@ -68,7 +73,9 @@ const ServiceMetricsComponent: React.FC<ServiceMetricsProps> = ({ metrics }) => 
                 className={`flex items-center justify-between p-3 rounded-lg border ${item.bgColor} ${item.borderColor}`}
               >
                 <div className="flex items-center gap-3">
-                  <Icon className={`h-5 w-5 ${item.color}`} />
+                  <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center shadow-sm">
+                    <Icon className={`h-4 w-4 ${item.color}`} />
+                  </div>
                   <span className="text-sm font-medium">{item.label}</span>
                 </div>
                 <Badge variant="secondary" className={`${item.color} font-semibold`}>

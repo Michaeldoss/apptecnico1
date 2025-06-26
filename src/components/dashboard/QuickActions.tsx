@@ -10,7 +10,8 @@ import {
   Calendar,
   Wrench,
   CreditCard,
-  Package
+  Package,
+  Zap
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -69,7 +70,12 @@ const QuickActions: React.FC = () => {
   return (
     <Card>
       <CardHeader className="pb-4">
-        <CardTitle className="text-lg font-semibold">Acessos Rápidos</CardTitle>
+        <CardTitle className="flex items-center gap-3 text-lg font-semibold">
+          <div className="w-8 h-8 rounded-lg bg-yellow-100 flex items-center justify-center">
+            <Zap className="h-4 w-4 text-yellow-600" />
+          </div>
+          Acessos Rápidos
+        </CardTitle>
       </CardHeader>
       <CardContent className="pt-0">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -83,7 +89,9 @@ const QuickActions: React.FC = () => {
                   className={`${action.color} text-white flex flex-col gap-2 h-20 p-3 transition-all duration-200`}
                   onClick={() => alert('Funcionalidade em desenvolvimento')}
                 >
-                  <Icon className="h-5 w-5" />
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <Icon className="h-4 w-4" />
+                  </div>
                   <span className="text-xs text-center leading-tight">{action.label}</span>
                 </Button>
               );
@@ -92,7 +100,9 @@ const QuickActions: React.FC = () => {
             return (
               <Link key={action.label} to={action.href}>
                 <Button className={`${action.color} text-white flex flex-col gap-2 h-20 p-3 w-full transition-all duration-200`}>
-                  <Icon className="h-5 w-5" />
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <Icon className="h-4 w-4" />
+                  </div>
                   <span className="text-xs text-center leading-tight">{action.label}</span>
                 </Button>
               </Link>

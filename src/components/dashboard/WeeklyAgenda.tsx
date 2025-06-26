@@ -17,8 +17,10 @@ const WeeklyAgenda: React.FC<WeeklyAgendaProps> = ({ weeklySchedule, totalConfli
     <Card className="h-full">
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2 text-lg font-semibold">
-            <Calendar className="h-5 w-5" />
+          <CardTitle className="flex items-center gap-3 text-lg font-semibold">
+            <div className="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center">
+              <Calendar className="h-4 w-4 text-purple-600" />
+            </div>
             Agenda Semanal
           </CardTitle>
           {totalConflicts > 0 && (

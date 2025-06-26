@@ -1,9 +1,9 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Package, AlertTriangle, ShoppingCart } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Package, AlertTriangle, Plus } from 'lucide-react';
 import { StockItem } from '@/types/dashboard';
 
 interface StockControlProps {
@@ -16,8 +16,10 @@ const StockControl: React.FC<StockControlProps> = ({ stockItems, urgentItems }) 
     <Card className="h-full">
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2 text-lg font-semibold">
-            <Package className="h-5 w-5" />
+          <CardTitle className="flex items-center gap-3 text-lg font-semibold">
+            <div className="w-8 h-8 rounded-lg bg-orange-100 flex items-center justify-center">
+              <Package className="h-4 w-4 text-orange-600" />
+            </div>
             Controle de Estoque
           </CardTitle>
           {urgentItems.length > 0 && (
@@ -30,53 +32,48 @@ const StockControl: React.FC<StockControlProps> = ({ stockItems, urgentItems }) 
       </CardHeader>
       <CardContent className="pt-0 flex flex-col h-full">
         <div className="space-y-3 flex-1">
-          {stockItems.slice(0, 4).map((item) => {
-            const isLow = item.currentStock <= item.minStock;
-            const percentage = (item.currentStock / item.minStock) * 100;
-            
-            return (
-              <div key={item.id} className="flex items-center justify-between p-3 rounded-lg border bg-gray-50">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-sm font-medium">{item.name}</span>
-                    {isLow && (
-                      <Badge variant="destructive" className="text-xs">
-                        Baixo
-                      </Badge>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div className="flex-1 bg-gray-200 rounded-full h-2">
-                      <div 
-                        className={`h-2 rounded-full transition-all duration-300 ${
-                          percentage <= 50 ? 'bg-red-500' : 
-                          percentage <= 80 ? 'bg-yellow-500' : 'bg-green-500'
-                        }`}
-                        style={{ width: `${Math.min(percentage, 100)}%` }}
-                      />
-                    </div>
-                    <span className="text-xs text-muted-foreground font-medium min-w-fit">
-                      {item.currentStock}/{item.minStock}
-                    </span>
-                  </div>
+          {stockItems.slice(0, 4).map((item) => (
+            <div 
+              key={item.id} 
+              className={`flex items-center justify-between p-3 rounded-lg border ${
+                item.urgent || item.currentStock <= item.minStock
+                  ? 'bg-red-50 border-red-200' 
+                  : 'bg-gray-50 border-gray-200'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <div className={`w-8 h-8 rounded-lg flex items-center justify-center shadow-sm ${
+                  item.urgent || item.currentStock <= item.minStock
+                    ? 'bg-red-100' 
+                    : 'bg-white'
+                }`}>
+                  <Package className={`h-4 w-4 ${
+                    item.urgent || item.currentStock <= item.minStock
+                      ? 'text-red-600' 
+                      : 'text-orange-600'
+                  }`} />
+                </div>
+                <div>
+                  <h4 className="text-sm font-medium">{item.name}</h4>
+                  <p className="text-xs text-muted-foreground">
+                    Mín: {item.minStock} unidades
+                  </p>
                 </div>
               </div>
-            );
-          })}
+              <Badge 
+                variant={item.urgent || item.currentStock <= item.minStock ? "destructive" : "secondary"}
+                className="font-semibold"
+              >
+                {item.currentStock}
+              </Badge>
+            </div>
+          ))}
         </div>
         
-        {urgentItems.length > 0 && (
-          <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-            <p className="text-sm text-red-700 mb-3 flex items-center gap-2">
-              <AlertTriangle className="h-4 w-4" />
-              {urgentItems.length} ite{urgentItems.length > 1 ? 'ns' : 'm'} precisa{urgentItems.length > 1 ? 'm' : ''} reposição urgente
-            </p>
-            <Button size="sm" className="w-full" variant="outline">
-              <ShoppingCart className="h-4 w-4 mr-2" />
-              Solicitar Reposição
-            </Button>
-          </div>
-        )}
+        <Button variant="outline" className="w-full mt-4 flex items-center gap-2" size="sm">
+          <Plus className="h-4 w-4" />
+          Gerenciar Estoque
+        </Button>
       </CardContent>
     </Card>
   );
