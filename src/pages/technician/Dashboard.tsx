@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -129,9 +130,11 @@ const TechnicianDashboard = () => {
                   </span>
                 </li>
               </ul>
-              <Button variant="outline" className="w-full mt-4" asChild>
-                <Link to="/tecnico/servicos">Ver todos os serviços</Link>
-              </Button>
+              <Link to="/tecnico/servicos" className="block mt-4">
+                <Button variant="outline" className="w-full">
+                  Ver todos os serviços
+                </Button>
+              </Link>
             </CardContent>
           </Card>
           
@@ -141,15 +144,21 @@ const TechnicianDashboard = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                <Button className="w-full" asChild>
-                  <Link to="/tecnico/agenda">Ver Agenda</Link>
-                </Button>
-                <Button variant="outline" className="w-full" asChild>
-                  <Link to="/tecnico/perfil">Atualizar Perfil</Link>
-                </Button>
-                <Button variant="outline" className="w-full" asChild>
-                  <Link to="/tecnico/pecas">Gerenciar Peças</Link>
-                </Button>
+                <Link to="/tecnico/agenda">
+                  <Button className="w-full">
+                    Ver Agenda
+                  </Button>
+                </Link>
+                <Link to="/tecnico/perfil">
+                  <Button variant="outline" className="w-full">
+                    Atualizar Perfil
+                  </Button>
+                </Link>
+                <Link to="/tecnico/pecas">
+                  <Button variant="outline" className="w-full">
+                    Gerenciar Peças
+                  </Button>
+                </Link>
               </div>
             </CardContent>
           </Card>
