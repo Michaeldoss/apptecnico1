@@ -220,26 +220,50 @@ function App() {
               </ProtectedRoute>
             } />
 
-            {/* Store Routes */}
+            {/* Store Routes - Updated to use /loja/ prefix */}
+            <Route path="/loja/dashboard" element={
+              <ProtectedRoute allowedUserTypes={['company']}>
+                <CompanyDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/loja/companies" element={<CompanyList />} />
+            <Route path="/loja/profile" element={
+              <ProtectedRoute allowedUserTypes={['company']}>
+                <CompanyProfile />
+              </ProtectedRoute>
+            } />
+            <Route path="/loja/products" element={
+              <ProtectedRoute allowedUserTypes={['company']}>
+                <CompanyProducts />
+              </ProtectedRoute>
+            } />
+            <Route path="/loja/register" element={<CompanyRegister />} />
+            <Route path="/loja/settings" element={
+              <ProtectedRoute allowedUserTypes={['company']}>
+                <CompanySettings />
+              </ProtectedRoute>
+            } />
+
+            {/* Keep existing store routes for backward compatibility */}
             <Route path="/store/dashboard" element={
-              <ProtectedRoute allowedUserTypes={['store']}>
+              <ProtectedRoute allowedUserTypes={['company']}>
                 <CompanyDashboard />
               </ProtectedRoute>
             } />
             <Route path="/store/companies" element={<CompanyList />} />
             <Route path="/store/profile" element={
-              <ProtectedRoute allowedUserTypes={['store']}>
+              <ProtectedRoute allowedUserTypes={['company']}>
                 <CompanyProfile />
               </ProtectedRoute>
             } />
             <Route path="/store/products" element={
-              <ProtectedRoute allowedUserTypes={['store']}>
+              <ProtectedRoute allowedUserTypes={['company']}>
                 <CompanyProducts />
               </ProtectedRoute>
             } />
             <Route path="/store/register" element={<CompanyRegister />} />
             <Route path="/store/settings" element={
-              <ProtectedRoute allowedUserTypes={['store']}>
+              <ProtectedRoute allowedUserTypes={['company']}>
                 <CompanySettings />
               </ProtectedRoute>
             } />

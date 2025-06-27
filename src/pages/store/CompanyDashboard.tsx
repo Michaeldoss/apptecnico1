@@ -74,7 +74,7 @@ const CompanyDashboard = () => {
   
   if (!isAuthenticated || userType !== 'company') {
     console.log('CompanyDashboard - Redirecionando para registro');
-    return <Navigate to="/store/company-register" replace />;
+    return <Navigate to="/loja/register" replace />;
   }
 
   return (
@@ -96,13 +96,13 @@ const CompanyDashboard = () => {
               </div>
             </div>
             <div className="flex gap-2">
-              <Link to="/store/company-profile">
+              <Link to="/loja/profile">
                 <Button variant="outline">
                   <UserRound className="mr-2 h-4 w-4" />
                   Meu Perfil
                 </Button>
               </Link>
-              <Link to="/store/company-settings">
+              <Link to="/loja/settings">
                 <Button>
                   <Settings className="mr-2 h-4 w-4" />
                   Configurações
@@ -231,7 +231,7 @@ const CompanyDashboard = () => {
                       Gerencie o catálogo de produtos da sua loja
                     </CardDescription>
                   </div>
-                  <Link to="/store/company-products">
+                  <Link to="/loja/products">
                     <Button>
                       <Plus className="mr-2 h-4 w-4" />
                       Adicionar Produto
@@ -265,7 +265,7 @@ const CompanyDashboard = () => {
                   <p className="text-sm text-gray-500">
                     Mostrando produtos disponíveis
                   </p>
-                  <Link to="/store/company-products">
+                  <Link to="/loja/products">
                     <Button variant="outline" size="sm" className="flex items-center gap-1">
                       Ver todos os produtos
                       <ArrowRight className="h-4 w-4" />

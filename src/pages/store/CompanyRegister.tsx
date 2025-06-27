@@ -126,7 +126,7 @@ const CompanyRegister = () => {
       const loginSuccess = await login(data.email, data.password);
       
       if (loginSuccess) {
-        navigate('/store/company-dashboard');
+        navigate('/loja/dashboard');
       }
       
       form.reset();
@@ -152,7 +152,7 @@ const CompanyRegister = () => {
           title: "Login realizado com sucesso!",
           description: "Bem-vindo de volta. Você será redirecionado para o painel.",
         });
-        navigate('/store/company-dashboard');
+        navigate('/loja/dashboard');
       }
     } catch (error) {
       console.error('Erro ao fazer login:', error);
