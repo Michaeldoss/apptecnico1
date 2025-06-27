@@ -34,13 +34,13 @@ const SidebarItem = ({ to, icon: Icon, children, active, onClick }: SidebarItemP
     <Link
       to={to}
       className={cn(
-        "flex items-center gap-3 rounded-lg px-4 py-3 text-base transition-all duration-200 hover:bg-blue-500 font-inter font-medium",
+        "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-200 hover:bg-blue-400/50 font-inter font-medium",
         active ? "bg-white text-blue-600 shadow-sm" : "text-white hover:text-blue-100"
       )}
       onClick={onClick}
     >
-      <Icon className={cn("h-5 w-5", active ? "text-blue-600" : "text-white")} />
-      <span>{children}</span>
+      <Icon className={cn("h-4 w-4 flex-shrink-0", active ? "text-blue-600" : "text-yellow-400")} />
+      <span className="truncate">{children}</span>
     </Link>
   );
 };
@@ -110,15 +110,15 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
         {/* Sidebar */}
         <aside 
           className={cn(
-            "w-72 shrink-0 transition-all duration-300",
-            isMobile ? "fixed left-0 top-16 bottom-0 bg-gradient-to-b from-blue-600 to-blue-700 z-30 h-[calc(100vh-4rem)] px-6 pt-20 pb-6 shadow-2xl overflow-y-auto border-r-4 border-yellow-400" : "hidden md:block bg-gradient-to-b from-blue-600 to-blue-700 rounded-xl p-6 shadow-xl border-4 border-yellow-400",
+            "w-64 shrink-0 transition-all duration-300",
+            isMobile ? "fixed left-0 top-16 bottom-0 bg-gradient-to-b from-blue-400 to-blue-500 z-30 h-[calc(100vh-4rem)] px-4 pt-20 pb-6 shadow-2xl overflow-y-auto" : "hidden md:block bg-gradient-to-b from-blue-400 to-blue-500 rounded-xl p-4 shadow-xl",
             isMobile && !isMenuOpen ? "-translate-x-full" : isMobile && isMenuOpen ? "translate-x-0" : ""
           )}
         >
-          <div className="space-y-3 py-4">
-            <div className="mb-6 pb-4 border-b border-blue-400">
-              <h2 className="text-xl font-bold text-white">Menu Principal</h2>
-              <p className="text-blue-200 text-sm">Acesse suas funcionalidades</p>
+          <div className="space-y-2 py-4">
+            <div className="mb-6 pb-4 border-b border-blue-300">
+              <h2 className="text-lg font-bold text-white">Menu Principal</h2>
+              <p className="text-blue-100 text-xs">Acesse suas funcionalidades</p>
             </div>
             
             <SidebarItem 
@@ -205,15 +205,15 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
             </SidebarItem>
           </div>
           
-          <div className="pt-6 mt-8 border-t border-blue-400">
+          <div className="pt-4 mt-6 border-t border-blue-300">
             <button 
               onClick={() => {
                 handleLogout();
                 closeMenu();
               }}
-              className="flex items-center gap-3 rounded-lg px-4 py-3 text-base transition-all duration-200 hover:bg-red-500 text-white hover:text-red-100 w-full text-left font-inter font-medium bg-red-600 shadow-lg"
+              className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-200 hover:bg-red-500 text-white hover:text-red-100 w-full text-left font-inter font-medium bg-red-600 shadow-lg"
             >
-              <LogOut className="h-5 w-5 text-white" />
+              <LogOut className="h-4 w-4 text-white flex-shrink-0" />
               <span>Sair</span>
             </button>
           </div>
@@ -221,7 +221,7 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
         
         {/* Main content */}
         <main className={cn("flex-1 min-w-0", isMobile ? "pl-0" : "")}>
-          {/* Header melhorado - Mais limpo */}
+          {/* Header */}
           <div className={cn("mb-8", isMobile ? "mx-2" : "")}>
             <div className="flex items-center justify-between">
               <div>
