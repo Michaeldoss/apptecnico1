@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import CustomerLayout from '@/components/layout/CustomerLayout';
 import { Button } from '@/components/ui/button';
@@ -121,33 +120,26 @@ const CustomerEquipment = () => {
   return (
     <CustomerLayout title="Meus Equipamentos">
       <div className="space-y-8">
-        {/* Header com busca e adicionar - Melhorado */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
-            <div className="flex-1 max-w-md">
-              <label className="block text-sm font-semibold text-gray-700 mb-3">
-                Buscar Equipamentos
-              </label>
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <Input
-                  placeholder="Digite marca, modelo ou tipo..."
-                  className="pl-10 h-11 border-gray-300 focus:border-yellow-500 focus:ring-yellow-500"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Button className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 font-semibold px-6 py-3 h-11 shadow-lg hover:shadow-xl transition-all duration-200">
-                <Plus className="h-4 w-4 mr-2" />
-                Adicionar Equipamento
-              </Button>
+        {/* Header com busca e adicionar - Mais limpo */}
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+          <div className="flex-1 max-w-md">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Input
+                placeholder="Buscar por marca, modelo ou tipo..."
+                className="pl-10 h-12 bg-white border-2 border-gray-200 focus:border-yellow-500 focus:ring-yellow-500 shadow-md"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
             </div>
           </div>
+          <Button className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 font-semibold px-8 py-3 h-12 shadow-lg hover:shadow-xl transition-all duration-200 border-2 border-yellow-400">
+            <Plus className="h-5 w-5 mr-2" />
+            Adicionar Equipamento
+          </Button>
         </div>
 
-        {/* Grid de Equipamentos - Melhorado */}
+        {/* Grid de Equipamentos */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
           {filteredEquipment.map((item) => (
             <Card key={item.id} className="bg-white border-2 border-gray-200 hover:border-yellow-400 hover:shadow-xl transition-all duration-300 overflow-hidden">
@@ -167,7 +159,7 @@ const CustomerEquipment = () => {
                   )}
                 </div>
 
-                {/* Informações Principais - Organizadas */}
+                {/* Informações Principais */}
                 <div className="space-y-3">
                   <div className="flex justify-between items-start">
                     <div className="flex-1">
@@ -183,14 +175,14 @@ const CustomerEquipment = () => {
                     </div>
                   </div>
 
-                  {/* Informações Técnicas - Bem Organizadas */}
+                  {/* Informações Técnicas */}
                   <div className="bg-gray-50 rounded-lg p-3">
                     <div className="grid grid-cols-2 gap-3 text-sm">
                       <div className="flex items-center gap-2">
                         <MapPin className="h-4 w-4 text-blue-600 flex-shrink-0" />
                         <div>
                           <div className="text-gray-500 text-xs font-medium">Local</div>
-                          <div className="text-gray-800 font-semibold">{item.location}</div>
+                          <div className="text-gray-800 font-semibold truncate">{item.location}</div>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
@@ -220,8 +212,8 @@ const CustomerEquipment = () => {
               </CardHeader>
 
               <CardContent className="pt-4 space-y-4">
-                {/* Resumo Financeiro - Destacado */}
-                <div className="bg-gradient-to-r from-yellow-50 to-yellow-100 border border-yellow-200 rounded-lg p-4">
+                {/* Resumo Financeiro */}
+                <div className="bg-gradient-to-r from-yellow-50 to-yellow-100 border-2 border-yellow-200 rounded-lg p-4">
                   <h4 className="text-sm font-semibold text-yellow-800 mb-3">Resumo Financeiro</h4>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
@@ -237,7 +229,7 @@ const CustomerEquipment = () => {
                   </div>
                 </div>
 
-                {/* Botões de Ação - Bem Organizados */}
+                {/* Botões de Ação */}
                 <div className="space-y-3">
                   {/* Linha 1 - Botões Principais */}
                   <div className="grid grid-cols-2 gap-3">
@@ -245,7 +237,7 @@ const CustomerEquipment = () => {
                       variant="outline" 
                       size="sm"
                       onClick={() => handleViewDetails(item)}
-                      className="h-10 text-sm font-medium border-blue-200 text-blue-700 hover:bg-blue-50 hover:border-blue-300"
+                      className="h-10 text-sm font-medium border-2 border-blue-200 text-blue-700 hover:bg-blue-50 hover:border-blue-300"
                     >
                       <Eye className="h-4 w-4 mr-2" />
                       Ver Detalhes
@@ -254,7 +246,7 @@ const CustomerEquipment = () => {
                       variant="outline" 
                       size="sm"
                       onClick={() => handleViewServiceOrders(item)}
-                      className="h-10 text-sm font-medium border-purple-200 text-purple-700 hover:bg-purple-50 hover:border-purple-300"
+                      className="h-10 text-sm font-medium border-2 border-purple-200 text-purple-700 hover:bg-purple-50 hover:border-purple-300"
                     >
                       <FileText className="h-4 w-4 mr-2" />
                       Ver O.S.
@@ -267,7 +259,7 @@ const CustomerEquipment = () => {
                       variant="outline" 
                       size="sm"
                       onClick={() => handleViewParts(item)}
-                      className="h-10 text-sm font-medium border-orange-200 text-orange-700 hover:bg-orange-50 hover:border-orange-300"
+                      className="h-10 text-sm font-medium border-2 border-orange-200 text-orange-700 hover:bg-orange-50 hover:border-orange-300"
                     >
                       <Settings className="h-4 w-4 mr-2" />
                       Peças Usadas
@@ -288,7 +280,7 @@ const CustomerEquipment = () => {
                       <Button 
                         variant="outline" 
                         size="sm" 
-                        className="w-full h-10 text-sm font-medium border-gray-300 hover:bg-gray-50"
+                        className="w-full h-10 text-sm font-medium border-2 border-gray-300 hover:bg-gray-50"
                       >
                         <Edit className="h-4 w-4 mr-2" />
                         Mais Ações
@@ -314,7 +306,7 @@ const CustomerEquipment = () => {
           ))}
         </div>
 
-        {/* Estado vazio - Melhorado */}
+        {/* Estado vazio */}
         {filteredEquipment.length === 0 && (
           <div className="text-center py-16">
             <Card className="max-w-md mx-auto bg-white shadow-lg border-2 border-gray-200">
@@ -326,7 +318,7 @@ const CustomerEquipment = () => {
                 <p className="text-gray-600 mb-6">
                   {searchQuery ? 'Tente uma busca diferente ou' : 'Comece a'} adicionar seus equipamentos.
                 </p>
-                <Button className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 font-semibold px-6 py-3 shadow-lg hover:shadow-xl transition-all duration-200">
+                <Button className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 font-semibold px-6 py-3 shadow-lg hover:shadow-xl transition-all duration-200 border-2 border-yellow-400">
                   <Plus className="h-4 w-4 mr-2" />
                   Adicionar Equipamento
                 </Button>
