@@ -15,7 +15,8 @@ import {
   Menu,
   X,
   CreditCard,
-  FileText
+  FileText,
+  Crown
 } from 'lucide-react';
 import { useNotifications } from '@/hooks/useNotifications';
 import { Badge } from '@/components/ui/badge';
@@ -170,6 +171,14 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
               onClick={closeMenu}
             >
               Pagamentos
+            </SidebarItem>
+            <SidebarItem 
+              href={`${pathPrefix}/planos`} 
+              icon={Crown} 
+              active={location.pathname?.includes('/planos') || location.pathname?.includes('/subscription')}
+              onClick={closeMenu}
+            >
+              Planos
             </SidebarItem>
             <SidebarItem 
               href={`${pathPrefix}/agenda`} 

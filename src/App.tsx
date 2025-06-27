@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '@/context/AuthContext';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
@@ -62,14 +61,16 @@ import TechnicianSchedule from '@/pages/technician/Schedule';
 import TechnicianPayments from '@/pages/technician/Payments';
 import TechnicianChat from '@/pages/technician/Chat';
 import TechnicianLanding from '@/pages/technician/Landing';
+import TechnicianSubscription from './pages/technician/Subscription';
 
 import './App.css';
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
+    <BrowserRouter>
+      <AuthProvider>
         <div className="App">
+          <Toaster />
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Index />} />
@@ -298,13 +299,19 @@ function App() {
               </ProtectedRoute>
             } />
 
+            {/* Add new route for technician subscription */}
+            <Route path="/tecnico/planos" element={
+              <ProtectedRoute userType="technician">
+                <TechnicianSubscription />
+              </ProtectedRoute>
+            } />
+
             {/* 404 Route */}
             <Route path="*" element={<NotFound />} />
           </Routes>
-          <Toaster />
         </div>
-      </Router>
-    </AuthProvider>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 
