@@ -8,12 +8,20 @@ interface PlanLimits {
   equipment: { current: number; max: number };
 }
 
+interface CommissionData {
+  servicesCompleted: number;
+  appCommission: number;
+  availableBalance: number;
+  commissionRate: number;
+}
+
 interface SubscriptionData {
-  planType: 'free' | 'basic' | 'professional' | 'corporate';
+  planType: 'free' | 'basic' | 'professional' | 'premium';
   planName: string;
   expiresAt?: string;
   daysRemaining?: number;
   limits: PlanLimits;
+  commissions: CommissionData;
 }
 
 const defaultLimits = {
@@ -28,15 +36,22 @@ const defaultLimits = {
     equipment: { max: 10 }
   },
   professional: {
+    clients: { max: 20 },
+    serviceCalls: { max: 40 },
+    equipment: { max: 10 }
+  },
+  premium: {
     clients: { max: -1 }, // ilimitado
     serviceCalls: { max: -1 },
     equipment: { max: -1 }
-  },
-  corporate: {
-    clients: { max: -1 },
-    serviceCalls: { max: -1 },
-    equipment: { max: -1 }
   }
+};
+
+const commissionRates = {
+  free: 0.10, // 10%
+  basic: 0.08, // 8%
+  professional: 0.08, // 8%
+  premium: 0.05 // 5%
 };
 
 export const useSubscription = () => {
@@ -57,6 +72,12 @@ export const useSubscription = () => {
             clients: { current: 1, max: defaultLimits.free.clients.max },
             serviceCalls: { current: 3, max: defaultLimits.free.serviceCalls.max },
             equipment: { current: 1, max: defaultLimits.free.equipment.max }
+          },
+          commissions: {
+            servicesCompleted: 4500,
+            appCommission: 450,
+            availableBalance: 4050,
+            commissionRate: commissionRates.free
           }
         };
 
@@ -82,19 +103,25 @@ export const useSubscription = () => {
       case 'pdf_export':
         return planType !== 'free';
       case 'full_history':
-        return planType === 'professional' || planType === 'corporate';
+        return planType === 'professional' || planType === 'premium';
       case 'parts_control':
         return planType !== 'free';
       case 'advanced_parts':
-        return planType === 'professional' || planType === 'corporate';
+        return planType === 'professional' || planType === 'premium';
       case 'digital_signature':
-        return planType === 'professional' || planType === 'corporate';
+        return planType === 'professional' || planType === 'premium';
       case 'advanced_reports':
-        return planType === 'professional' || planType === 'corporate';
+        return planType === 'professional' || planType === 'premium';
       case 'team_access':
-        return planType === 'corporate';
+        return planType === 'premium';
       case 'multi_company':
-        return planType === 'corporate';
+        return planType === 'premium';
+      case 'priority_support':
+        return planType !== 'free';
+      case 'parts_store':
+        return planType !== 'free';
+      case 'analytics':
+        return planType === 'premium';
       default:
         return true;
     }
@@ -107,16 +134,37 @@ export const useSubscription = () => {
     return limit.max === -1 || limit.current < limit.max;
   };
 
-  const upgradePlan = (newPlanType: 'basic' | 'professional' | 'corporate') => {
+  const getRequiredPlan = (feature: string): 'basic' | 'professional' | 'premium' => {
+    switch (feature) {
+      case 'pdf_export':
+      case 'parts_control':
+      case 'parts_store':
+        return 'basic';
+      case 'full_history':
+      case 'advanced_parts':
+      case 'digital_signature':
+      case 'advanced_reports':
+        return 'professional';
+      case 'team_access':
+      case 'multi_company':
+      case 'analytics':
+        return 'premium';
+      default:
+        return 'basic';
+    }
+  };
+
+  const upgradePlan = (newPlanType: 'basic' | 'professional' | 'premium') => {
     if (!subscription) return;
 
     const planNames = {
       basic: 'Básico',
       professional: 'Profissional',
-      corporate: 'Corporativo'
+      premium: 'Premium'
     };
 
     const newLimits = defaultLimits[newPlanType];
+    const newCommissionRate = commissionRates[newPlanType];
     
     setSubscription({
       ...subscription,
@@ -128,6 +176,10 @@ export const useSubscription = () => {
         clients: { current: subscription.limits.clients.current, max: newLimits.clients.max },
         serviceCalls: { current: subscription.limits.serviceCalls.current, max: newLimits.serviceCalls.max },
         equipment: { current: subscription.limits.equipment.current, max: newLimits.equipment.max }
+      },
+      commissions: {
+        ...subscription.commissions,
+        commissionRate: newCommissionRate
       }
     });
   };
@@ -137,6 +189,7 @@ export const useSubscription = () => {
     loading,
     checkPermission,
     checkLimit,
+    getRequiredPlan,
     upgradePlan
   };
 };

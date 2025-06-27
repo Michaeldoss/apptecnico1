@@ -14,7 +14,7 @@ interface PlanLimits {
 
 interface CurrentPlanStatusProps {
   planName: string;
-  planType: 'free' | 'basic' | 'professional' | 'corporate';
+  planType: 'free' | 'basic' | 'professional' | 'premium';
   expiresAt?: string;
   daysRemaining?: number;
   limits?: PlanLimits;
@@ -25,14 +25,14 @@ const planIcons = {
   free: AlertTriangle,
   basic: Users,
   professional: Wrench,
-  corporate: Crown
+  premium: Crown
 };
 
 const planColors = {
   free: 'bg-yellow-500',
   basic: 'bg-blue-500',
   professional: 'bg-purple-500',
-  corporate: 'bg-gold-500'
+  premium: 'bg-gold-500'
 };
 
 const CurrentPlanStatus: React.FC<CurrentPlanStatusProps> = ({
@@ -46,13 +46,6 @@ const CurrentPlanStatus: React.FC<CurrentPlanStatusProps> = ({
   const Icon = planIcons[planType];
   const colorClass = planColors[planType];
   
-  const getProgressColor = (current: number, max: number) => {
-    const percentage = (current / max) * 100;
-    if (percentage >= 90) return 'bg-red-500';
-    if (percentage >= 70) return 'bg-yellow-500';
-    return 'bg-green-500';
-  };
-
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('pt-BR');
   };
@@ -72,7 +65,7 @@ const CurrentPlanStatus: React.FC<CurrentPlanStatusProps> = ({
           </div>
         </div>
         
-        {planType !== 'corporate' && (
+        {planType !== 'premium' && (
           <Button onClick={onUpgrade} size="sm" className="bg-tech-primary hover:bg-tech-primary-hover">
             Fazer Upgrade
           </Button>
@@ -100,33 +93,38 @@ const CurrentPlanStatus: React.FC<CurrentPlanStatusProps> = ({
           </div>
         )}
 
+        {/* Separador */}
+        <div className="border-t border-gray-200"></div>
+
         {/* Limites de uso */}
         {limits && (
           <div className="space-y-4">
-            <h4 className="text-sm font-medium text-gray-700">Uso atual</h4>
+            <h4 className="text-sm font-medium text-gray-700">Detalhes do uso</h4>
             
             {/* Clientes */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Users className="h-4 w-4 text-gray-500" />
+                  <Users className="h-4 w-4 text-gray-500 flex-shrink-0" />
                   <span className="text-sm">Clientes</span>
                 </div>
                 <span className="text-sm font-medium">
-                  {limits.clients.current}/{limits.clients.max}
+                  {limits.clients.current}/{limits.clients.max === -1 ? '∞' : limits.clients.max}
                 </span>
               </div>
-              <Progress 
-                value={(limits.clients.current / limits.clients.max) * 100} 
-                className="h-2"
-              />
+              {limits.clients.max !== -1 && (
+                <Progress 
+                  value={(limits.clients.current / limits.clients.max) * 100} 
+                  className="h-2"
+                />
+              )}
             </div>
 
             {/* Chamados */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <FileText className="h-4 w-4 text-gray-500" />
+                  <FileText className="h-4 w-4 text-gray-500 flex-shrink-0" />
                   <span className="text-sm">Chamados</span>
                 </div>
                 <span className="text-sm font-medium">
@@ -145,7 +143,7 @@ const CurrentPlanStatus: React.FC<CurrentPlanStatusProps> = ({
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Wrench className="h-4 w-4 text-gray-500" />
+                  <Wrench className="h-4 w-4 text-gray-500 flex-shrink-0" />
                   <span className="text-sm">Equipamentos</span>
                 </div>
                 <span className="text-sm font-medium">
@@ -164,15 +162,15 @@ const CurrentPlanStatus: React.FC<CurrentPlanStatusProps> = ({
 
         {/* Alerta para plano gratuito */}
         {planType === 'free' && daysRemaining && daysRemaining <= 3 && (
-          <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+          <div className="p-3 bg-yellow-100 border border-yellow-300 rounded-lg">
             <div className="flex items-center gap-2">
-              <AlertTriangle className="h-4 w-4 text-yellow-600" />
-              <span className="text-sm font-medium text-yellow-800">
-                Seu teste expira em {daysRemaining} {daysRemaining === 1 ? 'dia' : 'dias'}
+              <AlertTriangle className="h-4 w-4 text-yellow-700" />
+              <span className="text-sm font-medium text-black">
+                ⚠️ Seu plano gratuito expira em {daysRemaining} {daysRemaining === 1 ? 'dia' : 'dias'}
               </span>
             </div>
-            <p className="text-xs text-yellow-700 mt-1">
-              Faça upgrade para continuar usando todas as funcionalidades.
+            <p className="text-xs text-black mt-1">
+              Após esse prazo, seus recursos serão limitados. Faça upgrade para continuar.
             </p>
           </div>
         )}

@@ -6,7 +6,7 @@ import { Lock, Crown, Star, Zap } from 'lucide-react';
 
 interface FeatureBlockerProps {
   feature: string;
-  requiredPlan: 'basic' | 'professional' | 'corporate';
+  requiredPlan: 'basic' | 'professional' | 'premium';
   onUpgrade?: () => void;
   children?: React.ReactNode;
 }
@@ -26,8 +26,8 @@ const planInfo = {
     bgColor: 'bg-purple-50',
     borderColor: 'border-purple-200'
   },
-  corporate: {
-    name: 'Corporativo',
+  premium: {
+    name: 'Premium',
     icon: Crown,
     color: 'text-gold-500',
     bgColor: 'bg-yellow-50',
@@ -63,10 +63,10 @@ const FeatureBlocker: React.FC<FeatureBlockerProps> = ({
         </CardTitle>
         
         <p className="text-sm text-gray-600 mt-2">
-          Esta funcionalidade está disponível no 
+          ⚠️ Essa funcionalidade está disponível no 
           <span className={`font-semibold ${plan.color} mx-1`}>
             Plano {plan.name}
-          </span>
+          </span>. Faça upgrade agora.
         </p>
       </CardHeader>
 
