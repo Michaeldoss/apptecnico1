@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Navbar from '@/components/layout/Navbar';
@@ -17,9 +16,10 @@ import {
 } from 'lucide-react';
 import { useCart } from '@/hooks/useCart';
 import { formatCurrency } from '@/lib/format';
+import { MarketplaceProduct } from '@/types/marketplace';
 
 // This would normally fetch product data based on the ID
-const mockProduct = {
+const mockProduct: MarketplaceProduct = {
   id: '1',
   vendorId: 'vendor1',
   vendorName: 'TechParts Pro',
@@ -46,7 +46,9 @@ const mockProduct = {
   ativo: true,
   criadoEm: '2024-01-15',
   atualizadoEm: '2024-01-15',
-  observacoes: 'Produto testado e aprovado por nossos técnicos.'
+  observacoes: 'Produto testado e aprovado por nossos técnicos.',
+  sku: 'DMP-001',
+  ncm: '84439990'
 };
 
 const ProductDetails = () => {
