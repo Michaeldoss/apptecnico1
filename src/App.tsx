@@ -67,7 +67,7 @@ import './App.css';
 
 function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <AuthProvider>
         <div className="App">
           <Toaster />
@@ -301,7 +301,7 @@ function App() {
 
             {/* Add new route for technician subscription */}
             <Route path="/tecnico/planos" element={
-              <ProtectedRoute userType="technician">
+              <ProtectedRoute allowedUserTypes={['technician']}>
                 <TechnicianSubscription />
               </ProtectedRoute>
             } />
@@ -311,7 +311,7 @@ function App() {
           </Routes>
         </div>
       </AuthProvider>
-    </BrowserRouter>
+    </Router>
   );
 }
 
