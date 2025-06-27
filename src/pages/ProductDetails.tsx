@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Navbar from '@/components/layout/Navbar';
@@ -25,7 +26,7 @@ const mockProduct: MarketplaceProduct = {
   vendorName: 'TechParts Pro',
   vendorRating: 4.8,
   nome: 'Damper UV Premium - Epson DX5',
-  categoria: 'damper',
+  categoria: 'damper', // Fixed: using valid ProductCategory value
   preco: 45.90,
   precoOriginal: 55.00,
   desconto: 17,
