@@ -35,7 +35,7 @@ const CompanyProfile = () => {
   
   // Redirect to login if not authenticated or not a company
   if (!isAuthenticated || userType !== 'company') {
-    return <Navigate to="/store/company-register" replace />;
+    return <Navigate to="/loja/register" replace />;
   }
 
   // Handle form submission (mock)
@@ -83,7 +83,7 @@ const CompanyProfile = () => {
                 </p>
               </div>
             </div>
-            <Link to="/store/company-dashboard">
+            <Link to="/loja/dashboard">
               <Button variant="outline">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Voltar para Dashboard
