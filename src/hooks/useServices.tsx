@@ -1,277 +1,164 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { Service, ServiceRequest } from '@/types/service';
 import { toast } from '@/hooks/use-toast';
-import { Service, ServiceStatus, PaymentStatus } from '@/types/service';
 
-// Mock data - in a real app, this would come from an API
+// Mock data com informações de pagamento para demonstração
 const mockServices: Service[] = [
   {
     id: 1,
-    client: 'João Silva',
-    type: 'Reparo de Computador',
-    description: 'PC não liga, possível problema na fonte',
-    status: 'pendente',
-    date: '24/07/2023',
-    address: 'Rua Augusta, 1500, São Paulo - SP',
+    client: 'Cliente Demo',
+    type: 'Manutenção de Impressora',
+    description: 'Manutenção preventiva da impressora HP LaserJet',
+    status: 'concluído',
+    date: '2024-01-15',
+    address: 'Rua das Flores, 123 - Centro',
     price: 'R$ 150,00',
-    tracking: {
-      checkedIn: false,
-      checkedOut: false
+    equipmentType: 'Impressora',
+    clientId: 1,
+    payment: {
+      status: 'aguardando',
+      method: 'PIX',
+      date: '2024-01-15'
     },
-    clientRating: null,
-    technicianRating: null
+    tracking: {
+      checkedIn: true,
+      checkedOut: true,
+      checkinTime: '09:00',
+      checkoutTime: '11:30',
+      location: 'Rua das Flores, 123'
+    }
   },
   {
     id: 2,
-    client: 'Maria Oliveira',
-    type: 'Instalação de Rede',
-    description: 'Instalação de rede Wi-Fi e configuração',
+    client: 'Cliente Demo',
+    type: 'Instalação de Plotter',
+    description: 'Instalação e configuração de plotter de recorte',
     status: 'em andamento',
-    date: '22/07/2023',
-    address: 'Av. Paulista, 900, São Paulo - SP',
-    price: 'R$ 200,00',
+    date: '2024-01-20',
+    address: 'Av. Principal, 456 - Bairro Novo',
+    price: 'R$ 300,00',
+    equipmentType: 'Plotter',
+    clientId: 1,
     tracking: {
       checkedIn: true,
       checkedOut: false,
-      checkinTime: '22/07/2023 14:30'
-    },
-    clientRating: null,
-    technicianRating: null
+      checkinTime: '14:00',
+      location: 'Av. Principal, 456'
+    }
   },
   {
     id: 3,
-    client: 'Pedro Santos',
-    type: 'Manutenção de Impressora',
-    description: 'Impressora com problema de papel preso',
+    client: 'Cliente Demo',
+    type: 'Reparo de Scanner',
+    description: 'Reparo do sistema de alimentação de papel',
     status: 'concluído',
-    date: '20/07/2023',
-    address: 'Rua Consolação, 250, São Paulo - SP',
-    price: 'R$ 100,00',
+    date: '2024-01-10',
+    address: 'Rua do Comércio, 789 - Centro',
+    price: 'R$ 200,00',
+    equipmentType: 'Scanner',
+    clientId: 1,
+    payment: {
+      status: 'pago',
+      method: 'Cartão de Crédito',
+      date: '2024-01-12'
+    },
     tracking: {
       checkedIn: true,
       checkedOut: true,
-      checkinTime: '20/07/2023 09:15',
-      checkoutTime: '20/07/2023 10:45'
-    },
-    payment: {
-      status: 'pago',
-      method: 'cartão de crédito',
-      date: '20/07/2023'
-    },
-    clientRating: 4.5,
-    technicianRating: 5
+      checkinTime: '08:30',
+      checkoutTime: '10:45',
+      location: 'Rua do Comércio, 789'
+    }
   },
   {
     id: 4,
-    client: 'Ana Costa',
-    type: 'Formatação de Notebook',
-    description: 'Formatação completa e instalação de softwares',
+    client: 'Cliente Demo',
+    type: 'Orçamento de CNC',
+    description: 'Orçamento para reparo de CNC Router',
     status: 'concluído',
-    date: '18/07/2023',
-    address: 'Av. Brigadeiro Faria Lima, 1200, São Paulo - SP',
-    price: 'R$ 180,00',
-    tracking: {
-      checkedIn: true,
-      checkedOut: true,
-      checkinTime: '18/07/2023 13:00',
-      checkoutTime: '18/07/2023 16:30'
-    },
+    date: '2024-01-18',
+    address: 'Industrial Park, 321 - Zona Industrial',
+    price: 'R$ 450,00',
+    equipmentType: 'CNC',
+    clientId: 1,
     payment: {
-      status: 'pago',
-      method: 'transferência bancária',
-      date: '18/07/2023'
-    },
-    clientRating: 5,
-    technicianRating: 4
-  },
-  {
-    id: 5,
-    client: 'Carlos Mendes',
-    type: 'Reparo de Smartphone',
-    description: 'Troca de tela quebrada',
-    status: 'cancelado',
-    date: '15/07/2023',
-    address: 'Rua Oscar Freire, 500, São Paulo - SP',
-    price: 'R$ 250,00',
-    tracking: {
-      checkedIn: false,
-      checkedOut: false
-    },
-    clientRating: null,
-    technicianRating: null
-  },
+      status: 'parcial',
+      method: 'Transferência',
+      date: '2024-01-19'
+    }
+  }
 ];
 
 export const useServices = () => {
   const [services, setServices] = useState<Service[]>(mockServices);
-  const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
-  
-  // Filter services based on search query
-  const filteredServices = services.filter(service => 
-    service.client.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    service.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    service.description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-  
-  // Handle check-in/check-out actions
-  const handleTrackingAction = (service: Service, action: 'checkin' | 'checkout') => {
-    const now = new Date();
-    const formattedDate = now.toLocaleDateString('pt-BR') + ' ' + 
-                         now.getHours().toString().padStart(2, '0') + ':' + 
-                         now.getMinutes().toString().padStart(2, '0');
-    
-    const updatedServices = services.map(s => {
-      if (s.id === service.id) {
-        if (action === 'checkin') {
-          return {
-            ...s,
-            status: 'em andamento' as ServiceStatus,
-            tracking: {
-              ...s.tracking,
-              checkedIn: true,
-              checkinTime: formattedDate
-            }
-          };
-        } else if (action === 'checkout') {
-          return {
-            ...s,
-            status: 'concluído' as ServiceStatus,
-            tracking: {
-              ...s.tracking,
-              checkedOut: true,
-              checkoutTime: formattedDate
-            }
-          };
-        }
-      }
-      return s;
-    });
-    
-    setServices(updatedServices);
-    
-    // Show toast notification
-    toast({
-      title: action === 'checkin' ? "Check-in realizado!" : "Check-out realizado!",
-      description: action === 'checkin' 
-        ? `Você iniciou o serviço para ${service.client} às ${formattedDate}.`
-        : `Você finalizou o serviço para ${service.client} às ${formattedDate}.`,
-    });
 
-    return formattedDate;
-  };
-
-  // Function to rate a technician
-  const rateTechnician = (serviceId: number, rating: number) => {
-    const updatedServices = services.map(s => {
-      if (s.id === serviceId) {
-        return {
-          ...s,
-          technicianRating: rating
-        };
-      }
-      return s;
-    });
-    
-    setServices(updatedServices);
-    
-    toast({
-      title: "Avaliação enviada!",
-      description: `Você avaliou o técnico com ${rating} estrelas.`,
-    });
-  };
-
-  // Function to rate a client
-  const rateClient = (serviceId: number, rating: number) => {
-    const updatedServices = services.map(s => {
-      if (s.id === serviceId) {
-        return {
-          ...s,
-          clientRating: rating
-        };
-      }
-      return s;
-    });
-    
-    setServices(updatedServices);
-    
-    toast({
-      title: "Avaliação enviada!",
-      description: `Você avaliou o cliente com ${rating} estrelas.`,
-    });
-  };
-
-  // Function to request a new service
-  const requestService = (serviceData: Partial<Service>) => {
-    // Generate a new ID by getting the max ID and adding 1
-    const newId = Math.max(...services.map(s => s.id)) + 1;
-    
+  const addService = (serviceRequest: ServiceRequest) => {
     const newService: Service = {
-      id: newId,
-      client: serviceData.client || 'Cliente',
-      type: serviceData.type || 'Serviço não especificado',
-      description: serviceData.description || '',
+      id: services.length + 1,
+      client: 'Cliente Demo',
+      type: serviceRequest.type,
+      description: serviceRequest.description,
       status: 'pendente',
-      date: serviceData.date || new Date().toLocaleDateString('pt-BR'),
-      address: serviceData.address || '',
-      price: serviceData.price || 'A definir',
-      tracking: {
-        checkedIn: false,
-        checkedOut: false
-      },
-      clientRating: null,
-      technicianRating: null
+      date: serviceRequest.date,
+      address: serviceRequest.address,
+      price: 'A definir',
+      equipmentType: 'Não especificado',
+      clientId: 1
     };
-    
-    setServices([...services, newService]);
-    
+
+    setServices(prev => [...prev, newService]);
+
     toast({
-      title: "Serviço solicitado!",
-      description: "Sua solicitação de serviço foi enviada com sucesso.",
+      title: "Solicitação enviada com sucesso!",
+      description: "Entraremos em contato em breve para agendar o serviço.",
     });
-    
-    return newService;
   };
 
-  // Function to process a payment
   const processPayment = (serviceId: number, method: string) => {
-    const now = new Date();
-    const formattedDate = now.toLocaleDateString('pt-BR');
-    
-    const updatedServices = services.map(s => {
-      if (s.id === serviceId) {
-        return {
-          ...s,
-          payment: {
-            status: 'pago' as PaymentStatus,
-            method,
-            date: formattedDate
-          }
-        };
-      }
-      return s;
-    });
-    
-    setServices(updatedServices);
-    
+    setServices(prev => 
+      prev.map(service => 
+        service.id === serviceId 
+          ? { 
+              ...service, 
+              payment: { 
+                status: 'pago',
+                method,
+                date: new Date().toISOString().split('T')[0]
+              }
+            }
+          : service
+      )
+    );
+
     toast({
-      title: "Pagamento realizado!",
-      description: `Pagamento de ${method} processado com sucesso.`,
+      title: "Pagamento processado!",
+      description: "Obrigado pelo pagamento. Seu serviço foi finalizado.",
     });
   };
-  
+
+  const rateTechnician = (serviceId: number, rating: number) => {
+    setServices(prev => 
+      prev.map(service => 
+        service.id === serviceId 
+          ? { ...service, technicianRating: rating }
+          : service
+      )
+    );
+
+    toast({
+      title: "Avaliação enviada!",
+      description: "Obrigado pela sua avaliação. Ela nos ajuda a melhorar nossos serviços.",
+    });
+  };
+
   return {
-    services: filteredServices,
-    data: filteredServices,
+    services,
+    data: services,
     isLoading,
-    error,
-    searchQuery,
-    setSearchQuery,
-    handleTrackingAction,
-    rateTechnician,
-    rateClient,
-    requestService,
-    processPayment
+    addService,
+    processPayment,
+    rateTechnician
   };
 };
