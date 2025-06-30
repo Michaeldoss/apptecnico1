@@ -93,6 +93,7 @@ const mockServices: Service[] = [
 export const useServices = () => {
   const [services, setServices] = useState<Service[]>(mockServices);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const addService = (serviceRequest: ServiceRequest) => {
     const newService: Service = {
@@ -157,7 +158,9 @@ export const useServices = () => {
     services,
     data: services,
     isLoading,
+    error,
     addService,
+    requestService: addService, // Alias para addService
     processPayment,
     rateTechnician
   };
