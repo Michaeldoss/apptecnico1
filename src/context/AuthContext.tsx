@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { toast } from '@/hooks/use-toast';
 
@@ -8,7 +7,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   userType: UserType;
   user: any | null;
-  login: (email: string, password: string) => Promise<boolean>;
+  login: (email: string, password: string, selectedUserType?: 'customer' | 'technician' | 'company') => Promise<boolean>;
   logout: () => void;
   isLoading: boolean;
   getSession: () => Promise<{ user: any } | null>;
@@ -103,7 +102,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => clearTimeout(timer);
   }, []);
 
-  const login = async (email: string, password: string): Promise<boolean> => {
+  const login = async (email: string, password: string, selectedUserType?: 'customer' | 'technician' | 'company'): Promise<boolean> => {
     console.log('[DEBUG] Iniciando login para:', email);
     
     try {
@@ -161,17 +160,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         // Buscar se o usuário já existe por email
         let foundUser = mockUsers.find(u => u.email === email);
         
-        // Se não existir, criar um novo usuário
+        // Se não existir, criar um novo usuário com o tipo selecionado
         if (!foundUser) {
+          const userTypeMap = {
+            'customer': 'cliente',
+            'technician': 'tecnico', 
+            'company': 'loja'
+          };
+          
           foundUser = {
             id: Date.now(), // ID único baseado no timestamp
             name: email.split('@')[0], // Nome baseado no email
             email: email,
             password: 'google_user',
-            type: 'customer', // Tipo padrão para novos usuários do Google
-            tipo: 'cliente'
+            type: selectedUserType || 'customer', // Usar tipo selecionado ou padrão
+            tipo: userTypeMap[selectedUserType || 'customer']
           };
-          console.log('[DEBUG] Novo usuário Google criado:', foundUser.name);
+          console.log('[DEBUG] Novo usuário Google criado:', foundUser.name, 'como', foundUser.type);
+        } else {
+          // Se o usuário já existe, usar o tipo selecionado se fornecido
+          if (selectedUserType) {
+            foundUser = { ...foundUser, type: selectedUserType };
+            console.log('[DEBUG] Tipo de usuário atualizado para:', selectedUserType);
+          }
         }
         
         const { password: _, ...userWithoutPassword } = foundUser;
