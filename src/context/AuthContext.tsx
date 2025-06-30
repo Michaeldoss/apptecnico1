@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { toast } from '@/hooks/use-toast';
 
@@ -168,8 +169,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             email: email,
             password: 'google_user',
             type: 'customer', // Tipo padrão para novos usuários do Google
-            tipo: 'cliente',
-            isGoogleUser: true
+            tipo: 'cliente'
           };
           console.log('[DEBUG] Novo usuário Google criado:', foundUser.name);
         }
