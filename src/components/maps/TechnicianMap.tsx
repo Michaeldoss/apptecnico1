@@ -16,7 +16,6 @@ const TechnicianMap: React.FC<TechnicianMapProps> = ({
   setSelectedTechnician
 }) => {
   const mapRef = useRef<HTMLDivElement>(null);
-  const [mapLoaded, setMapLoaded] = useState(false);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const { toast } = useToast();
 
@@ -80,17 +79,9 @@ const TechnicianMap: React.FC<TechnicianMapProps> = ({
     }
   };
 
-  // Simular carregamento
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setMapLoaded(true);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, []);
-
-  // Calcular posição relativa dos marcadores no mapa simulado
+  // Calcular posição relativa dos marcadores no mapa
   const calculatePosition = (index: number, total: number) => {
-    const radius = 40;
+    const radius = 35;
     const angle = (index / total) * 2 * Math.PI;
     const centerX = 50;
     const centerY = 50;
@@ -102,25 +93,29 @@ const TechnicianMap: React.FC<TechnicianMapProps> = ({
   };
 
   return (
-    <div 
-      ref={mapRef} 
-      className="w-full h-full bg-blue-50 relative overflow-hidden rounded-lg border"
-    >
-      {!mapLoaded && (
-        <div className="absolute inset-0 flex items-center justify-center bg-blue-50/80">
-          <div className="flex flex-col items-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
-            <p className="text-muted-foreground">Carregando localização dos técnicos...</p>
-          </div>
-        </div>
-      )}
+    <div className="w-full h-full relative overflow-hidden rounded-lg border">
+      {/* Google Maps Embed */}
+      <div className="absolute inset-0">
+        {userLocation && (
+          <iframe
+            src={`https://www.google.com/maps/embed/v1/view?key=AIzaSyBVhq1HrZhP9VCFRvGF8_Y8w8Z3P1m2p3M&center=${userLocation.lat},${userLocation.lng}&zoom=12&maptype=roadmap`}
+            width="100%"
+            height="100%"
+            style={{ border: 0 }}
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            className="rounded-lg"
+          />
+        )}
+      </div>
       
-      {/* Área do mapa simulado com marcadores */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-100 to-green-100">
+      {/* Overlay com marcadores dos técnicos */}
+      <div className="absolute inset-0 pointer-events-none">
         {/* Marcador para localização do usuário */}
         {userLocation && (
           <div 
-            className="absolute w-6 h-6 transform -translate-x-1/2 -translate-y-1/2 z-20"
+            className="absolute w-6 h-6 transform -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-auto"
             style={{ left: '50%', top: '50%' }}
             title="Sua localização"
           >
@@ -137,7 +132,7 @@ const TechnicianMap: React.FC<TechnicianMapProps> = ({
           return (
             <div
               key={technician.id}
-              className={`absolute cursor-pointer transition-all transform -translate-x-1/2 -translate-y-1/2 z-10 ${isSelected ? 'scale-125' : ''}`}
+              className={`absolute cursor-pointer transition-all transform -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-auto ${isSelected ? 'scale-125' : ''}`}
               style={{ left: `${position.x}%`, top: `${position.y}%` }}
               onClick={() => handleMarkerClick(technician)}
               title={`${technician.name} - Clique para ver detalhes`}
@@ -177,43 +172,23 @@ const TechnicianMap: React.FC<TechnicianMapProps> = ({
             </div>
           );
         })}
-        
-        {/* Botão para abrir Google Maps completo */}
-        <div className="absolute top-4 left-4">
-          <button 
-            onClick={openGoogleMaps}
-            className="bg-white px-3 py-2 rounded-lg shadow-lg hover:bg-gray-50 transition-colors text-sm font-medium flex items-center gap-2"
-          >
-            <MapPin className="h-4 w-4 text-blue-600" />
-            Abrir no Google Maps
-          </button>
-        </div>
-        
-        {/* Controles do mapa simulado */}
-        <div className="absolute bottom-4 right-4 flex flex-col gap-2">
-          <button 
-            className="bg-white p-2 rounded-full shadow hover:bg-gray-100"
-            title="Zoom in"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-700">
-              <path d="M5 12h14"/><path d="M12 5v14"/>
-            </svg>
-          </button>
-          <button 
-            className="bg-white p-2 rounded-full shadow hover:bg-gray-100"
-            title="Zoom out"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-700">
-              <path d="M5 12h14"/>
-            </svg>
-          </button>
-        </div>
-        
-        {/* Informação sobre integração com Google Maps */}
-        <div className="absolute left-0 right-0 bottom-4 flex justify-center pointer-events-none">
-          <div className="bg-white/90 backdrop-blur px-4 py-2 rounded-full text-xs text-center shadow">
-            Integrado com Google Maps - Clique nos técnicos para ver rotas
-          </div>
+      </div>
+      
+      {/* Botão para abrir Google Maps completo */}
+      <div className="absolute top-4 left-4 z-30">
+        <button 
+          onClick={openGoogleMaps}
+          className="bg-white px-3 py-2 rounded-lg shadow-lg hover:bg-gray-50 transition-colors text-sm font-medium flex items-center gap-2"
+        >
+          <MapPin className="h-4 w-4 text-blue-600" />
+          Abrir no Google Maps
+        </button>
+      </div>
+      
+      {/* Informação sobre integração com Google Maps */}
+      <div className="absolute left-0 right-0 bottom-4 flex justify-center pointer-events-none z-30">
+        <div className="bg-white/90 backdrop-blur px-4 py-2 rounded-full text-xs text-center shadow">
+          Mapa do Google Maps - Clique nos técnicos para ver rotas
         </div>
       </div>
     </div>
