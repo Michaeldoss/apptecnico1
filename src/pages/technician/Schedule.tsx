@@ -3,14 +3,17 @@ import React from 'react';
 import TechnicianLayout from '@/components/layout/TechnicianLayout';
 import TechnicianScheduleCalendar from '@/components/technician/TechnicianScheduleCalendar';
 import AppointmentDetailsModal from '@/components/technician/AppointmentDetailsModal';
+import LocationSharingControl from '@/components/technician/LocationSharingControl';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Calendar,
   Clock,
   CheckCircle,
   AlertTriangle,
-  TrendingUp
+  TrendingUp,
+  MapPin
 } from 'lucide-react';
 import { useTechnicianSchedule } from '@/hooks/useTechnicianSchedule';
 
@@ -27,6 +30,9 @@ const TechnicianSchedule = () => {
     handleAppointmentSelect,
     handleCloseDetailsModal,
   } = useTechnicianSchedule();
+
+  // Dados mock para o controle de localização
+  const nextAppointment = appointments.find(apt => apt.status === 'confirmed');
 
   return (
     <TechnicianLayout title="Minha Agenda">
@@ -101,15 +107,50 @@ const TechnicianSchedule = () => {
           </Card>
         )}
 
-        {/* Calendário principal */}
-        <TechnicianScheduleCalendar
-          appointments={appointments}
-          onAppointmentSelect={handleAppointmentSelect}
-          onCheckIn={handleCheckIn}
-          onCheckOut={handleCheckOut}
-          onReschedule={handleReschedule}
-          onCancel={handleCancel}
-        />
+        {/* Tabs para agenda e rastreamento */}
+        <Tabs defaultValue="agenda" className="w-full">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="agenda">Minha Agenda</TabsTrigger>
+            <TabsTrigger value="tracking" className="flex items-center gap-2">
+              <MapPin className="h-4 w-4" />
+              Rastreamento
+            </TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="agenda" className="space-y-6">
+            {/* Calendário principal */}
+            <TechnicianScheduleCalendar
+              appointments={appointments}
+              onAppointmentSelect={handleAppointmentSelect}
+              onCheckIn={handleCheckIn}
+              onCheckOut={handleCheckOut}
+              onReschedule={handleReschedule}
+              onCancel={handleCancel}
+            />
+          </TabsContent>
+          
+          <TabsContent value="tracking" className="space-y-6">
+            {nextAppointment ? (
+              <LocationSharingControl
+                serviceId={nextAppointment.id}
+                customerName={nextAppointment.client}
+                customerAddress={nextAppointment.address}
+                estimatedDistance="8.5 km"
+                estimatedTime="20-25 min"
+              />
+            ) : (
+              <Card>
+                <CardContent className="p-6 text-center">
+                  <MapPin className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="font-semibold text-lg mb-2">Nenhum agendamento ativo</h3>
+                  <p className="text-gray-600">
+                    O controle de rastreamento ficará disponível quando você tiver um agendamento confirmado.
+                  </p>
+                </CardContent>
+              </Card>
+            )}
+          </TabsContent>
+        </Tabs>
 
         {/* Modal de detalhes */}
         <AppointmentDetailsModal

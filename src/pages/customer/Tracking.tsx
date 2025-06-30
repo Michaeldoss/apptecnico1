@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import CustomerLayout from '@/components/layout/CustomerLayout';
+import RealTimeTracking from '@/components/tracking/RealTimeTracking';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -10,48 +11,37 @@ import { Search, User, Clock, CheckCircle, MapPin, Navigation } from 'lucide-rea
 const CustomerTracking = () => {
   const [trackingCode, setTrackingCode] = useState('');
   const [searchResult, setSearchResult] = useState(null);
-  const [technicianLocation, setTechnicianLocation] = useState(null);
+  const [showRealTimeTracking, setShowRealTimeTracking] = useState(false);
   
   const handleSearch = () => {
     if (!trackingCode.trim()) return;
     
-    // Simular busca com dados mockados incluindo localização do técnico
+    // Simular busca com dados mockados
     const mockResult = {
       status: 'Em andamento',
       technician: 'João Silva',
+      technicianPhone: '(11) 99999-9999',
       lastUpdate: '24/06/2025 às 14:30',
       code: trackingCode,
-      technicianLocation: {
-        lat: -23.5505,
-        lng: -46.6333,
-        address: 'Av. Paulista, 1578 - Bela Vista, São Paulo - SP'
-      },
-      customerAddress: 'Rua das Flores, 123 - Vila Madalena, São Paulo - SP'
+      customerAddress: 'Rua das Flores, 123 - Vila Madalena, São Paulo - SP',
+      isTrackingActive: Math.random() > 0.3, // 70% chance de estar ativo
+      estimatedArrival: '15-20 min',
+      distance: '5.2 km'
     };
     
     setSearchResult(mockResult);
-    setTechnicianLocation(mockResult.technicianLocation);
+    setShowRealTimeTracking(true);
   };
 
-  const openGoogleMapsRoute = () => {
-    if (searchResult && technicianLocation) {
-      const origin = encodeURIComponent(technicianLocation.address);
-      const destination = encodeURIComponent(searchResult.customerAddress);
-      const url = `https://www.google.com/maps/dir/${origin}/${destination}`;
-      window.open(url, '_blank');
-    }
-  };
-
-  const viewTechnicianLocation = () => {
-    if (technicianLocation) {
-      const url = `https://www.google.com/maps/search/?api=1&query=${technicianLocation.lat},${technicianLocation.lng}`;
-      window.open(url, '_blank');
-    }
+  const openGoogleMapsRoute = (address) => {
+    const destination = encodeURIComponent(address);
+    const url = `https://www.google.com/maps/search/?api=1&query=${destination}`;
+    window.open(url, '_blank');
   };
   
   return (
     <CustomerLayout title="">
-      <div className="min-h-screen flex justify-center items-center px-4 -mt-20">
+      <div className="min-h-screen flex justify-center items-start px-4 py-8">
         <div className="w-full max-w-2xl space-y-8">
           {/* Título centralizado */}
           <div className="text-center">
@@ -93,10 +83,11 @@ const CustomerTracking = () => {
             </div>
           </div>
           
-          {/* Resultado da busca */}
-          {searchResult && (
-            <div className="flex justify-center">
-              <Card className="w-full max-w-md bg-white border border-gray-border shadow-lg">
+          {/* Resultado da busca com rastreamento em tempo real */}
+          {searchResult && showRealTimeTracking && (
+            <div className="space-y-6">
+              {/* Informações básicas do chamado */}
+              <Card className="bg-white border border-gray-border shadow-lg">
                 <CardContent className="p-6 space-y-4">
                   <div className="text-center">
                     <div className="flex justify-center mb-3">
@@ -137,27 +128,29 @@ const CustomerTracking = () => {
                     </div>
                   </div>
 
-                  {/* Botões de localização e rota */}
-                  <div className="space-y-2 pt-4 border-t">
+                  <div className="pt-4 border-t">
                     <Button 
-                      onClick={viewTechnicianLocation}
+                      onClick={() => openGoogleMapsRoute(searchResult.customerAddress)}
                       variant="outline" 
                       className="w-full"
                     >
                       <MapPin className="h-4 w-4 mr-2" />
-                      Ver Localização do Técnico
-                    </Button>
-                    
-                    <Button 
-                      onClick={openGoogleMapsRoute}
-                      className="w-full bg-blue-600 hover:bg-blue-700"
-                    >
-                      <Navigation className="h-4 w-4 mr-2" />
-                      Ver Rota no Google Maps
+                      Ver Endereço no Mapa
                     </Button>
                   </div>
                 </CardContent>
               </Card>
+
+              {/* Componente de rastreamento em tempo real */}
+              <RealTimeTracking
+                serviceId={searchResult.code}
+                technicianName={searchResult.technician}
+                technicianPhone={searchResult.technicianPhone}
+                customerAddress={searchResult.customerAddress}
+                isTrackingActive={searchResult.isTrackingActive}
+                estimatedArrival={searchResult.estimatedArrival}
+                distance={searchResult.distance}
+              />
             </div>
           )}
         </div>
