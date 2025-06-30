@@ -98,7 +98,7 @@ const TechnicianMap: React.FC<TechnicianMapProps> = ({
       <div className="absolute inset-0">
         {userLocation && (
           <iframe
-            src={`https://www.google.com/maps/embed/v1/view?key=AIzaSyBVhq1HrZhP9VCFRvGF8_Y8w8Z3P1m2p3M&center=${userLocation.lat},${userLocation.lng}&zoom=12&maptype=roadmap`}
+            src={`https://www.google.com/maps/embed/v1/view?key=AIzaSyDCdnGU1xlCZzTKHNTgmOEZ4CUn63z4DhE&center=${userLocation.lat},${userLocation.lng}&zoom=12&maptype=roadmap`}
             width="100%"
             height="100%"
             style={{ border: 0 }}

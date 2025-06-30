@@ -146,7 +146,7 @@ const RealTimeTracking: React.FC<RealTimeTrackingProps> = ({
           <div className="relative h-64 bg-gray-100 rounded-lg overflow-hidden">
             {technicianLocation && (
               <iframe
-                src={`https://www.google.com/maps/embed/v1/directions?key=AIzaSyBVhq1HrZhP9VCFRvGF8_Y8w8Z3P1m2p3M&origin=${technicianLocation.lat},${technicianLocation.lng}&destination=${encodeURIComponent(customerAddress)}&mode=driving`}
+                src={`https://www.google.com/maps/embed/v1/directions?key=AIzaSyDCdnGU1xlCZzTKHNTgmOEZ4CUn63z4DhE&origin=${technicianLocation.lat},${technicianLocation.lng}&destination=${encodeURIComponent(customerAddress)}&mode=driving`}
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
