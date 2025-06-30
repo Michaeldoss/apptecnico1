@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -189,8 +190,7 @@ const Login = () => {
                   'Entrar'
                 )}
               </Button>
-              
-              {/* Remover o separador e botão do Google antigo */}
+            </form>
 
             {/* Área de teste com credenciais */}
             <div className="mt-6 p-4 bg-gray-50 rounded-lg">
