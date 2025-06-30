@@ -32,7 +32,7 @@ const TechnicianSchedule = () => {
   } = useTechnicianSchedule();
 
   // Dados mock para o controle de localização
-  const nextAppointment = appointments.find(apt => apt.status === 'confirmed');
+  const nextAppointment = appointments.find(apt => apt.status === 'confirmado');
 
   return (
     <TechnicianLayout title="Minha Agenda">
@@ -132,8 +132,8 @@ const TechnicianSchedule = () => {
           <TabsContent value="tracking" className="space-y-6">
             {nextAppointment ? (
               <LocationSharingControl
-                serviceId={nextAppointment.id}
-                customerName={nextAppointment.client}
+                serviceId={nextAppointment.id.toString()}
+                customerName={nextAppointment.clientName}
                 customerAddress={nextAppointment.address}
                 estimatedDistance="8.5 km"
                 estimatedTime="20-25 min"
