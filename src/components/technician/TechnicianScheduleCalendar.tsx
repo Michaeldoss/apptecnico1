@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -99,7 +98,14 @@ const TechnicianScheduleCalendar: React.FC<TechnicianScheduleCalendarProps> = ({
 
   const openGoogleMaps = (address: string) => {
     const encodedAddress = encodeURIComponent(address);
-    window.open(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`, '_blank');
+    const url = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
+    window.open(url, '_blank');
+  };
+
+  const getDirectionsToClient = (address: string) => {
+    const encodedAddress = encodeURIComponent(address);
+    const url = `https://www.google.com/maps/dir/Current+Location/${encodedAddress}`;
+    window.open(url, '_blank');
   };
 
   const openWhatsApp = (phone: string) => {
@@ -239,7 +245,7 @@ const TechnicianScheduleCalendar: React.FC<TechnicianScheduleCalendarProps> = ({
                     </div>
                   </div>
 
-                  {/* Ações */}
+                  {/* Ações atualizadas com Google Maps */}
                   <div className="flex flex-wrap gap-2">
                     <Button
                       size="sm"
@@ -271,6 +277,18 @@ const TechnicianScheduleCalendar: React.FC<TechnicianScheduleCalendarProps> = ({
                       onClick={(e) => {
                         e.stopPropagation();
                         openGoogleMaps(appointment.address);
+                      }}
+                    >
+                      <MapPin className="h-4 w-4 mr-1" />
+                      Ver Local
+                    </Button>
+
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        getDirectionsToClient(appointment.address);
                       }}
                     >
                       <Navigation className="h-4 w-4 mr-1" />

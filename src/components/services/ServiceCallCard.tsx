@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -10,7 +9,8 @@ import {
   Phone, 
   MessageCircle,
   Calendar,
-  Wrench
+  Wrench,
+  Navigation
 } from 'lucide-react';
 import { ServiceCall, statusConfig } from '@/types/service-status';
 import { format } from 'date-fns';
@@ -34,6 +34,11 @@ const ServiceCallCard: React.FC<ServiceCallCardProps> = ({ call, onOpenDetails }
   const handleMaps = (address: string) => {
     const encodedAddress = encodeURIComponent(address);
     window.open(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`, '_blank');
+  };
+
+  const getDirections = (address: string) => {
+    const encodedAddress = encodeURIComponent(address);
+    window.open(`https://www.google.com/maps/dir/Current+Location/${encodedAddress}`, '_blank');
   };
 
   return (
@@ -113,6 +118,16 @@ const ServiceCallCard: React.FC<ServiceCallCardProps> = ({ call, onOpenDetails }
             className="flex items-center gap-1"
           >
             <MapPin className="h-3 w-3" />
+            Ver Local
+          </Button>
+
+          <Button 
+            size="sm" 
+            variant="outline" 
+            onClick={() => getDirections(call.address)}
+            className="flex items-center gap-1"
+          >
+            <Navigation className="h-3 w-3" />
             Rota
           </Button>
           

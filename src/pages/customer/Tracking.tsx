@@ -1,26 +1,52 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CustomerLayout from '@/components/layout/CustomerLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
-import { Search, User, Clock, CheckCircle } from 'lucide-react';
+import { Search, User, Clock, CheckCircle, MapPin, Navigation } from 'lucide-react';
 
 const CustomerTracking = () => {
   const [trackingCode, setTrackingCode] = useState('');
   const [searchResult, setSearchResult] = useState(null);
+  const [technicianLocation, setTechnicianLocation] = useState(null);
   
   const handleSearch = () => {
     if (!trackingCode.trim()) return;
     
-    // Simular busca com dados mockados
-    setSearchResult({
+    // Simular busca com dados mockados incluindo localização do técnico
+    const mockResult = {
       status: 'Em andamento',
       technician: 'João Silva',
       lastUpdate: '24/06/2025 às 14:30',
-      code: trackingCode
-    });
+      code: trackingCode,
+      technicianLocation: {
+        lat: -23.5505,
+        lng: -46.6333,
+        address: 'Av. Paulista, 1578 - Bela Vista, São Paulo - SP'
+      },
+      customerAddress: 'Rua das Flores, 123 - Vila Madalena, São Paulo - SP'
+    };
+    
+    setSearchResult(mockResult);
+    setTechnicianLocation(mockResult.technicianLocation);
+  };
+
+  const openGoogleMapsRoute = () => {
+    if (searchResult && technicianLocation) {
+      const origin = encodeURIComponent(technicianLocation.address);
+      const destination = encodeURIComponent(searchResult.customerAddress);
+      const url = `https://www.google.com/maps/dir/${origin}/${destination}`;
+      window.open(url, '_blank');
+    }
+  };
+
+  const viewTechnicianLocation = () => {
+    if (technicianLocation) {
+      const url = `https://www.google.com/maps/search/?api=1&query=${technicianLocation.lat},${technicianLocation.lng}`;
+      window.open(url, '_blank');
+    }
   };
   
   return (
@@ -109,6 +135,26 @@ const CustomerTracking = () => {
                       </span>
                       <span className="font-medium text-gray-primary font-inter text-sm">{searchResult.lastUpdate}</span>
                     </div>
+                  </div>
+
+                  {/* Botões de localização e rota */}
+                  <div className="space-y-2 pt-4 border-t">
+                    <Button 
+                      onClick={viewTechnicianLocation}
+                      variant="outline" 
+                      className="w-full"
+                    >
+                      <MapPin className="h-4 w-4 mr-2" />
+                      Ver Localização do Técnico
+                    </Button>
+                    
+                    <Button 
+                      onClick={openGoogleMapsRoute}
+                      className="w-full bg-blue-600 hover:bg-blue-700"
+                    >
+                      <Navigation className="h-4 w-4 mr-2" />
+                      Ver Rota no Google Maps
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
