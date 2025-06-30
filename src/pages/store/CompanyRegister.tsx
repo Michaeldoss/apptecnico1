@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -22,6 +21,7 @@ import { useAuth } from '@/context/AuthContext';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useNavigate } from 'react-router-dom';
 import { Store, Building, Building2, MapPin, Mail, Phone, FileText } from 'lucide-react';
+import GoogleLoginButton from '@/components/auth/GoogleLoginButton';
 
 const companyFormSchema = z.object({
   companyName: z.string().min(3, {
@@ -415,6 +415,18 @@ const CompanyRegister = () => {
                     <p className="text-sm text-muted-foreground mt-1">
                       Faça login com sua conta de fornecedor para gerenciar seus produtos
                     </p>
+                  </div>
+                  
+                  {/* Login com Google */}
+                  <div className="mb-4">
+                    <GoogleLoginButton />
+                  </div>
+                  
+                  <div className="relative flex items-center justify-center">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-border"></div>
+                    </div>
+                    <div className="relative px-4 bg-card text-sm">Ou com email</div>
                   </div>
                   
                   <Form {...loginForm}>

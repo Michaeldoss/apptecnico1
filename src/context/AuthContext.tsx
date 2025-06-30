@@ -153,6 +153,40 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         },
       ];
 
+      // Tratamento especial para login com Google
+      if (password === 'google_login') {
+        console.log('[DEBUG] Login com Google detectado');
+        
+        // Buscar se o usuário já existe por email
+        let foundUser = mockUsers.find(u => u.email === email);
+        
+        // Se não existir, criar um novo usuário
+        if (!foundUser) {
+          foundUser = {
+            id: Date.now(), // ID único baseado no timestamp
+            name: email.split('@')[0], // Nome baseado no email
+            email: email,
+            password: 'google_user',
+            type: 'customer', // Tipo padrão para novos usuários do Google
+            tipo: 'cliente',
+            isGoogleUser: true
+          };
+          console.log('[DEBUG] Novo usuário Google criado:', foundUser.name);
+        }
+        
+        const { password: _, ...userWithoutPassword } = foundUser;
+        
+        setUser(userWithoutPassword);
+        setUserType(foundUser.type as UserType);
+        setIsAuthenticated(true);
+        
+        localStorage.setItem('techSupportUser', JSON.stringify(userWithoutPassword));
+        
+        console.log('[DEBUG] Login com Google bem-sucedido');
+        return true;
+      }
+
+      // Login tradicional com email e senha
       const foundUser = mockUsers.find(u => u.email === email && u.password === password);
 
       if (!foundUser) {
