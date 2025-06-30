@@ -201,7 +201,7 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
               active={path.startsWith('/cliente/clientes')}
               onClick={closeMenu}
             >
-              Clientes
+              Meu Cadastro
             </SidebarItem>
           </div>
           
