@@ -18,6 +18,7 @@ import CategoryPage from '@/pages/store/CategoryPage';
 import SellEquipment from '@/pages/SellEquipment';
 import SellEquipmentCreate from '@/pages/SellEquipmentCreate';
 import Services from '@/pages/Services';
+import About from '@/pages/About';
 
 // Customer pages
 import CustomerDashboard from '@/pages/customer/Dashboard';
@@ -72,6 +73,7 @@ function App() {
                 <Route path="/sell-equipment" element={<SellEquipment />} />
                 <Route path="/sell-equipment/create" element={<SellEquipmentCreate />} />
                 <Route path="/services" element={<Services />} />
+                <Route path="/about" element={<About />} />
                 
                 {/* Customer routes */}
                 <Route path="/cliente/painel" element={
