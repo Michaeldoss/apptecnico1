@@ -5,22 +5,27 @@ import { useAuth } from '@/context/AuthContext';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
+  userType?: string; // Add this prop to match usage in App.tsx
   allowedUserTypes?: string[];
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
   children, 
+  userType, // Accept userType prop
   allowedUserTypes = ['customer', 'technician', 'admin', 'company'] 
 }) => {
-  const { isAuthenticated, userType, user, isLoading } = useAuth();
+  const { isAuthenticated, userType: currentUserType, user, isLoading } = useAuth();
   const location = useLocation();
+
+  // If userType is provided, use it as the only allowed type
+  const finalAllowedTypes = userType ? [userType] : allowedUserTypes;
 
   console.log('ProtectedRoute - Verificando acesso para:', location.pathname);
   console.log('ProtectedRoute - isLoading:', isLoading);
   console.log('ProtectedRoute - isAuthenticated:', isAuthenticated);
-  console.log('ProtectedRoute - userType:', userType);
+  console.log('ProtectedRoute - userType:', currentUserType);
   console.log('ProtectedRoute - user:', user?.name);
-  console.log('ProtectedRoute - allowedUserTypes:', allowedUserTypes);
+  console.log('ProtectedRoute - finalAllowedTypes:', finalAllowedTypes);
 
   if (isLoading) {
     console.log('ProtectedRoute - Ainda carregando...');
@@ -39,16 +44,16 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  if (!userType) {
+  if (!currentUserType) {
     console.log('ProtectedRoute - UserType é null, redirecionando para login');
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  if (!allowedUserTypes.includes(userType)) {
-    console.log('ProtectedRoute - Tipo de usuário não permitido:', userType, 'permitidos:', allowedUserTypes);
+  if (!finalAllowedTypes.includes(currentUserType)) {
+    console.log('ProtectedRoute - Tipo de usuário não permitido:', currentUserType, 'permitidos:', finalAllowedTypes);
     
     // Redirecionar para o dashboard apropriado do usuário
-    switch (userType) {
+    switch (currentUserType) {
       case 'technician':
         return <Navigate to="/tecnico/dashboard" replace />;
       case 'customer':
@@ -62,7 +67,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     }
   }
 
-  console.log('ProtectedRoute - Acesso autorizado para:', userType);
+  console.log('ProtectedRoute - Acesso autorizado para:', currentUserType);
   
   return <>{children}</>;
 };
