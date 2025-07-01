@@ -20,6 +20,21 @@ export type EquipmentType =
   | 'solvent'
   | 'silk-carousel';
 
+export type EquipmentStatus = 'operational' | 'maintenance' | 'broken' | 'inactive';
+
+export interface Equipment {
+  id: number;
+  name: string;
+  type: EquipmentType;
+  model: string;
+  brand: string;
+  serialNumber: string;
+  purchaseDate: string;
+  lastMaintenanceDate?: string;
+  status: EquipmentStatus;
+  notes?: string;
+}
+
 export const equipmentTypeLabels: Record<EquipmentType, string> = {
   'eco-solvent': 'Plotter Eco Solvente',
   'uv-flexible': 'Plotter UV Flexível',
@@ -64,3 +79,10 @@ export const equipmentCategories = [
     types: ['sewing-machine'] as EquipmentType[]
   }
 ];
+
+export const getAllEquipmentTypes = () => {
+  return Object.entries(equipmentTypeLabels).map(([value, label]) => ({
+    value: value as EquipmentType,
+    label
+  }));
+};

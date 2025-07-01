@@ -91,7 +91,7 @@ const FindTechnician = () => {
         const category = equipmentCategories.find(cat => cat.id === selectedCategory);
         if (!category) return true;
         
-        return tech.equipmentTypes?.some(type => category.types.includes(type));
+        return tech.equipmentTypes?.some(type => category.types.includes(type as EquipmentType));
       })
     : technicians;
 
