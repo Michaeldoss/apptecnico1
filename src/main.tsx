@@ -5,7 +5,6 @@ import App from './App.tsx';
 import GoogleAuthProvider from '@/components/auth/GoogleAuthProvider';
 import './index.css';
 
-// Make sure React is explicitly in scope
 const root = createRoot(document.getElementById("root")!);
 root.render(
   <React.StrictMode>
