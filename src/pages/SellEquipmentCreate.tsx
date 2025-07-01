@@ -1,31 +1,31 @@
 
 import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Upload, X, DollarSign, MapPin, Phone, Mail, Camera, FileText, AlertCircle } from 'lucide-react';
+import { ArrowLeft, Save, Upload, X } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import { equipmentTypeLabels } from '@/types/equipment';
 import { SellEquipmentCondition, equipmentConditionLabels } from '@/types/sellEquipment';
-import { useToast } from '@/hooks/use-toast';
+import { toast } from '@/hooks/use-toast';
 
 const SellEquipmentCreate = () => {
-  const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
-  const [images, setImages] = useState<File[]>([]);
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [images, setImages] = useState<string[]>([]);
+  
   const [formData, setFormData] = useState({
     title: '',
     type: '',
     brand: '',
     model: '',
-    year: '',
-    condition: '' as SellEquipmentCondition | '',
-    price: '',
+    year: new Date().getFullYear(),
+    condition: 'seminovo' as SellEquipmentCondition,
+    price: 0,
     description: '',
     city: '',
     state: '',
@@ -35,18 +35,15 @@ const SellEquipmentCreate = () => {
     contactWhatsapp: ''
   });
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const newImages = Array.from(e.target.files);
-      if (images.length + newImages.length > 6) {
-        toast({
-          title: "Limite excedido",
-          description: "Você pode adicionar no máximo 6 imagens.",
-          variant: "destructive"
-        });
-        return;
-      }
-      setImages(prev => [...prev, ...newImages]);
+  const handleInputChange = (field: string, value: any) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      const newImages = Array.from(files).map(file => URL.createObjectURL(file));
+      setImages(prev => [...prev, ...newImages].slice(0, 5));
     }
   };
 
@@ -54,160 +51,109 @@ const SellEquipmentCreate = () => {
     setImages(prev => prev.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
+    setLoading(true);
 
-    // Validação básica
-    if (!formData.title || !formData.type || !formData.brand || !formData.condition || !formData.price) {
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
       toast({
-        title: "Campos obrigatórios",
-        description: "Preencha todos os campos obrigatórios.",
-        variant: "destructive"
-      });
-      setIsLoading(false);
-      return;
-    }
-
-    if (images.length === 0) {
-      toast({
-        title: "Imagens necessárias",
-        description: "Adicione pelo menos uma foto do equipamento.",
-        variant: "destructive"
-      });
-      setIsLoading(false);
-      return;
-    }
-
-    // Simular criação do anúncio
-    setTimeout(() => {
-      setIsLoading(false);
-      toast({
-        title: "Anúncio criado com sucesso!",
-        description: "Seu equipamento foi anunciado e está aguardando aprovação.",
+        title: "Equipamento cadastrado!",
+        description: "Seu anúncio foi criado com sucesso.",
       });
       
-      // Reset form
-      setFormData({
-        title: '',
-        type: '',
-        brand: '',
-        model: '',
-        year: '',
-        condition: '',
-        price: '',
-        description: '',
-        city: '',
-        state: '',
-        contactName: '',
-        contactPhone: '',
-        contactEmail: '',
-        contactWhatsapp: ''
+      navigate('/sell-equipment');
+    } catch (error) {
+      toast({
+        title: "Erro ao cadastrar",
+        description: "Não foi possível criar o anúncio. Tente novamente.",
+        variant: "destructive",
       });
-      setImages([]);
-    }, 2000);
-  };
-
-  const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
       
-      <main className="flex-grow bg-gray-50 py-8">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Vender Meu Equipamento
-            </h1>
-            <p className="text-lg text-gray-600">
-              Anuncie seu equipamento gráfico de forma rápida e segura. 
-              Alcance milhares de compradores interessados!
-            </p>
+      <main className="flex-grow container mx-auto px-4 py-8">
+        <div className="max-w-2xl mx-auto">
+          <div className="flex items-center mb-8">
+            <Link to="/sell-equipment">
+              <Button variant="outline" size="sm" className="mr-4">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Voltar
+              </Button>
+            </Link>
+            <div>
+              <h1 className="text-3xl font-bold">Anunciar Equipamento</h1>
+              <p className="text-gray-600">Preencha as informações do seu equipamento</p>
+            </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-8">
-            {/* Informações do Equipamento */}
+          <form onSubmit={handleSubmit} className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <FileText className="h-5 w-5" />
-                  Informações do Equipamento
-                </CardTitle>
+                <CardTitle>Informações Básicas</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="title">Título do Anúncio *</Label>
-                    <Input
-                      id="title"
-                      placeholder="Ex: Plotter Roland VersaCAMM VS-640i"
-                      value={formData.title}
-                      onChange={(e) => handleInputChange('title', e.target.value)}
-                      required
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="type">Tipo de Equipamento *</Label>
-                    <Select value={formData.type} onValueChange={(value) => handleInputChange('type', value)}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecione o tipo" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {Object.entries(equipmentTypeLabels).map(([key, label]) => (
-                          <SelectItem key={key} value={key}>
-                            {label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
+                <div>
+                  <Label htmlFor="title">Título do Anúncio *</Label>
+                  <Input
+                    id="title"
+                    value={formData.title}
+                    onChange={(e) => handleInputChange('title', e.target.value)}
+                    placeholder="Ex: Plotter Roland VersaCAMM VS-640i"
+                    required
+                  />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="space-y-2">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
                     <Label htmlFor="brand">Marca *</Label>
                     <Input
                       id="brand"
-                      placeholder="Ex: Roland, Mimaki, HP"
                       value={formData.brand}
                       onChange={(e) => handleInputChange('brand', e.target.value)}
+                      placeholder="Ex: Roland, Epson, Mimaki"
                       required
                     />
                   </div>
                   
-                  <div className="space-y-2">
+                  <div>
                     <Label htmlFor="model">Modelo *</Label>
                     <Input
                       id="model"
-                      placeholder="Ex: VersaCAMM VS-640i"
                       value={formData.model}
                       onChange={(e) => handleInputChange('model', e.target.value)}
+                      placeholder="Ex: VersaCAMM VS-640i"
                       required
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="year">Ano (opcional)</Label>
-                    <Input
-                      id="year"
-                      type="number"
-                      placeholder="2023"
-                      value={formData.year}
-                      onChange={(e) => handleInputChange('year', e.target.value)}
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="condition">Estado de Conservação *</Label>
-                    <Select value={formData.condition} onValueChange={(value) => handleInputChange('condition', value as SellEquipmentCondition)}>
+                  <div>
+                    <Label htmlFor="year">Ano</Label>
+                    <Input
+                      id="year"
+                      type="number"
+                      value={formData.year}
+                      onChange={(e) => handleInputChange('year', parseInt(e.target.value))}
+                      min="1990"
+                      max={new Date().getFullYear()}
+                    />
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="condition">Estado *</Label>
+                    <Select value={formData.condition} onValueChange={(value) => handleInputChange('condition', value)}>
                       <SelectTrigger>
-                        <SelectValue placeholder="Selecione o estado" />
+                        <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
                         {Object.entries(equipmentConditionLabels).map(([key, label]) => (
@@ -218,77 +164,95 @@ const SellEquipmentCreate = () => {
                       </SelectContent>
                     </Select>
                   </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="price">Preço (R$) *</Label>
-                    <div className="relative">
-                      <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                      <Input
-                        id="price"
-                        type="number"
-                        placeholder="50000"
-                        className="pl-10"
-                        value={formData.price}
-                        onChange={(e) => handleInputChange('price', e.target.value)}
-                        required
-                      />
-                    </div>
-                  </div>
                 </div>
 
-                <div className="space-y-2">
+                <div>
+                  <Label htmlFor="price">Preço (R$) *</Label>
+                  <Input
+                    id="price"
+                    type="number"
+                    value={formData.price}
+                    onChange={(e) => handleInputChange('price', parseFloat(e.target.value))}
+                    placeholder="0.00"
+                    min="0"
+                    step="0.01"
+                    required
+                  />
+                </div>
+
+                <div>
                   <Label htmlFor="description">Descrição *</Label>
                   <Textarea
                     id="description"
-                    placeholder="Descreva as condições do equipamento, histórico de uso, inclusos, etc..."
-                    rows={4}
                     value={formData.description}
                     onChange={(e) => handleInputChange('description', e.target.value)}
+                    placeholder="Descreva o equipamento, estado de conservação, acessórios inclusos..."
+                    rows={4}
                     required
                   />
                 </div>
               </CardContent>
             </Card>
 
-            {/* Fotos */}
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Camera className="h-5 w-5" />
-                  Fotos do Equipamento
-                </CardTitle>
+                <CardTitle>Localização</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="city">Cidade *</Label>
+                    <Input
+                      id="city"
+                      value={formData.city}
+                      onChange={(e) => handleInputChange('city', e.target.value)}
+                      placeholder="Ex: São Paulo"
+                      required
+                    />
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="state">Estado *</Label>
+                    <Input
+                      id="state"
+                      value={formData.state}
+                      onChange={(e) => handleInputChange('state', e.target.value)}
+                      placeholder="Ex: SP"
+                      required
+                    />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Fotos do Equipamento</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div className="flex items-center gap-2 p-4 bg-blue-50 rounded-lg">
-                    <AlertCircle className="h-5 w-5 text-blue-600" />
-                    <p className="text-sm text-blue-700">
-                      Adicione fotos nítidas e bem iluminadas. Anúncios com mais fotos recebem 3x mais contatos!
-                    </p>
-                  </div>
-                  
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                     {images.map((image, index) => (
-                      <div key={index} className="relative">
-                        <img
-                          src={URL.createObjectURL(image)}
-                          alt={`Foto ${index + 1}`}
-                          className="w-full h-32 object-cover rounded-lg border"
-                        />
-                        <button
+                      <div key={index} className="relative aspect-square border rounded-lg overflow-hidden">
+                        <img src={image} alt={`Equipamento ${index + 1}`} className="w-full h-full object-cover" />
+                        <Button
                           type="button"
+                          variant="destructive"
+                          size="sm"
+                          className="absolute top-1 right-1"
                           onClick={() => removeImage(index)}
-                          className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
                         >
-                          <X className="h-4 w-4" />
-                        </button>
+                          <X className="h-3 w-3" />
+                        </Button>
                       </div>
                     ))}
                     
-                    {images.length < 6 && (
-                      <label className="w-full h-32 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition-colors">
-                        <Upload className="h-8 w-8 text-gray-400 mb-2" />
-                        <span className="text-sm text-gray-500">Adicionar foto</span>
+                    {images.length < 5 && (
+                      <label className="aspect-square border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center cursor-pointer hover:border-gray-400">
+                        <div className="text-center">
+                          <Upload className="h-6 w-6 mx-auto mb-2 text-gray-400" />
+                          <span className="text-sm text-gray-600">Adicionar Foto</span>
+                        </div>
                         <input
                           type="file"
                           multiple
@@ -299,161 +263,78 @@ const SellEquipmentCreate = () => {
                       </label>
                     )}
                   </div>
-                  
-                  <p className="text-xs text-gray-500">
-                    Máximo 6 fotos. Formatos aceitos: JPG, PNG, WebP
+                  <p className="text-sm text-gray-600">
+                    Adicione até 5 fotos. Fotos de qualidade ajudam a vender mais rápido.
                   </p>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Localização */}
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <MapPin className="h-5 w-5" />
-                  Localização
-                </CardTitle>
+                <CardTitle>Informações de Contato</CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="city">Cidade *</Label>
-                    <Input
-                      id="city"
-                      placeholder="São Paulo"
-                      value={formData.city}
-                      onChange={(e) => handleInputChange('city', e.target.value)}
-                      required
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="state">Estado *</Label>
-                    <Input
-                      id="state"
-                      placeholder="SP"
-                      value={formData.state}
-                      onChange={(e) => handleInputChange('state', e.target.value)}
-                      required
-                    />
-                  </div>
+              <CardContent className="space-y-4">
+                <div>
+                  <Label htmlFor="contactName">Nome completo *</Label>
+                  <Input
+                    id="contactName"
+                    value={formData.contactName}
+                    onChange={(e) => handleInputChange('contactName', e.target.value)}
+                    required
+                  />
                 </div>
-              </CardContent>
-            </Card>
 
-            {/* Contato */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Phone className="h-5 w-5" />
-                  Informações de Contato
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="contactName">Nome para Contato *</Label>
-                    <Input
-                      id="contactName"
-                      placeholder="João Silva"
-                      value={formData.contactName}
-                      onChange={(e) => handleInputChange('contactName', e.target.value)}
-                      required
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="contactEmail">E-mail *</Label>
-                    <Input
-                      id="contactEmail"
-                      type="email"
-                      placeholder="joao@exemplo.com"
-                      value={formData.contactEmail}
-                      onChange={(e) => handleInputChange('contactEmail', e.target.value)}
-                      required
-                    />
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                  <div className="space-y-2">
+                  <div>
                     <Label htmlFor="contactPhone">Telefone *</Label>
                     <Input
                       id="contactPhone"
-                      placeholder="(11) 99999-9999"
                       value={formData.contactPhone}
                       onChange={(e) => handleInputChange('contactPhone', e.target.value)}
+                      placeholder="(11) 99999-9999"
                       required
                     />
                   </div>
                   
-                  <div className="space-y-2">
-                    <Label htmlFor="contactWhatsapp">WhatsApp (opcional)</Label>
+                  <div>
+                    <Label htmlFor="contactWhatsapp">WhatsApp</Label>
                     <Input
                       id="contactWhatsapp"
-                      placeholder="11999999999"
                       value={formData.contactWhatsapp}
                       onChange={(e) => handleInputChange('contactWhatsapp', e.target.value)}
+                      placeholder="11999999999"
                     />
                   </div>
                 </div>
+
+                <div>
+                  <Label htmlFor="contactEmail">E-mail *</Label>
+                  <Input
+                    id="contactEmail"
+                    type="email"
+                    value={formData.contactEmail}
+                    onChange={(e) => handleInputChange('contactEmail', e.target.value)}
+                    required
+                  />
+                </div>
               </CardContent>
             </Card>
 
-            {/* Resumo e Envio */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Resumo do Anúncio</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="bg-gray-50 p-4 rounded-lg space-y-2">
-                  <p><strong>Equipamento:</strong> {formData.title || 'Não informado'}</p>
-                  <p><strong>Marca/Modelo:</strong> {formData.brand} {formData.model}</p>
-                  <p><strong>Estado:</strong> {formData.condition ? equipmentConditionLabels[formData.condition] : 'Não informado'}</p>
-                  <p><strong>Preço:</strong> {formData.price ? `R$ ${parseFloat(formData.price).toLocaleString('pt-BR')}` : 'Não informado'}</p>
-                  <p><strong>Localização:</strong> {formData.city}, {formData.state}</p>
-                  <p><strong>Fotos:</strong> {images.length} foto(s) adicionada(s)</p>
-                </div>
-                
-                <div className="mt-6 space-y-4">
-                  <div className="flex items-start gap-2 p-4 bg-yellow-50 rounded-lg">
-                    <AlertCircle className="h-5 w-5 text-yellow-600 mt-0.5" />
-                    <div className="text-sm text-yellow-700">
-                      <p className="font-medium mb-1">Importante:</p>
-                      <ul className="list-disc list-inside space-y-1">
-                        <li>Seu anúncio será analisado antes de ser publicado</li>
-                        <li>Mantenha seu telefone/WhatsApp disponível para contato</li>
-                        <li>Seja honesto sobre o estado do equipamento</li>
-                      </ul>
-                    </div>
-                  </div>
-                  
-                  <Button 
-                    type="submit" 
-                    size="lg" 
-                    className="w-full"
-                    disabled={isLoading}
-                  >
-                    {isLoading ? (
-                      <span className="flex items-center">
-                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        Publicando anúncio...
-                      </span>
-                    ) : (
-                      'Publicar Anúncio'
-                    )}
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            <div className="flex gap-4">
+              <Button type="submit" disabled={loading} className="flex-1">
+                {loading ? "Salvando..." : (
+                  <>
+                    <Save className="h-4 w-4 mr-2" />
+                    Publicar Anúncio
+                  </>
+                )}
+              </Button>
+            </div>
           </form>
         </div>
       </main>
-
+      
       <Footer />
     </div>
   );
