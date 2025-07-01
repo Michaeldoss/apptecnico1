@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -21,7 +22,7 @@ import BlurContainer from '@/components/ui/BlurContainer';
 import TechnicianFilters from '@/components/technician/TechnicianFilters';
 import QuoteRequestForm from '@/components/services/QuoteRequestForm';
 import TechnicalVisitForm from '@/components/services/TechnicalVisitForm';
-import { equipmentCategories } from '@/types/equipment';
+import { equipmentCategories, EquipmentType } from '@/types/equipment';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import TechnicianPricing from '@/components/technician/TechnicianPricing';
