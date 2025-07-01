@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from '@/components/ui/sonner';
@@ -10,6 +11,7 @@ import Index from '@/pages/Index';
 import NotFound from '@/pages/NotFound';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
+import FindTechnician from '@/pages/FindTechnician';
 
 // Customer pages
 import CustomerDashboard from '@/pages/customer/Dashboard';
@@ -56,6 +58,7 @@ function App() {
               <Route path="/" element={<Index />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/find-technician" element={<FindTechnician />} />
               
               {/* Customer routes */}
               <Route path="/cliente/painel" element={
