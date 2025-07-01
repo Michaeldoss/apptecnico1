@@ -67,7 +67,7 @@ const TechnicianFilters: React.FC<TechnicianFiltersProps> = ({
             <SelectValue placeholder="Tipo de serviço" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">Todos os serviços</SelectItem>
+            <SelectItem value="all">Todos os serviços</SelectItem>
             {Object.entries(serviceTypeLabels).map(([key, label]) => (
               <SelectItem key={key} value={key}>{label}</SelectItem>
             ))}
@@ -80,7 +80,7 @@ const TechnicianFilters: React.FC<TechnicianFiltersProps> = ({
             <SelectValue placeholder="Estado" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">Todos os estados</SelectItem>
+            <SelectItem value="all">Todos os estados</SelectItem>
             {brazilianStates.map((state) => (
               <SelectItem key={state.value} value={state.value}>
                 {state.label}
@@ -103,7 +103,7 @@ const TechnicianFilters: React.FC<TechnicianFiltersProps> = ({
             <SelectValue placeholder="Tipo de equipamento" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">Todos os equipamentos</SelectItem>
+            <SelectItem value="all">Todos os equipamentos</SelectItem>
             {Object.entries(equipmentTypeLabels).map(([key, label]) => (
               <SelectItem key={key} value={key}>{label}</SelectItem>
             ))}

@@ -187,13 +187,13 @@ export const useTechnicianSearch = () => {
       );
     }
     
-    if (filterByService) {
+    if (filterByService && filterByService !== 'all') {
       filtered = filtered.filter(tech => 
         tech.specialties.some(s => s.toLowerCase().includes(filterByService.toLowerCase()))
       );
     }
     
-    if (selectedState) {
+    if (selectedState && selectedState !== 'all') {
       filtered = filtered.filter(tech => tech.state === selectedState);
     }
     
@@ -201,9 +201,9 @@ export const useTechnicianSearch = () => {
       filtered = filtered.filter(tech => tech.city?.toLowerCase().includes(selectedCity.toLowerCase()));
     }
     
-    if (selectedEquipmentType) {
+    if (selectedEquipmentType && selectedEquipmentType !== 'all') {
       filtered = filtered.filter(tech => 
-        tech.equipmentTypes?.includes(selectedEquipmentType)
+        tech.equipmentTypes?.includes(selectedEquipmentType as EquipmentType)
       );
     }
     
