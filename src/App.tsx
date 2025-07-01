@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from '@/components/ui/sonner';
@@ -18,6 +17,7 @@ import Marketplace from '@/pages/Marketplace';
 import CategoryPage from '@/pages/store/CategoryPage';
 import SellEquipment from '@/pages/SellEquipment';
 import SellEquipmentCreate from '@/pages/SellEquipmentCreate';
+import Services from '@/pages/Services';
 
 // Customer pages
 import CustomerDashboard from '@/pages/customer/Dashboard';
@@ -71,6 +71,7 @@ function App() {
                 <Route path="/store/category/:categorySlug" element={<CategoryPage />} />
                 <Route path="/sell-equipment" element={<SellEquipment />} />
                 <Route path="/sell-equipment/create" element={<SellEquipmentCreate />} />
+                <Route path="/services" element={<Services />} />
                 
                 {/* Customer routes */}
                 <Route path="/cliente/painel" element={
