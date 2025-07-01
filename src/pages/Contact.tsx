@@ -31,21 +31,25 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen flex flex-col bg-blue-600">
       <Navbar />
       
-      <div className="section-padding">
-        <div className="container-standard">
-          {/* Hero Section */}
-          <div className="text-center mb-16 mt-20">
-            <h1 className="text-5xl font-bold text-tech-primary mb-6 font-inter">
+      {/* Blue header bar */}
+      <div className="bg-blue-600 pt-20 pb-8">
+        <div className="container mx-auto px-4">
+          <div className="text-center">
+            <h1 className="text-5xl font-bold text-white mb-6 font-inter">
               Entre em Contato
             </h1>
-            <p className="text-xl text-gray-secondary max-w-3xl mx-auto font-inter">
+            <p className="text-xl text-blue-100 max-w-3xl mx-auto font-inter">
               Estamos aqui para ajudar você. Entre em contato conosco através dos canais abaixo ou envie uma mensagem.
             </p>
           </div>
-
+        </div>
+      </div>
+      
+      <div className="flex-1 bg-white">
+        <div className="container mx-auto px-4 py-16">
           {/* Contact Cards */}
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
             <Card className="text-center hover:shadow-lg transition-all duration-200 border-2 hover:border-tech-primary/20">
