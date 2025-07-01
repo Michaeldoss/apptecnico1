@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Technician } from '@/types/technician';
 import { equipmentTypeLabels, EquipmentType } from '@/types/equipment';
@@ -200,7 +201,7 @@ export const useTechnicianSearch = () => {
       filtered = filtered.filter(tech => tech.city?.toLowerCase().includes(selectedCity.toLowerCase()));
     }
     
-    if (selectedEquipmentType && selectedEquipmentType !== 'all' && selectedEquipmentType !== '') {
+    if (selectedEquipmentType !== '' && selectedEquipmentType !== 'all') {
       filtered = filtered.filter(tech => 
         tech.equipmentTypes?.includes(selectedEquipmentType as EquipmentType)
       );
