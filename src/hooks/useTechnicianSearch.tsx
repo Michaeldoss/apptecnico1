@@ -201,7 +201,7 @@ export const useTechnicianSearch = () => {
       filtered = filtered.filter(tech => tech.city?.toLowerCase().includes(selectedCity.toLowerCase()));
     }
     
-    if (selectedEquipmentType && selectedEquipmentType !== 'all' && selectedEquipmentType !== '') {
+    if (selectedEquipmentType && selectedEquipmentType !== '' && selectedEquipmentType !== 'all') {
       const equipmentType = selectedEquipmentType as EquipmentType;
       filtered = filtered.filter(tech => 
         tech.equipmentTypes?.includes(equipmentType)
