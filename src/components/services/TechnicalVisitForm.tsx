@@ -1,249 +1,169 @@
-import React from 'react';
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { useToast } from '@/hooks/use-toast';
-import { Badge } from "@/components/ui/badge";
-import { MapPin } from "lucide-react";
 
-const formSchema = z.object({
-  name: z.string().min(2, { message: "Nome deve ter pelo menos 2 caracteres" }),
-  email: z.string().email({ message: "Email inválido" }),
-  phone: z.string().min(10, { message: "Telefone deve ter pelo menos 10 dígitos" }),
-  address: z.string().min(10, { message: "Endereço completo é obrigatório" }),
-  preferredDate: z.string().min(1, { message: "Data preferencial é obrigatória" }),
-  preferredTime: z.string().min(1, { message: "Horário preferencial é obrigatório" }),
-  equipmentType: z.string().min(3, { message: "Tipo de equipamento é obrigatório" }),
-  description: z.string().min(10, { message: "Descrição deve ter pelo menos 10 caracteres" }),
-});
+import React, { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useToast } from '@/hooks/use-toast';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { CalendarIcon } from 'lucide-react';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
 interface TechnicalVisitFormProps {
-  onSuccess?: () => void;
+  onSuccess: () => void;
   technicianId?: number;
-  visitPrice?: number;
+  visitPrice: number;
 }
 
-const TechnicalVisitForm: React.FC<TechnicalVisitFormProps> = ({ 
-  onSuccess, 
-  technicianId,
-  visitPrice = 80 // Valor padrão para demonstração
-}) => {
+const TechnicalVisitForm: React.FC<TechnicalVisitFormProps> = ({ onSuccess, technicianId, visitPrice }) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    address: '',
+    preferredDate: undefined as Date | undefined,
+    preferredTime: '',
+    description: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      phone: "",
-      address: "",
-      preferredDate: new Date().toISOString().split('T')[0],
-      preferredTime: "09:00",
-      equipmentType: "",
-      description: "",
-    },
-  });
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
     try {
       // Simulate API call
-      console.log('Technical visit request:', { ...values, technicianId, visitPrice });
-      
-      form.reset();
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
       toast({
-        title: "Visita técnica agendada!",
-        description: "Sua solicitação foi enviada com sucesso. O técnico confirmará o agendamento em breve.",
+        title: "Visita agendada!",
+        description: `Sua visita técnica foi agendada. Custo: R$ ${visitPrice}`,
       });
       
-      if (onSuccess) {
-        onSuccess();
-      }
+      onSuccess();
     } catch (error) {
       toast({
-        title: "Erro ao agendar visita",
-        description: "Ocorreu um erro ao enviar sua solicitação. Tente novamente.",
+        title: "Erro ao agendar",
+        description: "Não foi possível agendar sua visita. Tente novamente.",
         variant: "destructive",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="space-y-4">
-      {/* Pricing Info */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <MapPin className="h-4 w-4 text-blue-600" />
-            <h3 className="font-semibold text-blue-800">Custo de Deslocamento</h3>
-          </div>
-          <Badge variant="secondary" className="bg-blue-100 text-blue-800">
-            R$ {visitPrice.toFixed(2)}
-          </Badge>
-        </div>
-        <p className="text-sm text-blue-700 mt-1">
-          Taxa de deslocamento para visita técnica. Não inclui mão de obra ou materiais.
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="bg-blue-50 p-4 rounded-lg mb-4">
+        <p className="text-sm text-blue-700">
+          <strong>Custo da visita técnica: R$ {visitPrice}</strong>
+        </p>
+        <p className="text-xs text-blue-600 mt-1">
+          Este valor será cobrado para cobrir os custos de deslocamento
         </p>
       </div>
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Nome Completo</FormLabel>
-                <FormControl>
-                  <Input placeholder="Seu nome completo" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium mb-2">Nome completo</label>
+          <Input
+            required
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            placeholder="Seu nome completo"
           />
-          
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input type="email" placeholder="seu@email.com" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+        </div>
+        
+        <div>
+          <label className="block text-sm font-medium mb-2">Email</label>
+          <Input
+            type="email"
+            required
+            value={formData.email}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            placeholder="seu@email.com"
           />
-          
-          <FormField
-            control={form.control}
-            name="phone"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Telefone</FormLabel>
-                <FormControl>
-                  <Input placeholder="(11) 99999-9999" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          
-          <FormField
-            control={form.control}
-            name="address"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Endereço Completo</FormLabel>
-                <FormControl>
-                  <Textarea 
-                    placeholder="Rua, número, bairro, cidade - Estado, CEP"
-                    className="min-h-[80px]"
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>
-                  Endereço onde será realizada a visita técnica.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="preferredDate"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Data Preferencial</FormLabel>
-                  <FormControl>
-                    <Input type="date" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={form.control}
-              name="preferredTime"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Horário Preferencial</FormLabel>
-                  <FormControl>
-                    <select {...field} className="w-full px-3 py-2 border border-gray-300 rounded-md">
-                      <option value="08:00">08:00</option>
-                      <option value="09:00">09:00</option>
-                      <option value="10:00">10:00</option>
-                      <option value="11:00">11:00</option>
-                      <option value="13:00">13:00</option>
-                      <option value="14:00">14:00</option>
-                      <option value="15:00">15:00</option>
-                      <option value="16:00">16:00</option>
-                      <option value="17:00">17:00</option>
-                    </select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          
-          <FormField
-            control={form.control}
-            name="equipmentType"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Tipo de Equipamento</FormLabel>
-                <FormControl>
-                  <Input placeholder="Ex: Plotter eco solvente" {...field} />
-                </FormControl>
-                <FormDescription>
-                  Descreva o tipo de equipamento que precisa de manutenção.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Descrição do Problema</FormLabel>
-                <FormControl>
-                  <Textarea 
-                    placeholder="Descreva o problema ou serviço necessário em detalhes..."
-                    className="min-h-[100px]"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          
-          <Button type="submit" className="w-full">
-            Agendar Visita Técnica - R$ {visitPrice.toFixed(2)}
-          </Button>
-        </form>
-      </Form>
-    </div>
+        </div>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium mb-2">Telefone</label>
+        <Input
+          required
+          value={formData.phone}
+          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+          placeholder="(11) 99999-9999"
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium mb-2">Endereço completo</label>
+        <Input
+          required
+          value={formData.address}
+          onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+          placeholder="Rua, número, bairro, cidade"
+        />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium mb-2">Data preferida</label>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className="w-full justify-start text-left">
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {formData.preferredDate ? (
+                  format(formData.preferredDate, "PPP", { locale: ptBR })
+                ) : (
+                  <span>Selecionar data</span>
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0">
+              <Calendar
+                mode="single"
+                selected={formData.preferredDate}
+                onSelect={(date) => setFormData({ ...formData, preferredDate: date })}
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-2">Horário preferido</label>
+          <Select value={formData.preferredTime} onValueChange={(value) => setFormData({ ...formData, preferredTime: value })}>
+            <SelectTrigger>
+              <SelectValue placeholder="Selecionar horário" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="morning">Manhã (8h às 12h)</SelectItem>
+              <SelectItem value="afternoon">Tarde (13h às 17h)</SelectItem>
+              <SelectItem value="evening">Noite (18h às 20h)</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium mb-2">Descrição do problema</label>
+        <Textarea
+          required
+          value={formData.description}
+          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+          placeholder="Descreva o problema que precisa ser verificado..."
+          rows={4}
+        />
+      </div>
+
+      <Button type="submit" disabled={isSubmitting} className="w-full">
+        {isSubmitting ? 'Agendando...' : `Agendar Visita - R$ ${visitPrice}`}
+      </Button>
+    </form>
   );
 };
 

@@ -1,24 +1,11 @@
 
 import React from 'react';
-import { Search, MapPin, Filter } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Label } from '@/components/ui/label';
-import { getAllEquipmentTypes } from '@/types/equipment';
-import { brazilianStates } from '@/types/technician';
-import { EquipmentType } from '@/types/equipment';
+import { Search, MapPin, Filter } from 'lucide-react';
+import { brazilianStates, serviceTypeLabels } from '@/types/technician';
+import { equipmentTypeLabels, EquipmentType } from '@/types/equipment';
 
 interface TechnicianFiltersProps {
   searchQuery: string;
@@ -31,7 +18,7 @@ interface TechnicianFiltersProps {
   setSelectedState: (state: string) => void;
   selectedCity: string;
   setSelectedCity: (city: string) => void;
-  selectedEquipmentType: string;
+  selectedEquipmentType: EquipmentType | '';
   setSelectedEquipmentType: (type: EquipmentType | '') => void;
 }
 
@@ -49,108 +36,79 @@ const TechnicianFilters: React.FC<TechnicianFiltersProps> = ({
   selectedEquipmentType,
   setSelectedEquipmentType
 }) => {
-  const equipmentOptions = getAllEquipmentTypes();
-  
   return (
-    <div className="space-y-4">
-      <div className="flex flex-col md:flex-row gap-2">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-          <Input 
-            type="text" 
-            placeholder="Buscar por tipo de equipamento" 
-            value={filterByService}
-            onChange={(e) => setFilterByService(e.target.value)}
-            className="pl-10 bg-white text-black w-full"
+    <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {/* Search Query */}
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/70 h-4 w-4" />
+          <Input
+            placeholder="Buscar técnico ou especialidade"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-10 bg-white/20 border-white/30 text-white placeholder:text-white/70"
           />
         </div>
-        <div className="relative flex-1">
-          <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-          <Input 
-            type="text" 
-            placeholder="Localização (ex: São Paulo, SP)" 
+
+        {/* Location */}
+        <div className="relative">
+          <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/70 h-4 w-4" />
+          <Input
+            placeholder="Localização"
             value={searchLocation}
             onChange={(e) => setSearchLocation(e.target.value)}
-            className="pl-10 bg-white text-black w-full"
+            className="pl-10 bg-white/20 border-white/30 text-white placeholder:text-white/70"
           />
         </div>
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button variant="secondary" className="whitespace-nowrap">
-              <Filter className="mr-2 h-4 w-4" />
-              Filtrar
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-96">
-            <div className="space-y-4">
-              <h3 className="font-medium">Filtros avançados</h3>
-              
-              <div className="space-y-2">
-                <Label htmlFor="equipment-type">Tipo de Equipamento</Label>
-                <Select 
-                  value={selectedEquipmentType || "all"} 
-                  onValueChange={(value) => setSelectedEquipmentType(value === "all" ? '' : value as EquipmentType)}
-                >
-                  <SelectTrigger id="equipment-type">
-                    <SelectValue placeholder="Selecione um tipo de equipamento" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Todos os tipos</SelectItem>
-                    {equipmentOptions.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="state">Estado</Label>
-                <Select 
-                  value={selectedState || "all"} 
-                  onValueChange={(value) => setSelectedState(value === "all" ? '' : value)}
-                >
-                  <SelectTrigger id="state">
-                    <SelectValue placeholder="Selecione um estado" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Todos os estados</SelectItem>
-                    {brazilianStates.map((state) => (
-                      <SelectItem key={state.value} value={state.value}>
-                        {state.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="city">Cidade</Label>
-                <Input
-                  id="city"
-                  value={selectedCity}
-                  onChange={(e) => setSelectedCity(e.target.value)}
-                  placeholder="Digite a cidade"
-                />
-              </div>
-              
-              <Button 
-                variant="outline" 
-                className="w-full"
-                onClick={() => {
-                  setSelectedEquipmentType('');
-                  setSelectedState('');
-                  setSelectedCity('');
-                  setSearchLocation('');
-                  setFilterByService('');
-                }}
-              >
-                Limpar filtros
-              </Button>
-            </div>
-          </PopoverContent>
-        </Popover>
+
+        {/* Service Filter */}
+        <Select value={filterByService} onValueChange={setFilterByService}>
+          <SelectTrigger className="bg-white/20 border-white/30 text-white">
+            <SelectValue placeholder="Tipo de serviço" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="">Todos os serviços</SelectItem>
+            {Object.entries(serviceTypeLabels).map(([key, label]) => (
+              <SelectItem key={key} value={key}>{label}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        {/* State Filter */}
+        <Select value={selectedState} onValueChange={setSelectedState}>
+          <SelectTrigger className="bg-white/20 border-white/30 text-white">
+            <SelectValue placeholder="Estado" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="">Todos os estados</SelectItem>
+            {brazilianStates.map((state) => (
+              <SelectItem key={state.value} value={state.value}>
+                {state.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        {/* City Filter */}
+        <Input
+          placeholder="Cidade"
+          value={selectedCity}
+          onChange={(e) => setSelectedCity(e.target.value)}
+          className="bg-white/20 border-white/30 text-white placeholder:text-white/70"
+        />
+
+        {/* Equipment Type Filter */}
+        <Select value={selectedEquipmentType} onValueChange={(value) => setSelectedEquipmentType(value as EquipmentType | '')}>
+          <SelectTrigger className="bg-white/20 border-white/30 text-white">
+            <SelectValue placeholder="Tipo de equipamento" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="">Todos os equipamentos</SelectItem>
+            {Object.entries(equipmentTypeLabels).map(([key, label]) => (
+              <SelectItem key={key} value={key}>{label}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
     </div>
   );
