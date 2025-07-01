@@ -167,7 +167,7 @@ export const useTechnicianSearch = () => {
   const [selectedTechnician, setSelectedTechnician] = useState<Technician | null>(null);
   const [selectedState, setSelectedState] = useState<string>('');
   const [selectedCity, setSelectedCity] = useState<string>('');
-  const [selectedEquipmentType, setSelectedEquipmentType] = useState<EquipmentType | ''>('');
+  const [selectedEquipmentType, setSelectedEquipmentType] = useState<EquipmentType | 'all' | ''>('');
   
   useEffect(() => {
     // Filtrar técnicos com base nos critérios de pesquisa
@@ -201,7 +201,7 @@ export const useTechnicianSearch = () => {
       filtered = filtered.filter(tech => tech.city?.toLowerCase().includes(selectedCity.toLowerCase()));
     }
     
-    if (selectedEquipmentType && selectedEquipmentType !== 'all') {
+    if (selectedEquipmentType && selectedEquipmentType !== 'all' && selectedEquipmentType !== '') {
       filtered = filtered.filter(tech => 
         tech.equipmentTypes?.includes(selectedEquipmentType as EquipmentType)
       );

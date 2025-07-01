@@ -18,8 +18,8 @@ interface TechnicianFiltersProps {
   setSelectedState: (state: string) => void;
   selectedCity: string;
   setSelectedCity: (city: string) => void;
-  selectedEquipmentType: EquipmentType | '';
-  setSelectedEquipmentType: (type: EquipmentType | '') => void;
+  selectedEquipmentType: EquipmentType | 'all' | '';
+  setSelectedEquipmentType: (type: EquipmentType | 'all' | '') => void;
 }
 
 const TechnicianFilters: React.FC<TechnicianFiltersProps> = ({
@@ -98,7 +98,7 @@ const TechnicianFilters: React.FC<TechnicianFiltersProps> = ({
         />
 
         {/* Equipment Type Filter */}
-        <Select value={selectedEquipmentType} onValueChange={(value) => setSelectedEquipmentType(value as EquipmentType | '')}>
+        <Select value={selectedEquipmentType} onValueChange={(value) => setSelectedEquipmentType(value as EquipmentType | 'all' | '')}>
           <SelectTrigger className="bg-white/20 border-white/30 text-white">
             <SelectValue placeholder="Tipo de equipamento" />
           </SelectTrigger>
