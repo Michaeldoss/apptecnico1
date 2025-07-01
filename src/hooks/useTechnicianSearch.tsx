@@ -203,7 +203,7 @@ export const useTechnicianSearch = () => {
     
     if (selectedEquipmentType && selectedEquipmentType !== 'all' && selectedEquipmentType !== '') {
       filtered = filtered.filter(tech => 
-        tech.equipmentTypes?.includes(selectedEquipmentType as EquipmentType)
+        tech.equipmentTypes?.includes(selectedEquipmentType)
       );
     }
     
