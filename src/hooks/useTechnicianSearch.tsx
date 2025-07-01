@@ -202,8 +202,9 @@ export const useTechnicianSearch = () => {
     }
     
     if (selectedEquipmentType && selectedEquipmentType !== 'all' && selectedEquipmentType !== '') {
+      const equipmentType = selectedEquipmentType as EquipmentType;
       filtered = filtered.filter(tech => 
-        tech.equipmentTypes?.includes(selectedEquipmentType as EquipmentType)
+        tech.equipmentTypes?.includes(equipmentType)
       );
     }
     
