@@ -59,11 +59,14 @@ const FindTechnician = () => {
 
   const handleSearch = () => {
     // A pesquisa já é executada automaticamente através dos useEffect no hook
-    // Este botão pode ser usado para feedback visual ou para forçar uma nova busca
+    // Este botão pode ser usado para feedback visual
     toast({
       title: "Pesquisa executada",
       description: `Encontrados ${filteredTechnicians.length} técnicos`,
     });
+    
+    // Reset do técnico selecionado para refletir os novos resultados
+    setSelectedTechnician(null);
   };
 
   const handleContactRequest = (technicianId: number) => {
