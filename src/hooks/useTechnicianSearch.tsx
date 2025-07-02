@@ -156,6 +156,44 @@ const mockTechnicians: Technician[] = [
       visitPrice: 80,
       laborPrice: 120
     }
+  },
+  {
+    id: 9,
+    name: "João Schneider",
+    description: "Técnico especializado em equipamentos CNC e plotters na região de Santa Catarina.",
+    rating: 4.6,
+    reviewCount: 45,
+    specialties: ["CNC Router", "Plotter de recorte", "Manutenção", "Instalação"],
+    location: "Joinville, SC",
+    state: "SC",
+    city: "Joinville",
+    coordinates: [-26.3044, -48.8487],
+    availability: ["Segunda-Feira", "Terça-Feira", "Quinta-Feira", "Sexta-Feira"],
+    equipmentTypes: ["cnc-router", "cutting"],
+    pricing: {
+      quotePrice: 0,
+      visitPrice: 85,
+      laborPrice: 125
+    }
+  },
+  {
+    id: 10,
+    name: "Maria Mueller",
+    description: "Assistência técnica em plotters UV e sublimação em Santa Catarina.",
+    rating: 4.7,
+    reviewCount: 67,
+    specialties: ["Plotter UV flexível", "Plotter sublimática", "Calandra para sublimação"],
+    location: "Blumenau, SC",
+    state: "SC", 
+    city: "Blumenau",
+    coordinates: [-26.9194, -49.0661],
+    availability: ["Segunda-Feira", "Quarta-Feira", "Sexta-Feira"],
+    equipmentTypes: ["uv-flexible", "sublimation", "sublimation-calander"],
+    pricing: {
+      quotePrice: 0,
+      visitPrice: 80,
+      laborPrice: 115
+    }
   }
 ];
 

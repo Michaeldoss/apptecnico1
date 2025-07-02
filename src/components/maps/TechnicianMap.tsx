@@ -63,8 +63,8 @@ const TechnicianMap: React.FC<TechnicianMapProps> = ({
       // Adicionar técnicos como pontos de interesse
       if (technicians.length > 0) {
         const locations = technicians.map((tech, index) => {
-          const lat = -23.5505 + (tech.id * 0.01);
-          const lng = -46.6333 + (tech.id * 0.01);
+          const lat = tech.coordinates ? tech.coordinates[0] : -23.5505 + (tech.id * 0.01);
+          const lng = tech.coordinates ? tech.coordinates[1] : -46.6333 + (tech.id * 0.01);
           return `${lat},${lng}`;
         }).join('|');
         
@@ -76,9 +76,8 @@ const TechnicianMap: React.FC<TechnicianMapProps> = ({
   };
 
   const viewTechnicianOnGoogleMaps = (technician: Technician) => {
-    // Simular coordenadas baseadas no ID do técnico para demonstração
-    const lat = -23.5505 + (technician.id * 0.01);
-    const lng = -46.6333 + (technician.id * 0.01);
+    const lat = technician.coordinates ? technician.coordinates[0] : -23.5505 + (technician.id * 0.01);
+    const lng = technician.coordinates ? technician.coordinates[1] : -46.6333 + (technician.id * 0.01);
     const query = encodeURIComponent(`${technician.name} - ${technician.location}`);
     const url = `https://www.google.com/maps/search/${query}/@${lat},${lng},15z`;
     window.open(url, '_blank');
@@ -86,9 +85,8 @@ const TechnicianMap: React.FC<TechnicianMapProps> = ({
 
   const getDirectionsToTechnician = (technician: Technician) => {
     if (userLocation) {
-      // Simular coordenadas do técnico baseadas no ID para demonstração
-      const techLat = -23.5505 + (technician.id * 0.01);
-      const techLng = -46.6333 + (technician.id * 0.01);
+      const techLat = technician.coordinates ? technician.coordinates[0] : -23.5505 + (technician.id * 0.01);
+      const techLng = technician.coordinates ? technician.coordinates[1] : -46.6333 + (technician.id * 0.01);
       const destination = encodeURIComponent(`${technician.name} - ${technician.location}`);
       const url = `https://www.google.com/maps/dir/${userLocation.lat},${userLocation.lng}/${techLat},${techLng}`;
       window.open(url, '_blank');
@@ -96,8 +94,23 @@ const TechnicianMap: React.FC<TechnicianMapProps> = ({
   };
 
   const openInGoogleMaps = () => {
-    if (userLocation && technicians.length > 0) {
-      // Criar uma URL mais específica para mostrar todos os técnicos
+    if (technicians.length > 0) {
+      // Se há técnicos filtrados, calcular centro baseado neles
+      const avgLat = technicians.reduce((sum, tech) => {
+        const lat = tech.coordinates ? tech.coordinates[0] : -23.5505;
+        return sum + lat;
+      }, 0) / technicians.length;
+      
+      const avgLng = technicians.reduce((sum, tech) => {
+        const lng = tech.coordinates ? tech.coordinates[1] : -46.6333;
+        return sum + lng;
+      }, 0) / technicians.length;
+      
+      const query = encodeURIComponent('técnicos assistência técnica equipamentos');
+      const url = `https://www.google.com/maps/search/${query}/@${avgLat},${avgLng},10z`;
+      window.open(url, '_blank');
+    } else if (userLocation) {
+      // Fallback para localização do usuário
       const centerLat = userLocation.lat;
       const centerLng = userLocation.lng;
       const query = encodeURIComponent('técnicos assistência técnica equipamentos');
@@ -105,6 +118,46 @@ const TechnicianMap: React.FC<TechnicianMapProps> = ({
       window.open(url, '_blank');
     }
   };
+
+  // Função para calcular o centro e zoom baseado nos técnicos
+  const getMapCenter = () => {
+    if (technicians.length === 0) {
+      // Se não há técnicos, mostrar Brasil inteiro
+      return {
+        lat: -14.2350,
+        lng: -51.9253,
+        zoom: 4
+      };
+    }
+    
+    if (technicians.length === 1) {
+      const tech = technicians[0];
+      return {
+        lat: tech.coordinates ? tech.coordinates[0] : -23.5505,
+        lng: tech.coordinates ? tech.coordinates[1] : -46.6333,
+        zoom: 12
+      };
+    }
+    
+    // Calcular centro baseado nos técnicos disponíveis
+    const avgLat = technicians.reduce((sum, tech) => {
+      const lat = tech.coordinates ? tech.coordinates[0] : -23.5505;
+      return sum + lat;
+    }, 0) / technicians.length;
+    
+    const avgLng = technicians.reduce((sum, tech) => {
+      const lng = tech.coordinates ? tech.coordinates[1] : -46.6333;
+      return sum + lng;
+    }, 0) / technicians.length;
+    
+    return {
+      lat: avgLat,
+      lng: avgLng,
+      zoom: 8
+    };
+  };
+
+  const mapCenter = getMapCenter();
 
   // Calcular posição relativa dos marcadores no mapa
   const calculatePosition = (index: number, total: number) => {
@@ -123,18 +176,17 @@ const TechnicianMap: React.FC<TechnicianMapProps> = ({
     <div className="w-full h-full relative overflow-hidden rounded-lg border">
       {/* Google Maps Embed */}
       <div className="absolute inset-0">
-        {userLocation && (
-          <iframe
-            src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d58523.98646741327!2d-46.66311!3d-23.55052!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59c8da0aa315%3A0xd59f9431f2c9776a!2sSão%20Paulo%2C%20SP!5e0!3m2!1spt!2sbr!4v1699999999999!5m2!1spt!2sbr`}
-            width="100%"
-            height="100%"
-            style={{ border: 0 }}
-            allowFullScreen
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            className="rounded-lg"
-          />
-        )}
+        <iframe
+          src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d${mapCenter.zoom === 4 ? '15000000' : mapCenter.zoom === 8 ? '400000' : '100000'}!2d${mapCenter.lng}!3d${mapCenter.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f${mapCenter.zoom}.1!3m3!1m2!1s0x0%3A0x0!2zVMOpY25pY29z!5e0!3m2!1spt!2sbr!4v1699999999999!5m2!1spt!2sbr`}
+          width="100%"
+          height="100%"
+          style={{ border: 0 }}
+          allowFullScreen
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          className="rounded-lg"
+          key={`${mapCenter.lat}-${mapCenter.lng}-${mapCenter.zoom}`}
+        />
       </div>
       
       {/* Overlay com marcadores dos técnicos */}
