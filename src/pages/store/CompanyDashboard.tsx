@@ -78,32 +78,38 @@ const CompanyDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="min-h-screen">
       <Navbar />
       
-      <main className="flex-grow container mx-auto px-4 py-8">
-        <div className="max-w-6xl mx-auto">
+      {/* Hero Section similar to home page */}
+      <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-24 px-4 relative overflow-hidden">
+        {/* Elementos decorativos de fundo */}
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-transparent to-purple-600/20"></div>
+        <div className="absolute top-20 left-20 w-72 h-72 bg-white/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-yellow-300/10 rounded-full blur-3xl"></div>
+        
+        <div className="max-w-6xl mx-auto relative z-10">
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center">
-              <Building className="h-10 w-10 text-blue-600 mr-4" />
+              <Building className="h-12 w-12 text-yellow-300 mr-4 drop-shadow-lg" />
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">
+                <h1 className="text-4xl md:text-5xl font-black text-white drop-shadow-lg">
                   Portal do Fornecedor
                 </h1>
-                <p className="text-gray-600">
+                <p className="text-xl text-blue-100 mt-2 drop-shadow-lg">
                   Bem-vindo, {user?.name || 'Doss Group'}!
                 </p>
               </div>
             </div>
-            <div className="flex gap-2">
+            <div className="hidden md:flex gap-3">
               <Link to="/loja/profile">
-                <Button variant="outline">
+                <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20 backdrop-blur-sm">
                   <UserRound className="mr-2 h-4 w-4" />
                   Meu Perfil
                 </Button>
               </Link>
               <Link to="/loja/settings">
-                <Button>
+                <Button className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900">
                   <Settings className="mr-2 h-4 w-4" />
                   Configurações
                 </Button>
@@ -111,49 +117,41 @@ const CompanyDashboard = () => {
             </div>
           </div>
           
+          {/* Cards de métricas */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-semibold text-gray-600">Produtos</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-gray-900">{user?.productCount || 87}</div>
-              </CardContent>
-            </Card>
+            <div className="bg-white/20 backdrop-blur-xl rounded-2xl p-6 border border-white/30 shadow-xl hover:bg-white/25 transition-all duration-300">
+              <div className="text-sm font-semibold text-blue-100 mb-2">Produtos</div>
+              <div className="text-3xl font-black text-white">{user?.productCount || 87}</div>
+            </div>
             
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-semibold text-gray-600">Vendas (Mês)</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-gray-900">23</div>
-              </CardContent>
-            </Card>
+            <div className="bg-white/20 backdrop-blur-xl rounded-2xl p-6 border border-white/30 shadow-xl hover:bg-white/25 transition-all duration-300">
+              <div className="text-sm font-semibold text-blue-100 mb-2">Vendas (Mês)</div>
+              <div className="text-3xl font-black text-white">23</div>
+            </div>
             
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-semibold text-gray-600 flex items-center gap-1">
-                  <Lock className="h-4 w-4" />
-                  Faturamento
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-gray-900">R$ 12.450,00</div>
-                <div className="text-xs text-green-600 mt-2">
-                  Pagamento Protegido
-                </div>
-              </CardContent>
-            </Card>
+            <div className="bg-white/20 backdrop-blur-xl rounded-2xl p-6 border border-white/30 shadow-xl hover:bg-white/25 transition-all duration-300">
+              <div className="text-sm font-semibold text-blue-100 mb-2 flex items-center gap-1">
+                <Lock className="h-4 w-4" />
+                Faturamento
+              </div>
+              <div className="text-3xl font-black text-white">R$ 12.450,00</div>
+              <div className="text-xs text-green-300 mt-2 font-semibold">
+                Pagamento Protegido
+              </div>
+            </div>
             
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-semibold text-gray-600">Avaliação</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-gray-900">{user?.rating || 4.8} ★</div>
-              </CardContent>
-            </Card>
+            <div className="bg-white/20 backdrop-blur-xl rounded-2xl p-6 border border-white/30 shadow-xl hover:bg-white/25 transition-all duration-300">
+              <div className="text-sm font-semibold text-blue-100 mb-2">Avaliação</div>
+              <div className="text-3xl font-black text-white">{user?.rating || 4.8} ★</div>
+            </div>
           </div>
+        </div>
+      </section>
+      
+      {/* Main Dashboard Content */}
+      <main className="bg-white py-8">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
           
           <Tabs defaultValue="overview">
             <div className="border-b border-gray-200 mb-6">
@@ -289,6 +287,7 @@ const CompanyDashboard = () => {
               </Card>
             </TabsContent>
           </Tabs>
+          </div>
         </div>
       </main>
       

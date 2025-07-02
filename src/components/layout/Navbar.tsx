@@ -47,8 +47,8 @@ const Navbar = () => {
 
   const getDashboardLink = () => {
     if (userType === "customer") return "/cliente/painel";
-    if (userType === "technician") return "/technician/dashboard";
-    if (userType === "company") return "/store/company-dashboard";
+    if (userType === "technician") return "/tecnico/painel";
+    if (userType === "company") return "/loja/dashboard";
     return "/";
   };
 
@@ -166,7 +166,7 @@ const Navbar = () => {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to="/store/company-register" className="font-inter font-medium flex items-center gap-3 p-3">
+                    <Link to="/loja/register" className="font-inter font-medium flex items-center gap-3 p-3">
                       <Store className="h-4 w-4 text-blue-600" />
                       <div>
                         <div className="font-semibold text-gray-800">Lojista</div>
@@ -265,7 +265,7 @@ const Navbar = () => {
                       </Button>
                     </Link>
                     
-                    <Link to="/store/company-register" onClick={() => setIsMenuOpen(false)}>
+                    <Link to="/loja/register" onClick={() => setIsMenuOpen(false)}>
                       <Button className="w-full justify-start bg-blue-700 text-white hover:bg-blue-800 font-inter font-semibold shadow-lg">
                         <Store className="h-4 w-4 mr-2" /> Lojista
                       </Button>
