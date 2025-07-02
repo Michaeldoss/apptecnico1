@@ -64,7 +64,10 @@ import CompanyInventory from '@/pages/store/CompanyInventory';
 
 // Admin pages
 import AdminDashboard from '@/pages/admin/Dashboard';
-import AdminUsers from '@/pages/admin/Users';
+import AdminUsers from '@/pages/admin/AdminUsers';
+import AdminPayments from '@/pages/admin/AdminPayments';
+import AdminServices from '@/pages/admin/AdminServices';
+import AdminReports from '@/pages/admin/AdminReports';
 import AdminRoles from '@/pages/admin/Roles';
 import AdminSettings from '@/pages/admin/Settings';
 
@@ -389,6 +392,21 @@ function App() {
                 <Route path="/admin/users" element={
                   <ProtectedRoute userType="admin">
                     <AdminUsers />
+                  </ProtectedRoute>
+                } />
+                <Route path="/admin/payments" element={
+                  <ProtectedRoute userType="admin">
+                    <AdminPayments />
+                  </ProtectedRoute>
+                } />
+                <Route path="/admin/services" element={
+                  <ProtectedRoute userType="admin">
+                    <AdminServices />
+                  </ProtectedRoute>
+                } />
+                <Route path="/admin/reports" element={
+                  <ProtectedRoute userType="admin">
+                    <AdminReports />
                   </ProtectedRoute>
                 } />
                 <Route path="/admin/roles" element={
