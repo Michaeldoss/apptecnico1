@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { MapPin, Star, ArrowRight, AlertCircle, Printer, Scissors, Wrench, Calculator, Clock } from 'lucide-react';
-import TechnicianMap from '@/components/maps/TechnicianMap';
+import MapboxTechnicianMap from '@/components/maps/MapboxTechnicianMap';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { useTechnicianSearch } from '@/hooks/useTechnicianSearch';
@@ -179,7 +179,7 @@ const FindTechnician = () => {
               {/* Map */}
               <div className="lg:col-span-2">
                 <BlurContainer className="h-[600px] rounded-xl overflow-hidden">
-                  <TechnicianMap 
+                  <MapboxTechnicianMap 
                     technicians={filteredTechnicians} 
                     selectedTechnician={selectedTechnician}
                     setSelectedTechnician={setSelectedTechnician}
