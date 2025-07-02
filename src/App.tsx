@@ -56,6 +56,11 @@ import TechnicianSchedule from '@/pages/technician/Schedule';
 // Store pages
 import CompanyDashboard from '@/pages/store/CompanyDashboard';
 import CompanyRegister from '@/pages/store/CompanyRegister';
+import CompanyProducts from '@/pages/store/CompanyProducts';
+import CompanyOrders from '@/pages/store/CompanyOrders';
+import CompanyFinancial from '@/pages/store/CompanyFinancial';
+import CompanyReviews from '@/pages/store/CompanyReviews';
+import CompanyInventory from '@/pages/store/CompanyInventory';
 
 // Admin pages
 import AdminDashboard from '@/pages/admin/Dashboard';
@@ -93,6 +98,31 @@ function App() {
                  <Route path="/loja/dashboard" element={
                    <ProtectedRoute userType="company">
                      <CompanyDashboard />
+                   </ProtectedRoute>
+                 } />
+                 <Route path="/loja/products" element={
+                   <ProtectedRoute userType="company">
+                     <CompanyProducts />
+                   </ProtectedRoute>
+                 } />
+                 <Route path="/loja/orders" element={
+                   <ProtectedRoute userType="company">
+                     <CompanyOrders />
+                   </ProtectedRoute>
+                 } />
+                 <Route path="/loja/financeiro" element={
+                   <ProtectedRoute userType="company">
+                     <CompanyFinancial />
+                   </ProtectedRoute>
+                 } />
+                 <Route path="/loja/avaliacoes" element={
+                   <ProtectedRoute userType="company">
+                     <CompanyReviews />
+                   </ProtectedRoute>
+                 } />
+                 <Route path="/loja/estoque" element={
+                   <ProtectedRoute userType="company">
+                     <CompanyInventory />
                    </ProtectedRoute>
                  } />
                  
