@@ -16,8 +16,9 @@ const TechnicianMap: React.FC<TechnicianMapProps> = ({
   selectedTechnician,
   setSelectedTechnician
 }) => {
-  const mapRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<HTMLIFrameElement>(null);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [currentMapBounds, setCurrentMapBounds] = useState<{ center: { lat: number; lng: number }, zoom: number } | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -50,6 +51,74 @@ const TechnicianMap: React.FC<TechnicianMapProps> = ({
       });
     }
   }, [toast]);
+
+  // Função para calcular o centro e zoom baseado nos técnicos
+  const getMapCenter = () => {
+    if (technicians.length === 0) {
+      // Se não há técnicos, mostrar Brasil inteiro
+      return {
+        lat: -14.2350,
+        lng: -51.9253,
+        zoom: 4
+      };
+    }
+    
+    if (technicians.length === 1) {
+      const tech = technicians[0];
+      return {
+        lat: tech.coordinates ? tech.coordinates[0] : -23.5505,
+        lng: tech.coordinates ? tech.coordinates[1] : -46.6333,
+        zoom: 12
+      };
+    }
+    
+    // Calcular centro baseado nos técnicos disponíveis
+    const avgLat = technicians.reduce((sum, tech) => {
+      const lat = tech.coordinates ? tech.coordinates[0] : -23.5505;
+      return sum + lat;
+    }, 0) / technicians.length;
+    
+    const avgLng = technicians.reduce((sum, tech) => {
+      const lng = tech.coordinates ? tech.coordinates[1] : -46.6333;
+      return sum + lng;
+    }, 0) / technicians.length;
+    
+    return {
+      lat: avgLat,
+      lng: avgLng,
+      zoom: 8
+    };
+  };
+
+  const mapCenter = getMapCenter();
+
+  // Atualizar bounds do mapa quando mudar o centro
+  useEffect(() => {
+    setCurrentMapBounds({ center: mapCenter, zoom: mapCenter.zoom });
+  }, [mapCenter.lat, mapCenter.lng, mapCenter.zoom]);
+
+  // Converter coordenadas geográficas para posições no mapa
+  const calculateMapPosition = (technician: Technician, mapCenter: any) => {
+    const techLat = technician.coordinates ? technician.coordinates[0] : -23.5505 + (technician.id * 0.01);
+    const techLng = technician.coordinates ? technician.coordinates[1] : -46.6333 + (technician.id * 0.01);
+    
+    // Calcular posição relativa baseada no centro do mapa
+    const latDiff = techLat - mapCenter.lat;
+    const lngDiff = techLng - mapCenter.lng;
+    
+    // Converter diferenças para posições percentuais no mapa
+    // Ajustar escala baseada no zoom
+    const scale = mapCenter.zoom >= 12 ? 0.8 : mapCenter.zoom >= 8 ? 0.4 : 0.2;
+    
+    const x = 50 + (lngDiff * scale * 100);
+    const y = 50 - (latDiff * scale * 100);
+    
+    // Limitar posições dentro do mapa visível
+    return {
+      x: Math.max(5, Math.min(95, x)),
+      y: Math.max(5, Math.min(95, y))
+    };
+  };
 
   const handleMarkerClick = (technician: Technician) => {
     setSelectedTechnician(technician);
@@ -119,74 +188,12 @@ const TechnicianMap: React.FC<TechnicianMapProps> = ({
     }
   };
 
-  // Função para calcular o centro e zoom baseado nos técnicos
-  const getMapCenter = () => {
-    if (technicians.length === 0) {
-      // Se não há técnicos, mostrar Brasil inteiro
-      return {
-        lat: -14.2350,
-        lng: -51.9253,
-        zoom: 4
-      };
-    }
-    
-    if (technicians.length === 1) {
-      const tech = technicians[0];
-      return {
-        lat: tech.coordinates ? tech.coordinates[0] : -23.5505,
-        lng: tech.coordinates ? tech.coordinates[1] : -46.6333,
-        zoom: 12
-      };
-    }
-    
-    // Calcular centro baseado nos técnicos disponíveis
-    const avgLat = technicians.reduce((sum, tech) => {
-      const lat = tech.coordinates ? tech.coordinates[0] : -23.5505;
-      return sum + lat;
-    }, 0) / technicians.length;
-    
-    const avgLng = technicians.reduce((sum, tech) => {
-      const lng = tech.coordinates ? tech.coordinates[1] : -46.6333;
-      return sum + lng;
-    }, 0) / technicians.length;
-    
-    return {
-      lat: avgLat,
-      lng: avgLng,
-      zoom: 8
-    };
-  };
-
-  const mapCenter = getMapCenter();
-
-  // Converter coordenadas geográficas para posições no mapa
-  const calculateMapPosition = (technician: Technician, mapCenter: any) => {
-    const techLat = technician.coordinates ? technician.coordinates[0] : -23.5505 + (technician.id * 0.01);
-    const techLng = technician.coordinates ? technician.coordinates[1] : -46.6333 + (technician.id * 0.01);
-    
-    // Calcular posição relativa baseada no centro do mapa
-    const latDiff = techLat - mapCenter.lat;
-    const lngDiff = techLng - mapCenter.lng;
-    
-    // Converter diferenças para posições percentuais no mapa
-    // Ajustar escala baseada no zoom
-    const scale = mapCenter.zoom >= 12 ? 0.8 : mapCenter.zoom >= 8 ? 0.4 : 0.2;
-    
-    const x = 50 + (lngDiff * scale * 100);
-    const y = 50 - (latDiff * scale * 100);
-    
-    // Limitar posições dentro do mapa visível
-    return {
-      x: Math.max(5, Math.min(95, x)),
-      y: Math.max(5, Math.min(95, y))
-    };
-  };
-
   return (
     <div className="w-full h-full relative overflow-hidden rounded-lg border">
       {/* Google Maps Embed */}
       <div className="absolute inset-0">
         <iframe
+          ref={mapRef}
           src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d${mapCenter.zoom === 4 ? '15000000' : mapCenter.zoom === 8 ? '400000' : '100000'}!2d${mapCenter.lng}!3d${mapCenter.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f${mapCenter.zoom}.1!3m3!1m2!1s0x0%3A0x0!2zVMOpY25pY29z!5e0!3m2!1spt!2sbr!4v1699999999999!5m2!1spt!2sbr`}
           width="100%"
           height="100%"
@@ -195,7 +202,13 @@ const TechnicianMap: React.FC<TechnicianMapProps> = ({
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
           className="rounded-lg"
-          key={`${mapCenter.lat}-${mapCenter.lng}-${mapCenter.zoom}`}
+          key={`${mapCenter.lat}-${mapCenter.lng}-${mapCenter.zoom}-${technicians.length}`}
+        />
+        
+        {/* Overlay que força reposicionamento dos marcadores */}
+        <div 
+          className="absolute inset-0 opacity-0 pointer-events-none"
+          key={`overlay-${mapCenter.lat}-${mapCenter.lng}-${mapCenter.zoom}`}
         />
       </div>
       
