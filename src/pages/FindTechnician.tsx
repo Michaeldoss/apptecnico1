@@ -62,7 +62,7 @@ const FindTechnician = () => {
     // Este botão pode ser usado para feedback visual
     toast({
       title: "Pesquisa executada",
-      description: `Encontrados ${filteredTechnicians.length} técnicos`,
+      description: `Encontrados ${technicians.length} técnicos`,
     });
     
     // Reset do técnico selecionado para refletir os novos resultados
