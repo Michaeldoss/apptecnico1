@@ -159,17 +159,27 @@ const TechnicianMap: React.FC<TechnicianMapProps> = ({
 
   const mapCenter = getMapCenter();
 
-  // Calcular posição relativa dos marcadores no mapa
-  const calculatePosition = (index: number, total: number) => {
-    const radius = 35;
-    const angle = (index / total) * 2 * Math.PI;
-    const centerX = 50;
-    const centerY = 50;
+  // Converter coordenadas geográficas para posições no mapa
+  const calculateMapPosition = (technician: Technician, mapCenter: any) => {
+    const techLat = technician.coordinates ? technician.coordinates[0] : -23.5505 + (technician.id * 0.01);
+    const techLng = technician.coordinates ? technician.coordinates[1] : -46.6333 + (technician.id * 0.01);
     
-    const x = centerX + radius * Math.cos(angle);
-    const y = centerY + radius * Math.sin(angle);
+    // Calcular posição relativa baseada no centro do mapa
+    const latDiff = techLat - mapCenter.lat;
+    const lngDiff = techLng - mapCenter.lng;
     
-    return { x, y };
+    // Converter diferenças para posições percentuais no mapa
+    // Ajustar escala baseada no zoom
+    const scale = mapCenter.zoom >= 12 ? 0.8 : mapCenter.zoom >= 8 ? 0.4 : 0.2;
+    
+    const x = 50 + (lngDiff * scale * 100);
+    const y = 50 - (latDiff * scale * 100);
+    
+    // Limitar posições dentro do mapa visível
+    return {
+      x: Math.max(5, Math.min(95, x)),
+      y: Math.max(5, Math.min(95, y))
+    };
   };
 
   return (
@@ -205,7 +215,7 @@ const TechnicianMap: React.FC<TechnicianMapProps> = ({
         
         {/* Marcadores dos técnicos */}
         {technicians.map((technician, index) => {
-          const position = calculatePosition(index, technicians.length);
+          const position = calculateMapPosition(technician, mapCenter);
           const isSelected = selectedTechnician?.id === technician.id;
           
           return (
