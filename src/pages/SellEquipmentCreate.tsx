@@ -80,20 +80,33 @@ const SellEquipmentCreate = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       
-      <main className="flex-grow container mx-auto px-4 py-8">
-        <div className="max-w-2xl mx-auto">
-          <div className="flex items-center mb-8">
-            <Link to="/sell-equipment">
-              <Button variant="outline" size="sm" className="mr-4">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Voltar
-              </Button>
-            </Link>
-            <div>
-              <h1 className="text-3xl font-bold">Anunciar Equipamento</h1>
-              <p className="text-gray-600">Preencha as informações do seu equipamento</p>
+      {/* Hero Section */}
+      <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-12 relative overflow-hidden">
+        {/* Elementos decorativos de fundo */}
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-transparent to-purple-600/20"></div>
+        <div className="absolute top-6 left-6 w-24 h-24 bg-white/5 rounded-full blur-2xl"></div>
+        <div className="absolute bottom-6 right-6 w-32 h-32 bg-yellow-300/10 rounded-full blur-2xl"></div>
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-2xl mx-auto">
+            <div className="flex items-center mb-4">
+              <Link to="/sell-equipment">
+                <Button variant="outline" size="sm" className="mr-4 bg-white/10 border-white/30 text-white hover:bg-white hover:text-blue-600 backdrop-blur-sm">
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Voltar
+                </Button>
+              </Link>
+              <div>
+                <h1 className="text-3xl md:text-4xl font-bold text-white drop-shadow-lg">Anunciar Equipamento</h1>
+                <p className="text-white/90 drop-shadow-md">Preencha as informações do seu equipamento</p>
+              </div>
             </div>
           </div>
+        </div>
+      </section>
+      
+      <main className="flex-grow container mx-auto px-4 py-8 bg-gray-50">
+        <div className="max-w-2xl mx-auto">
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <Card>
