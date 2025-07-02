@@ -371,7 +371,9 @@ const SellEquipment = () => {
             </div>
 
             {viewMode === 'map' ? (
-              renderMapView()
+              <div className="h-[600px]">
+                {renderMapView()}
+              </div>
             ) : filteredEquipments.length > 0 ? (
               <div className={`grid gap-6 ${
                 viewMode === 'grid' 

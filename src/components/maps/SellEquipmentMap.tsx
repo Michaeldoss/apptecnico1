@@ -32,8 +32,12 @@ const SellEquipmentMap: React.FC<SellEquipmentMapProps> = ({
 }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
-  const [mapboxToken, setMapboxToken] = useState('');
-  const [showTokenInput, setShowTokenInput] = useState(true);
+  const [mapboxToken, setMapboxToken] = useState(() => 
+    localStorage.getItem('mapbox-token') || ''
+  );
+  const [showTokenInput, setShowTokenInput] = useState(() => 
+    !localStorage.getItem('mapbox-token')
+  );
   const markers = useRef<mapboxgl.Marker[]>([]);
 
   const initializeMap = () => {
@@ -59,6 +63,7 @@ const SellEquipmentMap: React.FC<SellEquipmentMapProps> = ({
         addEquipmentMarkers();
       });
 
+      localStorage.setItem('mapbox-token', mapboxToken);
       setShowTokenInput(false);
     } catch (error) {
       console.error('Erro ao inicializar o mapa:', error);
@@ -136,13 +141,15 @@ const SellEquipmentMap: React.FC<SellEquipmentMapProps> = ({
   };
 
   useEffect(() => {
-    if (mapboxToken && map.current) {
+    if (mapboxToken && !showTokenInput && !map.current) {
+      initializeMap();
+    } else if (mapboxToken && map.current) {
       addEquipmentMarkers();
     }
-  }, [equipments, mapboxToken]);
+  }, [equipments, mapboxToken, showTokenInput]);
 
   return (
-    <div className="w-full h-96 relative">
+    <div className="w-full h-full relative">
       {showTokenInput ? (
         <Card className="absolute inset-0 z-10 flex items-center justify-center">
           <CardContent className="text-center max-w-md">
