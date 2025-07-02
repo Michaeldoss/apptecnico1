@@ -121,20 +121,33 @@ const TechnicianMap: React.FC<TechnicianMapProps> = ({
 
   return (
     <div className="w-full h-full relative overflow-hidden rounded-lg border">
-      {/* Google Maps Embed */}
-      <div className="absolute inset-0">
-        {userLocation && (
-          <iframe
-            src={`https://www.google.com/maps/embed/v1/search?key=AIzaSyDCdnGU1xlCZzTKHNTgmOEZ4CUn63z4DhE&q=técnicos+assistência+técnica&center=${userLocation.lat},${userLocation.lng}&zoom=12`}
-            width="100%"
-            height="100%"
-            style={{ border: 0 }}
-            allowFullScreen
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            className="rounded-lg"
-          />
-        )}
+      {/* Mapa de fundo com gradiente */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-100 via-green-50 to-blue-200">
+        {/* Decorações do mapa */}
+        <div className="absolute inset-0 opacity-20">
+          {/* Ruas simuladas */}
+          <div className="absolute h-0.5 bg-gray-400 w-full top-1/4 transform rotate-12"></div>
+          <div className="absolute h-0.5 bg-gray-400 w-full top-1/2 transform -rotate-6"></div>
+          <div className="absolute h-0.5 bg-gray-400 w-full top-3/4 transform rotate-3"></div>
+          <div className="absolute w-0.5 bg-gray-400 h-full left-1/4 transform rotate-12"></div>
+          <div className="absolute w-0.5 bg-gray-400 h-full left-1/2 transform -rotate-3"></div>
+          <div className="absolute w-0.5 bg-gray-400 h-full left-3/4 transform rotate-6"></div>
+          
+          {/* Áreas verdes simuladas */}
+          <div className="absolute top-10 left-10 w-20 h-20 bg-green-300 rounded-full opacity-30"></div>
+          <div className="absolute bottom-16 right-16 w-24 h-16 bg-green-300 rounded-lg opacity-30"></div>
+          <div className="absolute top-20 right-20 w-16 h-16 bg-green-300 rounded-full opacity-30"></div>
+        </div>
+        
+        {/* Grade do mapa */}
+        <div className="absolute inset-0 opacity-10">
+          {Array.from({ length: 20 }).map((_, i) => (
+            <div key={`h-${i}`} className="absolute h-px bg-gray-500 w-full" style={{ top: `${i * 5}%` }}></div>
+          ))}
+          {Array.from({ length: 20 }).map((_, i) => (
+            <div key={`v-${i}`} className="absolute w-px bg-gray-500 h-full" style={{ left: `${i * 5}%` }}></div>
+          ))}
+        </div>
       </div>
       
       {/* Overlay com marcadores dos técnicos */}
