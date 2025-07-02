@@ -53,6 +53,10 @@ import TechnicianPayments from '@/pages/technician/Payments';
 import TechnicianSubscription from '@/pages/technician/Subscription';
 import TechnicianSchedule from '@/pages/technician/Schedule';
 
+// Store pages
+import CompanyDashboard from '@/pages/store/CompanyDashboard';
+import CompanyRegister from '@/pages/store/CompanyRegister';
+
 // Admin pages
 import AdminDashboard from '@/pages/admin/Dashboard';
 import AdminUsers from '@/pages/admin/Users';
@@ -82,9 +86,17 @@ function App() {
                 <Route path="/services" element={<Services />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
-                <Route path="/support" element={<Support />} />
-                
-                {/* Customer routes */}
+                 <Route path="/support" element={<Support />} />
+                 
+                 {/* Store routes */}
+                 <Route path="/loja/register" element={<CompanyRegister />} />
+                 <Route path="/loja/dashboard" element={
+                   <ProtectedRoute userType="company">
+                     <CompanyDashboard />
+                   </ProtectedRoute>
+                 } />
+                 
+                 {/* Customer routes */}
                 <Route path="/cliente/painel" element={
                   <ProtectedRoute userType="customer">
                     <CustomerDashboard />
