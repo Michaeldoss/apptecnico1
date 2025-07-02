@@ -4,7 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, Filter, Plus, Grid, List, MapPin, SlidersHorizontal, Map } from 'lucide-react';
+import { Search, Filter, Plus, Grid, List, MapPin, SlidersHorizontal, Map, Star, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import EquipmentForSaleCard from '@/components/sell-equipment/EquipmentForSaleCard';
@@ -55,7 +56,8 @@ const mockEquipments: SellEquipmentItem[] = [
       whatsapp: '21888888888'
     },
     createdAt: '2024-01-14T15:30:00Z',
-    updatedAt: '2024-01-14T15:30:00Z'
+    updatedAt: '2024-01-14T15:30:00Z',
+    featured: true
   },
   {
     id: '3',
@@ -214,6 +216,59 @@ const SellEquipment = () => {
                   Ver no Mapa
                 </Button>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Featured Equipment Carousel */}
+        <section className="py-8 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">Equipamentos em Destaque</h2>
+                <p className="text-gray-600">Anúncios premium que ficam em evidência</p>
+              </div>
+              <Badge className="bg-yellow-500 text-black font-semibold px-3 py-1">
+                <Star className="h-4 w-4 mr-1" />
+                Premium
+              </Badge>
+            </div>
+            
+            <Carousel
+              opts={{
+                align: "start",
+                loop: true,
+              }}
+              className="w-full"
+            >
+              <CarouselContent className="-ml-2 md:-ml-4">
+                {equipments.filter(eq => eq.featured).map((equipment) => (
+                  <CarouselItem key={equipment.id} className="pl-2 md:pl-4 basis-full md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+                    <div className="relative">
+                      <EquipmentForSaleCard
+                        equipment={equipment}
+                        onContact={handleContact}
+                        onFavorite={handleFavorite}
+                        isFavorited={favorites.includes(equipment.id)}
+                      />
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <div className="flex justify-center mt-4 gap-2">
+                <CarouselPrevious className="static transform-none mx-0 bg-white/80 backdrop-blur-sm border-blue-600" />
+                <CarouselNext className="static transform-none mx-0 bg-white/80 backdrop-blur-sm border-blue-600" />
+              </div>
+            </Carousel>
+            
+            <div className="text-center mt-6">
+              <p className="text-sm text-gray-600 mb-2">
+                Destaque seu anúncio e tenha mais visibilidade
+              </p>
+              <Button variant="outline" className="text-yellow-600 border-yellow-600 hover:bg-yellow-600 hover:text-white">
+                <Star className="h-4 w-4 mr-2" />
+                Promover Meu Anúncio
+              </Button>
             </div>
           </div>
         </section>
