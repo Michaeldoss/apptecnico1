@@ -207,8 +207,7 @@ const SellEquipmentMap: React.FC<SellEquipmentMapProps> = ({
       
       <div 
         ref={mapContainer} 
-        className="w-full h-full rounded-lg"
-        style={{ display: showTokenInput ? 'none' : 'block' }}
+        className="w-full h-full rounded-lg overflow-hidden"
       />
       
       {!showTokenInput && (
