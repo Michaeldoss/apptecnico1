@@ -43,7 +43,7 @@ const SidebarItem = ({ href, icon: Icon, children, active, badge, onClick }: Sid
       onClick={onClick}
     >
       <Icon className={cn("h-5 w-5 flex-shrink-0", active ? "text-white" : "text-tech-primary")} />
-      <span className="flex-1 min-w-0 text-left">{children}</span>
+      <span className="flex-1 min-w-0 text-left w-full">{children}</span>
       
       {badge && badge > 0 && (
         <Badge 
