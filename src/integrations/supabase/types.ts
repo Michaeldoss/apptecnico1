@@ -9,7 +9,90 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      tecnico_pagamento_config: {
+        Row: {
+          conta_verificada: boolean | null
+          created_at: string
+          id: string
+          mercadopago_access_token: string | null
+          mercadopago_user_id: string | null
+          taxa_plataforma: number | null
+          tecnico_id: string
+          updated_at: string
+        }
+        Insert: {
+          conta_verificada?: boolean | null
+          created_at?: string
+          id?: string
+          mercadopago_access_token?: string | null
+          mercadopago_user_id?: string | null
+          taxa_plataforma?: number | null
+          tecnico_id: string
+          updated_at?: string
+        }
+        Update: {
+          conta_verificada?: boolean | null
+          created_at?: string
+          id?: string
+          mercadopago_access_token?: string | null
+          mercadopago_user_id?: string | null
+          taxa_plataforma?: number | null
+          tecnico_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      transacoes: {
+        Row: {
+          cliente_id: string
+          comprovante_url: string | null
+          created_at: string
+          data_liberacao: string | null
+          data_pagamento: string | null
+          id: string
+          meio_pagamento: string
+          mercadopago_payment_id: string | null
+          mercadopago_preference_id: string | null
+          servico_id: string
+          status: string
+          tecnico_id: string
+          updated_at: string
+          valor_total: number
+        }
+        Insert: {
+          cliente_id: string
+          comprovante_url?: string | null
+          created_at?: string
+          data_liberacao?: string | null
+          data_pagamento?: string | null
+          id?: string
+          meio_pagamento: string
+          mercadopago_payment_id?: string | null
+          mercadopago_preference_id?: string | null
+          servico_id: string
+          status?: string
+          tecnico_id: string
+          updated_at?: string
+          valor_total: number
+        }
+        Update: {
+          cliente_id?: string
+          comprovante_url?: string | null
+          created_at?: string
+          data_liberacao?: string | null
+          data_pagamento?: string | null
+          id?: string
+          meio_pagamento?: string
+          mercadopago_payment_id?: string | null
+          mercadopago_preference_id?: string | null
+          servico_id?: string
+          status?: string
+          tecnico_id?: string
+          updated_at?: string
+          valor_total?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

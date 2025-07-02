@@ -3,30 +3,44 @@ import React, { useState } from 'react';
 import TechnicianLayout from '@/components/layout/TechnicianLayout';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Search, Filter } from 'lucide-react';
-import { usePayments } from '@/hooks/usePayments';
-import PaymentSummaryComponent from '@/components/payments/PaymentSummary';
-import PaymentCharts from '@/components/payments/PaymentCharts';
-import PaymentTable from '@/components/payments/PaymentTable';
+import { Search, Filter, Plus } from 'lucide-react';
+import { useTransacoes } from '@/hooks/useTransacoes';
+import TransacaoCard from '@/components/payments/TransacaoCard';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const TechnicianPayments = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const {
-    payments,
-    summary,
-    monthlyEarnings,
-    serviceTypeEarnings,
+    transacoes,
     isLoading,
-    handleWithdraw,
-    handleReleasePayment,
-    handleContestPayment
-  } = usePayments();
+    liberarPagamento,
+    resumo
+  } = useTransacoes();
 
-  const filteredPayments = payments.filter(payment =>
-    payment.clientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    payment.serviceId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    payment.transactionCode.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredTransacoes = transacoes.filter(transacao =>
+    transacao.servico_id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    transacao.meio_pagamento.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const formatarValor = (valor: number) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    }).format(valor);
+  };
+
+  if (isLoading) {
+    return (
+      <TechnicianLayout title="Pagamentos">
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-tech-primary mx-auto"></div>
+            <p className="mt-2 text-gray-600">Carregando transações...</p>
+          </div>
+        </div>
+      </TechnicianLayout>
+    );
+  }
 
   return (
     <TechnicianLayout title="Pagamentos">
@@ -42,31 +56,65 @@ const TechnicianPayments = () => {
           </p>
           <div className="flex gap-4 text-xs text-blue-600">
             <span>✓ Pagamento antecipado garantido</span>
-            <span>✓ Liberação automática em 48h</span>
+            <span>✓ Liberação automática em 24h</span>
             <span>✓ Sistema de contestação</span>
             <span>✓ Saque imediato disponível</span>
           </div>
         </div>
 
         {/* Resumo Financeiro */}
-        <PaymentSummaryComponent
-          summary={summary}
-          onWithdraw={handleWithdraw}
-          isLoading={isLoading}
-        />
-
-        {/* Gráficos */}
-        <PaymentCharts
-          monthlyEarnings={monthlyEarnings}
-          serviceTypeEarnings={serviceTypeEarnings}
-        />
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-gray-600">Total Retido</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-2xl font-bold text-orange-600">
+                {formatarValor(resumo.totalRetido)}
+              </p>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-gray-600">Total Liberado</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-2xl font-bold text-green-600">
+                {formatarValor(resumo.totalLiberado)}
+              </p>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-gray-600">Pendente Liberação</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-2xl font-bold text-blue-600">
+                {formatarValor(resumo.pendenteLiberacao)}
+              </p>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-gray-600">Total Transações</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-2xl font-bold text-gray-900">
+                {resumo.totalTransacoes}
+              </p>
+            </CardContent>
+          </Card>
+        </div>
 
         {/* Busca e Filtros */}
         <div className="flex items-center justify-between">
           <div className="relative w-full max-w-sm">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Buscar por cliente, O.S. ou código"
+              placeholder="Buscar por serviço ou meio de pagamento"
               className="pl-8"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -78,12 +126,31 @@ const TechnicianPayments = () => {
           </Button>
         </div>
 
-        {/* Tabela de Pagamentos */}
-        <PaymentTable
-          payments={filteredPayments}
-          onReleasePayment={handleReleasePayment}
-          onContestPayment={handleContestPayment}
-        />
+        {/* Lista de Transações */}
+        {filteredTransacoes.length > 0 ? (
+          <div className="grid gap-4">
+            {filteredTransacoes.map((transacao) => (
+              <TransacaoCard
+                key={transacao.id}
+                transacao={transacao}
+                onLiberar={liberarPagamento}
+                isLoading={isLoading}
+              />
+            ))}
+          </div>
+        ) : (
+          <Card>
+            <CardContent className="p-6 text-center">
+              <div className="mx-auto w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+                <Plus className="h-6 w-6 text-gray-400" />
+              </div>
+              <h3 className="text-lg font-medium mb-2 text-gray-900">Nenhuma transação encontrada</h3>
+              <p className="text-gray-600 mb-4">
+                Você ainda não tem transações de pagamento. Quando os clientes pagarem pelos seus serviços, elas aparecerão aqui.
+              </p>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </TechnicianLayout>
   );
