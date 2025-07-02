@@ -121,33 +121,20 @@ const TechnicianMap: React.FC<TechnicianMapProps> = ({
 
   return (
     <div className="w-full h-full relative overflow-hidden rounded-lg border">
-      {/* Mapa de fundo com gradiente */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-100 via-green-50 to-blue-200">
-        {/* Decorações do mapa */}
-        <div className="absolute inset-0 opacity-20">
-          {/* Ruas simuladas */}
-          <div className="absolute h-0.5 bg-gray-400 w-full top-1/4 transform rotate-12"></div>
-          <div className="absolute h-0.5 bg-gray-400 w-full top-1/2 transform -rotate-6"></div>
-          <div className="absolute h-0.5 bg-gray-400 w-full top-3/4 transform rotate-3"></div>
-          <div className="absolute w-0.5 bg-gray-400 h-full left-1/4 transform rotate-12"></div>
-          <div className="absolute w-0.5 bg-gray-400 h-full left-1/2 transform -rotate-3"></div>
-          <div className="absolute w-0.5 bg-gray-400 h-full left-3/4 transform rotate-6"></div>
-          
-          {/* Áreas verdes simuladas */}
-          <div className="absolute top-10 left-10 w-20 h-20 bg-green-300 rounded-full opacity-30"></div>
-          <div className="absolute bottom-16 right-16 w-24 h-16 bg-green-300 rounded-lg opacity-30"></div>
-          <div className="absolute top-20 right-20 w-16 h-16 bg-green-300 rounded-full opacity-30"></div>
-        </div>
-        
-        {/* Grade do mapa */}
-        <div className="absolute inset-0 opacity-10">
-          {Array.from({ length: 20 }).map((_, i) => (
-            <div key={`h-${i}`} className="absolute h-px bg-gray-500 w-full" style={{ top: `${i * 5}%` }}></div>
-          ))}
-          {Array.from({ length: 20 }).map((_, i) => (
-            <div key={`v-${i}`} className="absolute w-px bg-gray-500 h-full" style={{ left: `${i * 5}%` }}></div>
-          ))}
-        </div>
+      {/* Google Maps Embed */}
+      <div className="absolute inset-0">
+        {userLocation && (
+          <iframe
+            src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d58523.98646741327!2d-46.66311!3d-23.55052!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59c8da0aa315%3A0xd59f9431f2c9776a!2sSão%20Paulo%2C%20SP!5e0!3m2!1spt!2sbr!4v1699999999999!5m2!1spt!2sbr`}
+            width="100%"
+            height="100%"
+            style={{ border: 0 }}
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            className="rounded-lg"
+          />
+        )}
       </div>
       
       {/* Overlay com marcadores dos técnicos */}
