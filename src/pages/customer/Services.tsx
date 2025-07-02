@@ -48,9 +48,8 @@ const CustomerServices = () => {
   };
 
   return (
-    <div className="min-h-screen bg-blue-600">
-      <CustomerLayout title="Meus Serviços">
-        <div className="space-y-6">
+    <CustomerLayout title="Meus Serviços">
+      <div className="space-y-6">
           <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
             <div className="max-w-sm flex-1">
               <Input
@@ -183,8 +182,8 @@ const CustomerServices = () => {
             service={activeService}
           />
         )}
-      </CustomerLayout>
-    </div>
+      </div>
+    </CustomerLayout>
   );
 };
 

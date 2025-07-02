@@ -33,7 +33,7 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
     <div className="min-h-screen flex flex-col bg-blue-600">
       <Navbar />
       
-      <div className="flex-1 flex container mx-auto px-4 py-8 gap-8 max-w-7xl">
+      <div className="flex-1 flex container mx-auto px-4 py-6 gap-6 max-w-7xl">
         <MobileSidebar 
           isMenuOpen={isMenuOpen}
           toggleMenu={toggleMenu}
@@ -41,10 +41,10 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
         />
         
         {/* Main content */}
-        <main className={cn("flex-1 min-w-0", isMobile ? "pl-0" : "")}>
+        <main className={cn("flex-1 min-w-0 relative", isMobile ? "pl-0" : "")}>
           <PageHeader title={title} />
           
-          <div className={cn("w-full", isMobile ? "px-2" : "")}>
+          <div className={cn("w-full", isMobile ? "px-1" : "")}>
             {children}
           </div>
         </main>

@@ -45,9 +45,9 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isMenuOpen, toggleMenu, c
       {isMobile && (
         <button 
           onClick={toggleMenu}
-          className="fixed top-24 left-6 z-40 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 p-3 rounded-full shadow-xl md:hidden transition-all duration-200 hover:scale-110"
+          className="fixed top-20 left-4 z-50 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 p-2.5 rounded-full shadow-xl md:hidden transition-all duration-200 hover:scale-105"
         >
-          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
       )}
 
@@ -63,7 +63,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isMenuOpen, toggleMenu, c
       <aside 
         className={cn(
           "w-64 shrink-0 transition-all duration-300",
-          isMobile ? "fixed left-0 top-16 bottom-0 bg-gradient-to-b from-blue-400 to-blue-500 z-30 h-[calc(100vh-4rem)] px-4 pt-20 pb-6 shadow-2xl overflow-y-auto" : "hidden md:block bg-gradient-to-b from-blue-400 to-blue-500 rounded-xl p-4 shadow-xl",
+          isMobile ? "fixed left-0 top-16 bottom-0 bg-gradient-to-b from-blue-400 to-blue-500 z-40 h-[calc(100vh-4rem)] px-3 pt-16 pb-6 shadow-2xl overflow-y-auto" : "hidden md:block bg-gradient-to-b from-blue-400 to-blue-500 rounded-xl p-4 shadow-xl",
           isMobile && !isMenuOpen ? "-translate-x-full" : isMobile && isMenuOpen ? "translate-x-0" : ""
         )}
       >

@@ -12,19 +12,25 @@ const PageHeader: React.FC<PageHeaderProps> = ({ title }) => {
   const isMobile = useIsMobile();
 
   return (
-    <div className={cn("mb-8", isMobile ? "mx-2" : "")}>
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className={cn("text-4xl font-bold text-white font-inter mb-2", isMobile ? "text-3xl pl-12" : "")}>
+    <div className={cn("mb-8", isMobile ? "mx-2 mt-16" : "")}>
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div className="flex-1">
+          <h1 className={cn(
+            "text-4xl font-bold text-white font-inter mb-3",
+            isMobile ? "text-2xl text-center" : ""
+          )}>
             {title}
           </h1>
-          <p className="text-blue-100 text-lg font-medium">
+          <p className={cn(
+            "text-blue-100 text-lg font-medium",
+            isMobile ? "text-center text-base" : ""
+          )}>
             Gerencie e monitore seus equipamentos
           </p>
         </div>
-        <div className="hidden md:flex items-center bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg border border-white/20">
+        <div className="hidden md:flex items-center bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg border border-white/20 shrink-0">
           <Calendar className="h-5 w-5 text-white mr-2" />
-          <span className="text-white font-semibold">
+          <span className="text-white font-semibold text-sm">
             {new Date().toLocaleDateString('pt-BR', { 
               weekday: 'long', 
               year: 'numeric', 
