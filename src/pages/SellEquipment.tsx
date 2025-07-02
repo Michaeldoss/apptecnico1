@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, Filter, Plus, Grid, List, MapPin, SlidersHorizontal, Map, Star, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Search, Filter, Plus, Grid, List, MapPin, SlidersHorizontal, Map, Star as StarIcon, ArrowLeft, ArrowRight } from 'lucide-react';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -186,7 +186,7 @@ const SellEquipment = () => {
                 <p className="text-gray-600">Anúncios premium que ficam em evidência</p>
               </div>
               <Badge className="bg-yellow-500 text-black font-semibold px-3 py-1">
-                <Star className="h-4 w-4 mr-1" />
+                <StarIcon className="h-4 w-4 mr-1" />
                 Premium
               </Badge>
             </div>
@@ -223,7 +223,7 @@ const SellEquipment = () => {
                 Destaque seu anúncio e tenha mais visibilidade
               </p>
               <Button variant="outline" className="text-yellow-600 border-yellow-600 hover:bg-yellow-600 hover:text-white">
-                <Star className="h-4 w-4 mr-2" />
+                <StarIcon className="h-4 w-4 mr-2" />
                 Promover Meu Anúncio
               </Button>
             </div>
