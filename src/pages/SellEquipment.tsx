@@ -9,6 +9,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import EquipmentForSaleCard from '@/components/sell-equipment/EquipmentForSaleCard';
+import SellEquipmentMap from '@/components/maps/SellEquipmentMap';
 import { SellEquipmentItem, equipmentConditionLabels } from '@/types/sellEquipment';
 import { Link } from 'react-router-dom';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -110,59 +111,10 @@ const SellEquipment = () => {
 
   const renderMapView = () => {
     return (
-      <div className="w-full h-96 bg-gray-100 relative overflow-hidden rounded-lg border">
-        <div 
-          className="w-full h-full relative"
-          style={{ 
-            backgroundImage: `url("https://maps.googleapis.com/maps/api/staticmap?center=São+Paulo,SP&zoom=10&size=800x400&scale=2&maptype=roadmap&key=YOUR_GOOGLE_MAPS_API_KEY")`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center'
-          }}
-        >
-          {/* Marcadores dos equipamentos */}
-          {filteredEquipments.slice(0, 10).map((equipment, index) => {
-            const position = {
-              x: 20 + (index % 4) * 20,
-              y: 20 + Math.floor(index / 4) * 25
-            };
-            
-            return (
-              <div
-                key={equipment.id}
-                className="absolute cursor-pointer transition-all transform -translate-x-1/2 -translate-y-1/2 group"
-                style={{ left: `${position.x}%`, top: `${position.y}%` }}
-              >
-                <div className="flex flex-col items-center">
-                  <MapPin className="h-8 w-8 text-red-500 fill-red-500 drop-shadow-lg" />
-                  <div className="hidden group-hover:block bg-white shadow-lg rounded p-2 text-xs font-medium whitespace-nowrap mt-1 border max-w-48">
-                    <div className="font-semibold">{equipment.title}</div>
-                    <div className="text-gray-600">{equipment.location.city}, {equipment.location.state}</div>
-                    <div className="text-blue-600 font-semibold">R$ {equipment.price.toLocaleString('pt-BR')}</div>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-          
-          {/* Controles do mapa */}
-          <div className="absolute bottom-4 right-4 flex flex-col gap-2">
-            <button className="bg-white p-2 rounded-full shadow hover:bg-gray-100 border">
-              <Plus className="h-4 w-4 text-gray-700" />
-            </button>
-            <button className="bg-white p-2 rounded-full shadow hover:bg-gray-100 border">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-700"><path d="M5 12h14"/></svg>
-            </button>
-          </div>
-          
-          {/* Aviso sobre API key */}
-          <div className="absolute top-4 left-4 bg-yellow-100 border border-yellow-400 text-yellow-800 px-3 py-2 rounded text-sm shadow">
-            <div className="flex items-center gap-2">
-              <MapPin className="h-4 w-4" />
-              <span>Configure sua chave do Google Maps para melhor experiência</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <SellEquipmentMap 
+        equipments={filteredEquipments}
+        onEquipmentClick={handleContact}
+      />
     );
   };
 
