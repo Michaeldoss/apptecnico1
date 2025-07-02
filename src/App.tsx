@@ -47,6 +47,11 @@ import TechnicianServiceOrders from '@/pages/technician/ServiceOrders';
 import TechnicianCustomers from '@/pages/technician/Customers';
 import TechnicianEquipments from '@/pages/technician/Equipments';
 import TechnicianSettings from '@/pages/technician/Settings';
+import TechnicianChat from '@/pages/technician/Chat';
+import TechnicianParts from '@/pages/technician/Parts';
+import TechnicianPayments from '@/pages/technician/Payments';
+import TechnicianSubscription from '@/pages/technician/Subscription';
+import TechnicianSchedule from '@/pages/technician/Schedule';
 
 // Admin pages
 import AdminDashboard from '@/pages/admin/Dashboard';
@@ -232,9 +237,64 @@ function App() {
                     <TechnicianServices />
                   </ProtectedRoute>
                 } />
+                <Route path="/tecnico/ordens-servico" element={
+                  <ProtectedRoute userType="technician">
+                    <TechnicianServiceOrders />
+                  </ProtectedRoute>
+                } />
                 <Route path="/tecnico/service-orders" element={
                   <ProtectedRoute userType="technician">
                     <TechnicianServiceOrders />
+                  </ProtectedRoute>
+                } />
+                <Route path="/tecnico/mensagens" element={
+                  <ProtectedRoute userType="technician">
+                    <TechnicianChat />
+                  </ProtectedRoute>
+                } />
+                <Route path="/tecnico/chat" element={
+                  <ProtectedRoute userType="technician">
+                    <TechnicianChat />
+                  </ProtectedRoute>
+                } />
+                <Route path="/tecnico/pecas" element={
+                  <ProtectedRoute userType="technician">
+                    <TechnicianParts />
+                  </ProtectedRoute>
+                } />
+                <Route path="/tecnico/parts" element={
+                  <ProtectedRoute userType="technician">
+                    <TechnicianParts />
+                  </ProtectedRoute>
+                } />
+                <Route path="/tecnico/pagamentos" element={
+                  <ProtectedRoute userType="technician">
+                    <TechnicianPayments />
+                  </ProtectedRoute>
+                } />
+                <Route path="/tecnico/payments" element={
+                  <ProtectedRoute userType="technician">
+                    <TechnicianPayments />
+                  </ProtectedRoute>
+                } />
+                <Route path="/tecnico/planos" element={
+                  <ProtectedRoute userType="technician">
+                    <TechnicianSubscription />
+                  </ProtectedRoute>
+                } />
+                <Route path="/tecnico/subscription" element={
+                  <ProtectedRoute userType="technician">
+                    <TechnicianSubscription />
+                  </ProtectedRoute>
+                } />
+                <Route path="/tecnico/agenda" element={
+                  <ProtectedRoute userType="technician">
+                    <TechnicianSchedule />
+                  </ProtectedRoute>
+                } />
+                <Route path="/tecnico/schedule" element={
+                  <ProtectedRoute userType="technician">
+                    <TechnicianSchedule />
                   </ProtectedRoute>
                 } />
                 <Route path="/tecnico/clientes" element={
