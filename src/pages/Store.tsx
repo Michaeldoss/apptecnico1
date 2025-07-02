@@ -389,7 +389,7 @@ const Store = () => {
                           isMobile ? "p-3" : ""
                         )}>
                           <CardTitle className={cn(
-                            "font-medium truncate text-gray-900 font-inter",
+                            "font-medium text-gray-900 font-inter leading-tight",
                             isMobile ? "text-sm" : "text-base"
                           )} title={product.nome}>
                             {product.nome}
