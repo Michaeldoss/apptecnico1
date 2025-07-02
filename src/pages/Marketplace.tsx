@@ -181,33 +181,38 @@ const Marketplace = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       
-      <main className="flex-grow bg-gray-50">
+      <main className="flex-grow">
         {/* Header */}
-        <div className="bg-white border-b">
-          <div className="container mx-auto px-4 py-6">
+        <div className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-16 relative overflow-hidden">
+          {/* Elementos decorativos de fundo */}
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-transparent to-purple-600/20"></div>
+          <div className="absolute top-10 left-10 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
+          <div className="absolute bottom-10 right-10 w-40 h-40 bg-yellow-300/10 rounded-full blur-2xl"></div>
+          
+          <div className="container mx-auto px-4 relative z-10">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">
-                <Store className="h-8 w-8 text-blue-600 mr-3" />
+                <Store className="h-8 w-8 text-white mr-3" />
                 <div>
-                  <h1 className="text-2xl font-bold text-gray-900">Marketplace Técnico</h1>
-                  <p className="text-gray-600">Peças e componentes para equipamentos gráficos</p>
+                  <h1 className="text-4xl md:text-5xl font-bold text-white drop-shadow-lg">Marketplace Técnico</h1>
+                  <p className="text-white/90 text-xl drop-shadow-md">Peças e componentes para equipamentos gráficos</p>
                 </div>
               </div>
               
               <div className="flex items-center gap-4">
                 <Link to="/carrinho">
-                  <Button variant="outline" className="relative">
+                  <Button variant="outline" className="relative bg-white/10 border-white/30 text-white hover:bg-white hover:text-blue-600 backdrop-blur-sm">
                     <ShoppingCart className="h-4 w-4 mr-2" />
                     Carrinho
                     {getCartItemCount() > 0 && (
-                      <Badge className="absolute -top-2 -right-2 px-2 py-1 text-xs">
+                      <Badge className="absolute -top-2 -right-2 px-2 py-1 text-xs bg-yellow-500 text-black">
                         {getCartItemCount()}
                       </Badge>
                     )}
                   </Button>
                 </Link>
                 <Link to="/loja/dashboard">
-                  <Button>
+                  <Button className="bg-yellow-500 hover:bg-yellow-600 text-black shadow-lg">
                     <Package className="h-4 w-4 mr-2" />
                     Vender
                   </Button>
@@ -223,13 +228,13 @@ const Marketplace = () => {
                   placeholder="Buscar produtos, marcas ou vendedores..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 bg-white/90 backdrop-blur-sm border-white/30"
                 />
               </div>
               
-              <div className="flex gap-2">
+               <div className="flex gap-2">
                 <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                  <SelectTrigger className="w-40">
+                  <SelectTrigger className="w-40 bg-white/90 backdrop-blur-sm border-white/30">
                     <SelectValue placeholder="Categoria" />
                   </SelectTrigger>
                   <SelectContent>
@@ -241,7 +246,7 @@ const Marketplace = () => {
                 </Select>
                 
                 <Select value={selectedEquipment} onValueChange={setSelectedEquipment}>
-                  <SelectTrigger className="w-32">
+                  <SelectTrigger className="w-32 bg-white/90 backdrop-blur-sm border-white/30">
                     <SelectValue placeholder="Equipamento" />
                   </SelectTrigger>
                   <SelectContent>
@@ -256,7 +261,7 @@ const Marketplace = () => {
                 
                 <Sheet>
                   <SheetTrigger asChild>
-                    <Button variant="outline" size="icon">
+                    <Button variant="outline" size="icon" className="bg-white/10 border-white/30 text-white hover:bg-white hover:text-blue-600 backdrop-blur-sm">
                       <SlidersHorizontal className="h-4 w-4" />
                     </Button>
                   </SheetTrigger>
@@ -290,7 +295,7 @@ const Marketplace = () => {
         </div>
         
         {/* Results and View Toggle */}
-        <div className="container mx-auto px-4 py-4">
+        <div className="container mx-auto px-4 py-4 bg-gray-50">
           <div className="flex items-center justify-between mb-6">
             <p className="text-gray-600">
               {filteredProducts.length} produto{filteredProducts.length !== 1 ? 's' : ''} encontrado{filteredProducts.length !== 1 ? 's' : ''}

@@ -195,23 +195,28 @@ const SellEquipment = () => {
       
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
-          <div className="container mx-auto px-4">
+        <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-16 relative overflow-hidden">
+          {/* Elementos decorativos de fundo */}
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-transparent to-purple-600/20"></div>
+          <div className="absolute top-10 left-10 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
+          <div className="absolute bottom-10 right-10 w-40 h-40 bg-yellow-300/10 rounded-full blur-2xl"></div>
+          
+          <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-4xl mx-auto text-center">
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-white">
+              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-white drop-shadow-lg">
                 Vender Equipamento
               </h1>
-              <p className="text-xl mb-8 text-white">
+              <p className="text-xl mb-8 text-white/90 drop-shadow-md">
                 Anuncie seu equipamento gráfico com segurança e alcance milhares de compradores interessados.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link to="/sell-equipment/create">
-                  <Button size="lg" className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold">
+                  <Button size="lg" className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold shadow-lg">
                     <Plus className="h-5 w-5 mr-2" />
                     Anunciar Equipamento
                   </Button>
                 </Link>
-                <Button size="lg" className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold" onClick={handleMapView}>
+                <Button size="lg" className="bg-white/10 hover:bg-white/20 text-white border border-white/30 font-semibold backdrop-blur-sm" onClick={handleMapView}>
                   <Map className="h-5 w-5 mr-2" />
                   Ver no Mapa
                 </Button>
