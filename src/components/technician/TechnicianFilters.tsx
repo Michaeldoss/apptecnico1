@@ -20,6 +20,7 @@ interface TechnicianFiltersProps {
   setSelectedCity: (city: string) => void;
   selectedEquipmentType: EquipmentType | 'all' | '';
   setSelectedEquipmentType: (type: EquipmentType | 'all' | '') => void;
+  onSearch?: () => void;
 }
 
 const TechnicianFilters: React.FC<TechnicianFiltersProps> = ({
@@ -34,11 +35,18 @@ const TechnicianFilters: React.FC<TechnicianFiltersProps> = ({
   selectedCity,
   setSelectedCity,
   selectedEquipmentType,
-  setSelectedEquipmentType
+  setSelectedEquipmentType,
+  onSearch
 }) => {
+  const handleSearch = () => {
+    if (onSearch) {
+      onSearch();
+    }
+  };
+
   return (
     <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 mb-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
         {/* Search Query */}
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/70 h-4 w-4" />
@@ -109,6 +117,17 @@ const TechnicianFilters: React.FC<TechnicianFiltersProps> = ({
             ))}
           </SelectContent>
         </Select>
+      </div>
+      
+      {/* Search Button */}
+      <div className="flex justify-center">
+        <Button 
+          onClick={handleSearch}
+          className="bg-white text-blue-600 hover:bg-white/90 font-semibold px-8 py-2"
+        >
+          <Search className="h-4 w-4 mr-2" />
+          Pesquisar Técnicos
+        </Button>
       </div>
     </div>
   );

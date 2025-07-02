@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -57,6 +56,15 @@ const FindTechnician = () => {
     visitPrice: 80,
     laborPrice: 120
   });
+
+  const handleSearch = () => {
+    // A pesquisa já é executada automaticamente através dos useEffect no hook
+    // Este botão pode ser usado para feedback visual ou para forçar uma nova busca
+    toast({
+      title: "Pesquisa executada",
+      description: `Encontrados ${filteredTechnicians.length} técnicos`,
+    });
+  };
 
   const handleContactRequest = (technicianId: number) => {
     if (!isAuthenticated) {
@@ -120,6 +128,7 @@ const FindTechnician = () => {
             setSelectedCity={setSelectedCity}
             selectedEquipmentType={selectedEquipmentType}
             setSelectedEquipmentType={setSelectedEquipmentType}
+            onSearch={handleSearch}
           />
         </div>
       </header>
