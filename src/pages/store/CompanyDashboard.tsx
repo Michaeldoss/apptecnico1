@@ -21,6 +21,10 @@ import {
   ArrowRight,
   Shield,
   Lock,
+  Star,
+  Eye,
+  TrendingUp,
+  DollarSign,
 } from 'lucide-react';
 import DashboardChart from '@/components/store/DashboardChart';
 import OrdersList from '@/components/store/OrdersList';
@@ -119,31 +123,54 @@ const CompanyDashboard = () => {
           
           {/* Cards de métricas */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div className="bg-white/20 backdrop-blur-xl rounded-2xl p-6 border border-white/30 shadow-xl hover:bg-white/25 transition-all duration-300">
-              <div className="text-sm font-semibold text-blue-100 mb-2">Produtos</div>
-              <div className="text-3xl font-black text-white">{user?.productCount || 87}</div>
-            </div>
-            
-            <div className="bg-white/20 backdrop-blur-xl rounded-2xl p-6 border border-white/30 shadow-xl hover:bg-white/25 transition-all duration-300">
-              <div className="text-sm font-semibold text-blue-100 mb-2">Vendas (Mês)</div>
-              <div className="text-3xl font-black text-white">23</div>
-            </div>
-            
-            <div className="bg-white/20 backdrop-blur-xl rounded-2xl p-6 border border-white/30 shadow-xl hover:bg-white/25 transition-all duration-300">
-              <div className="text-sm font-semibold text-blue-100 mb-2 flex items-center gap-1">
-                <Lock className="h-4 w-4" />
-                Faturamento
+            <Link to="/loja/products" className="group">
+              <div className="bg-white/20 backdrop-blur-xl rounded-2xl p-6 border border-white/30 shadow-xl hover:bg-white/25 transition-all duration-300 hover:scale-105 cursor-pointer">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="text-sm font-semibold text-blue-100">Produtos</div>
+                  <Package className="h-6 w-6 text-yellow-300 group-hover:scale-110 transition-transform" />
+                </div>
+                <div className="text-3xl font-black text-white">{user?.productCount || 87}</div>
+                <div className="text-xs text-blue-200 mt-2">Clique para gerenciar</div>
               </div>
-              <div className="text-3xl font-black text-white">R$ 12.450,00</div>
-              <div className="text-xs text-green-300 mt-2 font-semibold">
-                Pagamento Protegido
-              </div>
-            </div>
+            </Link>
             
-            <div className="bg-white/20 backdrop-blur-xl rounded-2xl p-6 border border-white/30 shadow-xl hover:bg-white/25 transition-all duration-300">
-              <div className="text-sm font-semibold text-blue-100 mb-2">Avaliação</div>
-              <div className="text-3xl font-black text-white">{user?.rating || 4.8} ★</div>
-            </div>
+            <Link to="/loja/orders" className="group">
+              <div className="bg-white/20 backdrop-blur-xl rounded-2xl p-6 border border-white/30 shadow-xl hover:bg-white/25 transition-all duration-300 hover:scale-105 cursor-pointer">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="text-sm font-semibold text-blue-100">Vendas (Mês)</div>
+                  <ShoppingBag className="h-6 w-6 text-green-300 group-hover:scale-110 transition-transform" />
+                </div>
+                <div className="text-3xl font-black text-white">23</div>
+                <div className="text-xs text-blue-200 mt-2">Ver pedidos</div>
+              </div>
+            </Link>
+            
+            <Link to="/loja/financeiro" className="group">
+              <div className="bg-white/20 backdrop-blur-xl rounded-2xl p-6 border border-white/30 shadow-xl hover:bg-white/25 transition-all duration-300 hover:scale-105 cursor-pointer">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="text-sm font-semibold text-blue-100 flex items-center gap-1">
+                    <Lock className="h-4 w-4" />
+                    Faturamento
+                  </div>
+                  <BarChart3 className="h-6 w-6 text-yellow-300 group-hover:scale-110 transition-transform" />
+                </div>
+                <div className="text-3xl font-black text-white">R$ 12.450,00</div>
+                <div className="text-xs text-green-300 mt-2 font-semibold">
+                  Pagamento Protegido
+                </div>
+              </div>
+            </Link>
+            
+            <Link to="/loja/avaliacoes" className="group">
+              <div className="bg-white/20 backdrop-blur-xl rounded-2xl p-6 border border-white/30 shadow-xl hover:bg-white/25 transition-all duration-300 hover:scale-105 cursor-pointer">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="text-sm font-semibold text-blue-100">Avaliação</div>
+                  <Star className="h-6 w-6 text-yellow-300 group-hover:scale-110 transition-transform" />
+                </div>
+                <div className="text-3xl font-black text-white">{user?.rating || 4.8} ★</div>
+                <div className="text-xs text-blue-200 mt-2">Ver avaliações</div>
+              </div>
+            </Link>
           </div>
         </div>
       </section>
@@ -199,21 +226,27 @@ const CompanyDashboard = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                      <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 p-3 rounded-md flex items-start">
-                        <AlertTriangle className="h-5 w-5 mr-2 flex-shrink-0 text-yellow-600" />
-                        <div>
-                          <p className="font-semibold text-yellow-900">Estoque Baixo</p>
-                          <p className="text-sm text-yellow-700">3 produtos estão com estoque abaixo do mínimo</p>
+                      <Link to="/loja/estoque" className="block">
+                        <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 p-3 rounded-md flex items-start hover:bg-yellow-100 transition-colors cursor-pointer group">
+                          <AlertTriangle className="h-5 w-5 mr-2 flex-shrink-0 text-yellow-600 group-hover:scale-110 transition-transform" />
+                          <div>
+                            <p className="font-semibold text-yellow-900">Estoque Baixo</p>
+                            <p className="text-sm text-yellow-700">3 produtos estão com estoque abaixo do mínimo</p>
+                          </div>
+                          <Eye className="h-4 w-4 ml-auto text-yellow-600 opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
-                      </div>
+                      </Link>
                       
-                      <div className="bg-blue-50 border border-blue-200 text-blue-800 p-3 rounded-md flex items-start">
-                        <AlertTriangle className="h-5 w-5 mr-2 flex-shrink-0 text-blue-600" />
-                        <div>
-                          <p className="font-semibold text-blue-900">Pedidos Pendentes</p>
-                          <p className="text-sm text-blue-700">5 pedidos aguardando processamento</p>
+                      <Link to="/loja/orders" className="block">
+                        <div className="bg-blue-50 border border-blue-200 text-blue-800 p-3 rounded-md flex items-start hover:bg-blue-100 transition-colors cursor-pointer group">
+                          <AlertTriangle className="h-5 w-5 mr-2 flex-shrink-0 text-blue-600 group-hover:scale-110 transition-transform" />
+                          <div>
+                            <p className="font-semibold text-blue-900">Pedidos Pendentes</p>
+                            <p className="text-sm text-blue-700">5 pedidos aguardando processamento</p>
+                          </div>
+                          <Eye className="h-4 w-4 ml-auto text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
-                      </div>
+                      </Link>
                     </div>
                   </CardContent>
                 </Card>
@@ -230,9 +263,10 @@ const CompanyDashboard = () => {
                     </CardDescription>
                   </div>
                   <Link to="/loja/products">
-                    <Button>
-                      <Plus className="mr-2 h-4 w-4" />
+                    <Button className="group">
+                      <Plus className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform" />
                       Adicionar Produto
+                      <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                     </Button>
                   </Link>
                 </CardHeader>
@@ -247,15 +281,18 @@ const CompanyDashboard = () => {
                     </div>
                     
                     <div className="divide-y">
-                      <div className="grid grid-cols-12 p-3 items-center hover:bg-gray-50">
-                        <div className="col-span-1 text-gray-500">8006</div>
-                        <div className="col-span-5 font-medium">BOMBA DE TINTA 100/200ML</div>
-                        <div className="col-span-2 text-right">14</div>
-                        <div className="col-span-2 text-right">R$ 155,00</div>
-                        <div className="col-span-2 text-right">
-                          <span className="inline-block px-2 py-1 rounded-full bg-green-100 text-green-800 text-xs">Ativo</span>
+                      <Link to="/loja/products/8006" className="block group">
+                        <div className="grid grid-cols-12 p-3 items-center hover:bg-gray-50 transition-colors">
+                          <div className="col-span-1 text-gray-500">8006</div>
+                          <div className="col-span-5 font-medium group-hover:text-blue-600 transition-colors">BOMBA DE TINTA 100/200ML</div>
+                          <div className="col-span-2 text-right">14</div>
+                          <div className="col-span-2 text-right">R$ 155,00</div>
+                          <div className="col-span-2 text-right flex items-center justify-end gap-2">
+                            <span className="inline-block px-2 py-1 rounded-full bg-green-100 text-green-800 text-xs">Ativo</span>
+                            <Eye className="h-4 w-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                          </div>
                         </div>
-                      </div>
+                      </Link>
                     </div>
                   </div>
                 </CardContent>
@@ -264,9 +301,9 @@ const CompanyDashboard = () => {
                     Mostrando produtos disponíveis
                   </p>
                   <Link to="/loja/products">
-                    <Button variant="outline" size="sm" className="flex items-center gap-1">
+                    <Button variant="outline" size="sm" className="flex items-center gap-1 group">
                       Ver todos os produtos
-                      <ArrowRight className="h-4 w-4" />
+                      <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                     </Button>
                   </Link>
                 </CardFooter>
