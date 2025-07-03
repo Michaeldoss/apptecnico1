@@ -156,7 +156,7 @@ const Features = () => {
             <p className="text-gray-700 mb-6 font-medium flex-grow">
               Venda produtos e peças para técnicos e clientes
             </p>
-            <Link to="/store/company-register" className="mt-auto">
+            <Link to="/loja/register" className="mt-auto">
               <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 text-lg shadow-lg transition-all duration-200 hover:scale-105">
                 Cadastrar como Lojista
               </Button>
