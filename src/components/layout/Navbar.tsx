@@ -74,7 +74,7 @@ const Navbar = () => {
         {/* Logo */}
         <Link to="/" className="flex items-center">
           <span className={`text-2xl font-bold font-inter ${logoClasses} drop-shadow-lg`}>
-            DGSoluções
+            AtendaJá
           </span>
         </Link>
 

@@ -73,7 +73,7 @@ export const useChatbot = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: '1',
-      content: 'Olá! 👋 Sou o assistente virtual da DGSoluções. Como posso te ajudar hoje?',
+      content: 'Olá! 👋 Sou o assistente virtual da AtendaJá. Como posso te ajudar hoje?',
       isBot: true,
       timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
       quickReplies: ['Agendar técnico', 'Ver preços', 'Tipos de serviço', 'Falar com humano']

@@ -167,7 +167,7 @@ const Features = () => {
         {/* CTA para Comunidade */}
         <div className="bg-gradient-to-r from-blue-700 to-blue-800 rounded-2xl p-12 text-center text-white shadow-2xl">
           <h3 className="text-3xl md:text-4xl font-bold mb-6 drop-shadow-lg">
-            Comunidade DGSoluções
+            Comunidade AtendaJá
           </h3>
           <p className="text-xl mb-8 text-blue-100 font-medium max-w-2xl mx-auto drop-shadow-sm">
             Participe das nossas comunidades e conecte-se com outros profissionais

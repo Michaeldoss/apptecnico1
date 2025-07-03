@@ -60,7 +60,7 @@ const About = () => {
         <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-20">
           <div className="container mx-auto px-4 text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6 text-white">
-              Sobre a DGSoluções
+              Sobre a AtendaJá
             </h1>
             <p className="text-xl mb-8 max-w-2xl mx-auto text-white">
               Revolucionando a forma como você encontra e contrata serviços técnicos especializados
@@ -79,8 +79,8 @@ const About = () => {
             <div className="max-w-3xl mx-auto text-center">
               <h2 className="text-3xl font-bold mb-6">Nossa História</h2>
               <p className="text-lg text-gray-600 mb-8">
-                A DGSoluções nasceu da necessidade de conectar pessoas que precisam de serviços técnicos 
-                especializados com profissionais qualificados de forma rápida e segura. Fundada em 2020, 
+                A AtendaJá nasceu da necessidade de conectar pessoas que precisam de serviços técnicos 
+                especializados com profissionais qualificados de forma rápida e segura. Fundada em 2020,
                 nossa plataforma já facilitou milhares de conexões entre clientes e técnicos.
               </p>
               <p className="text-lg text-gray-600">

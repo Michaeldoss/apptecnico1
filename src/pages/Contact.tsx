@@ -58,7 +58,7 @@ const Contact = () => {
                 <CardTitle className="text-lg font-semibold text-tech-primary font-inter">Email</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-secondary mb-4 font-inter">contato@dgsoluções.com</p>
+                <p className="text-gray-secondary mb-4 font-inter">contato@atendaja.com</p>
                 <Button variant="outline" size="sm" className="font-inter">
                   Enviar Email
                 </Button>

@@ -14,7 +14,7 @@ const Terms = () => {
       icon: FileText,
       title: "1. Aceitação dos Termos",
       content: [
-        "Ao acessar e usar a plataforma DGSoluções, você concorda em cumprir e ficar vinculado a estes Termos de Serviço.",
+        "Ao acessar e usar a plataforma AtendaJá, você concorda em cumprir e ficar vinculado a estes Termos de Serviço.",
         "Se você não concordar com qualquer parte destes termos, não deve usar nossos serviços.",
         "Reservamo-nos o direito de modificar estes termos a qualquer momento, com notificação prévia aos usuários."
       ]
@@ -26,7 +26,7 @@ const Terms = () => {
         "Cliente: Pessoa física ou jurídica que solicita serviços através da plataforma.",
         "Técnico: Profissional qualificado que presta serviços de manutenção e reparo de equipamentos.",
         "Lojista: Empresa que oferece produtos e peças através da plataforma.",
-        "Plataforma: Sistema online DGSoluções que conecta clientes, técnicos e lojistas."
+        "Plataforma: Sistema online AtendaJá que conecta clientes, técnicos e lojistas."
       ]
     },
     {
@@ -73,7 +73,7 @@ const Terms = () => {
       icon: Shield,
       title: "7. Limitação de Responsabilidade",
       content: [
-        "A DGSoluções atua como intermediária, conectando usuários, mas não é responsável pela qualidade dos serviços prestados.",
+        "A AtendaJá atua como intermediária, conectando usuários, mas não é responsável pela qualidade dos serviços prestados.",
         "Não nos responsabilizamos por danos diretos, indiretos, incidentais ou consequenciais.",
         "Nossa responsabilidade total não excederá o valor das taxas pagas pelo usuário nos últimos 12 meses.",
         "Usuários devem resolver disputas diretamente ou através dos mecanismos de resolução fornecidos."
@@ -83,7 +83,7 @@ const Terms = () => {
       icon: FileText,
       title: "8. Propriedade Intelectual",
       content: [
-        "Todo o conteúdo da plataforma, incluindo textos, gráficos, logos e software, é propriedade da DGSoluções.",
+        "Todo o conteúdo da plataforma, incluindo textos, gráficos, logos e software, é propriedade da AtendaJá.",
         "Usuários concedem licença para usar o conteúdo que enviam conforme necessário para operar a plataforma.",
         "É proibido copiar, modificar ou distribuir nosso conteúdo sem autorização expressa.",
         "Respeitamos os direitos de propriedade intelectual de terceiros e esperamos que os usuários façam o mesmo."
@@ -112,7 +112,7 @@ const Terms = () => {
             Termos de Serviço
           </h1>
           <p className="text-lg text-gray-secondary mb-2">
-            Condições gerais de uso da plataforma DGSoluções
+            Condições gerais de uso da plataforma AtendaJá
           </p>
           <p className="text-sm text-gray-secondary">
             Última atualização: {lastUpdated}
@@ -124,12 +124,12 @@ const Terms = () => {
           <CardHeader className="bg-tech-primary text-white">
             <CardTitle className="text-xl font-bold flex items-center gap-3">
               <FileText className="h-6 w-6" />
-              Bem-vindo aos Termos de Serviço da DGSoluções
+              Bem-vindo aos Termos de Serviço da AtendaJá
             </CardTitle>
           </CardHeader>
           <CardContent className="p-6">
             <p className="text-gray-secondary leading-relaxed">
-              Estes Termos de Serviço ("Termos") regem o uso da plataforma DGSoluções, 
+              Estes Termos de Serviço ("Termos") regem o uso da plataforma AtendaJá, 
               que conecta clientes a técnicos especializados em manutenção de equipamentos 
               gráficos e facilita a compra de peças e equipamentos. Ao usar nossa plataforma, 
               você concorda com estes termos.
@@ -203,7 +203,7 @@ const Terms = () => {
         {/* Footer Note */}
         <div className="text-center mt-12 p-6 bg-white rounded-lg border-2 border-gray-border">
           <p className="text-sm text-gray-500">
-            © 2025 DGSoluções. Todos os direitos reservados. 
+            © 2025 AtendaJá. Todos os direitos reservados. 
             Este documento foi atualizado em {lastUpdated}.
           </p>
         </div>

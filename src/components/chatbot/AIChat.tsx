@@ -59,7 +59,7 @@ const AIChat: React.FC<AIChatProps> = ({ isOpen, onClose }) => {
             <Bot size={20} />
           </div>
           <div>
-            <h3 className="font-semibold">Assistente DGSoluções</h3>
+            <h3 className="font-semibold">Assistente AtendaJá</h3>
             <p className="text-xs opacity-90">Online agora</p>
           </div>
         </div>
