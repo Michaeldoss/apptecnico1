@@ -153,17 +153,18 @@ const TopTechniciansCarousel = () => {
           </p>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4">
+        <div className="max-w-6xl mx-auto px-6">
           <Carousel plugins={[Autoplay({
-          delay: 3000,
+          delay: 4000,
           stopOnInteraction: true
         })]} opts={{
           align: "center",
-          loop: true
+          loop: true,
+          slidesToScroll: 1
         }} className="w-full">
-            <CarouselContent className="-ml-4">
-              {topTechnicians.map(technician => <CarouselItem key={technician.id} className="pl-4 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
-                  <Card className="bg-white/95 backdrop-blur-sm border-2 border-gray-200 shadow-2xl hover:shadow-3xl hover:border-blue-300 transition-all duration-500 hover:scale-[1.02] h-[420px] relative overflow-hidden group mx-auto">
+            <CarouselContent className="-ml-6">
+              {topTechnicians.map(technician => <CarouselItem key={technician.id} className="pl-6 basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+                  <Card className="bg-white/95 backdrop-blur-sm border-2 border-gray-200 shadow-xl hover:shadow-2xl hover:border-blue-300 transition-all duration-300 hover:scale-[1.02] h-[400px] relative overflow-hidden group mx-auto max-w-[280px]">
                     {/* Fundo gradiente */}
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-white to-purple-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     
