@@ -30,7 +30,7 @@ const Hero = () => {
         {/* Título Principal - Modo Deus */}
         <div className="text-center mb-16">
           <h1 className="text-5xl md:text-7xl font-black mb-8 leading-tight text-white drop-shadow-2xl">
-            Encontre o <span className="text-yellow-300 bg-gradient-to-r from-yellow-300/30 to-yellow-400/30 px-6 py-3 rounded-2xl border-2 border-yellow-300/50 backdrop-blur-sm mx-px font-bold text-7xl">técnico ideal</span><br />
+            Encontre o <span className="text-yellow-300 bg-gradient-to-r from-yellow-300/30 to-yellow-400/30 rounded-2xl border-2 border-yellow-300/50 backdrop-blur-sm mx-px font-bold text-7xl px-[20px] py-0">técnico ideal</span><br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-white">para seu equipamento</span>
           </h1>
           
