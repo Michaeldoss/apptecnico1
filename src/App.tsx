@@ -52,6 +52,7 @@ import TechnicianParts from '@/pages/technician/Parts';
 import TechnicianPayments from '@/pages/technician/Payments';
 import TechnicianSubscription from '@/pages/technician/Subscription';
 import TechnicianSchedule from '@/pages/technician/Schedule';
+import TechnicianRegister from '@/pages/technician/Register';
 
 // Store pages
 import CompanyDashboard from '@/pages/store/CompanyDashboard';
@@ -84,7 +85,8 @@ function App() {
                 {/* Public routes */}
                 <Route path="/" element={<Index />} />
                 <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
+                 <Route path="/register" element={<Register />} />
+                 <Route path="/technician" element={<TechnicianRegister />} />
                 <Route path="/find-technician" element={<FindTechnician />} />
                 <Route path="/store" element={<Store />} />
                 <Route path="/marketplace" element={<Marketplace />} />
