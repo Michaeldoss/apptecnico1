@@ -38,11 +38,11 @@ const SidebarItem = ({ href, icon: Icon, children, active, badge, onClick }: Sid
       to={href}
       className={cn(
         "flex items-center gap-3 rounded-lg px-4 py-3 text-base transition-all duration-200 hover:bg-gray-light font-inter font-medium relative w-full",
-        active ? "bg-tech-primary text-white shadow-sm" : "text-gray-primary hover:text-tech-primary"
+        active ? "bg-tech-primary text-white shadow-sm" : "text-blue-200 hover:text-blue-100"
       )}
       onClick={onClick}
     >
-      <Icon className={cn("h-5 w-5 flex-shrink-0", active ? "text-white" : "text-tech-primary")} />
+      <Icon className={cn("h-5 w-5 flex-shrink-0", active ? "text-white" : "text-yellow-400")} />
       <span className="flex-1 min-w-0 text-left w-full">{children}</span>
       
       {badge && badge > 0 && (
