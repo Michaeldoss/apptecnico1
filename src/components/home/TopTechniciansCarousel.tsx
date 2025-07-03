@@ -153,17 +153,17 @@ const TopTechniciansCarousel = () => {
           </p>
         </div>
 
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto px-4">
           <Carousel plugins={[Autoplay({
           delay: 3000,
           stopOnInteraction: true
         })]} opts={{
-          align: "start",
+          align: "center",
           loop: true
         }} className="w-full">
-            <CarouselContent className="-ml-2 md:-ml-4">
-              {topTechnicians.map(technician => <CarouselItem key={technician.id} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
-                  <Card className="bg-white/95 backdrop-blur-sm border-2 border-gray-200 shadow-2xl hover:shadow-3xl hover:border-blue-300 transition-all duration-500 hover:scale-105 h-[420px] relative overflow-hidden group">
+            <CarouselContent className="-ml-4">
+              {topTechnicians.map(technician => <CarouselItem key={technician.id} className="pl-4 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+                  <Card className="bg-white/95 backdrop-blur-sm border-2 border-gray-200 shadow-2xl hover:shadow-3xl hover:border-blue-300 transition-all duration-500 hover:scale-[1.02] h-[420px] relative overflow-hidden group mx-auto">
                     {/* Fundo gradiente */}
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-white to-purple-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     
@@ -183,10 +183,10 @@ const TopTechniciansCarousel = () => {
 
                     <CardContent className="p-6 h-full flex flex-col relative z-10">
                       {/* Header com foto */}
-                      <div className="flex flex-col items-center text-center mb-5">
-                        <div className="relative mb-4">
-                          <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-100 to-purple-100 p-1 shadow-xl">
-                            <img src={technician.photo} alt={technician.name} className="w-full h-full rounded-full object-cover border-3 border-white shadow-lg" />
+                      <div className="flex flex-col items-center justify-center text-center mb-5">
+                        <div className="relative mb-4 flex items-center justify-center">
+                          <div className="w-28 h-28 rounded-full bg-gradient-to-br from-blue-100 to-purple-100 p-1 shadow-xl flex items-center justify-center">
+                            <img src={technician.photo} alt={technician.name} className="w-full h-full rounded-full object-cover object-center border-3 border-white shadow-lg" />
                           </div>
                           <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-full flex items-center justify-center shadow-lg border-2 border-white">
                             <Award className="h-4 w-4 text-white" />
