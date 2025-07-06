@@ -1,14 +1,11 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { Mail, Phone, MessageCircle, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-
 const Support = () => {
-  return (
-    <div className="min-h-screen bg-white">
+  return <div className="min-h-screen bg-white">
       <Navbar />
       
       <div className="section-padding">
@@ -26,7 +23,7 @@ const Support = () => {
             <div className="card-standard text-center">
               <Mail className="h-12 w-12 text-tech-primary mx-auto mb-4" />
               <h3 className="text-lg font-semibold text-tech-primary mb-2 font-inter">Email</h3>
-              <p className="text-gray-secondary mb-4 font-inter">suporte@assistanywhere.com</p>
+              <p className="text-gray-secondary mb-4 font-inter">suporte@instalei.com.br</p>
               <Button variant="outline" size="sm">
                 Enviar Email
               </Button>
@@ -91,8 +88,6 @@ const Support = () => {
       </div>
 
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default Support;
