@@ -32,7 +32,7 @@ const Support = () => {
             <div className="card-standard text-center">
               <Phone className="h-12 w-12 text-tech-primary mx-auto mb-4" />
               <h3 className="text-lg font-semibold text-tech-primary mb-2 font-inter">Telefone</h3>
-              <p className="text-gray-secondary mb-4 font-inter">(11) 9999-9999</p>
+              <p className="text-gray-secondary mb-4 font-inter">+55 47 99734-2869</p>
               <Button variant="outline" size="sm">
                 Ligar Agora
               </Button>
