@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import {
@@ -83,12 +84,12 @@ const FAQ = () => {
             <p className="text-gray-secondary mb-4 font-inter">
               Não encontrou a resposta que procurava?
             </p>
-            <a
-              href="/support"
+            <Link
+              to="/support"
               className="text-tech-primary hover:text-tech-primary-hover font-medium font-inter link-underline"
             >
               Entre em contato conosco
-            </a>
+            </Link>
           </div>
         </div>
       </div>

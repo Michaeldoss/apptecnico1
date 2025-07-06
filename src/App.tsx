@@ -21,6 +21,7 @@ import Services from '@/pages/Services';
 import About from '@/pages/About';
 import Contact from '@/pages/Contact';
 import Support from '@/pages/Support';
+import FAQ from '@/pages/FAQ';
 
 // Customer pages
 import CustomerDashboard from '@/pages/customer/Dashboard';
@@ -96,7 +97,8 @@ function App() {
                 <Route path="/services" element={<Services />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
-                 <Route path="/support" element={<Support />} />
+                <Route path="/support" element={<Support />} />
+                <Route path="/faq" element={<FAQ />} />
                  
                  {/* Store routes */}
                  <Route path="/loja/register" element={<CompanyRegister />} />
