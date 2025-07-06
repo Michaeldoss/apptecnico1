@@ -22,8 +22,8 @@ const MapboxTechnicianMap: React.FC<MapboxTechnicianMapProps> = ({
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
-  const [mapboxToken, setMapboxToken] = useState<string>('');
-  const [isTokenValid, setIsTokenValid] = useState<boolean>(false);
+  const [mapboxToken, setMapboxToken] = useState<string>('pk.eyJ1IjoibWljaGFlbGRvc3Nncm91cCIsImEiOiJjbWNtNWJibG4waHcyMnNwc25jOXg1cm1lIn0.LXYkJOChx4Bp-4JcuIeQIQ');
+  const [isTokenValid, setIsTokenValid] = useState<boolean>(true);
   const markers = useRef<mapboxgl.Marker[]>([]);
   const { toast } = useToast();
 
