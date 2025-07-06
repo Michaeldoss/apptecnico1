@@ -40,7 +40,7 @@ const Support = () => {
 
             <div className="card-standard text-center">
               <MessageCircle className="h-12 w-12 text-tech-primary mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-tech-primary mb-2 font-inter">Chat Online</h3>
+              <h3 className="text-lg font-semibold text-tech-primary mb-2 font-inter">Atendimento Virtu</h3>
               <p className="text-gray-secondary mb-4 font-inter">Disponível 24/7</p>
               <Button variant="outline" size="sm">
                 Iniciar Chat
