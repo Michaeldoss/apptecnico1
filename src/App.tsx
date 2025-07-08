@@ -10,7 +10,8 @@ import { CartProvider } from '@/hooks/useCart';
 import Index from '@/pages/Index';
 import NotFound from '@/pages/NotFound';
 import Login from '@/pages/Login';
-import Register from '@/pages/Register';
+import NewRegister from '@/pages/NewRegister';
+import ProfileComplete from '@/pages/customer/ProfileComplete';
 import FindTechnician from '@/pages/FindTechnician';
 import Store from '@/pages/Store';
 import Marketplace from '@/pages/Marketplace';
@@ -86,7 +87,7 @@ function App() {
                 {/* Public routes */}
                 <Route path="/" element={<Index />} />
                 <Route path="/login" element={<Login />} />
-                 <Route path="/register" element={<Register />} />
+                 <Route path="/register" element={<NewRegister />} />
                  <Route path="/technician" element={<TechnicianRegister />} />
                 <Route path="/find-technician" element={<FindTechnician />} />
                 <Route path="/store" element={<Store />} />
@@ -144,11 +145,16 @@ function App() {
                     <CustomerDashboard />
                   </ProtectedRoute>
                 } />
-                <Route path="/cliente/perfil" element={
-                  <ProtectedRoute userType="customer">
-                    <CustomerProfile />
-                  </ProtectedRoute>
-                } />
+                 <Route path="/cliente/perfil" element={
+                   <ProtectedRoute userType="customer">
+                     <CustomerProfile />
+                   </ProtectedRoute>
+                 } />
+                 <Route path="/cliente/completar-perfil" element={
+                   <ProtectedRoute userType="customer">
+                     <ProfileComplete />
+                   </ProtectedRoute>
+                 } />
                 <Route path="/cliente/profile" element={
                   <ProtectedRoute userType="customer">
                     <CustomerProfile />

@@ -10,6 +10,7 @@ import BlurContainer from '@/components/ui/BlurContainer';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { useAuth } from '@/context/AuthContext';
+import { toast } from '@/hooks/use-toast';
 import GoogleLoginButton from '@/components/auth/GoogleLoginButton';
 
 const Login = () => {
@@ -59,6 +60,11 @@ const Login = () => {
     
     if (!email || !password) {
       console.log('Login - Email ou senha vazios');
+      toast({
+        variant: "destructive",
+        title: "Campos obrigatórios",
+        description: "Preencha email e senha para continuar.",
+      });
       return;
     }
 
@@ -69,14 +75,28 @@ const Login = () => {
       const success = await login(email, password);
       
       if (success) {
-        console.log('Login - Login bem-sucedido, redirecionamento será feito pelo useEffect');
+        console.log('Login - Login bem-sucedido');
+        toast({
+          title: "Login realizado",
+          description: "Bem-vindo! Redirecionando...",
+        });
         // O redirecionamento será feito pelo useEffect após o estado ser atualizado
       } else {
         console.log('Login - Login falhou');
+        toast({
+          variant: "destructive",
+          title: "Falha no login",
+          description: "Email ou senha incorretos. Verifique e tente novamente.",
+        });
         setIsLoading(false);
       }
     } catch (error) {
       console.error('Login - Erro durante login:', error);
+      toast({
+        variant: "destructive",
+        title: "Erro de conexão",
+        description: "Não foi possível conectar. Verifique sua internet e tente novamente.",
+      });
       setIsLoading(false);
     }
   };
