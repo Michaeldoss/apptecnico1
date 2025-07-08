@@ -166,29 +166,6 @@ const Store = () => {
         {/* Hero section - cores da home: azul com gradiente */}
         <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-8 md:py-12">
           <div className="container mx-auto px-4">
-            <div className={cn(
-              "flex mb-2",
-              isMobile ? "justify-center" : "justify-end"
-            )}>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Link to="/store/company-register">
-                      <Button variant="outline" size="sm" className="gap-1 rounded-full border-yellow-300 text-yellow-300 hover:bg-yellow-300 hover:text-blue-800 font-inter">
-                        <Plus className="h-4 w-4" />
-                        <span className={cn(isMobile ? "inline" : "hidden md:inline")}>
-                          {isMobile ? "Cadastrar" : "Cadastrar Empresa"}
-                        </span>
-                      </Button>
-                    </Link>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p className="font-inter">Cadastre sua empresa como fornecedor</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
-            
             <div className="max-w-4xl mx-auto text-center">
               <h1 className={cn(
                 "font-bold mb-4 text-white font-inter drop-shadow-lg",
