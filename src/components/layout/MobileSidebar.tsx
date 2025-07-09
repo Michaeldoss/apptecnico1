@@ -16,7 +16,8 @@ import {
   Printer,
   Menu,
   X,
-  Calendar
+  Calendar,
+  DollarSign
 } from 'lucide-react';
 
 type MobileSidebarProps = {
@@ -145,6 +146,15 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isMenuOpen, toggleMenu, c
             onClick={closeMenu}
           >
             Rastreamento
+          </SidebarItem>
+          
+          <SidebarItem 
+            to="/cliente/afiliados" 
+            icon={DollarSign} 
+            active={path.startsWith('/cliente/afiliados')}
+            onClick={closeMenu}
+          >
+            Afiliados
           </SidebarItem>
           
           <SidebarItem 

@@ -12,6 +12,9 @@ import NotFound from '@/pages/NotFound';
 import Login from '@/pages/Login';
 import NewRegister from '@/pages/NewRegister';
 import ProfileComplete from '@/pages/customer/ProfileComplete';
+import CustomerAffiliates from '@/pages/customer/Affiliates';
+import TechnicianAffiliates from '@/pages/technician/Affiliates';
+import CompanyAffiliates from '@/pages/store/CompanyAffiliates';
 import FindTechnician from '@/pages/FindTechnician';
 import Store from '@/pages/Store';
 import Marketplace from '@/pages/Marketplace';
@@ -128,11 +131,16 @@ function App() {
                      <CompanyReviews />
                    </ProtectedRoute>
                  } />
-                 <Route path="/loja/estoque" element={
-                   <ProtectedRoute userType="company">
-                     <CompanyInventory />
-                   </ProtectedRoute>
-                 } />
+                  <Route path="/loja/estoque" element={
+                    <ProtectedRoute userType="company">
+                      <CompanyInventory />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/loja/afiliados" element={
+                    <ProtectedRoute userType="company">
+                      <CompanyAffiliates />
+                    </ProtectedRoute>
+                  } />
                  
                  {/* Customer routes */}
                 <Route path="/cliente/painel" element={
@@ -150,11 +158,16 @@ function App() {
                      <CustomerProfile />
                    </ProtectedRoute>
                  } />
-                 <Route path="/cliente/completar-perfil" element={
-                   <ProtectedRoute userType="customer">
-                     <ProfileComplete />
-                   </ProtectedRoute>
-                 } />
+                  <Route path="/cliente/completar-perfil" element={
+                    <ProtectedRoute userType="customer">
+                      <ProfileComplete />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/cliente/afiliados" element={
+                    <ProtectedRoute userType="customer">
+                      <CustomerAffiliates />
+                    </ProtectedRoute>
+                  } />
                 <Route path="/cliente/profile" element={
                   <ProtectedRoute userType="customer">
                     <CustomerProfile />
@@ -377,11 +390,16 @@ function App() {
                     <TechnicianSettings />
                   </ProtectedRoute>
                 } />
-                <Route path="/tecnico/settings" element={
-                  <ProtectedRoute userType="technician">
-                    <TechnicianSettings />
-                  </ProtectedRoute>
-                } />
+                 <Route path="/tecnico/settings" element={
+                   <ProtectedRoute userType="technician">
+                     <TechnicianSettings />
+                   </ProtectedRoute>
+                 } />
+                 <Route path="/tecnico/afiliados" element={
+                   <ProtectedRoute userType="technician">
+                     <TechnicianAffiliates />
+                   </ProtectedRoute>
+                 } />
 
                 {/* Admin routes */}
                 <Route path="/admin/painel" element={

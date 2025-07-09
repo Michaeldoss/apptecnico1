@@ -14,6 +14,181 @@ export type Database = {
   }
   public: {
     Tables: {
+      affiliate_profiles: {
+        Row: {
+          affiliate_since: string
+          affiliate_slug: string
+          commission_paid: number | null
+          commission_pending: number | null
+          created_at: string
+          id: string
+          is_active: boolean
+          total_commission: number | null
+          total_sales: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          affiliate_since?: string
+          affiliate_slug: string
+          commission_paid?: number | null
+          commission_pending?: number | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          total_commission?: number | null
+          total_sales?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          affiliate_since?: string
+          affiliate_slug?: string
+          commission_paid?: number | null
+          commission_pending?: number | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          total_commission?: number | null
+          total_sales?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      affiliate_sales: {
+        Row: {
+          affiliate_id: string
+          buyer_id: string | null
+          commission_percent: number
+          commission_value: number
+          created_at: string
+          id: string
+          order_id: string | null
+          origin: string
+          product_id: string | null
+          product_name: string
+          sale_amount: number
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          affiliate_id: string
+          buyer_id?: string | null
+          commission_percent: number
+          commission_value: number
+          created_at?: string
+          id?: string
+          order_id?: string | null
+          origin?: string
+          product_id?: string | null
+          product_name: string
+          sale_amount: number
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          affiliate_id?: string
+          buyer_id?: string | null
+          commission_percent?: number
+          commission_value?: number
+          created_at?: string
+          id?: string
+          order_id?: string | null
+          origin?: string
+          product_id?: string | null
+          product_name?: string
+          sale_amount?: number
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "affiliate_sales_affiliate_id_fkey"
+            columns: ["affiliate_id"]
+            isOneToOne: false
+            referencedRelation: "affiliate_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      affiliate_withdrawals: {
+        Row: {
+          affiliate_id: string
+          amount: number
+          created_at: string
+          id: string
+          payment_details: Json | null
+          payment_method: string
+          processed_at: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          affiliate_id: string
+          amount: number
+          created_at?: string
+          id?: string
+          payment_details?: Json | null
+          payment_method?: string
+          processed_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          affiliate_id?: string
+          amount?: number
+          created_at?: string
+          id?: string
+          payment_details?: Json | null
+          payment_method?: string
+          processed_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "affiliate_withdrawals_affiliate_id_fkey"
+            columns: ["affiliate_id"]
+            isOneToOne: false
+            referencedRelation: "affiliate_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_affiliate_settings: {
+        Row: {
+          category: string | null
+          commission_percent: number
+          created_at: string
+          id: string
+          is_affiliate_enabled: boolean
+          product_id: string
+          product_name: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string | null
+          commission_percent?: number
+          created_at?: string
+          id?: string
+          is_affiliate_enabled?: boolean
+          product_id: string
+          product_name: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string | null
+          commission_percent?: number
+          created_at?: string
+          id?: string
+          is_affiliate_enabled?: boolean
+          product_id?: string
+          product_name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       tecnico_pagamento_config: {
         Row: {
           conta_verificada: boolean | null
