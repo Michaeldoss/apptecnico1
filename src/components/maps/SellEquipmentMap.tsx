@@ -6,6 +6,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { MapPin, Settings } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 interface SellEquipmentMapProps {
   equipments: SellEquipmentItem[];
@@ -32,16 +34,43 @@ const SellEquipmentMap: React.FC<SellEquipmentMapProps> = ({
 }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
-  const [mapboxToken, setMapboxToken] = useState(() => 
-    localStorage.getItem('mapbox-token') || ''
-  );
-  const [showTokenInput, setShowTokenInput] = useState(() => 
-    !localStorage.getItem('mapbox-token')
-  );
+  const [mapboxToken, setMapboxToken] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>('');
   const markers = useRef<mapboxgl.Marker[]>([]);
+  const { toast } = useToast();
+
+  // Buscar token do Mapbox
+  useEffect(() => {
+    const fetchMapboxToken = async () => {
+      try {
+        const { data, error } = await supabase.functions.invoke('get-mapbox-token');
+        
+        if (error) {
+          console.error('Erro ao buscar token:', error);
+          setError('Token do Mapbox não configurado');
+          setIsLoading(false);
+          return;
+        }
+
+        if (data?.token) {
+          setMapboxToken(data.token);
+          setError('');
+        } else {
+          setError('Token do Mapbox não encontrado');
+        }
+      } catch (err) {
+        console.error('Erro:', err);
+        setError('Erro ao carregar mapa');
+      }
+      setIsLoading(false);
+    };
+
+    fetchMapboxToken();
+  }, []);
 
   const initializeMap = () => {
-    if (!mapContainer.current || !mapboxToken) return;
+    if (!mapContainer.current || !mapboxToken || isLoading) return;
 
     try {
       mapboxgl.accessToken = mapboxToken;
@@ -63,10 +92,9 @@ const SellEquipmentMap: React.FC<SellEquipmentMapProps> = ({
         addEquipmentMarkers();
       });
 
-      localStorage.setItem('mapbox-token', mapboxToken);
-      setShowTokenInput(false);
     } catch (error) {
       console.error('Erro ao inicializar o mapa:', error);
+      setError('Erro ao carregar mapa');
     }
   };
 
@@ -141,83 +169,51 @@ const SellEquipmentMap: React.FC<SellEquipmentMapProps> = ({
   };
 
   useEffect(() => {
-    if (mapboxToken && !showTokenInput && !map.current) {
+    if (mapboxToken && !isLoading && !map.current) {
       initializeMap();
     } else if (mapboxToken && map.current) {
       addEquipmentMarkers();
     }
-  }, [equipments, mapboxToken, showTokenInput]);
+  }, [equipments, mapboxToken, isLoading]);
+
+  if (isLoading) {
+    return (
+      <div className="w-full h-full flex items-center justify-center bg-gray-50 rounded-lg">
+        <div className="text-center p-8">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Carregando mapa...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="w-full h-full flex items-center justify-center bg-gray-50 rounded-lg">
+        <Card className="max-w-md">
+          <CardContent className="text-center p-8">
+            <MapPin className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold mb-2 text-red-600">Erro no Mapa</h3>
+            <p className="text-sm text-gray-600 mb-4">{error}</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full h-full relative">
-      {showTokenInput ? (
-        <Card className="absolute inset-0 z-10 flex items-center justify-center">
-          <CardContent className="text-center max-w-md">
-            <CardHeader>
-              <CardTitle className="flex items-center justify-center gap-2">
-                <MapPin className="h-5 w-5" />
-                Configurar Mapa
-              </CardTitle>
-            </CardHeader>
-            <p className="text-sm text-gray-600 mb-4">
-              Para usar o mapa interativo, insira seu token público do Mapbox.
-            </p>
-            <div className="space-y-3">
-              <Input
-                placeholder="Insira seu token público do Mapbox"
-                value={mapboxToken}
-                onChange={(e) => setMapboxToken(e.target.value)}
-                type="password"
-              />
-              <Button 
-                onClick={initializeMap}
-                disabled={!mapboxToken.trim()}
-                className="w-full"
-              >
-                <MapPin className="h-4 w-4 mr-2" />
-                Inicializar Mapa
-              </Button>
-              <p className="text-xs text-gray-500">
-                Crie uma conta gratuita em{' '}
-                <a 
-                  href="https://mapbox.com" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline"
-                >
-                  mapbox.com
-                </a>
-                {' '}para obter seu token
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-      ) : (
-        <div className="absolute top-2 right-2 z-10">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setShowTokenInput(true)}
-            className="bg-white/90 backdrop-blur-sm"
-          >
-            <Settings className="h-4 w-4" />
-          </Button>
-        </div>
-      )}
-      
       <div 
         ref={mapContainer} 
         className="w-full h-full rounded-lg overflow-hidden"
       />
       
-      {!showTokenInput && (
-        <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg p-2 text-xs text-gray-600">
-          <div className="flex items-center gap-1">
-            <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-            <span>{equipments.length} equipamentos</span>
-          </div>
+      <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg p-2 text-xs text-gray-600">
+        <div className="flex items-center gap-1">
+          <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+          <span>{equipments.length} equipamentos</span>
         </div>
-      )}
+      </div>
     </div>
   );
 };

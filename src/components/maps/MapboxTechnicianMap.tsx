@@ -5,8 +5,7 @@ import { MapPin, User, ExternalLink } from 'lucide-react';
 import { Technician } from '@/types/technician';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { supabase } from '@/integrations/supabase/client';
 
 interface MapboxTechnicianMapProps {
   technicians: Technician[];
@@ -22,10 +21,40 @@ const MapboxTechnicianMap: React.FC<MapboxTechnicianMapProps> = ({
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
-  const [mapboxToken, setMapboxToken] = useState<string>('pk.eyJ1IjoibWljaGFlbGRvc3Nncm91cCIsImEiOiJjbWNtNWJibG4waHcyMnNwc25jOXg1cm1lIn0.LXYkJOChx4Bp-4JcuIeQIQ');
-  const [isTokenValid, setIsTokenValid] = useState<boolean>(true);
+  const [mapboxToken, setMapboxToken] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>('');
   const markers = useRef<mapboxgl.Marker[]>([]);
   const { toast } = useToast();
+
+  // Buscar token do Mapbox
+  useEffect(() => {
+    const fetchMapboxToken = async () => {
+      try {
+        const { data, error } = await supabase.functions.invoke('get-mapbox-token');
+        
+        if (error) {
+          console.error('Erro ao buscar token:', error);
+          setError('Token do Mapbox não configurado');
+          setIsLoading(false);
+          return;
+        }
+
+        if (data?.token) {
+          setMapboxToken(data.token);
+          setError('');
+        } else {
+          setError('Token do Mapbox não encontrado');
+        }
+      } catch (err) {
+        console.error('Erro:', err);
+        setError('Erro ao carregar mapa');
+      }
+      setIsLoading(false);
+    };
+
+    fetchMapboxToken();
+  }, []);
 
   // Obter localização do usuário
   useEffect(() => {
@@ -43,10 +72,6 @@ const MapboxTechnicianMap: React.FC<MapboxTechnicianMapProps> = ({
             lat: -23.5505,
             lng: -46.6333
           });
-          toast({
-            title: "Localização padrão",
-            description: "Usando São Paulo como localização de referência.",
-          });
         }
       );
     } else {
@@ -55,22 +80,17 @@ const MapboxTechnicianMap: React.FC<MapboxTechnicianMapProps> = ({
         lng: -46.6333
       });
     }
-  }, [toast]);
+  }, []);
 
-  // Inicializar mapa quando token for válido
+  // Inicializar mapa quando token estiver disponível
   useEffect(() => {
-    if (!mapContainer.current || !mapboxToken || !isTokenValid) return;
+    if (!mapContainer.current || !mapboxToken || isLoading) return;
 
     // Verificar suporte WebGL
     const canvas = document.createElement('canvas');
     const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
     if (!gl) {
-      setIsTokenValid(false);
-      toast({
-        title: "WebGL não suportado",
-        description: "Seu navegador não suporta WebGL. Tente usar um navegador mais recente.",
-        variant: "destructive"
-      });
+      setError('WebGL não suportado no seu navegador');
       return;
     }
 
@@ -116,115 +136,81 @@ const MapboxTechnicianMap: React.FC<MapboxTechnicianMapProps> = ({
         zoom: mapCenter.zoom,
         attributionControl: false
       });
+
+      // Adicionar controles de navegação
+      map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+      // Limpar marcadores existentes
+      markers.current.forEach(marker => marker.remove());
+      markers.current = [];
+
+      // Adicionar marcador do usuário
+      if (userLocation) {
+        const userMarker = new mapboxgl.Marker({
+          color: '#3B82F6',
+          scale: 0.8
+        })
+          .setLngLat([userLocation.lng, userLocation.lat])
+          .setPopup(new mapboxgl.Popup().setHTML('<div>Sua localização</div>'))
+          .addTo(map.current);
+        
+        markers.current.push(userMarker);
+      }
+
+      // Adicionar marcadores dos técnicos
+      technicians.forEach((technician) => {
+        const techLat = technician.coordinates ? technician.coordinates[0] : -23.5505 + (technician.id * 0.01);
+        const techLng = technician.coordinates ? technician.coordinates[1] : -46.6333 + (technician.id * 0.01);
+
+        // Criar elemento personalizado para o marcador
+        const el = document.createElement('div');
+        el.className = 'cursor-pointer transition-transform hover:scale-110';
+        el.innerHTML = `
+          <div class="flex flex-col items-center">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="${selectedTechnician?.id === technician.id ? '#DC2626' : '#16A34A'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+          </div>
+        `;
+
+        const marker = new mapboxgl.Marker(el)
+          .setLngLat([techLng, techLat])
+          .setPopup(
+            new mapboxgl.Popup({ offset: 25 }).setHTML(`
+              <div class="p-2">
+                <h3 class="font-semibold">${technician.name}</h3>
+                <p class="text-sm text-gray-600">${technician.location}</p>
+                <p class="text-sm">${technician.specialties.slice(0, 2).join(', ')}</p>
+                <div class="mt-2 flex gap-1">
+                  <button onclick="window.open('https://www.google.com/maps/search/${encodeURIComponent(technician.name + ' - ' + technician.location)}/@${techLat},${techLng},15z', '_blank')" class="text-xs bg-blue-500 text-white px-2 py-1 rounded">Ver no Maps</button>
+                  <button onclick="window.open('https://www.google.com/maps/dir/${userLocation?.lat || -23.5505},${userLocation?.lng || -46.6333}/${techLat},${techLng}', '_blank')" class="text-xs bg-green-500 text-white px-2 py-1 rounded">Rota</button>
+                </div>
+              </div>
+            `)
+          )
+          .addTo(map.current);
+
+        // Adicionar evento de clique
+        el.addEventListener('click', () => {
+          setSelectedTechnician(technician);
+        });
+
+        markers.current.push(marker);
+      });
+
     } catch (error) {
       console.error('Erro ao inicializar mapa:', error);
-      setIsTokenValid(false);
-      toast({
-        title: "Erro no mapa",
-        description: "Não foi possível carregar o mapa. Verifique se o token está correto.",
-        variant: "destructive"
-      });
+      setError('Erro ao carregar o mapa');
       return;
     }
-
-    // Adicionar controles de navegação
-    map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
-
-    // Limpar marcadores existentes
-    markers.current.forEach(marker => marker.remove());
-    markers.current = [];
-
-    // Adicionar marcador do usuário
-    if (userLocation) {
-      const userMarker = new mapboxgl.Marker({
-        color: '#3B82F6',
-        scale: 0.8
-      })
-        .setLngLat([userLocation.lng, userLocation.lat])
-        .setPopup(new mapboxgl.Popup().setHTML('<div>Sua localização</div>'))
-        .addTo(map.current);
-      
-      markers.current.push(userMarker);
-    }
-
-    // Adicionar marcadores dos técnicos
-    technicians.forEach((technician) => {
-      const techLat = technician.coordinates ? technician.coordinates[0] : -23.5505 + (technician.id * 0.01);
-      const techLng = technician.coordinates ? technician.coordinates[1] : -46.6333 + (technician.id * 0.01);
-
-      // Criar elemento personalizado para o marcador
-      const el = document.createElement('div');
-      el.className = 'cursor-pointer transition-transform hover:scale-110';
-      el.innerHTML = `
-        <div class="flex flex-col items-center">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="${selectedTechnician?.id === technician.id ? '#DC2626' : '#16A34A'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
-            <circle cx="12" cy="10" r="3"></circle>
-          </svg>
-        </div>
-      `;
-
-      const marker = new mapboxgl.Marker(el)
-        .setLngLat([techLng, techLat])
-        .setPopup(
-          new mapboxgl.Popup({ offset: 25 }).setHTML(`
-            <div class="p-2">
-              <h3 class="font-semibold">${technician.name}</h3>
-              <p class="text-sm text-gray-600">${technician.location}</p>
-              <p class="text-sm">${technician.specialties.slice(0, 2).join(', ')}</p>
-              <div class="mt-2 flex gap-1">
-                <button onclick="window.open('https://www.google.com/maps/search/${encodeURIComponent(technician.name + ' - ' + technician.location)}/@${techLat},${techLng},15z', '_blank')" class="text-xs bg-blue-500 text-white px-2 py-1 rounded">Ver no Maps</button>
-                <button onclick="window.open('https://www.google.com/maps/dir/${userLocation?.lat || -23.5505},${userLocation?.lng || -46.6333}/${techLat},${techLng}', '_blank')" class="text-xs bg-green-500 text-white px-2 py-1 rounded">Rota</button>
-              </div>
-            </div>
-          `)
-        )
-        .addTo(map.current);
-
-      // Adicionar evento de clique
-      el.addEventListener('click', () => {
-        setSelectedTechnician(technician);
-      });
-
-      markers.current.push(marker);
-    });
 
     // Cleanup
     return () => {
       markers.current.forEach(marker => marker.remove());
       map.current?.remove();
     };
-  }, [technicians, selectedTechnician, userLocation, mapboxToken, isTokenValid, setSelectedTechnician, toast]);
-
-  const handleTokenSubmit = () => {
-    if (mapboxToken.trim()) {
-      // Verificar suporte WebGL antes de tentar carregar o mapa
-      const canvas = document.createElement('canvas');
-      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-      if (!gl) {
-        toast({
-          title: "WebGL não suportado",
-          description: "Seu navegador não suporta WebGL. Use o Google Maps como alternativa.",
-          variant: "destructive"
-        });
-        return;
-      }
-
-      // Verificar se o token é válido testando o acesso
-      mapboxgl.accessToken = mapboxToken;
-      setIsTokenValid(true);
-      toast({
-        title: "Token configurado",
-        description: "Mapa Mapbox carregado com sucesso!",
-      });
-    } else {
-      toast({
-        title: "Token inválido",
-        description: "Por favor, insira um token válido do Mapbox.",
-        variant: "destructive"
-      });
-    }
-  };
+  }, [technicians, selectedTechnician, userLocation, mapboxToken, isLoading, setSelectedTechnician]);
 
   const openGoogleMaps = () => {
     if (technicians.length > 0) {
@@ -244,38 +230,24 @@ const MapboxTechnicianMap: React.FC<MapboxTechnicianMapProps> = ({
     }
   };
 
-  if (!isTokenValid) {
+  if (isLoading) {
+    return (
+      <div className="w-full h-full flex items-center justify-center bg-gray-50 rounded-lg border">
+        <div className="text-center p-8">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Carregando mapa...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
     return (
       <div className="w-full h-full flex items-center justify-center bg-gray-50 rounded-lg border">
         <div className="text-center p-8 max-w-md">
           <MapPin className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold mb-2">Configure o Mapbox</h3>
-          <p className="text-sm text-gray-600 mb-4">
-            Para ver o mapa interativo com técnicos fixos nas posições corretas, 
-            você precisa inserir um token público do Mapbox.
-          </p>
-          <div className="space-y-3">
-            <div>
-              <Label htmlFor="mapbox-token">Token Público do Mapbox</Label>
-              <Input
-                id="mapbox-token"
-                type="text"
-                placeholder="pk.eyJ1..."
-                value={mapboxToken}
-                onChange={(e) => setMapboxToken(e.target.value)}
-                className="mt-1"
-              />
-            </div>
-            <Button onClick={handleTokenSubmit} className="w-full">
-              Carregar Mapa
-            </Button>
-            <div className="text-xs text-gray-500">
-              <p>Obtenha seu token gratuito em: <br />
-              <a href="https://mapbox.com/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
-                mapbox.com → Dashboard → Tokens
-              </a></p>
-            </div>
-          </div>
+          <h3 className="text-lg font-semibold mb-2 text-red-600">Erro no Mapa</h3>
+          <p className="text-sm text-gray-600 mb-4">{error}</p>
           
           <div className="mt-6 pt-4 border-t">
             <Button 
