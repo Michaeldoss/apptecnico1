@@ -105,7 +105,7 @@ const CompanyDashboard = () => {
                     Portal do Fornecedor
                   </h1>
                   <p className="text-xl text-blue-100 mt-2 drop-shadow-lg">
-                    Bem-vindo, {user?.name || 'Doss Group'}!
+                    Bem-vindo, Doss Group!
                   </p>
                 </div>
               </div>
@@ -133,7 +133,7 @@ const CompanyDashboard = () => {
                     <div className="text-sm font-semibold text-blue-100">Produtos</div>
                     <Package className="h-6 w-6 text-yellow-300 group-hover:scale-110 transition-transform" />
                   </div>
-                  <div className="text-3xl font-black text-white">{user?.productCount || 87}</div>
+                  <div className="text-3xl font-black text-white">87</div>
                   <div className="text-xs text-blue-200 mt-2">Clique para gerenciar</div>
                 </div>
               </Link>
@@ -171,7 +171,7 @@ const CompanyDashboard = () => {
                     <div className="text-sm font-semibold text-blue-100">Avaliação</div>
                     <Star className="h-6 w-6 text-yellow-300 group-hover:scale-110 transition-transform" />
                   </div>
-                  <div className="text-3xl font-black text-white">{user?.rating || 4.8} ★</div>
+                  <div className="text-3xl font-black text-white">4.8 ★</div>
                   <div className="text-xs text-blue-200 mt-2">Ver avaliações</div>
                 </div>
               </Link>
