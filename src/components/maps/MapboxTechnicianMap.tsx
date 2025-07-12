@@ -61,6 +61,19 @@ const MapboxTechnicianMap: React.FC<MapboxTechnicianMapProps> = ({
   useEffect(() => {
     if (!mapContainer.current || !mapboxToken || !isTokenValid) return;
 
+    // Verificar suporte WebGL
+    const canvas = document.createElement('canvas');
+    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    if (!gl) {
+      setIsTokenValid(false);
+      toast({
+        title: "WebGL não suportado",
+        description: "Seu navegador não suporta WebGL. Tente usar um navegador mais recente.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     // Configurar token do Mapbox
     mapboxgl.accessToken = mapboxToken;
 
@@ -94,13 +107,25 @@ const MapboxTechnicianMap: React.FC<MapboxTechnicianMapProps> = ({
 
     const mapCenter = getMapCenter();
 
-    // Inicializar mapa
-    map.current = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/light-v11',
-      center: [mapCenter.lng, mapCenter.lat],
-      zoom: mapCenter.zoom
-    });
+    try {
+      // Inicializar mapa
+      map.current = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: 'mapbox://styles/mapbox/light-v11',
+        center: [mapCenter.lng, mapCenter.lat],
+        zoom: mapCenter.zoom,
+        attributionControl: false
+      });
+    } catch (error) {
+      console.error('Erro ao inicializar mapa:', error);
+      setIsTokenValid(false);
+      toast({
+        title: "Erro no mapa",
+        description: "Não foi possível carregar o mapa. Verifique se o token está correto.",
+        variant: "destructive"
+      });
+      return;
+    }
 
     // Adicionar controles de navegação
     map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
@@ -173,6 +198,18 @@ const MapboxTechnicianMap: React.FC<MapboxTechnicianMapProps> = ({
 
   const handleTokenSubmit = () => {
     if (mapboxToken.trim()) {
+      // Verificar suporte WebGL antes de tentar carregar o mapa
+      const canvas = document.createElement('canvas');
+      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      if (!gl) {
+        toast({
+          title: "WebGL não suportado",
+          description: "Seu navegador não suporta WebGL. Use o Google Maps como alternativa.",
+          variant: "destructive"
+        });
+        return;
+      }
+
       // Verificar se o token é válido testando o acesso
       mapboxgl.accessToken = mapboxToken;
       setIsTokenValid(true);
