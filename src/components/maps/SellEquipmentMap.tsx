@@ -37,13 +37,34 @@ const SellEquipmentMap: React.FC<SellEquipmentMapProps> = ({
   const [mapboxToken, setMapboxToken] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
+  const [webglSupported, setWebglSupported] = useState<boolean>(true);
   const markers = useRef<mapboxgl.Marker[]>([]);
   const { toast } = useToast();
+
+  // Check WebGL support
+  const checkWebGLSupport = (): boolean => {
+    try {
+      const canvas = document.createElement('canvas');
+      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      canvas.remove();
+      return !!gl;
+    } catch (e) {
+      return false;
+    }
+  };
 
   // Buscar token do Mapbox
   useEffect(() => {
     const fetchMapboxToken = async () => {
       try {
+        // Check WebGL support first
+        if (!checkWebGLSupport()) {
+          setWebglSupported(false);
+          setError('WebGL não é suportado neste browser. Use um browser mais moderno.');
+          setIsLoading(false);
+          return;
+        }
+
         const { data, error } = await supabase.functions.invoke('get-mapbox-token');
         
         if (error) {
@@ -70,7 +91,7 @@ const SellEquipmentMap: React.FC<SellEquipmentMapProps> = ({
   }, []);
 
   const initializeMap = () => {
-    if (!mapContainer.current || !mapboxToken || isLoading) return;
+    if (!mapContainer.current || !mapboxToken || isLoading || !webglSupported) return;
 
     try {
       mapboxgl.accessToken = mapboxToken;
@@ -90,6 +111,11 @@ const SellEquipmentMap: React.FC<SellEquipmentMapProps> = ({
 
       map.current.on('load', () => {
         addEquipmentMarkers();
+      });
+
+      map.current.on('error', (e) => {
+        console.error('Mapbox error:', e);
+        setError('Erro ao carregar o mapa. Tente recarregar a página.');
       });
 
     } catch (error) {
@@ -169,12 +195,12 @@ const SellEquipmentMap: React.FC<SellEquipmentMapProps> = ({
   };
 
   useEffect(() => {
-    if (mapboxToken && !isLoading && !map.current) {
+    if (mapboxToken && !isLoading && !map.current && webglSupported) {
       initializeMap();
-    } else if (mapboxToken && map.current) {
+    } else if (mapboxToken && map.current && webglSupported) {
       addEquipmentMarkers();
     }
-  }, [equipments, mapboxToken, isLoading]);
+  }, [equipments, mapboxToken, isLoading, webglSupported]);
 
   if (isLoading) {
     return (
@@ -187,6 +213,20 @@ const SellEquipmentMap: React.FC<SellEquipmentMapProps> = ({
     );
   }
 
+  if (!webglSupported) {
+    return (
+      <div className="w-full h-full flex items-center justify-center bg-gray-50 rounded-lg">
+        <Card className="max-w-md">
+          <CardContent className="text-center p-8">
+            <Settings className="h-16 w-16 text-orange-400 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold mb-2 text-orange-600">WebGL não suportado</h3>
+            <p className="text-sm text-gray-600 mb-4">Use um browser mais moderno para visualizar o mapa</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   if (error) {
     return (
       <div className="w-full h-full flex items-center justify-center bg-gray-50 rounded-lg">
@@ -195,6 +235,12 @@ const SellEquipmentMap: React.FC<SellEquipmentMapProps> = ({
             <MapPin className="h-16 w-16 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-semibold mb-2 text-red-600">Erro no Mapa</h3>
             <p className="text-sm text-gray-600 mb-4">{error}</p>
+            <Button 
+              onClick={() => window.location.reload()} 
+              className="mt-2"
+            >
+              Recarregar
+            </Button>
           </CardContent>
         </Card>
       </div>
