@@ -93,7 +93,7 @@ const SimpleLeafletMap: React.FC<SimpleLeafletMapProps> = ({
     technicians.forEach((technician) => {
       if (!technician.coordinates) return;
 
-      const position: L.LatLngExpression = [technician.coordinates[1], technician.coordinates[0]];
+      const position: L.LatLngExpression = [technician.coordinates[0], technician.coordinates[1]];
       bounds.extend(position);
 
       const marker = L.marker(position)
