@@ -106,6 +106,55 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     console.log('[DEBUG] Iniciando login para:', email);
     
     try {
+      // Primeiro, verificar se é um usuário real do banco
+      try {
+        const { supabase } = await import('@/integrations/supabase/client');
+        
+        // Buscar usuário no banco de dados
+        const { data: userData, error } = await supabase
+          .from('usuarios')
+          .select('*')
+          .eq('email', email)
+          .eq('ativo', true)
+          .single();
+
+        console.log('[DEBUG] Consulta no banco:', { userData, error });
+
+        if (userData && !error) {
+          // Usuário encontrado no banco - usar dados reais
+          console.log('[DEBUG] Usuário real encontrado:', userData.nome);
+          
+          const userForSession = {
+            id: userData.id,
+            name: userData.nome,
+            email: userData.email,
+            type: userData.tipo_usuario === 'admin' ? 'admin' : 
+                  userData.tipo_usuario === 'tecnico' ? 'technician' :
+                  userData.tipo_usuario === 'cliente' ? 'customer' : 'company',
+            tipo: userData.tipo_usuario,
+            isRealUser: true
+          };
+          
+          setUser(userForSession);
+          setUserType(userForSession.type as UserType);
+          setIsAuthenticated(true);
+          
+          localStorage.setItem('techSupportUser', JSON.stringify(userForSession));
+          
+          console.log('[DEBUG] Login do usuário real bem-sucedido');
+          
+          toast({
+            title: "Login realizado com sucesso",
+            description: `Bem-vindo, ${userData.nome}!`,
+          });
+          
+          return true;
+        }
+      } catch (dbError) {
+        console.log('[DEBUG] Erro na consulta do banco, continuando com mock:', dbError);
+      }
+
+      // Se não encontrou no banco, usar sistema mock
       const mockUsers = [
         { 
           id: 1, 

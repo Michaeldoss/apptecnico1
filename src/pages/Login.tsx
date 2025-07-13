@@ -220,6 +220,18 @@ const Login = () => {
                 <p><strong style={{ fontWeight: 'bold' }}>Técnico:</strong> tecnico@exemplo.com / 123456</p>
                 <p><strong>Empresa:</strong> loja@exemplo.com / 123456</p>
                 <p><strong>Admin:</strong> admin@exemplo.com / 123456</p>
+                <p><strong style={{ color: '#059669' }}>Seu usuário:</strong> admin@dossgroup.com.br / qualquer senha</p>
+                <Button 
+                  onClick={() => {
+                    setEmail('admin@dossgroup.com.br');
+                    setPassword('123456');
+                  }}
+                  variant="outline"
+                  size="sm"
+                  className="mt-2 text-xs"
+                >
+                  Preencher com suas credenciais
+                </Button>
               </div>
             </div>
           </BlurContainer>
