@@ -35,8 +35,22 @@ export const UniversalMap: React.FC<UniversalMapProps> = ({
     try {
       const canvas = document.createElement('canvas');
       const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      if (!gl) {
+        canvas.remove();
+        return false;
+      }
+      
+      // Simple WebGL validation
+      const webglContext = gl as WebGLRenderingContext;
+      const renderer = webglContext.getParameter(webglContext.RENDERER);
       canvas.remove();
-      return !!gl;
+      
+      // Check if it's software rendering (not hardware accelerated)
+      if (renderer && (renderer.includes('SwiftShader') || renderer.includes('Software'))) {
+        return false;
+      }
+      
+      return true;
     } catch (e) {
       return false;
     }
@@ -70,21 +84,30 @@ export const UniversalMap: React.FC<UniversalMapProps> = ({
 
     const initializeMap = async () => {
       try {
-        // First try to get Mapbox token
+        // Check WebGL support first
+        const hasWebGL = checkWebGLSupport();
+        console.log('WebGL Support:', hasWebGL);
+        
+        if (!hasWebGL) {
+          console.log('WebGL não suportado, usando Leaflet');
+          setMapType('leaflet');
+          return;
+        }
+
+        // Only try Mapbox if WebGL is supported
         const token = await fetchMapboxToken();
         
-        if (token && checkWebGLSupport()) {
+        if (token) {
           console.log('Usando Mapbox com WebGL');
           setMapboxToken(token);
           setMapType('mapbox');
         } else {
-          console.log('Fallback para Leaflet (WebGL não suportado ou token indisponível)');
+          console.log('Token do Mapbox indisponível, usando Leaflet');
           setMapType('leaflet');
         }
       } catch (error) {
         console.error('Erro ao inicializar mapa:', error);
-        setError('Erro ao carregar o mapa');
-        setMapType('leaflet'); // Fallback
+        setMapType('leaflet'); // Always fallback to Leaflet on error
       }
     };
 
