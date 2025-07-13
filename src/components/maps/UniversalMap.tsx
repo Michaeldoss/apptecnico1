@@ -84,27 +84,32 @@ export const UniversalMap: React.FC<UniversalMapProps> = ({
 
     const initializeMap = async () => {
       try {
-        // Check WebGL support first
-        const hasWebGL = checkWebGLSupport();
-        console.log('WebGL Support:', hasWebGL);
+        // Force Leaflet for now since WebGL issues persist
+        console.log('Usando Leaflet (forçado para resolver problemas de WebGL)');
+        setMapType('leaflet');
+        return;
         
-        if (!hasWebGL) {
-          console.log('WebGL não suportado, usando Leaflet');
-          setMapType('leaflet');
-          return;
-        }
+        // Check WebGL support first (commented out for now)
+        // const hasWebGL = checkWebGLSupport();
+        // console.log('WebGL Support:', hasWebGL);
+        
+        // if (!hasWebGL) {
+        //   console.log('WebGL não suportado, usando Leaflet');
+        //   setMapType('leaflet');
+        //   return;
+        // }
 
-        // Only try Mapbox if WebGL is supported
-        const token = await fetchMapboxToken();
+        // Only try Mapbox if WebGL is supported (commented out for now)
+        // const token = await fetchMapboxToken();
         
-        if (token) {
-          console.log('Usando Mapbox com WebGL');
-          setMapboxToken(token);
-          setMapType('mapbox');
-        } else {
-          console.log('Token do Mapbox indisponível, usando Leaflet');
-          setMapType('leaflet');
-        }
+        // if (token) {
+        //   console.log('Usando Mapbox com WebGL');
+        //   setMapboxToken(token);
+        //   setMapType('mapbox');
+        // } else {
+        //   console.log('Token do Mapbox indisponível, usando Leaflet');
+        //   setMapType('leaflet');
+        // }
       } catch (error) {
         console.error('Erro ao inicializar mapa:', error);
         setMapType('leaflet'); // Always fallback to Leaflet on error
