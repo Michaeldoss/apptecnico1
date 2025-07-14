@@ -156,6 +156,379 @@ export type Database = {
           },
         ]
       }
+      clientes: {
+        Row: {
+          ativo: boolean | null
+          bairro: string | null
+          cep: string | null
+          cidade: string | null
+          complemento: string | null
+          cpf_cnpj: string | null
+          created_at: string
+          dados_bancarios: Json | null
+          documentos_url: Json | null
+          email: string
+          endereco: string | null
+          estado: string | null
+          foto_perfil_url: string | null
+          id: string
+          nome: string
+          nota_perfil: number | null
+          numero: string | null
+          perfil_completo: boolean | null
+          telefone: string | null
+          updated_at: string
+        }
+        Insert: {
+          ativo?: boolean | null
+          bairro?: string | null
+          cep?: string | null
+          cidade?: string | null
+          complemento?: string | null
+          cpf_cnpj?: string | null
+          created_at?: string
+          dados_bancarios?: Json | null
+          documentos_url?: Json | null
+          email: string
+          endereco?: string | null
+          estado?: string | null
+          foto_perfil_url?: string | null
+          id?: string
+          nome: string
+          nota_perfil?: number | null
+          numero?: string | null
+          perfil_completo?: boolean | null
+          telefone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          ativo?: boolean | null
+          bairro?: string | null
+          cep?: string | null
+          cidade?: string | null
+          complemento?: string | null
+          cpf_cnpj?: string | null
+          created_at?: string
+          dados_bancarios?: Json | null
+          documentos_url?: Json | null
+          email?: string
+          endereco?: string | null
+          estado?: string | null
+          foto_perfil_url?: string | null
+          id?: string
+          nome?: string
+          nota_perfil?: number | null
+          numero?: string | null
+          perfil_completo?: boolean | null
+          telefone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      lojas: {
+        Row: {
+          ativo: boolean | null
+          bairro: string | null
+          cep: string | null
+          cidade: string | null
+          cnpj: string | null
+          complemento: string | null
+          created_at: string
+          dados_bancarios: Json | null
+          descricao: string | null
+          documentos_url: Json | null
+          email: string
+          endereco: string | null
+          estado: string | null
+          id: string
+          logo_url: string | null
+          nome_contato: string
+          nome_empresa: string
+          nota_perfil: number | null
+          numero: string | null
+          perfil_completo: boolean | null
+          telefone: string | null
+          updated_at: string
+          verificado: boolean | null
+        }
+        Insert: {
+          ativo?: boolean | null
+          bairro?: string | null
+          cep?: string | null
+          cidade?: string | null
+          cnpj?: string | null
+          complemento?: string | null
+          created_at?: string
+          dados_bancarios?: Json | null
+          descricao?: string | null
+          documentos_url?: Json | null
+          email: string
+          endereco?: string | null
+          estado?: string | null
+          id?: string
+          logo_url?: string | null
+          nome_contato: string
+          nome_empresa: string
+          nota_perfil?: number | null
+          numero?: string | null
+          perfil_completo?: boolean | null
+          telefone?: string | null
+          updated_at?: string
+          verificado?: boolean | null
+        }
+        Update: {
+          ativo?: boolean | null
+          bairro?: string | null
+          cep?: string | null
+          cidade?: string | null
+          cnpj?: string | null
+          complemento?: string | null
+          created_at?: string
+          dados_bancarios?: Json | null
+          descricao?: string | null
+          documentos_url?: Json | null
+          email?: string
+          endereco?: string | null
+          estado?: string | null
+          id?: string
+          logo_url?: string | null
+          nome_contato?: string
+          nome_empresa?: string
+          nota_perfil?: number | null
+          numero?: string | null
+          perfil_completo?: boolean | null
+          telefone?: string | null
+          updated_at?: string
+          verificado?: boolean | null
+        }
+        Relationships: []
+      }
+      ordens_servico: {
+        Row: {
+          avaliacao: number | null
+          categoria: string | null
+          cliente_id: string | null
+          comentario_avaliacao: string | null
+          created_at: string
+          data_agendada: string | null
+          data_conclusao: string | null
+          descricao: string | null
+          endereco_servico: string | null
+          id: string
+          prioridade: string | null
+          status: string | null
+          tecnico_id: string | null
+          titulo: string
+          updated_at: string
+          valor_pecas: number | null
+          valor_servico: number | null
+          valor_total: number | null
+        }
+        Insert: {
+          avaliacao?: number | null
+          categoria?: string | null
+          cliente_id?: string | null
+          comentario_avaliacao?: string | null
+          created_at?: string
+          data_agendada?: string | null
+          data_conclusao?: string | null
+          descricao?: string | null
+          endereco_servico?: string | null
+          id?: string
+          prioridade?: string | null
+          status?: string | null
+          tecnico_id?: string | null
+          titulo: string
+          updated_at?: string
+          valor_pecas?: number | null
+          valor_servico?: number | null
+          valor_total?: number | null
+        }
+        Update: {
+          avaliacao?: number | null
+          categoria?: string | null
+          cliente_id?: string | null
+          comentario_avaliacao?: string | null
+          created_at?: string
+          data_agendada?: string | null
+          data_conclusao?: string | null
+          descricao?: string | null
+          endereco_servico?: string | null
+          id?: string
+          prioridade?: string | null
+          status?: string | null
+          tecnico_id?: string | null
+          titulo?: string
+          updated_at?: string
+          valor_pecas?: number | null
+          valor_servico?: number | null
+          valor_total?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ordens_servico_cliente_id_fkey"
+            columns: ["cliente_id"]
+            isOneToOne: false
+            referencedRelation: "clientes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ordens_servico_tecnico_id_fkey"
+            columns: ["tecnico_id"]
+            isOneToOne: false
+            referencedRelation: "tecnicos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pecas: {
+        Row: {
+          ativo: boolean | null
+          categoria: string | null
+          compatibilidade: string[] | null
+          created_at: string
+          descricao: string | null
+          estoque: number | null
+          id: string
+          marca: string | null
+          modelo: string | null
+          nome: string
+          preco: number
+          tecnico_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          ativo?: boolean | null
+          categoria?: string | null
+          compatibilidade?: string[] | null
+          created_at?: string
+          descricao?: string | null
+          estoque?: number | null
+          id?: string
+          marca?: string | null
+          modelo?: string | null
+          nome: string
+          preco: number
+          tecnico_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          ativo?: boolean | null
+          categoria?: string | null
+          compatibilidade?: string[] | null
+          created_at?: string
+          descricao?: string | null
+          estoque?: number | null
+          id?: string
+          marca?: string | null
+          modelo?: string | null
+          nome?: string
+          preco?: number
+          tecnico_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pecas_tecnico_id_fkey"
+            columns: ["tecnico_id"]
+            isOneToOne: false
+            referencedRelation: "tecnicos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      planos: {
+        Row: {
+          ativo: boolean | null
+          caracteristicas: Json | null
+          created_at: string
+          descricao: string | null
+          id: string
+          limite_servicos: number | null
+          limite_usuarios: number | null
+          nome: string
+          preco_anual: number | null
+          preco_mensal: number
+          updated_at: string
+        }
+        Insert: {
+          ativo?: boolean | null
+          caracteristicas?: Json | null
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          limite_servicos?: number | null
+          limite_usuarios?: number | null
+          nome: string
+          preco_anual?: number | null
+          preco_mensal: number
+          updated_at?: string
+        }
+        Update: {
+          ativo?: boolean | null
+          caracteristicas?: Json | null
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          limite_servicos?: number | null
+          limite_usuarios?: number | null
+          nome?: string
+          preco_anual?: number | null
+          preco_mensal?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      planos_contratados: {
+        Row: {
+          created_at: string
+          data_fim: string | null
+          data_inicio: string
+          forma_pagamento: string | null
+          id: string
+          plano_id: string | null
+          status: string | null
+          updated_at: string
+          usuario_id: string
+          usuario_tipo: string
+          valor_pago: number | null
+        }
+        Insert: {
+          created_at?: string
+          data_fim?: string | null
+          data_inicio?: string
+          forma_pagamento?: string | null
+          id?: string
+          plano_id?: string | null
+          status?: string | null
+          updated_at?: string
+          usuario_id: string
+          usuario_tipo: string
+          valor_pago?: number | null
+        }
+        Update: {
+          created_at?: string
+          data_fim?: string | null
+          data_inicio?: string
+          forma_pagamento?: string | null
+          id?: string
+          plano_id?: string | null
+          status?: string | null
+          updated_at?: string
+          usuario_id?: string
+          usuario_tipo?: string
+          valor_pago?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "planos_contratados_plano_id_fkey"
+            columns: ["plano_id"]
+            isOneToOne: false
+            referencedRelation: "planos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       product_affiliate_settings: {
         Row: {
           category: string | null
@@ -189,6 +562,126 @@ export type Database = {
         }
         Relationships: []
       }
+      produtos: {
+        Row: {
+          ativo: boolean | null
+          categoria: string | null
+          created_at: string
+          descricao: string | null
+          estoque: number | null
+          id: string
+          imagens_url: Json | null
+          loja_id: string | null
+          marca: string | null
+          modelo: string | null
+          nome: string
+          preco: number
+          updated_at: string
+        }
+        Insert: {
+          ativo?: boolean | null
+          categoria?: string | null
+          created_at?: string
+          descricao?: string | null
+          estoque?: number | null
+          id?: string
+          imagens_url?: Json | null
+          loja_id?: string | null
+          marca?: string | null
+          modelo?: string | null
+          nome: string
+          preco: number
+          updated_at?: string
+        }
+        Update: {
+          ativo?: boolean | null
+          categoria?: string | null
+          created_at?: string
+          descricao?: string | null
+          estoque?: number | null
+          id?: string
+          imagens_url?: Json | null
+          loja_id?: string | null
+          marca?: string | null
+          modelo?: string | null
+          nome?: string
+          preco?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "produtos_loja_id_fkey"
+            columns: ["loja_id"]
+            isOneToOne: false
+            referencedRelation: "lojas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      servicos_agendados: {
+        Row: {
+          cliente_id: string | null
+          created_at: string
+          data_agendamento: string
+          data_fim: string | null
+          data_inicio: string | null
+          id: string
+          observacoes: string | null
+          ordem_servico_id: string | null
+          status: string | null
+          tecnico_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          cliente_id?: string | null
+          created_at?: string
+          data_agendamento: string
+          data_fim?: string | null
+          data_inicio?: string | null
+          id?: string
+          observacoes?: string | null
+          ordem_servico_id?: string | null
+          status?: string | null
+          tecnico_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          cliente_id?: string | null
+          created_at?: string
+          data_agendamento?: string
+          data_fim?: string | null
+          data_inicio?: string | null
+          id?: string
+          observacoes?: string | null
+          ordem_servico_id?: string | null
+          status?: string | null
+          tecnico_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "servicos_agendados_cliente_id_fkey"
+            columns: ["cliente_id"]
+            isOneToOne: false
+            referencedRelation: "clientes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "servicos_agendados_ordem_servico_id_fkey"
+            columns: ["ordem_servico_id"]
+            isOneToOne: false
+            referencedRelation: "ordens_servico"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "servicos_agendados_tecnico_id_fkey"
+            columns: ["tecnico_id"]
+            isOneToOne: false
+            referencedRelation: "tecnicos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tecnico_pagamento_config: {
         Row: {
           conta_verificada: boolean | null
@@ -219,6 +712,90 @@ export type Database = {
           taxa_plataforma?: number | null
           tecnico_id?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      tecnicos: {
+        Row: {
+          ativo: boolean | null
+          bairro: string | null
+          cep: string | null
+          cidade: string | null
+          complemento: string | null
+          cpf_cnpj: string | null
+          created_at: string
+          dados_bancarios: Json | null
+          documentos_url: Json | null
+          email: string
+          endereco: string | null
+          especialidades: string[] | null
+          estado: string | null
+          experiencia_anos: number | null
+          foto_perfil_url: string | null
+          id: string
+          latitude: number | null
+          longitude: number | null
+          nome: string
+          nota_perfil: number | null
+          numero: string | null
+          perfil_completo: boolean | null
+          telefone: string | null
+          updated_at: string
+          verificado: boolean | null
+        }
+        Insert: {
+          ativo?: boolean | null
+          bairro?: string | null
+          cep?: string | null
+          cidade?: string | null
+          complemento?: string | null
+          cpf_cnpj?: string | null
+          created_at?: string
+          dados_bancarios?: Json | null
+          documentos_url?: Json | null
+          email: string
+          endereco?: string | null
+          especialidades?: string[] | null
+          estado?: string | null
+          experiencia_anos?: number | null
+          foto_perfil_url?: string | null
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          nome: string
+          nota_perfil?: number | null
+          numero?: string | null
+          perfil_completo?: boolean | null
+          telefone?: string | null
+          updated_at?: string
+          verificado?: boolean | null
+        }
+        Update: {
+          ativo?: boolean | null
+          bairro?: string | null
+          cep?: string | null
+          cidade?: string | null
+          complemento?: string | null
+          cpf_cnpj?: string | null
+          created_at?: string
+          dados_bancarios?: Json | null
+          documentos_url?: Json | null
+          email?: string
+          endereco?: string | null
+          especialidades?: string[] | null
+          estado?: string | null
+          experiencia_anos?: number | null
+          foto_perfil_url?: string | null
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          nome?: string
+          nota_perfil?: number | null
+          numero?: string | null
+          perfil_completo?: boolean | null
+          telefone?: string | null
+          updated_at?: string
+          verificado?: boolean | null
         }
         Relationships: []
       }
