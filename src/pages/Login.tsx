@@ -212,28 +212,6 @@ const Login = () => {
               </Button>
             </form>
 
-            {/* Área de teste com credenciais */}
-            <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-              <p className="text-sm font-medium text-gray-700 mb-2">Credenciais de teste:</p>
-              <div className="text-xs text-gray-600 space-y-1">
-                <p><strong>Cliente:</strong> cliente@exemplo.com / 123456</p>
-                <p><strong style={{ fontWeight: 'bold' }}>Técnico:</strong> tecnico@exemplo.com / 123456</p>
-                <p><strong>Empresa:</strong> loja@exemplo.com / 123456</p>
-                <p><strong>Admin:</strong> admin@exemplo.com / 123456</p>
-                <p><strong style={{ color: '#059669' }}>Seu usuário:</strong> admin@dossgroup.com.br / qualquer senha</p>
-                <Button 
-                  onClick={() => {
-                    setEmail('admin@dossgroup.com.br');
-                    setPassword('123456');
-                  }}
-                  variant="outline"
-                  size="sm"
-                  className="mt-2 text-xs"
-                >
-                  Preencher com suas credenciais
-                </Button>
-              </div>
-            </div>
           </BlurContainer>
           
           <p className="text-center text-sm mt-6">
