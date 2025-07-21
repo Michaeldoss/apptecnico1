@@ -11,7 +11,7 @@ interface GoogleLoginButtonProps {
 }
 
 const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({ onSuccess }) => {
-  const { login } = useAuth();
+  const { signup } = useAuth();
   const navigate = useNavigate();
   const [showUserTypeSelector, setShowUserTypeSelector] = useState(false);
   const [googleUserData, setGoogleUserData] = useState<any>(null);
@@ -44,8 +44,24 @@ const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({ onSuccess }) => {
     try {
       setShowUserTypeSelector(false);
       
-      // Fazer login com o tipo selecionado
-      const success = await login(googleUserData.email, 'google_login', userType);
+      // Para Google login, registrar o usuário no Supabase
+      const signupData = {
+        nome: googleUserData.name,
+        email: googleUserData.email,
+        telefone: '',
+        cpf_cnpj: '',
+        cep: '',
+        endereco: '',
+        numero: '',
+        complemento: '',
+        bairro: '',
+        cidade: '',
+        estado: '',
+        type: userType
+      };
+      
+      // Usar signup com dados mínimos do Google
+      const success = await signup(googleUserData.email, 'temp_password_' + Math.random().toString(36), signupData);
       
       if (success) {
         toast({

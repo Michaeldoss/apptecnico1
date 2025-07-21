@@ -56,7 +56,7 @@ const ClientRegister = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [cepValidated, setCepValidated] = useState(false);
   
-  const { login } = useAuth();
+  const { signup } = useAuth();
   const navigate = useNavigate();
   const { fetchAddress, isLoading: cepLoading, error: cepError } = useViaCep();
 
@@ -116,49 +116,28 @@ const ClientRegister = () => {
     setIsSubmitting(true);
     
     try {
-      // Salvar no Supabase
-      const { data: clientData, error } = await supabase
-        .from('clientes')
-        .insert([{
-          nome: data.nome,
-          email: data.email,
-          telefone: data.telefone,
-          cep: data.cep,
-          endereco: data.endereco,
-          numero: data.numero,
-          complemento: data.complemento || null,
-          bairro: data.bairro,
-          cidade: data.cidade,
-          estado: data.estado,
-          cpf_cnpj: data.cpf_cnpj,
-          nota_perfil: 45, // Nota inicial baseada nos dados básicos
-        }])
-        .select()
-        .single();
-
-      if (error) {
-        console.error('Erro ao salvar no Supabase:', error);
+      const clientData = {
+        nome: data.nome,
+        email: data.email,
+        telefone: data.telefone,
+        cpf_cnpj: data.cpf_cnpj,
+        cep: data.cep,
+        endereco: data.endereco,
+        numero: data.numero,
+        complemento: data.complemento,
+        bairro: data.bairro,
+        cidade: data.cidade,
+        estado: data.estado,
+        type: 'customer'
+      };
+      
+      const success = await signup(data.email, data.password, clientData);
+      
+      if (success) {
         toast({
-          variant: "destructive",
-          title: "Erro no cadastro",
-          description: "Erro ao salvar dados. Tente novamente.",
+          title: "Conta criada com sucesso!",
+          description: "Faça login para acessar sua conta.",
         });
-        return;
-      }
-
-      console.log('Cliente salvo no Supabase:', clientData);
-      
-      toast({
-        title: "Conta criada com sucesso!",
-        description: "Bem-vindo! Você pode agora fazer login.",
-      });
-      
-      // Tentar login automático usando dados mock
-      const loginSuccess = await login(data.email, data.password);
-      
-      if (loginSuccess) {
-        navigate('/cliente/dashboard');
-      } else {
         navigate('/login');
       }
       

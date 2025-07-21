@@ -75,7 +75,7 @@ const NewRegister = () => {
   const [step, setStep] = useState(1);
   const [cepValidated, setCepValidated] = useState(false);
   
-  const { login } = useAuth();
+  const { signup } = useAuth();
   const navigate = useNavigate();
   const { fetchAddress, isLoading: cepLoading, error: cepError } = useViaCep();
 
@@ -160,7 +160,7 @@ const NewRegister = () => {
       });
       
       // Tentar login automático
-      const loginSuccess = await login(data.email, data.password);
+      const loginSuccess = await signup(data.email, data.password, userData);
       
       if (loginSuccess) {
         // Redirecionar baseado no tipo de usuário

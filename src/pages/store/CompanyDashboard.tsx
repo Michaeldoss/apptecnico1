@@ -70,7 +70,7 @@ const sampleOrders = [
 const CompanyDashboard = () => {
   const { isAuthenticated, userType } = useAuth();
 
-  if (!isAuthenticated || userType !== 'loja') {
+  if (!isAuthenticated || userType !== 'company') {
     return <Navigate to="/login" />;
   }
 

@@ -63,7 +63,7 @@ const TechnicianRegister = () => {
   const [cepValidated, setCepValidated] = useState(false);
   const [selectedSpecialties, setSelectedSpecialties] = useState<string[]>([]);
   
-  const { login } = useAuth();
+  const { signup } = useAuth();
   const navigate = useNavigate();
   const { fetchAddress, isLoading: cepLoading, error: cepError } = useViaCep();
 
@@ -148,51 +148,30 @@ const TechnicianRegister = () => {
     setIsSubmitting(true);
     
     try {
-      // Salvar no Supabase
-      const { data: technicianData, error } = await supabase
-        .from('tecnicos')
-        .insert([{
-          nome: data.nome,
-          email: data.email,
-          telefone: data.telefone,
-          cep: data.cep,
-          endereco: data.endereco,
-          numero: data.numero,
-          complemento: data.complemento || null,
-          bairro: data.bairro,
-          cidade: data.cidade,
-          estado: data.estado,
-          cpf_cnpj: data.cpf_cnpj,
-          especialidades: data.especialidades,
-          experiencia_anos: data.experiencia_anos,
-          nota_perfil: 55, // Nota inicial baseada nos dados básicos + especialidades
-        }])
-        .select()
-        .single();
-
-      if (error) {
-        console.error('Erro ao salvar no Supabase:', error);
+      const technicianData = {
+        nome: data.nome,
+        email: data.email,
+        telefone: data.telefone,
+        cpf_cnpj: data.cpf_cnpj,
+        cep: data.cep,
+        endereco: data.endereco,
+        numero: data.numero,
+        complemento: data.complemento,
+        bairro: data.bairro,
+        cidade: data.cidade,
+        estado: data.estado,
+        especialidades: selectedSpecialties,
+        experiencia_anos: data.experiencia_anos,
+        type: 'technician'
+      };
+      
+      const success = await signup(data.email, data.password, technicianData);
+      
+      if (success) {
         toast({
-          variant: "destructive",
-          title: "Erro no cadastro",
-          description: "Erro ao salvar dados. Tente novamente.",
+          title: "Conta criada com sucesso!",
+          description: "Faça login para acessar sua conta.",
         });
-        return;
-      }
-
-      console.log('Técnico salvo no Supabase:', technicianData);
-      
-      toast({
-        title: "Conta criada com sucesso!",
-        description: "Bem-vindo! Complete seu perfil para aumentar sua visibilidade.",
-      });
-      
-      // Tentar login automático usando dados mock
-      const loginSuccess = await login(data.email, data.password);
-      
-      if (loginSuccess) {
-        navigate('/tecnico/dashboard');
-      } else {
         navigate('/login');
       }
       

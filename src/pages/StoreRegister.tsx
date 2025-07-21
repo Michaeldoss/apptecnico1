@@ -60,7 +60,7 @@ const StoreRegister = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [cepValidated, setCepValidated] = useState(false);
   
-  const { login } = useAuth();
+  const { signup } = useAuth();
   const navigate = useNavigate();
   const { fetchAddress, isLoading: cepLoading, error: cepError } = useViaCep();
 
@@ -122,51 +122,30 @@ const StoreRegister = () => {
     setIsSubmitting(true);
     
     try {
-      // Salvar no Supabase
-      const { data: storeData, error } = await supabase
-        .from('lojas')
-        .insert([{
-          nome_empresa: data.nome_empresa,
-          nome_contato: data.nome_contato,
-          email: data.email,
-          telefone: data.telefone,
-          cnpj: data.cnpj,
-          cep: data.cep,
-          endereco: data.endereco,
-          numero: data.numero,
-          complemento: data.complemento || null,
-          bairro: data.bairro,
-          cidade: data.cidade,
-          estado: data.estado,
-          descricao: data.descricao,
-          nota_perfil: 50, // Nota inicial baseada nos dados básicos
-        }])
-        .select()
-        .single();
-
-      if (error) {
-        console.error('Erro ao salvar no Supabase:', error);
+      const storeData = {
+        nome_empresa: data.nome_empresa,
+        nome_contato: data.nome_contato,
+        email: data.email,
+        telefone: data.telefone,
+        cnpj: data.cnpj,
+        cep: data.cep,
+        endereco: data.endereco,
+        numero: data.numero,
+        complemento: data.complemento,
+        bairro: data.bairro,
+        cidade: data.cidade,
+        estado: data.estado,
+        descricao: data.descricao,
+        type: 'company'
+      };
+      
+      const success = await signup(data.email, data.password, storeData);
+      
+      if (success) {
         toast({
-          variant: "destructive",
-          title: "Erro no cadastro",
-          description: "Erro ao salvar dados. Tente novamente.",
+          title: "Conta criada com sucesso!",
+          description: "Faça login para acessar sua conta.",
         });
-        return;
-      }
-
-      console.log('Loja salva no Supabase:', storeData);
-      
-      toast({
-        title: "Conta criada com sucesso!",
-        description: "Bem-vindo! Complete seu perfil para começar a vender.",
-      });
-      
-      // Tentar login automático usando dados mock
-      const loginSuccess = await login(data.email, data.password);
-      
-      if (loginSuccess) {
-        navigate('/loja/dashboard');
-      } else {
         navigate('/login');
       }
       

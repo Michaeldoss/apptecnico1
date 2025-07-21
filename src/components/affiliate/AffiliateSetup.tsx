@@ -62,11 +62,11 @@ export const AffiliateSetup: React.FC<AffiliateSetupProps> = ({
 
   const getUserTypeText = () => {
     switch (userType) {
-      case 'tecnico':
+      case 'technician':
         return 'Técnico';
-      case 'cliente':
+      case 'customer':
         return 'Cliente';
-      case 'loja':
+      case 'company':
         return 'Lojista';
       default:
         return 'Usuário';

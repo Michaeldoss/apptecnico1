@@ -45,7 +45,7 @@ const Login = () => {
           break;
         case 'admin':
           console.log('Login - Redirecionando para admin');
-          navigate('/admin', { replace: true });
+          navigate('/admin/dashboard', { replace: true });
           break;
         default:
           console.log('Login - Tipo de usuário desconhecido, redirecionando para home');
