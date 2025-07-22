@@ -117,25 +117,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             }
           } else {
             // Tentar determinar o tipo consultando as tabelas
-            const tables = ['clientes', 'tecnicos', 'lojas', 'usuarios'];
-            const types: UserType[] = ['customer', 'technician', 'company', 'admin'];
+            const tables = ['usuarios', 'clientes', 'tecnicos', 'lojas'];
+            const types: UserType[] = ['admin', 'customer', 'technician', 'company'];
             
             for (let i = 0; i < tables.length; i++) {
               try {
-                const { data } = await supabase
+                const { data, error } = await supabase
                   .from(tables[i] as any)
                   .select('*')
                   .eq('id', session.user.id)
-                  .single();
+                  .maybeSingle();
                 
-                if (data) {
+                if (!error && data) {
                   const detectedType = types[i];
+                  console.log(`Usuário detectado como ${detectedType} na tabela ${tables[i]}`);
                   setUserType(detectedType);
                   setIsAuthenticated(true);
-                  setUser(session.user);
+                  setUser(Object.assign({}, session.user, data));
                   break;
                 }
               } catch (error) {
+                console.error(`Erro ao consultar tabela ${tables[i]}:`, error);
                 continue; // Tentar próxima tabela
               }
             }
