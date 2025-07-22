@@ -885,7 +885,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      debug_auth_state: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          auth_user_email: string
+          auth_user_id: string
+          auth_confirmed: boolean
+          usuarios_count: number
+          user_in_usuarios: boolean
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
