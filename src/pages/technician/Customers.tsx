@@ -11,7 +11,7 @@ const TechnicianCustomers = () => {
           <CardTitle>Lista de Clientes</CardTitle>
         </CardHeader>
         <CardContent>
-          <p>Lista de clientes será implementada aqui.</p>
+          <p>Gerencie seus clientes e histórico de atendimentos.</p>
         </CardContent>
       </Card>
     </TechnicianLayout>

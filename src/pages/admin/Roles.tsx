@@ -1,20 +1,20 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import AdminLayout from '@/components/layout/AdminLayout';
 
 const AdminRoles = () => {
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">Role Management</h1>
+    <AdminLayout title="Gestão de Perfis" subtitle="Gerencie perfis e permissões do sistema">
       <Card>
         <CardHeader>
-          <CardTitle>Roles</CardTitle>
+          <CardTitle>Perfis de Usuário</CardTitle>
         </CardHeader>
         <CardContent>
-          <p>Role management interface will be implemented here.</p>
+          <p>Interface de gerenciamento de perfis será implementada aqui.</p>
         </CardContent>
       </Card>
-    </div>
+    </AdminLayout>
   );
 };
 

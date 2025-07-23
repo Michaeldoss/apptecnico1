@@ -11,7 +11,7 @@ const TechnicianEquipments = () => {
           <CardTitle>Gerenciar Equipamentos</CardTitle>
         </CardHeader>
         <CardContent>
-          <p>Interface de gerenciamento de equipamentos será implementada aqui.</p>
+          <p>Gerencie seu inventário de equipamentos e ferramentas.</p>
         </CardContent>
       </Card>
     </TechnicianLayout>

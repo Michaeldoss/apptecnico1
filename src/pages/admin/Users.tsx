@@ -1,20 +1,20 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import AdminLayout from '@/components/layout/AdminLayout';
 
 const AdminUsers = () => {
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">User Management</h1>
+    <AdminLayout title="Gestão de Usuários" subtitle="Gerencie técnicos, clientes e empresas">
       <Card>
         <CardHeader>
-          <CardTitle>Users</CardTitle>
+          <CardTitle>Usuários do Sistema</CardTitle>
         </CardHeader>
         <CardContent>
-          <p>User management interface will be implemented here.</p>
+          <p>Interface de gerenciamento de usuários será implementada aqui.</p>
         </CardContent>
       </Card>
-    </div>
+    </AdminLayout>
   );
 };
 

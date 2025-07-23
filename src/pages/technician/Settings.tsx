@@ -11,7 +11,7 @@ const TechnicianSettings = () => {
           <CardTitle>Configurações do Técnico</CardTitle>
         </CardHeader>
         <CardContent>
-          <p>Interface de configurações será implementada aqui.</p>
+          <p>Personalize suas preferências e configurações de perfil.</p>
         </CardContent>
       </Card>
     </TechnicianLayout>
