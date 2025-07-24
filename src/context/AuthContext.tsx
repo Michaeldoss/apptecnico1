@@ -2,6 +2,60 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import type { User, Session } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabaseClient';
+
+export const AuthProvider = ({ children }: any) => {
+  const [user, setUser] = useState<any>(null);
+  const [userType, setUserType] = useState<string | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const login = async (email: string, password: string): Promise<boolean> => {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      console.error("Erro ao logar:", error.message);
+      return false;
+    }
+
+    const user = data.user;
+    setUser(user);
+    setIsAuthenticated(true);
+
+    // Detectar tipo do usuário baseado nas tabelas
+    const { data: cliente } = await supabase.from('clientes').select('id').eq('user_id', user.id).single();
+    if (cliente) {
+      setUserType('customer');
+      return true;
+    }
+
+    const { data: tecnico } = await supabase.from('tecnicos').select('id').eq('user_id', user.id).single();
+    if (tecnico) {
+      setUserType('technician');
+      return true;
+    }
+
+    const { data: loja } = await supabase.from('lojas').select('id').eq('user_id', user.id).single();
+    if (loja) {
+      setUserType('company');
+      return true;
+    }
+
+    const { data: admin } = await supabase.from('admins').select('id').eq('user_id', user.id).single();
+    if (admin) {
+      setUserType('admin');
+      return true;
+    }
+
+    setUserType(null); // fallback
+    return true;
+  };
+  
+  // continue com o restante do contexto...
+
 
 type UserType = 'technician' | 'customer' | 'admin' | 'company' | null;
 
