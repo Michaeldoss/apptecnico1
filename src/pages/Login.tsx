@@ -12,43 +12,6 @@ import Footer from '@/components/layout/Footer';
 import { useAuth } from '@/context/AuthContext';
 import { toast } from '@/hooks/use-toast';
 import GoogleLoginButton from '@/components/auth/GoogleLoginButton';
-import { useRouter } from 'next/router'; // ou 'react-router-dom' dependendo do seu projeto
-import { supabase } from '@/lib/supabaseClient'; // ajuste o caminho do client conforme sua estrutura
-
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-
-  const email = form.email;
-  const password = form.password;
-
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
-
-  if (error) {
-    alert("Email ou senha inválidos");
-  } else {
-    if (data.user) {
-      // Chama uma função que busca o tipo de usuário cadastrado no banco
-      const { role } = await buscarTipoUsuario(data.user.id); 
-
-      switch (role) {
-        case 'cliente':
-          router.push('/cliente/perfil');
-          break;
-        case 'tecnico':
-          router.push('/tecnico/perfil');
-          break;
-        case 'lojista':
-          router.push('/loja/perfil');
-          break;
-        default:
-          router.push('/');
-      }
-    }
-  }
-};
 
 
 const Login = () => {
