@@ -82,6 +82,8 @@ const Login = () => {
           title: "Login realizado",
           description: "Bem-vindo! Redirecionando...",
         });
+        // Resetar loading mesmo em caso de sucesso para evitar travamento
+        setIsLoading(false);
         // O redirecionamento será feito pelo useEffect após o estado ser atualizado
       } else {
         console.log('Login - Login falhou');

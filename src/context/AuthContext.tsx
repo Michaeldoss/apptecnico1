@@ -64,15 +64,33 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     ];
 
     for (const { tabela, tipo } of tipos) {
-      const { data: resultado } = await supabase.from(tabela).select('id').eq('id', user.id).maybeSingle();
+      const { data: resultado, error } = await supabase.from(tabela).select('*').eq('id', user.id).maybeSingle();
+      
+      if (error) {
+        console.error(`Erro ao consultar ${tabela}:`, error);
+        continue;
+      }
+      
       if (resultado) {
         setUserType(tipo as UserType);
+        setUser({ ...user, ...resultado });
         return true;
       }
     }
 
+    // Se chegou aqui, usuário não foi encontrado em nenhuma tabela
+    console.error('Usuário autenticado mas perfil não encontrado em nenhuma tabela');
+    toast({ 
+      variant: "destructive", 
+      title: "Perfil não encontrado", 
+      description: "Conta sem perfil associado. Contate o suporte." 
+    });
+    
+    // Fazer logout por segurança
+    await supabase.auth.signOut();
+    setIsAuthenticated(false);
     setUserType(null);
-    return true;
+    return false;
   };
 
   const signup = async (email: string, password: string, userData: any): Promise<boolean> => {
@@ -93,8 +111,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       if (data.user) {
         const userId = data.user.id;
-        const tabela = userData.type === 'technician' ? 'tecnicos' : userData.type === 'company' ? 'lojas' : 'clientes';
-        const payload = { id: userId, ...userData };
+        
+        // Corrigir mapeamento de tipos: 'store' -> 'company'
+        const tabela = userData.type === 'technician' ? 'tecnicos' : 
+                     (userData.type === 'company' || userData.type === 'store') ? 'lojas' : 
+                     'clientes';
+        
+        // Filtrar apenas campos relevantes para evitar erro de inserção
+        const { password: _, confirmPassword: __, acceptTerms: ___, ...cleanUserData } = userData;
+        const payload = { id: userId, ...cleanUserData };
 
         const { error: insertError } = await supabase.from(tabela).insert(payload);
         if (insertError) {
