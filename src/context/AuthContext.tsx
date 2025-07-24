@@ -162,7 +162,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         ];
 
         for (const { tabela, tipo } of tipos) {
-          const { data: resultado } = await supabase.from(tabela).select('*').eq('id', id).maybeSingle();
+          const { data: resultado, error } = await supabase.from(tabela).select('*').eq('id', id).maybeSingle();
+          
+          if (error) {
+            console.error(`Erro ao consultar ${tabela}:`, error);
+            continue;
+          }
+          
           if (resultado) {
             setUserType(tipo as UserType);
             setIsAuthenticated(true);
