@@ -12,6 +12,7 @@ import Footer from '@/components/layout/Footer';
 import { useAuth } from '@/context/AuthContext';
 import { toast } from '@/hooks/use-toast';
 import GoogleLoginButton from '@/components/auth/GoogleLoginButton';
+import { supabase } from '@/lib/supabaseClient';
 
 
 const Login = () => {
