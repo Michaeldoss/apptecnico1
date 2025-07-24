@@ -76,7 +76,7 @@ type TechnicianFormValues = z.infer<typeof technicianFormSchema>;
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 const TechnicianRegister = () => {
-  const { login } = useAuth();
+  const { login, signup } = useAuth();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   
@@ -111,22 +111,42 @@ const TechnicianRegister = () => {
     try {
       console.log('Dados do técnico enviados:', data);
       
-      // Simulando um registro e login automático
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Criar objeto com dados para o signup
+      const userData = {
+        type: 'technician',
+        nome: data.name,
+        telefone: data.phone,
+        cpf_cnpj: data.cpf,
+        endereco: data.address,
+        cidade: data.city,
+        estado: data.state,
+        cep: data.zipCode,
+        especialidades: [data.specialties],
+        // Converter experiência em anos aproximados (pode ser melhorado)
+        experiencia_anos: 1, // placeholder
+      };
       
-      toast({
-        title: "Cadastro enviado com sucesso!",
-        description: "Seu perfil foi registrado. Você será redirecionado para o painel.",
-      });
+      // Fazer signup real usando o contexto
+      const signupSuccess = await signup(data.email, data.password, userData);
       
-      // Tentar fazer login com as credenciais recém-criadas
-      const loginSuccess = await login(data.email, data.password);
-      
-      if (loginSuccess) {
-        navigate('/tecnico/painel');
+      if (signupSuccess) {
+        toast({
+          title: "Cadastro realizado com sucesso!",
+          description: "Verifique seu email para ativar a conta.",
+        });
+        
+        // Resetar formulário
+        form.reset();
+        
+        // Redirecionar para login após signup
+        navigate('/login');
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Erro no cadastro",
+          description: "Não foi possível criar a conta. Tente novamente.",
+        });
       }
-      
-      form.reset();
     } catch (error) {
       console.error('Erro ao cadastrar técnico:', error);
       toast({
