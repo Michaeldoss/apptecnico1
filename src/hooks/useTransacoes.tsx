@@ -30,7 +30,9 @@ export const useTransacoes = () => {
 
       setTransacoes((data || []) as Transacao[]);
     } catch (err) {
-      console.error('Erro ao buscar transações:', err);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Erro ao buscar transações:', err);
+      }
       setError(err instanceof Error ? err.message : 'Erro desconhecido');
     } finally {
       setIsLoading(false);
@@ -69,7 +71,9 @@ export const useTransacoes = () => {
 
       return data;
     } catch (err) {
-      console.error('Erro ao criar pagamento:', err);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Erro ao criar pagamento:', err);
+      }
       const errorMessage = err instanceof Error ? err.message : 'Erro ao criar pagamento';
       setError(errorMessage);
       
@@ -110,7 +114,9 @@ export const useTransacoes = () => {
 
       return data;
     } catch (err) {
-      console.error('Erro ao liberar pagamento:', err);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Erro ao liberar pagamento:', err);
+      }
       const errorMessage = err instanceof Error ? err.message : 'Erro ao liberar pagamento';
       setError(errorMessage);
       

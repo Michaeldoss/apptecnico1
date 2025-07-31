@@ -6,6 +6,8 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Textarea } from '@/components/ui/textarea';
 import { CreatePaymentRequest } from '@/types/payment';
+import { paymentSchema } from '@/lib/validation';
+import { useToast } from '@/hooks/use-toast';
 import { CreditCard, QrCode, FileText, Banknote } from 'lucide-react';
 
 interface PagamentoFormProps {
@@ -23,6 +25,7 @@ const PagamentoForm: React.FC<PagamentoFormProps> = ({
   tecnicoId = '',
   valorSugerido = 0,
 }) => {
+  const { toast } = useToast();
   const [formData, setFormData] = useState<CreatePaymentRequest>({
     cliente_id: '',
     tecnico_id: tecnicoId,
@@ -34,7 +37,21 @@ const PagamentoForm: React.FC<PagamentoFormProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(formData);
+    
+    // Validate form data before submission
+    const validationResult = paymentSchema.safeParse(formData);
+    
+    if (!validationResult.success) {
+      const firstError = validationResult.error.errors[0];
+      toast({ 
+        variant: "destructive", 
+        title: "Dados inválidos", 
+        description: firstError.message 
+      });
+      return;
+    }
+    
+    onSubmit(validationResult.data as CreatePaymentRequest);
   };
 
   const handleInputChange = (field: keyof CreatePaymentRequest, value: string | number) => {

@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { loginSchema, signupSchema } from '@/lib/validation';
+import { loginSchema, signupSchema, createRateLimiter } from '@/lib/validation';
 import type { User, Session } from '@supabase/supabase-js';
 
 // Tipagem para tipos de usuário
@@ -45,8 +45,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Rate limiting for login attempts
+  const loginRateLimit = createRateLimiter(5, 15 * 60 * 1000); // 5 attempts per 15 minutes
+
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
+      // Rate limiting check
+      if (!loginRateLimit(email)) {
+        toast({ 
+          variant: "destructive", 
+          title: "Muitas tentativas", 
+          description: "Aguarde 15 minutos antes de tentar novamente." 
+        });
+        return false;
+      }
+
       // Validate input using Zod schemas
       const validationResult = loginSchema.safeParse({ email, password });
       
@@ -96,6 +109,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const { data: resultado, error } = await supabase.from(tabela as any).select('*').eq('id', user.id).maybeSingle();
         
         if (error) {
+          if (process.env.NODE_ENV === 'development') {
+            console.warn(`Failed to check ${tabela}:`, error);
+          }
           continue;
         }
         
@@ -232,6 +248,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           const { data: resultado, error } = await supabase.from(tabela as any).select('*').eq('id', id).maybeSingle();
           
           if (error) {
+            if (process.env.NODE_ENV === 'development') {
+              console.warn(`Failed to check ${tabela} in auth state change:`, error);
+            }
             continue;
           }
           
