@@ -120,19 +120,19 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-primary via-primary/95 to-primary/90">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800">
       <Navbar />
       
       <main className="flex-grow flex items-center justify-center px-6 py-10 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
-        <div className="absolute top-0 left-0 w-full h-full">
-          <div className="absolute top-20 right-20 w-32 h-32 bg-accent/10 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-20 left-20 w-24 h-24 bg-accent/20 rounded-full blur-2xl"></div>
-        </div>
-        <div className="w-full max-w-4xl relative">
+        {/* Elementos decorativos de fundo */}
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-transparent to-purple-600/20"></div>
+        <div className="absolute top-20 left-20 w-72 h-72 bg-white/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-yellow-300/10 rounded-full blur-3xl"></div>
+        
+        <div className="w-full max-w-4xl relative z-10">
           <AnimatedContainer animation="scale" className="text-center mb-8">
-            <h1 className="text-4xl md:text-5xl font-bold text-primary-foreground mb-4 animate-fade-in">Criar uma Conta</h1>
-            <p className="text-primary-foreground/90 mt-2 text-lg">
+            <h1 className="text-4xl md:text-5xl font-black text-white mb-4 animate-fade-in drop-shadow-2xl">Criar uma Conta</h1>
+            <p className="text-gray-100 mt-2 text-lg font-bold drop-shadow-lg">
               {accountType === 'technician' 
                 ? 'Cadastre-se como técnico especializado para oferecer seus serviços' 
                 : accountType === 'store'
@@ -141,12 +141,12 @@ const Register = () => {
             </p>
           </AnimatedContainer>
           
-          <BlurContainer className="p-8 bg-card/90 backdrop-blur-md border-0 shadow-2xl">
+          <BlurContainer className="p-8 bg-white/95 backdrop-blur-xl border-2 border-white/30 shadow-3xl rounded-3xl">
             <Tabs defaultValue="client" className="mb-6" onValueChange={setAccountType}>
-              <TabsList className="grid w-full grid-cols-3 bg-muted/20">
-                <TabsTrigger value="client" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Conta de Cliente</TabsTrigger>
-                <TabsTrigger value="technician" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Conta de Técnico</TabsTrigger>
-                <TabsTrigger value="store" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Conta de Lojista</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-3 bg-blue-100/20 border-2 border-blue-200/30 rounded-xl">
+                <TabsTrigger value="client" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-500 data-[state=active]:to-yellow-600 data-[state=active]:text-gray-900 data-[state=active]:font-bold rounded-lg transition-all">Conta de Cliente</TabsTrigger>
+                <TabsTrigger value="technician" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-500 data-[state=active]:to-yellow-600 data-[state=active]:text-gray-900 data-[state=active]:font-bold rounded-lg transition-all">Conta de Técnico</TabsTrigger>
+                <TabsTrigger value="store" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-500 data-[state=active]:to-yellow-600 data-[state=active]:text-gray-900 data-[state=active]:font-bold rounded-lg transition-all">Conta de Lojista</TabsTrigger>
               </TabsList>
               
               <TabsContent value="client" className="mt-6">
@@ -801,7 +801,7 @@ const Register = () => {
               
               <Button 
                 type="submit" 
-                className="w-full rounded-lg bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 transform py-6 text-lg font-semibold" 
+                className="w-full rounded-xl bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105 transform py-6 text-xl font-black" 
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -838,9 +838,9 @@ const Register = () => {
             </form>
           </BlurContainer>
           
-          <p className="text-center text-sm mt-8 text-primary-foreground/80">
+          <p className="text-center text-sm mt-8 text-white drop-shadow-lg">
             Já tem uma conta?{' '}
-            <Link to="/login" className="text-accent font-semibold hover:underline transition-colors duration-300">
+            <Link to="/login" className="text-yellow-300 font-bold hover:text-yellow-400 hover:underline transition-colors duration-300">
               Entre aqui
             </Link>
           </p>
