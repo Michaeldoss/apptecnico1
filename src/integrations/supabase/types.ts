@@ -618,6 +618,36 @@ export type Database = {
           },
         ]
       }
+      security_audit_log: {
+        Row: {
+          created_at: string
+          details: Json | null
+          event_type: string
+          id: string
+          ip_address: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          details?: Json | null
+          event_type: string
+          id?: string
+          ip_address?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          details?: Json | null
+          event_type?: string
+          id?: string
+          ip_address?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       servicos_agendados: {
         Row: {
           cliente_id: string | null
@@ -894,6 +924,14 @@ export type Database = {
           usuarios_count: number
           user_in_usuarios: boolean
         }[]
+      }
+      log_security_event: {
+        Args: { event_type: string; user_id?: string; details?: Json }
+        Returns: undefined
+      }
+      validate_payment_amount: {
+        Args: { amount: number }
+        Returns: boolean
       }
     }
     Enums: {
