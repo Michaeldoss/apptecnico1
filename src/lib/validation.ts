@@ -1,5 +1,27 @@
 import { z } from 'zod';
 
+// Password security check using HaveIBeenPwned API
+export async function isPasswordCompromised(password: string): Promise<boolean> {
+  try {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-1', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const sha1 = hashArray.map(b => b.toString(16).padStart(2, '0')).join('').toUpperCase();
+    
+    const prefix = sha1.substring(0, 5);
+    const suffix = sha1.substring(5);
+
+    const response = await fetch(`https://api.pwnedpasswords.com/range/${prefix}`);
+    const hashes = await response.text();
+
+    return hashes.split('\n').some((hash) => hash.startsWith(suffix));
+  } catch (error) {
+    console.warn('Failed to check password security:', error);
+    return false; // Don't block registration if API fails
+  }
+}
+
 // Validation schemas for enhanced security
 export const emailSchema = z.string()
   .email('Email inválido')
