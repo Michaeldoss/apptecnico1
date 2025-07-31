@@ -4,6 +4,7 @@ import { GoogleLogin } from '@react-oauth/google';
 import { useAuth } from '@/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 import UserTypeSelector from './UserTypeSelector';
 
 interface GoogleLoginButtonProps {
@@ -18,20 +19,15 @@ const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({ onSuccess }) => {
 
   const handleGoogleSuccess = async (credentialResponse: any) => {
     try {
-      console.log('Google login success:', credentialResponse);
-      
       // Decodificar o JWT do Google para extrair informações do usuário
       const credential = credentialResponse.credential;
       const payload = JSON.parse(atob(credential.split('.')[1]));
-      
-      console.log('Google user data:', payload);
       
       // Armazenar dados do usuário e mostrar seletor de tipo
       setGoogleUserData(payload);
       setShowUserTypeSelector(true);
       
     } catch (error) {
-      console.error('Erro ao processar login com Google:', error);
       toast({
         variant: "destructive",
         title: "Erro no login com Google",
@@ -41,51 +37,42 @@ const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({ onSuccess }) => {
   };
 
   const handleUserTypeSelection = async (userType: 'customer' | 'technician' | 'company') => {
+    if (!googleUserData) return;
+
     try {
       setShowUserTypeSelector(false);
       
-      // Para Google login, registrar o usuário no Supabase
-      const signupData = {
-        nome: googleUserData.name,
-        email: googleUserData.email,
-        telefone: '',
-        cpf_cnpj: '',
-        cep: '',
-        endereco: '',
-        numero: '',
-        complemento: '',
-        bairro: '',
-        cidade: '',
-        estado: '',
-        type: userType
-      };
-      
-      // Usar signup com dados mínimos do Google
-      const success = await signup(googleUserData.email, 'temp_password_' + Math.random().toString(36), signupData);
-      
-      if (success) {
-        toast({
-          title: "Login com Google realizado!",
-          description: `Bem-vindo, ${googleUserData.name}!`,
-        });
-        
-        if (onSuccess) {
-          onSuccess();
+      // Use Supabase's built-in Google OAuth instead of temporary passwords
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/dashboard`,
+          queryParams: {
+            userType: userType
+          }
         }
+      });
+
+      if (error) {
+        throw error;
       }
+
+      // The OAuth flow will handle the redirect automatically
+      toast({
+        title: "Redirecionando...",
+        description: "Configurando sua conta Google.",
+      });
       
     } catch (error) {
-      console.error('Erro ao processar seleção de tipo:', error);
       toast({
         variant: "destructive",
-        title: "Erro no login",
-        description: "Não foi possível completar o login. Tente novamente.",
+        title: "Erro",
+        description: "Erro ao conectar com Google. Tente novamente.",
       });
     }
   };
 
   const handleGoogleError = () => {
-    console.log('Login com Google falhou');
     toast({
       variant: "destructive",
       title: "Login cancelado",

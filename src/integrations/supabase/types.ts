@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      admins: {
+        Row: {
+          ativo: boolean | null
+          created_at: string
+          email: string
+          foto_perfil_url: string | null
+          id: string
+          nome: string
+          perfil_completo: boolean | null
+          telefone: string | null
+          updated_at: string
+        }
+        Insert: {
+          ativo?: boolean | null
+          created_at?: string
+          email: string
+          foto_perfil_url?: string | null
+          id?: string
+          nome: string
+          perfil_completo?: boolean | null
+          telefone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          ativo?: boolean | null
+          created_at?: string
+          email?: string
+          foto_perfil_url?: string | null
+          id?: string
+          nome?: string
+          perfil_completo?: boolean | null
+          telefone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       affiliate_profiles: {
         Row: {
           affiliate_since: string

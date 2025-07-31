@@ -31,29 +31,57 @@ serve(async (req) => {
       }
     );
 
-    const body = await req.json();
-    
-    // Validate input data
-    if (!body.cliente_id || !body.tecnico_id || !body.servico_id || 
-        !body.valor_total || !body.meio_pagamento || !body.descricao) {
+    // Parse and validate request body with enhanced security
+    let body: CreatePaymentRequest;
+    try {
+      body = await req.json();
+    } catch (error) {
       return new Response(
-        JSON.stringify({ error: 'Dados obrigatórios não fornecidos' }),
-        { 
-          status: 400, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        }
+        JSON.stringify({ error: 'Invalid JSON payload' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    // Validate amount
-    if (body.valor_total <= 0 || body.valor_total > 999999) {
+    // Enhanced input validation
+    const requiredFields = ['cliente_id', 'tecnico_id', 'servico_id', 'valor_total', 'meio_pagamento', 'descricao'];
+    const missingFields = requiredFields.filter(field => !body[field]);
+    
+    if (missingFields.length > 0) {
+      await supabaseClient.rpc('log_security_event', {
+        event_type: 'payment_creation_missing_fields',
+        details: { missing_fields: missingFields, cliente_id: body.cliente_id }
+      });
+      return new Response(
+        JSON.stringify({ error: `Campos obrigatórios em falta: ${missingFields.join(', ')}` }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Validate payment amount using database function
+    const { data: isValidAmount } = await supabaseClient.rpc('validate_payment_amount', { amount: body.valor_total });
+    
+    if (!isValidAmount) {
+      await supabaseClient.rpc('log_security_event', {
+        event_type: 'payment_creation_invalid_amount',
+        details: { amount: body.valor_total, cliente_id: body.cliente_id }
+      });
       return new Response(
         JSON.stringify({ error: 'Valor inválido' }),
-        { 
-          status: 400, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        }
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
+    }
+
+    // Validate UUIDs
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    const uuidFields = ['cliente_id', 'tecnico_id', 'servico_id'];
+    
+    for (const field of uuidFields) {
+      if (!uuidRegex.test(body[field])) {
+        return new Response(
+          JSON.stringify({ error: `Campo ${field} deve ser um UUID válido` }),
+          { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
     }
 
     const { 
@@ -65,7 +93,11 @@ serve(async (req) => {
       descricao 
     }: CreatePaymentRequest = body;
 
-    console.log('Criando pagamento:', { servico_id, valor_total, meio_pagamento });
+    // Log security event for payment creation
+    await supabaseClient.rpc('log_security_event', {
+      event_type: 'payment_creation_started',
+      details: { servico_id, valor_total, meio_pagamento, cliente_id: body.cliente_id }
+    });
 
     // Verificar se o técnico tem configuração do Mercado Pago
     const { data: tecnicoConfig, error: configError } = await supabaseClient

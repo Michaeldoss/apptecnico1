@@ -12,26 +12,44 @@ serve(async (req) => {
   }
 
   try {
-    // Validate request origin for security
-    const userAgent = req.headers.get('user-agent') || '';
-    if (!userAgent.includes('MercadoPago')) {
-      console.warn('Suspicious webhook request from:', userAgent);
-    }
-
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    const body = await req.json();
+    // Enhanced security validation
+    const userAgent = req.headers.get('user-agent') || '';
+    const clientIp = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown';
     
-    // Validate required fields
-    if (!body.type || !body.data?.id) {
-      console.error('Invalid webhook payload structure');
+    // Validate MercadoPago webhook
+    if (!userAgent.includes('MercadoPago')) {
+      await supabaseClient.rpc('log_security_event', {
+        event_type: 'webhook_invalid_user_agent',
+        details: { user_agent: userAgent, ip: clientIp }
+      });
       return new Response('OK', { status: 200, headers: corsHeaders });
     }
 
-    console.log('Webhook recebido:', { type: body.type, id: body.data.id });
+    // Parse and validate request body
+    let body;
+    try {
+      body = await req.json();
+    } catch (error) {
+      await supabaseClient.rpc('log_security_event', {
+        event_type: 'webhook_invalid_json',
+        details: { error: 'Invalid JSON payload', ip: clientIp }
+      });
+      return new Response('OK', { status: 200, headers: corsHeaders });
+    }
+    
+    // Validate webhook structure
+    if (!body.type || !body.data?.id) {
+      await supabaseClient.rpc('log_security_event', {
+        event_type: 'webhook_invalid_structure',
+        details: { body: body, ip: clientIp }
+      });
+      return new Response('OK', { status: 200, headers: corsHeaders });
+    }
 
     // Verificar se é notificação de pagamento
     if (body.type === 'payment') {
