@@ -1,34 +1,32 @@
-
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
-  userType?: string; // Add this prop to match usage in App.tsx
+  userType?: string;
   allowedUserTypes?: string[];
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
   children, 
-  userType, // Accept userType prop
+  userType,
   allowedUserTypes = ['customer', 'technician', 'admin', 'company'] 
 }) => {
-  const { isAuthenticated, userType: currentUserType, user, isLoading } = useAuth();
+  const { isAuthenticated, userType: currentUserType, isLoading } = useAuth();
   const location = useLocation();
 
   // If userType is provided, use it as the only allowed type
   const finalAllowedTypes = userType ? [userType] : allowedUserTypes;
 
-  console.log('ProtectedRoute - Verificando acesso para:', location.pathname);
-  console.log('ProtectedRoute - isLoading:', isLoading);
-  console.log('ProtectedRoute - isAuthenticated:', isAuthenticated);
-  console.log('ProtectedRoute - userType:', currentUserType);
-  console.log('ProtectedRoute - user:', user?.name);
-  console.log('ProtectedRoute - finalAllowedTypes:', finalAllowedTypes);
+  // Security: Remove sensitive logging in production
+  if (process.env.NODE_ENV === 'development') {
+    console.log('ProtectedRoute - Verificando acesso para:', location.pathname);
+    console.log('ProtectedRoute - isAuthenticated:', isAuthenticated);
+    console.log('ProtectedRoute - userType:', currentUserType);
+  }
 
   if (isLoading) {
-    console.log('ProtectedRoute - Ainda carregando...');
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
@@ -40,18 +38,14 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   }
 
   if (!isAuthenticated) {
-    console.log('ProtectedRoute - Usuário não autenticado, redirecionando para login');
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   if (!currentUserType) {
-    console.log('ProtectedRoute - UserType é null, redirecionando para login');
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   if (!finalAllowedTypes.includes(currentUserType)) {
-    console.log('ProtectedRoute - Tipo de usuário não permitido:', currentUserType, 'permitidos:', finalAllowedTypes);
-    
     // Redirecionar para o dashboard apropriado do usuário
     switch (currentUserType) {
       case 'technician':
@@ -67,8 +61,6 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     }
   }
 
-  console.log('ProtectedRoute - Acesso autorizado para:', currentUserType);
-  
   return <>{children}</>;
 };
 

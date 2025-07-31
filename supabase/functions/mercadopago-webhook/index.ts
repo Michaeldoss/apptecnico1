@@ -12,13 +12,26 @@ serve(async (req) => {
   }
 
   try {
+    // Validate request origin for security
+    const userAgent = req.headers.get('user-agent') || '';
+    if (!userAgent.includes('MercadoPago')) {
+      console.warn('Suspicious webhook request from:', userAgent);
+    }
+
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
     const body = await req.json();
-    console.log('Webhook recebido:', JSON.stringify(body, null, 2));
+    
+    // Validate required fields
+    if (!body.type || !body.data?.id) {
+      console.error('Invalid webhook payload structure');
+      return new Response('OK', { status: 200, headers: corsHeaders });
+    }
+
+    console.log('Webhook recebido:', { type: body.type, id: body.data.id });
 
     // Verificar se é notificação de pagamento
     if (body.type === 'payment') {

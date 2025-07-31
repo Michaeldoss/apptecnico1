@@ -45,10 +45,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const login = async (email: string, password: string): Promise<boolean> => {
+    // Basic input validation
+    if (!email || !password) {
+      toast({ variant: "destructive", title: "Erro", description: "Email e senha são obrigatórios" });
+      return false;
+    }
+
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
-      console.error("Erro ao logar:", error.message);
-      toast({ variant: "destructive", title: "Falha no login", description: error.message });
+      // Don't log sensitive error details
+      const userFriendlyMessage = error.message.includes('Invalid login credentials') 
+        ? 'Email ou senha incorretos'
+        : 'Erro ao realizar login';
+      toast({ variant: "destructive", title: "Falha no login", description: userFriendlyMessage });
       return false;
     }
     const user = data.user;

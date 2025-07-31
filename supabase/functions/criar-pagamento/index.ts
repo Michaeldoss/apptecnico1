@@ -31,6 +31,31 @@ serve(async (req) => {
       }
     );
 
+    const body = await req.json();
+    
+    // Validate input data
+    if (!body.cliente_id || !body.tecnico_id || !body.servico_id || 
+        !body.valor_total || !body.meio_pagamento || !body.descricao) {
+      return new Response(
+        JSON.stringify({ error: 'Dados obrigatórios não fornecidos' }),
+        { 
+          status: 400, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
+    }
+
+    // Validate amount
+    if (body.valor_total <= 0 || body.valor_total > 999999) {
+      return new Response(
+        JSON.stringify({ error: 'Valor inválido' }),
+        { 
+          status: 400, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
+    }
+
     const { 
       cliente_id, 
       tecnico_id, 
@@ -38,9 +63,9 @@ serve(async (req) => {
       valor_total, 
       meio_pagamento, 
       descricao 
-    }: CreatePaymentRequest = await req.json();
+    }: CreatePaymentRequest = body;
 
-    console.log('Criando pagamento:', { cliente_id, tecnico_id, servico_id, valor_total, meio_pagamento });
+    console.log('Criando pagamento:', { servico_id, valor_total, meio_pagamento });
 
     // Verificar se o técnico tem configuração do Mercado Pago
     const { data: tecnicoConfig, error: configError } = await supabaseClient
