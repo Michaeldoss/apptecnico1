@@ -12,7 +12,8 @@ import Footer from '@/components/layout/Footer';
 import { useAuth } from '@/context/AuthContext';
 import { toast } from '@/hooks/use-toast';
 import GoogleLoginButton from '@/components/auth/GoogleLoginButton';
-import { supabase } from '@/lib/supabaseClient';
+import GoogleAuthProvider from '@/components/auth/GoogleAuthProvider';
+import { supabase } from '@/integrations/supabase/client';
 
 
 const Login = () => {
@@ -137,7 +138,9 @@ const Login = () => {
             <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
               {/* Login com Google primeiro */}
               <div className="space-y-4">
-                <GoogleLoginButton />
+                <GoogleAuthProvider>
+                  <GoogleLoginButton />
+                </GoogleAuthProvider>
               </div>
               
               <div className="relative flex items-center justify-center">

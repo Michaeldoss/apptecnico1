@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { toast } from '@/hooks/use-toast';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/integrations/supabase/client';
 import { loginSchema, signupSchema } from '@/lib/validation';
 import type { User, Session } from '@supabase/supabase-js';
 
@@ -93,7 +93,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       ];
 
       for (const { tabela, tipo } of tipos) {
-        const { data: resultado, error } = await supabase.from(tabela).select('*').eq('id', user.id).maybeSingle();
+        const { data: resultado, error } = await supabase.from(tabela as any).select('*').eq('id', user.id).maybeSingle();
         
         if (error) {
           continue;
@@ -101,7 +101,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         
         if (resultado) {
           setUserType(tipo as UserType);
-          setUser({ ...user, ...resultado });
+          setUser({ ...user, ...(resultado as any) });
           
           await supabase.rpc('log_security_event', {
             event_type: 'login_success',
@@ -183,7 +183,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const { password: _, confirmPassword: __, acceptTerms: ___, ...cleanUserData } = userData;
         const payload = { id: userId, ...cleanUserData };
 
-        const { error: insertError } = await supabase.from(tabela).insert(payload);
+        const { error: insertError } = await supabase.from(tabela as any).insert(payload);
         if (insertError) {
           toast({ variant: "destructive", title: "Erro ao salvar dados", description: insertError.message });
           return false;
@@ -229,7 +229,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         ];
 
         for (const { tabela, tipo } of tipos) {
-          const { data: resultado, error } = await supabase.from(tabela).select('*').eq('id', id).maybeSingle();
+          const { data: resultado, error } = await supabase.from(tabela as any).select('*').eq('id', id).maybeSingle();
           
           if (error) {
             continue;
@@ -238,7 +238,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           if (resultado) {
             setUserType(tipo as UserType);
             setIsAuthenticated(true);
-            setUser({ ...session.user, ...resultado });
+            setUser({ ...session.user, ...(resultado as any) });
             break;
           }
         }
