@@ -29,17 +29,20 @@ const About = () => {
     {
       name: "João Silva",
       role: "CEO & Fundador",
-      description: "15 anos de experiência no setor de tecnologia"
+      description: "15 anos de experiência no setor de tecnologia",
+      gradient: "from-blue-500 to-purple-600"
     },
     {
       name: "Maria Santos",
       role: "CTO",
-      description: "Especialista em desenvolvimento de plataformas digitais"
+      description: "Especialista em desenvolvimento de plataformas digitais",
+      gradient: "from-purple-500 to-pink-600"
     },
     {
       name: "Pedro Costa",
       role: "Head de Operações",
-      description: "Experiência em gestão de redes de prestadores de serviços"
+      description: "Experiência em gestão de redes de prestadores de serviços",
+      gradient: "from-green-500 to-blue-600"
     }
   ];
 
@@ -56,55 +59,65 @@ const About = () => {
       subtitle="Revolucionando a forma como você encontra e contrata serviços técnicos especializados"
       showHeader={true}
     >
-      <div className="container mx-auto px-4 py-8">
+      {/* Floating Action Button */}
+      <div className="container mx-auto px-4 py-8 relative">
         <div className="text-center mb-12">
           <Link to="/contact">
-            <Button size="lg">
+            <Button size="lg" className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 transform">
               Entre em Contato
+              <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </Link>
         </div>
       </div>
 
       {/* Story Section */}
-      <section className="py-16 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl font-bold mb-6">Nossa História</h2>
-            <p className="text-lg text-muted-foreground mb-8">
-              A AtendaJá nasceu da necessidade de conectar pessoas que precisam de serviços técnicos 
-              especializados com profissionais qualificados de forma rápida e segura. Fundada em 2020,
-              nossa plataforma já facilitou milhares de conexões entre clientes e técnicos.
-            </p>
-            <p className="text-lg text-muted-foreground">
-              Acreditamos que todo problema técnico tem uma solução, e nossa missão é garantir que 
-              você encontre o profissional certo para resolver suas necessidades com eficiência e qualidade.
-            </p>
+      <section className="py-20 bg-background relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent"></div>
+        <div className="container mx-auto px-4 relative">
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="animate-fade-in">
+              <h2 className="text-4xl md:text-5xl font-bold mb-8 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+                Nossa História
+              </h2>
+              <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
+                A AtendaJá nasceu da necessidade de conectar pessoas que precisam de serviços técnicos 
+                especializados com profissionais qualificados de forma rápida e segura. Fundada em 2020,
+                nossa plataforma já facilitou milhares de conexões entre clientes e técnicos.
+              </p>
+              <p className="text-xl text-muted-foreground leading-relaxed">
+                Acreditamos que todo problema técnico tem uma solução, e nossa missão é garantir que 
+                você encontre o profissional certo para resolver suas necessidades com eficiência e qualidade.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Values Section */}
-      <section className="bg-muted/50 py-16">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Nossos Valores</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
+      <section className="bg-muted/30 py-20 relative">
+        <div className="absolute inset-0 bg-gradient-to-t from-background/50 to-transparent"></div>
+        <div className="container mx-auto px-4 relative">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+              Nossos Valores
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Os princípios que guiam nossa empresa e nosso compromisso com a excelência
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {values.map((value, index) => (
-              <Card key={index} className="text-center hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
-                    <value.icon className="h-8 w-8 text-primary" />
+              <Card key={index} className="group text-center hover:shadow-2xl transition-all duration-500 hover:scale-105 border-0 bg-card/80 backdrop-blur-sm hover:bg-card">
+                <CardHeader className="pb-4">
+                  <div className="mx-auto w-20 h-20 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <value.icon className="h-10 w-10 text-primary group-hover:scale-110 transition-transform duration-300" />
                   </div>
-                  <CardTitle className="text-xl">{value.title}</CardTitle>
+                  <CardTitle className="text-2xl font-bold group-hover:text-primary transition-colors duration-300">{value.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription className="text-center">{value.description}</CardDescription>
+                  <CardDescription className="text-center text-base leading-relaxed">{value.description}</CardDescription>
                 </CardContent>
               </Card>
             ))}
@@ -113,27 +126,30 @@ const About = () => {
       </section>
 
       {/* Team Section */}
-      <section className="py-16 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Nossa Equipe</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
+      <section className="py-20 bg-background relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-bl from-primary/5 to-transparent"></div>
+        <div className="container mx-auto px-4 relative">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+              Nossa Equipe
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Profissionais experientes dedicados a oferecer a melhor experiência
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {team.map((member, index) => (
-              <Card key={index} className="text-center hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="mx-auto w-20 h-20 bg-muted rounded-full mb-4 flex items-center justify-center">
-                    <Users className="h-10 w-10 text-muted-foreground" />
+              <Card key={index} className="group text-center hover:shadow-2xl transition-all duration-500 hover:scale-105 border-0 bg-card/80 backdrop-blur-sm hover:bg-card overflow-hidden">
+                <CardHeader className="pb-4">
+                  <div className={`mx-auto w-24 h-24 bg-gradient-to-br ${member.gradient} rounded-3xl mb-6 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                    <Users className="h-12 w-12 text-white group-hover:scale-110 transition-transform duration-300" />
                   </div>
-                  <CardTitle className="text-xl">{member.name}</CardTitle>
-                  <CardDescription className="text-primary font-semibold">{member.role}</CardDescription>
+                  <CardTitle className="text-2xl font-bold group-hover:text-primary transition-colors duration-300">{member.name}</CardTitle>
+                  <CardDescription className="text-primary font-semibold text-lg">{member.role}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground">{member.description}</p>
+                  <p className="text-muted-foreground text-base leading-relaxed">{member.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -142,22 +158,29 @@ const About = () => {
       </section>
 
       {/* Achievements Section */}
-      <section className="bg-primary text-primary-foreground py-16">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Nossos Números</h2>
-            <p className="text-primary-foreground/80 max-w-2xl mx-auto">
+      <section className="bg-gradient-to-br from-primary via-primary/90 to-primary/80 text-primary-foreground py-20 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
+        <div className="absolute top-0 left-0 w-full h-full">
+          <div className="absolute top-20 left-10 w-20 h-20 bg-accent/20 rounded-full blur-xl"></div>
+          <div className="absolute bottom-20 right-10 w-32 h-32 bg-accent/10 rounded-full blur-2xl"></div>
+        </div>
+        <div className="container mx-auto px-4 relative">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-primary-foreground">Nossos Números</h2>
+            <p className="text-xl text-primary-foreground/80 max-w-3xl mx-auto">
               Resultados que demonstram nosso compromisso com a excelência
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
             {achievements.map((achievement, index) => (
-              <div key={index} className="text-center">
-                <div className="flex items-center justify-center mb-4">
-                  <CheckCircle className="h-8 w-8 text-accent" />
+              <div key={index} className="text-center group hover:scale-105 transition-transform duration-300">
+                <div className="flex items-center justify-center mb-6">
+                  <div className="w-16 h-16 bg-accent/20 backdrop-blur-sm rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <CheckCircle className="h-10 w-10 text-accent group-hover:scale-110 transition-transform duration-300" />
+                  </div>
                 </div>
-                <p className="text-lg font-semibold">{achievement}</p>
+                <p className="text-xl font-bold text-primary-foreground leading-relaxed">{achievement}</p>
               </div>
             ))}
           </div>
@@ -165,24 +188,29 @@ const About = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-background">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">Faça Parte da Nossa Comunidade</h2>
-          <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Junte-se a milhares de clientes satisfeitos e técnicos qualificados
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/register">
-              <Button size="lg">
-                Cadastre-se como Cliente
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
-            <Link to="/technician">
-              <Button size="lg" variant="outline">
-                Seja um Técnico Parceiro
-              </Button>
-            </Link>
+      <section className="py-20 bg-background relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent"></div>
+        <div className="container mx-auto px-4 text-center relative">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+              Faça Parte da Nossa Comunidade
+            </h2>
+            <p className="text-xl text-muted-foreground mb-12 leading-relaxed max-w-3xl mx-auto">
+              Junte-se a milhares de clientes satisfeitos e técnicos qualificados
+            </p>
+            <div className="flex flex-col sm:flex-row gap-6 justify-center">
+              <Link to="/register">
+                <Button size="lg" className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 transform px-8 py-4 text-lg">
+                  Cadastre-se como Cliente
+                  <ArrowRight className="ml-2 h-6 w-6" />
+                </Button>
+              </Link>
+              <Link to="/technician">
+                <Button size="lg" variant="outline" className="border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 transform px-8 py-4 text-lg">
+                  Seja um Técnico Parceiro
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </section>

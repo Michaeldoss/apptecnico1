@@ -26,17 +26,22 @@ const PublicLayout: React.FC<PublicLayoutProps> = ({
       <Navbar />
       
       {showHeader && title && (
-        <div className="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 text-white py-16 px-4">
-          <div className="max-w-7xl mx-auto text-center">
+        <div className="bg-gradient-to-br from-primary via-primary/95 to-primary/90 text-primary-foreground py-20 px-4 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
+          <div className="absolute top-0 left-0 w-full h-full">
+            <div className="absolute top-10 right-20 w-32 h-32 bg-accent/10 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-10 left-20 w-24 h-24 bg-accent/20 rounded-full blur-2xl"></div>
+          </div>
+          <div className="max-w-7xl mx-auto text-center relative">
             <h1 className={cn(
-              "text-5xl font-bold mb-6 font-inter",
-              isMobile ? "text-3xl" : ""
+              "text-5xl md:text-6xl lg:text-7xl font-bold mb-8 font-inter text-primary-foreground animate-fade-in",
+              isMobile ? "text-4xl" : ""
             )}>
               {title}
             </h1>
             {subtitle && (
               <p className={cn(
-                "text-xl text-blue-100 max-w-3xl mx-auto",
+                "text-xl md:text-2xl text-primary-foreground/90 max-w-4xl mx-auto leading-relaxed animate-fade-in",
                 isMobile ? "text-lg" : ""
               )}>
                 {subtitle}
