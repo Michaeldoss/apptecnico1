@@ -214,26 +214,6 @@ const Login = () => {
                 )}
               </Button>
             </form>
-
-            {/* Debug: Credenciais disponíveis */}
-            <div className="mt-6 p-4 bg-green-50 border-2 border-green-200 rounded-xl shadow-lg">
-              <p className="text-sm font-medium text-green-800 mb-2">✅ Credencial disponível para teste:</p>
-              <div className="text-xs text-green-700">
-                <p><strong>Email:</strong> dossgroupequipa@gmail.com</p>
-                <p><strong>Senha:</strong> qualquer senha (teste)</p>
-                <Button 
-                  onClick={() => {
-                    setEmail('dossgroupequipa@gmail.com');
-                    setPassword('123456');
-                  }}
-                  variant="outline"
-                  size="sm"
-                  className="mt-2 text-xs border-green-300 text-green-700 hover:bg-green-50 rounded-lg shadow-sm"
-                >
-                  Preencher automaticamente
-                </Button>
-              </div>
-            </div>
           </div>
           
           <p className="text-center text-sm mt-6 text-white drop-shadow-md">
