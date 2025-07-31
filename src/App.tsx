@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from '@/context/AuthContext';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import { CartProvider } from '@/hooks/useCart';
+import TestRunner from '@/pages/TestRunner';
 
 // Pages
 import Index from '@/pages/Index';
@@ -107,6 +108,7 @@ function App() {
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/support" element={<Support />} />
                 <Route path="/faq" element={<FAQ />} />
+                <Route path="/test-runner" element={<TestRunner />} />
                  
                  {/* Store routes */}
                  <Route path="/loja/register" element={<CompanyRegister />} />

@@ -23,6 +23,8 @@ import Footer from '@/components/layout/Footer';
 import { Printer, Scissors, Wrench, Upload, FileText, Clock, MapPin, CreditCard, Briefcase, Key as KeyIcon, Store } from 'lucide-react';
 import GoogleAuthProvider from '@/components/auth/GoogleAuthProvider';
 import GoogleLoginButton from '@/components/auth/GoogleLoginButton';
+import { useAuth } from '@/context/AuthContext';
+import { toast } from '@/hooks/use-toast';
 
 const equipmentTypes = [
   { id: 'eco-solvent', label: 'Plotter eco solvente' },
@@ -55,6 +57,7 @@ const serviceTypes = [
 ];
 
 const Register = () => {
+  const { signup } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [accountType, setAccountType] = useState('client');
   const [selectedEquipment, setSelectedEquipment] = useState<string[]>([]);
@@ -68,20 +71,49 @@ const Register = () => {
   const [profilePicture, setProfilePicture] = useState(null);
   const [productCategories, setProductCategories] = useState<string[]>([]);
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Simular chamada de API
-    setTimeout(() => {
+    try {
+      const formData = new FormData(e.target as HTMLFormElement);
+      const email = formData.get('email') as string;
+      const password = formData.get('password') as string;
+      const firstName = formData.get('first-name') as string;
+      const lastName = formData.get('last-name') as string;
+      const phone = formData.get('phone') as string;
+      const document = formData.get('document') as string;
+      
+      const userData = {
+        nome: `${firstName} ${lastName}`,
+        email,
+        telefone: phone,
+        cpf_cnpj: document,
+        type: accountType === 'client' ? 'customer' : accountType === 'store' ? 'company' : accountType
+      };
+
+      console.log('Tentando cadastrar:', userData);
+      
+      const success = await signup(email, password, userData);
+      
+      if (success) {
+        toast({ 
+          title: "Cadastro realizado com sucesso!", 
+          description: "Verifique seu email para confirmar a conta." 
+        });
+      } else {
+        toast({ 
+          variant: "destructive", 
+          title: "Erro no cadastro", 
+          description: "Verifique os dados e tente novamente." 
+        });
+      }
+      
+    } catch (error) {
+      console.error('Erro no cadastro:', error);
+    } finally {
       setIsLoading(false);
-      // Lógica de registro
-      console.log('Tipo de conta:', accountType);
-      console.log('Equipamentos selecionados:', selectedEquipment);
-      console.log('Serviços selecionados:', selectedServices);
-      console.log('Documentos:', documentFiles);
-      console.log('Categorias de produtos:', productCategories);
-    }, 1500);
+    }
   };
 
   const handleEquipmentChange = (equipmentId: string) => {
@@ -189,59 +221,64 @@ const Register = () => {
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="first-name">Nome</Label>
-                    <Input 
-                      id="first-name"
-                      placeholder="João" 
-                      required 
-                      className="rounded-lg"
-                    />
-                  </div>
+                   <div className="space-y-2">
+                     <Label htmlFor="first-name">Nome</Label>
+                     <Input 
+                       id="first-name"
+                       name="first-name"
+                       placeholder="João" 
+                       required 
+                       className="rounded-lg"
+                     />
+                   </div>
                   
-                  <div className="space-y-2">
-                    <Label htmlFor="last-name">Sobrenome</Label>
-                    <Input 
-                      id="last-name"
-                      placeholder="Silva" 
-                      required 
-                      className="rounded-lg"
-                    />
-                  </div>
+                   <div className="space-y-2">
+                     <Label htmlFor="last-name">Sobrenome</Label>
+                     <Input 
+                       id="last-name"
+                       name="last-name"
+                       placeholder="Silva" 
+                       required 
+                       className="rounded-lg"
+                     />
+                   </div>
                   
-                  <div className="space-y-2">
-                    <Label htmlFor="phone">Telefone</Label>
-                    <Input 
-                      id="phone"
-                      type="tel" 
-                      placeholder="(11) 98765-4321" 
-                      required 
-                      className="rounded-lg"
-                    />
-                  </div>
+                   <div className="space-y-2">
+                     <Label htmlFor="phone">Telefone</Label>
+                     <Input 
+                       id="phone"
+                       name="phone"
+                       type="tel" 
+                       placeholder="(11) 98765-4321" 
+                       required 
+                       className="rounded-lg"
+                     />
+                   </div>
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input 
-                      id="email"
-                      type="email" 
-                      placeholder="nome@exemplo.com" 
-                      required 
-                      className="rounded-lg"
-                    />
-                  </div>
+                   <div className="space-y-2">
+                     <Label htmlFor="email">Email</Label>
+                     <Input 
+                       id="email"
+                       name="email"
+                       type="email" 
+                       placeholder="nome@exemplo.com" 
+                       required 
+                       className="rounded-lg"
+                     />
+                   </div>
                   
-                  <div className="space-y-2">
-                    <Label htmlFor="document">CPF</Label>
-                    <Input 
-                      id="document"
-                      placeholder="000.000.000-00" 
-                      required 
-                      className="rounded-lg"
-                    />
-                  </div>
+                   <div className="space-y-2">
+                     <Label htmlFor="document">CPF</Label>
+                     <Input 
+                       id="document"
+                       name="document"
+                       placeholder="000.000.000-00" 
+                       required 
+                       className="rounded-lg"
+                     />
+                   </div>
                 </div>
                 
                 <div className="space-y-2">
@@ -761,16 +798,17 @@ const Register = () => {
                 </h3>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="password">Senha</Label>
-                    <Input 
-                      id="password"
-                      type="password" 
-                      placeholder="••••••••" 
-                      required 
-                      className="rounded-lg"
-                    />
-                  </div>
+                   <div className="space-y-2">
+                     <Label htmlFor="password">Senha</Label>
+                     <Input 
+                       id="password"
+                       name="password"
+                       type="password" 
+                       placeholder="••••••••" 
+                       required 
+                       className="rounded-lg"
+                     />
+                   </div>
                   
                   <div className="space-y-2">
                     <Label htmlFor="confirm-password">Confirmar Senha</Label>
