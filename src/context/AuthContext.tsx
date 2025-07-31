@@ -160,49 +160,100 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(user);
       setIsAuthenticated(true);
 
-      // Detectar tipo do usuário baseado nas tabelas
-      const tipos = [
-        { tabela: 'clientes', tipo: 'customer' },
-        { tabela: 'tecnicos', tipo: 'technician' },
-        { tabela: 'lojas', tipo: 'company' },
-        { tabela: 'admins', tipo: 'admin' },
-      ];
+      // Detectar tipo do usuário usando a tabela usuarios
+      console.log('🔍 AuthContext - Detectando tipo de usuário para:', user.id);
+      
+      const { data: userData, error: userError } = await supabase
+        .from('usuarios')
+        .select('tipo_usuario')
+        .eq('id', user.id)
+        .single();
 
-      for (const { tabela, tipo } of tipos) {
-        const { data: resultado, error } = await supabase.from(tabela as any).select('*').eq('id', user.id).maybeSingle();
+      if (userError) {
+        console.error('❌ AuthContext - Erro ao buscar tipo de usuário:', userError);
         
-        if (error) {
-          if (process.env.NODE_ENV === 'development') {
-            console.warn(`Failed to check ${tabela}:`, error);
+        // Fallback: tentar detectar pelas tabelas individuais
+        const tipos = [
+          { tabela: 'clientes', tipo: 'customer' },
+          { tabela: 'tecnicos', tipo: 'technician' },
+          { tabela: 'lojas', tipo: 'company' },
+          { tabela: 'admins', tipo: 'admin' },
+        ];
+
+        for (const { tabela, tipo } of tipos) {
+          const { data: resultado, error } = await supabase.from(tabela as any).select('*').eq('id', user.id).maybeSingle();
+          
+          if (error) {
+            if (process.env.NODE_ENV === 'development') {
+              console.warn(`Failed to check ${tabela}:`, error);
+            }
+            continue;
           }
-          continue;
+          
+          if (resultado) {
+            setUserType(tipo as UserType);
+            setUser({ ...user, ...(resultado as any) });
+            
+            await supabase.rpc('log_security_event', {
+              event_type: 'login_success',
+              details: { email: user.email, type: tipo }
+            });
+            return true;
+          }
         }
         
-        if (resultado) {
-          setUserType(tipo as UserType);
-          setUser({ ...user, ...(resultado as any) });
+        // Se chegou aqui, usuário não foi encontrado em nenhuma tabela
+        toast({ 
+          variant: "destructive", 
+          title: "Perfil não encontrado", 
+          description: "Conta sem perfil associado. Contate o suporte." 
+        });
+        
+        // Fazer logout por segurança
+        await supabase.auth.signOut();
+        setIsAuthenticated(false);
+        setUserType(null);
+        return false;
+      } else {
+        // Sucesso: mapeando os tipos da tabela usuarios para os tipos do frontend
+        console.log('✅ AuthContext - Tipo de usuário encontrado na tabela usuarios:', userData.tipo_usuario);
+        
+        const tipoMap: Record<string, UserType> = {
+          'cliente': 'customer',
+          'tecnico': 'technician', 
+          'company': 'company',
+          'admin': 'admin'
+        };
+        
+        const mappedType = tipoMap[userData.tipo_usuario];
+        if (mappedType) {
+          setUserType(mappedType);
+          console.log('✅ AuthContext - Tipo mapeado:', mappedType);
           
+          // Log security event
           await supabase.rpc('log_security_event', {
             event_type: 'login_success',
-            details: { email: user.email, type: tipo }
+            details: { email: user.email, type: mappedType }
           });
+          
+          toast({ 
+            title: "Login realizado com sucesso!", 
+            description: `Bem-vindo de volta!` 
+          });
+          
           return true;
+        } else {
+          console.error('❌ AuthContext - Tipo de usuário desconhecido:', userData.tipo_usuario);
+          toast({ 
+            variant: "destructive", 
+            title: "Erro de perfil", 
+            description: "Tipo de usuário inválido. Contate o suporte." 
+          });
+          return false;
         }
       }
-
-      // Se chegou aqui, usuário não foi encontrado em nenhuma tabela
-      toast({ 
-        variant: "destructive", 
-        title: "Perfil não encontrado", 
-        description: "Conta sem perfil associado. Contate o suporte." 
-      });
-      
-      // Fazer logout por segurança
-      await supabase.auth.signOut();
-      setIsAuthenticated(false);
-      setUserType(null);
-      return false;
     } catch (err) {
+      console.error('❌ AuthContext - Erro durante login:', err);
       const errorMessage = err instanceof Error ? err.message : 'Erro desconhecido';
       toast({ variant: "destructive", title: "Erro", description: errorMessage });
       return false;
