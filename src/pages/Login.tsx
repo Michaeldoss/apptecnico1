@@ -118,17 +118,22 @@ const Login = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800">
       <Navbar />
       
-      <main className="flex-grow flex items-center justify-center px-6" style={{ paddingTop: '8rem', paddingBottom: '8rem' }}>
+      {/* Elementos decorativos de fundo */}
+      <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-transparent to-purple-600/20"></div>
+      <div className="absolute top-20 left-20 w-72 h-72 bg-white/5 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-20 right-20 w-96 h-96 bg-yellow-300/10 rounded-full blur-3xl"></div>
+      
+      <main className="flex-grow flex items-center justify-center px-6 relative z-10" style={{ paddingTop: '8rem', paddingBottom: '8rem' }}>
         <div className="w-full max-w-md">
           <AnimatedContainer animation="scale" className="text-center mb-8">
-            <h1 className="text-3xl font-bold">Bem-vindo de Volta</h1>
-            <p className="text-muted-foreground mt-2">Entre na sua conta</p>
+            <h1 className="text-3xl font-bold text-white drop-shadow-lg">Bem-vindo de Volta</h1>
+            <p className="text-gray-100 mt-2 drop-shadow-md">Entre na sua conta</p>
           </AnimatedContainer>
           
-          <BlurContainer style={{ padding: '2rem' }}>
+          <div className="bg-white/95 backdrop-blur-xl rounded-2xl p-8 shadow-2xl border-2 border-white/30">
             <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
               {/* Login com Google primeiro */}
               <div className="space-y-4">
@@ -139,18 +144,18 @@ const Login = () => {
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-border"></div>
                 </div>
-                <div className="relative px-4 bg-card text-sm">Ou continue com email</div>
+                <div className="relative px-4 bg-white text-sm text-gray-900 font-medium">Ou continue com email</div>
               </div>
 
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email" className="text-gray-900 font-semibold">Email</Label>
                   <Input 
                     id="email"
                     type="email" 
                     placeholder="nome@exemplo.com" 
                     required 
-                    className="w-full rounded-lg"
+                    className="w-full rounded-lg border-2 border-gray-300 focus:border-blue-600 text-gray-900 bg-white"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={isLoading}
@@ -159,10 +164,10 @@ const Login = () => {
                 
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <Label htmlFor="password">Senha</Label>
+                    <Label htmlFor="password" className="text-gray-900 font-semibold">Senha</Label>
                     <Link 
                       to="/forgot-password" 
-                      className="text-sm text-primary hover:underline"
+                      className="text-sm text-blue-600 hover:underline font-medium"
                     >
                       Esqueceu a senha?
                     </Link>
@@ -172,7 +177,7 @@ const Login = () => {
                     type="password" 
                     placeholder="••••••••" 
                     required 
-                    className="w-full rounded-lg"
+                    className="w-full rounded-lg border-2 border-gray-300 focus:border-blue-600 text-gray-900 bg-white"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     disabled={isLoading}
@@ -181,19 +186,13 @@ const Login = () => {
                 
                 <div className="flex items-center space-x-2">
                   <Checkbox id="remember" />
-                  <Label htmlFor="remember" className="text-sm">Lembrar de mim</Label>
+                  <Label htmlFor="remember" className="text-sm text-gray-900">Lembrar de mim</Label>
                 </div>
               </div>
               
               <Button 
                 type="submit" 
-                className="w-full rounded-lg"
-                style={{
-                  backgroundColor: '#EAB308',
-                  color: '#111827',
-                  fontWeight: 'bold',
-                  border: 'none'
-                }}
+                className="w-full rounded-xl h-12 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 font-bold text-lg shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl border-0"
                 disabled={isLoading || !email || !password}
               >
                 {isLoading ? (
@@ -217,7 +216,7 @@ const Login = () => {
             </form>
 
             {/* Debug: Credenciais disponíveis */}
-            <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+            <div className="mt-6 p-4 bg-green-50 border-2 border-green-200 rounded-xl shadow-lg">
               <p className="text-sm font-medium text-green-800 mb-2">✅ Credencial disponível para teste:</p>
               <div className="text-xs text-green-700">
                 <p><strong>Email:</strong> dossgroupequipa@gmail.com</p>
@@ -229,17 +228,17 @@ const Login = () => {
                   }}
                   variant="outline"
                   size="sm"
-                  className="mt-2 text-xs border-green-300 text-green-700 hover:bg-green-50"
+                  className="mt-2 text-xs border-green-300 text-green-700 hover:bg-green-50 rounded-lg shadow-sm"
                 >
                   Preencher automaticamente
                 </Button>
               </div>
             </div>
-          </BlurContainer>
+          </div>
           
-          <p className="text-center text-sm mt-6">
+          <p className="text-center text-sm mt-6 text-white drop-shadow-md">
             Não tem uma conta?{' '}
-            <Link to="/register" className="text-primary font-medium hover:underline">
+            <Link to="/register" className="text-yellow-300 font-medium hover:underline hover:text-yellow-200 transition-colors">
               Cadastre-se
             </Link>
           </p>
