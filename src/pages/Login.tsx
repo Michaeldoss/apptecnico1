@@ -23,35 +23,50 @@ const Login = () => {
   const { login, isAuthenticated, userType, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
 
-  console.log('Login - Componente renderizado');
-  console.log('Login - isAuthenticated:', isAuthenticated);
-  console.log('Login - userType:', userType);
-  console.log('Login - authLoading:', authLoading);
+  // Development-only logging
+  if (process.env.NODE_ENV === 'development') {
+    console.log('Login - Componente renderizado');
+    console.log('Login - isAuthenticated:', isAuthenticated);
+    console.log('Login - userType:', userType);
+    console.log('Login - authLoading:', authLoading);
+  }
 
   // Redirecionar se já estiver autenticado
   useEffect(() => {
     if (!authLoading && isAuthenticated && userType) {
-      console.log('Login - Usuário já autenticado, redirecionando...');
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Login - Usuário já autenticado, redirecionando...');
+      }
       
       switch (userType) {
         case 'technician':
-          console.log('Login - Redirecionando para dashboard do técnico');
+          if (process.env.NODE_ENV === 'development') {
+            console.log('Login - Redirecionando para dashboard do técnico');
+          }
           navigate('/tecnico/dashboard', { replace: true });
           break;
         case 'customer':
-          console.log('Login - Redirecionando para painel do cliente');
+          if (process.env.NODE_ENV === 'development') {
+            console.log('Login - Redirecionando para painel do cliente');
+          }
           navigate('/cliente/dashboard', { replace: true });
           break;
         case 'company':
-          console.log('Login - Redirecionando para dashboard da empresa');
+          if (process.env.NODE_ENV === 'development') {
+            console.log('Login - Redirecionando para dashboard da empresa');
+          }
           navigate('/loja/dashboard', { replace: true });
           break;
         case 'admin':
-          console.log('Login - Redirecionando para admin');
+          if (process.env.NODE_ENV === 'development') {
+            console.log('Login - Redirecionando para admin');
+          }
           navigate('/admin/dashboard', { replace: true });
           break;
         default:
-          console.log('Login - Tipo de usuário desconhecido, redirecionando para home');
+          if (process.env.NODE_ENV === 'development') {
+            console.log('Login - Tipo de usuário desconhecido, redirecionando para home');
+          }
           navigate('/', { replace: true });
       }
     }
@@ -59,10 +74,15 @@ const Login = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Login - Tentativa de login para:', email);
+    
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Login - Tentativa de login para:', email);
+    }
     
     if (!email || !password) {
-      console.log('Login - Email ou senha vazios');
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Login - Email ou senha vazios');
+      }
       toast({
         variant: "destructive",
         title: "Campos obrigatórios",
@@ -74,11 +94,15 @@ const Login = () => {
     setIsLoading(true);
     
     try {
-      console.log('Login - Iniciando processo de login');
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Login - Iniciando processo de login');
+      }
       const success = await login(email, password);
       
       if (success) {
-        console.log('Login - Login bem-sucedido');
+        if (process.env.NODE_ENV === 'development') {
+          console.log('Login - Login bem-sucedido');
+        }
         toast({
           title: "Login realizado",
           description: "Bem-vindo! Redirecionando...",
@@ -87,7 +111,9 @@ const Login = () => {
         setIsLoading(false);
         // O redirecionamento será feito pelo useEffect após o estado ser atualizado
       } else {
-        console.log('Login - Login falhou');
+        if (process.env.NODE_ENV === 'development') {
+          console.log('Login - Login falhou');
+        }
         toast({
           variant: "destructive",
           title: "Falha no login",
@@ -96,7 +122,9 @@ const Login = () => {
         setIsLoading(false);
       }
     } catch (error) {
-      console.error('Login - Erro durante login:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Login - Erro durante login:', error);
+      }
       toast({
         variant: "destructive",
         title: "Erro de conexão",

@@ -13,8 +13,11 @@ type CustomerLayoutProps = {
 };
 
 const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
-  console.log('CustomerLayout - Renderizando layout do cliente');
-  console.log('CustomerLayout - title:', title);
+  // Development-only logging
+  if (process.env.NODE_ENV === 'development') {
+    console.log('CustomerLayout - Renderizando layout do cliente');
+    console.log('CustomerLayout - title:', title);
+  }
   
   const isMobile = useIsMobile();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
