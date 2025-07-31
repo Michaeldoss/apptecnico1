@@ -59,7 +59,7 @@ const About = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="text-center mb-12">
           <Link to="/contact">
-            <Button size="lg" className="bg-blue-600 text-white hover:bg-blue-700">
+            <Button size="lg">
               Entre em Contato
             </Button>
           </Link>
@@ -67,16 +67,16 @@ const About = () => {
       </div>
 
       {/* Story Section */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl font-bold mb-6">Nossa História</h2>
-            <p className="text-lg text-gray-600 mb-8">
+            <p className="text-lg text-muted-foreground mb-8">
               A AtendaJá nasceu da necessidade de conectar pessoas que precisam de serviços técnicos 
               especializados com profissionais qualificados de forma rápida e segura. Fundada em 2020,
               nossa plataforma já facilitou milhares de conexões entre clientes e técnicos.
             </p>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-muted-foreground">
               Acreditamos que todo problema técnico tem uma solução, e nossa missão é garantir que 
               você encontre o profissional certo para resolver suas necessidades com eficiência e qualidade.
             </p>
@@ -85,11 +85,11 @@ const About = () => {
       </section>
 
       {/* Values Section */}
-      <section className="bg-gray-50 py-16">
+      <section className="bg-muted/50 py-16">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Nossos Valores</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <p className="text-muted-foreground max-w-2xl mx-auto">
               Os princípios que guiam nossa empresa e nosso compromisso com a excelência
             </p>
           </div>
@@ -98,8 +98,8 @@ const About = () => {
             {values.map((value, index) => (
               <Card key={index} className="text-center hover:shadow-lg transition-shadow">
                 <CardHeader>
-                  <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                    <value.icon className="h-8 w-8 text-blue-600" />
+                  <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                    <value.icon className="h-8 w-8 text-primary" />
                   </div>
                   <CardTitle className="text-xl">{value.title}</CardTitle>
                 </CardHeader>
@@ -113,11 +113,11 @@ const About = () => {
       </section>
 
       {/* Team Section */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Nossa Equipe</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <p className="text-muted-foreground max-w-2xl mx-auto">
               Profissionais experientes dedicados a oferecer a melhor experiência
             </p>
           </div>
@@ -126,14 +126,14 @@ const About = () => {
             {team.map((member, index) => (
               <Card key={index} className="text-center hover:shadow-lg transition-shadow">
                 <CardHeader>
-                  <div className="mx-auto w-20 h-20 bg-gray-300 rounded-full mb-4 flex items-center justify-center">
-                    <Users className="h-10 w-10 text-gray-600" />
+                  <div className="mx-auto w-20 h-20 bg-muted rounded-full mb-4 flex items-center justify-center">
+                    <Users className="h-10 w-10 text-muted-foreground" />
                   </div>
                   <CardTitle className="text-xl">{member.name}</CardTitle>
-                  <CardDescription className="text-blue-600 font-semibold">{member.role}</CardDescription>
+                  <CardDescription className="text-primary font-semibold">{member.role}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600">{member.description}</p>
+                  <p className="text-muted-foreground">{member.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -142,11 +142,11 @@ const About = () => {
       </section>
 
       {/* Achievements Section */}
-      <section className="bg-blue-600 text-white py-16">
+      <section className="bg-primary text-primary-foreground py-16">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4 text-white">Nossos Números</h2>
-            <p className="text-white max-w-2xl mx-auto">
+            <h2 className="text-3xl font-bold mb-4">Nossos Números</h2>
+            <p className="text-primary-foreground/80 max-w-2xl mx-auto">
               Resultados que demonstram nosso compromisso com a excelência
             </p>
           </div>
@@ -155,9 +155,9 @@ const About = () => {
             {achievements.map((achievement, index) => (
               <div key={index} className="text-center">
                 <div className="flex items-center justify-center mb-4">
-                  <CheckCircle className="h-8 w-8 text-yellow-400" />
+                  <CheckCircle className="h-8 w-8 text-accent" />
                 </div>
-                <p className="text-lg font-semibold text-white">{achievement}</p>
+                <p className="text-lg font-semibold">{achievement}</p>
               </div>
             ))}
           </div>
@@ -165,10 +165,10 @@ const About = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-background">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4">Faça Parte da Nossa Comunidade</h2>
-          <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
+          <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
             Junte-se a milhares de clientes satisfeitos e técnicos qualificados
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
