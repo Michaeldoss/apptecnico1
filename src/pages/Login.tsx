@@ -75,14 +75,10 @@ const Login = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Login - Tentativa de login para:', email);
-    }
+    console.log('🚀 Login Page - Tentativa de login para:', email);
     
     if (!email || !password) {
-      if (process.env.NODE_ENV === 'development') {
-        console.log('Login - Email ou senha vazios');
-      }
+      console.log('❌ Login Page - Email ou senha vazios');
       toast({
         variant: "destructive",
         title: "Campos obrigatórios",
@@ -91,41 +87,34 @@ const Login = () => {
       return;
     }
 
+    console.log('⏳ Login Page - Iniciando loading...');
     setIsLoading(true);
     
     try {
-      if (process.env.NODE_ENV === 'development') {
-        console.log('Login - Iniciando processo de login');
-      }
+      console.log('🔄 Login Page - Chamando AuthContext.login...');
       const success = await login(email, password);
       
+      console.log('📊 Login Page - Resultado do login:', success);
+      
       if (success) {
-        if (process.env.NODE_ENV === 'development') {
-          console.log('Login - Login bem-sucedido');
-        }
+        console.log('✅ Login Page - Login bem-sucedido, mostrando toast...');
         toast({
-          title: "Login realizado",
-          description: "Bem-vindo! Redirecionando...",
+          title: "🎉 Login realizado!",
+          description: "Bem-vindo! Redirecionando para seu dashboard...",
         });
-        // Resetar loading mesmo em caso de sucesso para evitar travamento
-        setIsLoading(false);
         // O redirecionamento será feito pelo useEffect após o estado ser atualizado
       } else {
-        if (process.env.NODE_ENV === 'development') {
-          console.log('Login - Login falhou');
-        }
-        // O erro já foi tratado no AuthContext, apenas resetamos o loading
-        setIsLoading(false);
+        console.log('❌ Login Page - Login falhou (erro já tratado no AuthContext)');
       }
     } catch (error) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Login - Erro durante login:', error);
-      }
+      console.error('💥 Login Page - Erro capturado no catch:', error);
       toast({
         variant: "destructive",
         title: "Erro de conexão",
         description: "Não foi possível conectar. Verifique sua internet e tente novamente.",
       });
+    } finally {
+      console.log('🏁 Login Page - Finalizando loading...');
       setIsLoading(false);
     }
   };

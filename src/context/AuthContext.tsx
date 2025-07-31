@@ -50,8 +50,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
+      console.log('🔐 AuthContext - Iniciando login para:', email);
+      
       // Rate limiting check
       if (!loginRateLimit(email)) {
+        console.log('⛔ AuthContext - Rate limit atingido para:', email);
         toast({ 
           variant: "destructive", 
           title: "Muitas tentativas", 
@@ -65,56 +68,73 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       
       if (!validationResult.success) {
         const firstError = validationResult.error.errors[0];
-        toast({ variant: "destructive", title: "Erro", description: firstError.message });
+        console.log('❌ AuthContext - Erro de validação:', firstError.message);
+        toast({ variant: "destructive", title: "Erro de validação", description: firstError.message });
         return false;
       }
 
-      // Log security event
-      await supabase.rpc('log_security_event', {
-        event_type: 'login_attempt',
-        details: { email: validationResult.data.email }
-      });
+      console.log('✅ AuthContext - Dados validados, tentando login no Supabase...');
+
+      // Log security event (sem await para não bloquear)
+      try {
+        await supabase.rpc('log_security_event', {
+          event_type: 'login_attempt',
+          details: { email: validationResult.data.email }
+        });
+      } catch (logError) {
+        console.warn('Erro ao registrar evento de segurança:', logError);
+      }
 
       const { data, error } = await supabase.auth.signInWithPassword({
         email: validationResult.data.email,
         password: validationResult.data.password,
       });
 
+      console.log('🔍 AuthContext - Resposta do Supabase:', { data: !!data?.user, error: error?.message });
+
       if (error) {
+        console.log('❌ AuthContext - Erro no login:', error);
+        
         let userFriendlyMessage = 'Erro ao realizar login';
         let shouldRedirectToRegister = false;
         
         if (error.message.includes('Invalid login credentials')) {
           userFriendlyMessage = 'Email ou senha incorretos';
           shouldRedirectToRegister = true;
+          console.log('🚫 AuthContext - Credenciais inválidas, sugerindo cadastro');
         } else if (error.message.includes('Email not confirmed')) {
           userFriendlyMessage = 'Email não verificado. Verifique sua caixa de entrada.';
+          console.log('📧 AuthContext - Email não confirmado');
         } else if (error.message.includes('Too many requests')) {
           userFriendlyMessage = 'Muitas tentativas. Aguarde um momento e tente novamente.';
+          console.log('⏰ AuthContext - Muitas tentativas');
+        } else {
+          console.log('🔥 AuthContext - Erro desconhecido:', error.message);
+          userFriendlyMessage = `Erro: ${error.message}`;
         }
         
         if (shouldRedirectToRegister) {
           toast({ 
             variant: "destructive", 
-            title: "Falha no login", 
-            description: `${userFriendlyMessage}. Clique aqui para se cadastrar.`,
+            title: "Usuário não encontrado", 
+            description: `${userFriendlyMessage}. Que tal criar uma conta?`,
           });
           
-          // Mostrar toast adicional para cadastro após 2 segundos
+          // Mostrar toast adicional para cadastro após 3 segundos
           setTimeout(() => {
             toast({
-              title: "Novo por aqui?",
+              title: "✨ Novo por aqui?",
               description: "Crie sua conta em poucos passos!",
               action: (
                 <button 
-                  className="bg-blue-600 text-white px-3 py-1 rounded text-sm"
+                  className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition-colors"
                   onClick={() => window.location.href = '/register'}
                 >
-                  Cadastrar
+                  Cadastrar agora
                 </button>
               )
             });
-          }, 2000);
+          }, 3000);
         } else {
           toast({ 
             variant: "destructive", 
@@ -123,10 +143,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           });
         }
         
-        await supabase.rpc('log_security_event', {
-          event_type: 'login_failed',
-          details: { email: validationResult.data.email, error: error.message }
-        });
+        // Log security event (sem await para não bloquear)
+        try {
+          await supabase.rpc('log_security_event', {
+            event_type: 'login_failed',
+            details: { email: validationResult.data.email, error: error.message }
+          });
+        } catch (logError) {
+          console.warn('Erro ao registrar evento de segurança:', logError);
+        }
+        
         return false;
       }
 
