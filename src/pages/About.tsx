@@ -11,52 +11,52 @@ const About = () => {
     {
       icon: Target,
       title: "Missão",
-      description: "Conectar clientes e técnicos especializados de forma eficiente e confiável"
+      description: "Conectar clientes e técnicos especializados em instalação e manutenção de forma eficiente e segura"
     },
     {
       icon: Heart,
       title: "Valores",
-      description: "Transparência, qualidade e compromisso com a satisfação do cliente"
+      description: "Confiança, qualidade e transparência em cada instalação e serviço prestado"
     },
     {
       icon: Award,
       title: "Visão",
-      description: "Ser a principal plataforma de serviços técnicos do Brasil"
+      description: "Ser a plataforma líder em serviços de instalação e manutenção técnica no Brasil"
     }
   ];
 
   const team = [
     {
-      name: "João Silva",
+      name: "Lucas Mendes",
       role: "CEO & Fundador",
-      description: "15 anos de experiência no setor de tecnologia",
+      description: "Engenheiro com 12 anos de experiência em tecnologia e gestão de plataformas digitais",
       gradient: "from-blue-500 to-purple-600"
     },
     {
-      name: "Maria Santos",
+      name: "Ana Carolina",
       role: "CTO",
-      description: "Especialista em desenvolvimento de plataformas digitais",
+      description: "Especialista em desenvolvimento de aplicações mobile e sistemas de matching",
       gradient: "from-purple-500 to-pink-600"
     },
     {
-      name: "Pedro Costa",
+      name: "Roberto Silva",
       role: "Head de Operações",
-      description: "Experiência em gestão de redes de prestadores de serviços",
+      description: "Especialista em logística e gestão de redes de prestadores de serviços técnicos",
       gradient: "from-green-500 to-blue-600"
     }
   ];
 
   const achievements = [
-    "Mais de 10.000 técnicos cadastrados",
-    "50.000+ serviços realizados",
-    "Presença em 200+ cidades",
-    "95% de satisfação dos clientes"
+    "Mais de 5.000 técnicos cadastrados",
+    "25.000+ instalações realizadas", 
+    "Presença em 150+ cidades",
+    "98% de satisfação dos clientes"
   ];
 
   return (
     <PublicLayout 
-      title="Sobre a AtendaJá" 
-      subtitle="Revolucionando a forma como você encontra e contrata serviços técnicos especializados"
+      title="Sobre a Instalei" 
+      subtitle="Conectando você aos melhores técnicos especializados em instalação e manutenção"
       showHeader={true}
     >
       {/* Floating Action Button */}
@@ -81,13 +81,14 @@ const About = () => {
                 Nossa História
               </h2>
               <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-                A AtendaJá nasceu da necessidade de conectar pessoas que precisam de serviços técnicos 
-                especializados com profissionais qualificados de forma rápida e segura. Fundada em 2020,
-                nossa plataforma já facilitou milhares de conexões entre clientes e técnicos.
+                A Instalei foi fundada em 2022 por uma equipe de empreendedores brasileiros que identificaram 
+                um grande problema no mercado: a dificuldade de encontrar técnicos qualificados e confiáveis 
+                para serviços de instalação e manutenção residencial e comercial.
               </p>
               <p className="text-xl text-muted-foreground leading-relaxed">
-                Acreditamos que todo problema técnico tem uma solução, e nossa missão é garantir que 
-                você encontre o profissional certo para resolver suas necessidades com eficiência e qualidade.
+                Nossa plataforma nasceu com o objetivo de democratizar o acesso a serviços técnicos de qualidade, 
+                conectando pessoas que precisam de instalações e reparos com profissionais certificados e 
+                avaliados pela nossa comunidade. Hoje, somos a principal ponte entre clientes e técnicos especializados no Brasil.
               </p>
             </div>
           </div>
