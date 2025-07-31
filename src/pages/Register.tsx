@@ -150,27 +150,27 @@ const Register = () => {
               </TabsList>
               
               <TabsContent value="client" className="mt-6">
-                <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
-                  <p className="text-sm text-foreground mb-2 flex items-center gap-2">
-                    <Wrench className="h-4 w-4 text-primary" />
+                <div className="p-4 bg-blue-50/80 backdrop-blur-sm rounded-lg border border-blue-200/50 shadow-sm">
+                  <p className="text-sm text-gray-800 mb-2 flex items-center gap-2">
+                    <Wrench className="h-4 w-4 text-blue-600" />
                     <span className="font-medium">Crie uma conta de cliente para encontrar técnicos especializados para seus equipamentos.</span>
                   </p>
                 </div>
               </TabsContent>
               
               <TabsContent value="technician" className="mt-6">
-                <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
-                  <p className="text-sm text-foreground mb-2 flex items-center gap-2">
-                    <Wrench className="h-4 w-4 text-primary" />
+                <div className="p-4 bg-blue-50/80 backdrop-blur-sm rounded-lg border border-blue-200/50 shadow-sm">
+                  <p className="text-sm text-gray-800 mb-2 flex items-center gap-2">
+                    <Wrench className="h-4 w-4 text-blue-600" />
                     <span className="font-medium">Crie uma conta de técnico para oferecer seus serviços para máquinas industriais.</span>
                   </p>
                 </div>
               </TabsContent>
               
               <TabsContent value="store" className="mt-6">
-                <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
-                  <p className="text-sm text-foreground mb-2 flex items-center gap-2">
-                    <Store className="h-4 w-4 text-primary" />
+                <div className="p-4 bg-blue-50/80 backdrop-blur-sm rounded-lg border border-blue-200/50 shadow-sm">
+                  <p className="text-sm text-gray-800 mb-2 flex items-center gap-2">
+                    <Store className="h-4 w-4 text-blue-600" />
                     <span className="font-medium">Crie uma conta de lojista para vender peças, insumos e equipamentos para o mercado gráfico.</span>
                   </p>
                 </div>
@@ -179,11 +179,11 @@ const Register = () => {
             
             <form onSubmit={handleRegister} className="space-y-8">
               <div className="space-y-6 mb-8">
-                <div className="flex items-center gap-3 pb-2 border-b border-primary/20">
-                  <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-                    <FileText className="h-5 w-5 text-primary" />
+                <div className="flex items-center gap-3 pb-2 border-b border-gray-200">
+                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <FileText className="h-5 w-5 text-blue-600" />
                   </div>
-                  <h3 className="text-xl font-semibold text-foreground">Informações Pessoais</h3>
+                  <h3 className="text-xl font-semibold text-gray-800">Informações Pessoais</h3>
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -254,12 +254,12 @@ const Register = () => {
                 </div>
               </div>
               
-              <div className="border-t border-primary/20 pt-8 space-y-6">
-                <div className="flex items-center gap-3 pb-2 border-b border-primary/20">
-                  <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-                    <MapPin className="h-5 w-5 text-primary" />
+              <div className="border-t border-gray-200 pt-8 space-y-6">
+                <div className="flex items-center gap-3 pb-2 border-b border-gray-200">
+                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <MapPin className="h-5 w-5 text-blue-600" />
                   </div>
-                  <h3 className="text-xl font-semibold text-foreground">Endereço</h3>
+                  <h3 className="text-xl font-semibold text-gray-800">Endereço</h3>
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -346,19 +346,19 @@ const Register = () => {
                     onChange={(e) => handleFileChange('addressProof', e)}
                     className="rounded-lg"
                   />
-                  <p className="text-xs text-muted-foreground mt-1">
+                  <p className="text-xs text-gray-600 mt-1">
                     Conta de luz, água ou telefone recente (últimos 3 meses)
                   </p>
                 </div>
               </div>
               
               {/* Documentos */}
-              <div className="border-t border-primary/20 pt-8 space-y-6">
-                <div className="flex items-center gap-3 pb-2 border-b border-primary/20">
-                  <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-                    <FileText className="h-5 w-5 text-primary" />
+              <div className="border-t border-gray-200 pt-8 space-y-6">
+                <div className="flex items-center gap-3 pb-2 border-b border-gray-200">
+                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <FileText className="h-5 w-5 text-blue-600" />
                   </div>
-                  <h3 className="text-xl font-semibold text-foreground">Documentos</h3>
+                  <h3 className="text-xl font-semibold text-gray-800">Documentos</h3>
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
