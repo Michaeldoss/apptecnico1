@@ -114,11 +114,7 @@ const Login = () => {
         if (process.env.NODE_ENV === 'development') {
           console.log('Login - Login falhou');
         }
-        toast({
-          variant: "destructive",
-          title: "Falha no login",
-          description: "Email ou senha incorretos. Verifique e tente novamente.",
-        });
+        // O erro já foi tratado no AuthContext, apenas resetamos o loading
         setIsLoading(false);
       }
     } catch (error) {
@@ -247,12 +243,18 @@ const Login = () => {
             </form>
           </div>
           
-          <p className="text-center text-sm mt-6 text-white drop-shadow-md">
-            Não tem uma conta?{' '}
-            <Link to="/register" className="text-yellow-300 font-medium hover:underline hover:text-yellow-200 transition-colors">
-              Cadastre-se
-            </Link>
-          </p>
+          <div className="text-center mt-6 space-y-2">
+            <p className="text-sm text-white drop-shadow-md">
+              Não tem uma conta?{' '}
+              <Link to="/register" className="text-yellow-300 font-medium hover:underline hover:text-yellow-200 transition-colors">
+                Cadastre-se
+              </Link>
+            </p>
+            <p className="text-xs text-gray-200 drop-shadow-md">
+              Ou faça login com: cliente@exemplo.com.br | tecnico@exemplo.com.br | loja@exemplo.com.br
+            </p>
+            <p className="text-xs text-gray-300 drop-shadow-md">Senha: 123456</p>
+          </div>
         </div>
       </main>
       

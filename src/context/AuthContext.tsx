@@ -81,10 +81,47 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       });
 
       if (error) {
-        const userFriendlyMessage = error.message.includes('Invalid login credentials') 
-          ? 'Email ou senha incorretos'
-          : 'Erro ao realizar login';
-        toast({ variant: "destructive", title: "Falha no login", description: userFriendlyMessage });
+        let userFriendlyMessage = 'Erro ao realizar login';
+        let shouldRedirectToRegister = false;
+        
+        if (error.message.includes('Invalid login credentials')) {
+          userFriendlyMessage = 'Email ou senha incorretos';
+          shouldRedirectToRegister = true;
+        } else if (error.message.includes('Email not confirmed')) {
+          userFriendlyMessage = 'Email não verificado. Verifique sua caixa de entrada.';
+        } else if (error.message.includes('Too many requests')) {
+          userFriendlyMessage = 'Muitas tentativas. Aguarde um momento e tente novamente.';
+        }
+        
+        if (shouldRedirectToRegister) {
+          toast({ 
+            variant: "destructive", 
+            title: "Falha no login", 
+            description: `${userFriendlyMessage}. Clique aqui para se cadastrar.`,
+          });
+          
+          // Mostrar toast adicional para cadastro após 2 segundos
+          setTimeout(() => {
+            toast({
+              title: "Novo por aqui?",
+              description: "Crie sua conta em poucos passos!",
+              action: (
+                <button 
+                  className="bg-blue-600 text-white px-3 py-1 rounded text-sm"
+                  onClick={() => window.location.href = '/register'}
+                >
+                  Cadastrar
+                </button>
+              )
+            });
+          }, 2000);
+        } else {
+          toast({ 
+            variant: "destructive", 
+            title: "Falha no login", 
+            description: userFriendlyMessage
+          });
+        }
         
         await supabase.rpc('log_security_event', {
           event_type: 'login_failed',
