@@ -6,13 +6,21 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { formatCurrency } from '@/lib/format';
 import { AffiliateWithdrawal, AffiliateStats } from '@/types/affiliate';
+import { 
+  Wallet, 
+  CreditCard, 
+  DollarSign, 
+  Clock, 
+  CheckCircle, 
+  XCircle,
+  ArrowUpRight,
+  PiggyBank,
+  TrendingUp
+} from 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { DollarSign, Download } from 'lucide-react';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { cn } from '@/lib/utils';
+import { toast } from '@/hooks/use-toast';
 
 interface AffiliateWithdrawalsProps {
   withdrawals: AffiliateWithdrawal[];
@@ -20,282 +28,349 @@ interface AffiliateWithdrawalsProps {
   onRequestWithdrawal: (amount: number, paymentDetails: any) => Promise<boolean>;
 }
 
-export const AffiliateWithdrawals: React.FC<AffiliateWithdrawalsProps> = ({
-  withdrawals,
-  stats,
-  onRequestWithdrawal
+export const AffiliateWithdrawals: React.FC<AffiliateWithdrawalsProps> = ({ 
+  withdrawals, 
+  stats, 
+  onRequestWithdrawal 
 }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [amount, setAmount] = useState('');
+  const [withdrawAmount, setWithdrawAmount] = useState('');
   const [pixKey, setPixKey] = useState('');
-  const [pixKeyType, setPixKeyType] = useState('cpf');
   const [isLoading, setIsLoading] = useState(false);
-  const isMobile = useIsMobile();
 
-  const minWithdrawAmount = 50; // R$ 50 mínimo
+  const minimumWithdraw = 50;
+  const availableBalance = stats.pendingCommission;
 
-  const handleWithdrawal = async () => {
-    const withdrawAmount = parseFloat(amount);
+  const handleWithdrawRequest = async () => {
+    const amount = parseFloat(withdrawAmount);
     
-    if (withdrawAmount < minWithdrawAmount) {
+    if (amount < minimumWithdraw) {
+      toast({
+        variant: "destructive",
+        title: "Valor mínimo",
+        description: `O valor mínimo para saque é R$ ${minimumWithdraw.toLocaleString()}.`
+      });
       return;
     }
 
-    if (withdrawAmount > stats.pendingCommission) {
+    if (amount > availableBalance) {
+      toast({
+        variant: "destructive",
+        title: "Saldo insuficiente",
+        description: "O valor solicitado é maior que seu saldo disponível."
+      });
       return;
     }
 
     if (!pixKey.trim()) {
+      toast({
+        variant: "destructive",
+        title: "Chave PIX obrigatória",
+        description: "Informe sua chave PIX para receber o pagamento."
+      });
       return;
     }
 
     setIsLoading(true);
-    
-    const paymentDetails = {
-      pix_key: pixKey,
-      pix_key_type: pixKeyType,
-    };
-
-    const success = await onRequestWithdrawal(withdrawAmount, paymentDetails);
+    const success = await onRequestWithdrawal(amount, { pixKey });
     
     if (success) {
-      setAmount('');
-      setPixKey('');
       setIsDialogOpen(false);
+      setWithdrawAmount('');
+      setPixKey('');
     }
     
     setIsLoading(false);
   };
 
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'pago':
+        return <CheckCircle className="h-4 w-4 text-green-400" />;
+      case 'processando':
+        return <Clock className="h-4 w-4 text-blue-400" />;
+      case 'cancelado':
+        return <XCircle className="h-4 w-4 text-red-400" />;
+      default:
+        return <Clock className="h-4 w-4 text-yellow-400" />;
+    }
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'pago':
-        return 'bg-green-100 text-green-800';
+        return 'bg-green-500/20 text-green-300 border-green-500/30';
       case 'processando':
-        return 'bg-blue-100 text-blue-800';
-      case 'solicitado':
-        return 'bg-yellow-100 text-yellow-800';
+        return 'bg-blue-500/20 text-blue-300 border-blue-500/30';
       case 'cancelado':
-        return 'bg-red-100 text-red-800';
+        return 'bg-red-500/20 text-red-300 border-red-500/30';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30';
     }
   };
 
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case 'pago':
-        return 'Pago';
-      case 'processando':
-        return 'Processando';
-      case 'solicitado':
-        return 'Solicitado';
-      case 'cancelado':
-        return 'Cancelado';
-      default:
-        return status;
-    }
-  };
+  const totalWithdrawn = withdrawals
+    .filter(w => w.status === 'pago')
+    .reduce((sum, w) => sum + w.amount, 0);
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className={cn(
-            "font-bold text-gray-900",
-            isMobile ? "text-xl" : "text-2xl"
-          )}>
-            Saques e Comissões
-          </h2>
-          <p className="text-gray-600">Gerencie suas solicitações de saque</p>
-        </div>
-      </div>
-
-      {/* Resumo de Comissões */}
-      <div className={cn(
-        "grid gap-4",
-        isMobile ? "grid-cols-1" : "grid-cols-3"
-      )}>
-        <Card className="bg-green-50 border-green-200">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-green-800 text-sm">Disponível para Saque</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold text-green-900">
-              {formatCurrency(stats.pendingCommission)}
-            </p>
-          </CardContent>
-        </Card>
-        
-        <Card className="bg-blue-50 border-blue-200">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-blue-800 text-sm">Total Recebido</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold text-blue-900">
-              {formatCurrency(stats.paidCommission)}
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-purple-50 border-purple-200">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-purple-800 text-sm">Comissão Total</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold text-purple-900">
-              {formatCurrency(stats.totalCommission)}
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Botão de Saque */}
-      <div className="flex justify-center">
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button 
-              size="lg"
-              disabled={stats.pendingCommission < minWithdrawAmount}
-              className="bg-green-600 hover:bg-green-700"
-            >
-              <Download className="h-4 w-4 mr-2" />
-              Solicitar Saque
-            </Button>
-          </DialogTrigger>
-          <DialogContent className={cn(isMobile ? "w-[95%]" : "")}>
-            <DialogHeader>
-              <DialogTitle>Solicitar Saque</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label>Valor do Saque</Label>
-                <Input
-                  type="number"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  placeholder="Ex: 100.00"
-                  max={stats.pendingCommission}
-                  min={minWithdrawAmount}
-                />
-                <p className="text-xs text-gray-500">
-                  Valor mínimo: {formatCurrency(minWithdrawAmount)} | 
-                  Disponível: {formatCurrency(stats.pendingCommission)}
+      {/* Cards de Resumo Financeiro */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Card className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 border-green-300/30 text-white">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-green-100">💰 Saldo Disponível</p>
+                <p className="text-2xl font-bold">R$ {availableBalance.toLocaleString()}</p>
+                <p className="text-xs text-green-200 mt-1">
+                  Mín. saque: R$ {minimumWithdraw}
                 </p>
               </div>
-
-              <div className="space-y-2">
-                <Label>Chave PIX</Label>
-                <Input
-                  value={pixKey}
-                  onChange={(e) => setPixKey(e.target.value)}
-                  placeholder="Digite sua chave PIX"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label>Tipo da Chave</Label>
-                <select 
-                  value={pixKeyType} 
-                  onChange={(e) => setPixKeyType(e.target.value)}
-                  className="w-full p-2 border rounded-md"
-                >
-                  <option value="cpf">CPF</option>
-                  <option value="email">E-mail</option>
-                  <option value="telefone">Telefone</option>
-                  <option value="aleatoria">Chave Aleatória</option>
-                </select>
-              </div>
-
-              <Button 
-                onClick={handleWithdrawal}
-                disabled={isLoading || !amount || !pixKey || parseFloat(amount) < minWithdrawAmount}
-                className="w-full"
-              >
-                {isLoading ? 'Processando...' : 'Confirmar Solicitação'}
-              </Button>
+              <PiggyBank className="h-8 w-8 text-green-300" />
             </div>
-          </DialogContent>
-        </Dialog>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border-blue-300/30 text-white">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-blue-100">📈 Total Sacado</p>
+                <p className="text-2xl font-bold">R$ {totalWithdrawn.toLocaleString()}</p>
+                <p className="text-xs text-blue-200 mt-1">
+                  Lifetime earnings
+                </p>
+              </div>
+              <TrendingUp className="h-8 w-8 text-blue-300" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 border-purple-300/30 text-white">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-purple-100">🔄 Em Processamento</p>
+                <p className="text-2xl font-bold">
+                  {withdrawals.filter(w => w.status === 'processando').length}
+                </p>
+                <p className="text-xs text-purple-200 mt-1">
+                  Saques pendentes
+                </p>
+              </div>
+              <Clock className="h-8 w-8 text-purple-300" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Botão de Saque e Informações */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Card className="bg-white/10 border-white/20 text-white">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              💳 Solicitar Saque
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="bg-gradient-to-r from-green-500/10 to-blue-500/10 rounded-lg p-4">
+              <h4 className="font-semibold text-green-300 mb-2">✨ Saque Instantâneo via PIX</h4>
+              <p className="text-sm text-white/80 mb-3">
+                Receba suas comissões em até 30 minutos, 24h por dia!
+              </p>
+              <div className="flex items-center gap-2 text-sm text-green-300">
+                <CheckCircle className="h-4 w-4" />
+                <span>Sem taxas</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm text-green-300">
+                <CheckCircle className="h-4 w-4" />
+                <span>Processamento automático</span>
+              </div>
+            </div>
+
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger asChild>
+                <Button 
+                  className="w-full bg-green-500 hover:bg-green-600 text-white"
+                  disabled={availableBalance < minimumWithdraw}
+                >
+                  <Wallet className="h-4 w-4 mr-2" />
+                  Sacar R$ {availableBalance.toLocaleString()}
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="bg-gray-900 border-gray-700 text-white">
+                <DialogHeader>
+                  <DialogTitle className="flex items-center gap-2">
+                    💳 Solicitar Saque via PIX
+                  </DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <div>
+                    <Label className="text-white/80">Valor do saque</Label>
+                    <Input
+                      type="number"
+                      placeholder={`Mínimo: R$ ${minimumWithdraw}`}
+                      value={withdrawAmount}
+                      onChange={(e) => setWithdrawAmount(e.target.value)}
+                      className="bg-white/10 border-white/20 text-white"
+                      max={availableBalance}
+                    />
+                    <p className="text-xs text-white/60 mt-1">
+                      Disponível: R$ {availableBalance.toLocaleString()}
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <Label className="text-white/80">Chave PIX</Label>
+                    <Input
+                      placeholder="Digite sua chave PIX (CPF, email, celular ou aleatória)"
+                      value={pixKey}
+                      onChange={(e) => setPixKey(e.target.value)}
+                      className="bg-white/10 border-white/20 text-white"
+                    />
+                  </div>
+
+                  <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-3">
+                    <h4 className="font-semibold text-blue-300 mb-1">ℹ️ Informações importantes:</h4>
+                    <ul className="text-sm text-white/80 space-y-1">
+                      <li>• Saques são processados em até 30 minutos</li>
+                      <li>• Não cobramos taxas para saques via PIX</li>
+                      <li>• Disponível 24h por dia, inclusive finais de semana</li>
+                    </ul>
+                  </div>
+
+                  <Button 
+                    onClick={handleWithdrawRequest}
+                    disabled={isLoading}
+                    className="w-full bg-green-500 hover:bg-green-600"
+                  >
+                    {isLoading ? (
+                      <Clock className="h-4 w-4 mr-2 animate-spin" />
+                    ) : (
+                      <ArrowUpRight className="h-4 w-4 mr-2" />
+                    )}
+                    {isLoading ? 'Processando...' : 'Confirmar Saque'}
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
+
+            {availableBalance < minimumWithdraw && (
+              <p className="text-sm text-yellow-300 text-center">
+                Você precisa de mais R$ {(minimumWithdraw - availableBalance).toLocaleString()} para solicitar um saque.
+              </p>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card className="bg-white/10 border-white/20 text-white">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              📊 Resumo Mensal
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="flex justify-between items-center p-3 bg-black/20 rounded-lg">
+                <div>
+                  <p className="text-sm text-white/60">Janeiro 2024</p>
+                  <p className="font-semibold">R$ 1.250,00</p>
+                </div>
+                <Badge className="bg-green-500/20 text-green-300">Pago</Badge>
+              </div>
+              <div className="flex justify-between items-center p-3 bg-black/20 rounded-lg">
+                <div>
+                  <p className="text-sm text-white/60">Fevereiro 2024</p>
+                  <p className="font-semibold">R$ 890,00</p>
+                </div>
+                <Badge className="bg-green-500/20 text-green-300">Pago</Badge>
+              </div>
+              <div className="flex justify-between items-center p-3 bg-black/20 rounded-lg">
+                <div>
+                  <p className="text-sm text-white/60">Março 2024</p>
+                  <p className="font-semibold">R$ {availableBalance.toLocaleString()}</p>
+                </div>
+                <Badge className="bg-yellow-500/20 text-yellow-300">Disponível</Badge>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Histórico de Saques */}
-      <Card>
+      <Card className="bg-white/10 border-white/20 text-white">
         <CardHeader>
-          <CardTitle>Histórico de Saques</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            📋 Histórico de Saques
+            <Badge variant="secondary" className="bg-blue-500/20 text-blue-300">
+              {withdrawals.length} saques
+            </Badge>
+          </CardTitle>
         </CardHeader>
         <CardContent>
           {withdrawals.length === 0 ? (
             <div className="text-center py-8">
-              <DollarSign className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-500">Nenhum saque solicitado ainda</p>
-            </div>
-          ) : isMobile ? (
-            <div className="space-y-4">
-              {withdrawals.map((withdrawal) => (
-                <div key={withdrawal.id} className="p-4 border rounded-lg space-y-2">
-                  <div className="flex justify-between items-start">
-                    <span className="font-medium">
-                      {formatCurrency(withdrawal.amount)}
-                    </span>
-                    <Badge className={getStatusColor(withdrawal.status)}>
-                      {getStatusText(withdrawal.status)}
-                    </Badge>
-                  </div>
-                  <div className="text-sm text-gray-600">
-                    <div>PIX: {withdrawal.payment_details?.pix_key}</div>
-                    <div>
-                      {format(new Date(withdrawal.created_at), 'dd/MM/yyyy', { locale: ptBR })}
-                    </div>
-                  </div>
-                </div>
-              ))}
+              <div className="text-6xl mb-4">💰</div>
+              <h3 className="text-xl font-semibold mb-2">Nenhum saque realizado</h3>
+              <p className="text-white/60">
+                Quando você solicitar um saque, ele aparecerá aqui.
+              </p>
             </div>
           ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Valor</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Método</TableHead>
-                  <TableHead>Data</TableHead>
-                  <TableHead>Processado em</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {withdrawals.map((withdrawal) => (
-                  <TableRow key={withdrawal.id}>
-                    <TableCell className="font-medium">
-                      {formatCurrency(withdrawal.amount)}
-                    </TableCell>
-                    <TableCell>
-                      <Badge className={getStatusColor(withdrawal.status)}>
-                        {getStatusText(withdrawal.status)}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <div className="space-y-1">
-                        <div>{withdrawal.payment_method.toUpperCase()}</div>
-                        {withdrawal.payment_details?.pix_key && (
-                          <div className="text-xs text-gray-500">
-                            {withdrawal.payment_details.pix_key}
-                          </div>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      {format(new Date(withdrawal.created_at), 'dd/MM/yyyy', { locale: ptBR })}
-                    </TableCell>
-                    <TableCell>
-                      {withdrawal.processed_at 
-                        ? format(new Date(withdrawal.processed_at), 'dd/MM/yyyy', { locale: ptBR })
-                        : '-'
-                      }
-                    </TableCell>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="border-white/20">
+                    <TableHead className="text-white/80">Valor</TableHead>
+                    <TableHead className="text-white/80">Método</TableHead>
+                    <TableHead className="text-white/80">Status</TableHead>
+                    <TableHead className="text-white/80">Data Solicitação</TableHead>
+                    <TableHead className="text-white/80">Data Pagamento</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {withdrawals.map((withdrawal) => (
+                    <TableRow key={withdrawal.id} className="border-white/20">
+                      <TableCell>
+                        <div className="font-semibold">R$ {withdrawal.amount.toLocaleString()}</div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <CreditCard className="h-4 w-4 text-blue-400" />
+                          <span>PIX</span>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge className={getStatusColor(withdrawal.status)}>
+                          <div className="flex items-center gap-1">
+                            {getStatusIcon(withdrawal.status)}
+                            {withdrawal.status}
+                          </div>
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <div className="text-sm">
+                          {format(new Date(withdrawal.created_at), 'dd/MM/yyyy', { locale: ptBR })}
+                        </div>
+                        <div className="text-xs text-white/60">
+                          {format(new Date(withdrawal.created_at), 'HH:mm')}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        {withdrawal.processed_at ? (
+                          <div className="text-sm">
+                            {format(new Date(withdrawal.processed_at), 'dd/MM/yyyy', { locale: ptBR })}
+                          </div>
+                        ) : (
+                          <span className="text-white/60">-</span>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           )}
         </CardContent>
       </Card>
