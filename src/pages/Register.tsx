@@ -154,22 +154,28 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-background via-background/95 to-muted/30">
+    <div className="min-h-screen flex flex-col">
       <Navbar />
       
-      <main className="flex-grow flex items-center justify-center px-6 py-10 pt-32 relative overflow-hidden">
-        {/* Elementos decorativos de fundo */}
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-accent/10"></div>
-        <div className="absolute top-20 left-20 w-72 h-72 bg-primary/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-accent/10 rounded-full blur-3xl"></div>
-        
+      {/* Header azul com gradiente */}
+      <div className="bg-gradient-to-br from-primary via-primary/95 to-primary/90 text-primary-foreground py-20 px-4 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
+        <div className="absolute top-0 left-0 w-full h-full">
+          <div className="absolute top-10 right-20 w-32 h-32 bg-accent/10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-10 left-20 w-24 h-24 bg-accent/20 rounded-full blur-2xl"></div>
+        </div>
+        <div className="max-w-7xl mx-auto text-center relative">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 font-inter text-primary-foreground animate-fade-in">
+            Criar Conta
+          </h1>
+          <p className="text-lg md:text-xl text-primary-foreground/90 max-w-3xl mx-auto leading-relaxed animate-fade-in">
+            Preencha seus dados para começar a usar nossa plataforma
+          </p>
+        </div>
+      </div>
+      
+      <main className="flex-grow flex items-center justify-center px-6 py-16 bg-gradient-to-br from-background via-background/95 to-muted/30">
         <div className="w-full max-w-4xl relative z-10">
-          <AnimatedContainer animation="scale" className="text-center mb-8">
-            <h1 className="text-4xl md:text-5xl font-black text-foreground mb-4 animate-fade-in">Criar Conta</h1>
-            <p className="text-muted-foreground mt-2 text-lg">
-              Preencha seus dados para começar a usar nossa plataforma
-            </p>
-          </AnimatedContainer>
           
           <BlurContainer className="p-8 bg-card/95 backdrop-blur-xl border border-border shadow-2xl rounded-3xl">
             <Tabs defaultValue="client" className="mb-6" onValueChange={setAccountType}>
