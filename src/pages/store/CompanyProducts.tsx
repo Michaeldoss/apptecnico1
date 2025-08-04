@@ -2,8 +2,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Navigate, Link } from 'react-router-dom';
-import Navbar from '@/components/layout/Navbar';
-import Footer from '@/components/layout/Footer';
+import StoreLayout from '@/components/layout/StoreLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -141,222 +140,220 @@ const CompanyProducts = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      
-      <main className="flex-grow container mx-auto px-4 py-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center">
-              <Link to="/loja/dashboard">
-                <Button variant="outline" size="sm" className="mr-4">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Dashboard
-                </Button>
-              </Link>
-              <div>
-                <h1 className="text-3xl font-bold">Meus Produtos</h1>
-                <p className="text-gray-600">Gerencie seus produtos no marketplace</p>
-              </div>
-            </div>
-            
-            <Link to="/loja/products/create">
-              <Button>
-                <Plus className="h-4 w-4 mr-2" />
-                Adicionar Produto
+    <StoreLayout 
+      title="Meus Produtos" 
+      subtitle="Gerencie seus produtos no marketplace"
+    >
+      <div className="space-y-6">
+        {/* Header com botão adicionar */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            <Link to="/loja/dashboard">
+              <Button variant="outline" className="mr-4 bg-white/10 border-white/20 text-white hover:bg-white/20">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Dashboard
               </Button>
             </Link>
           </div>
+          
+          <Link to="/loja/products/create">
+            <Button className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900">
+              <Plus className="h-4 w-4 mr-2" />
+              Adicionar Produto
+            </Button>
+          </Link>
+        </div>
 
-          {/* Filters and Search */}
-          <Card className="mb-6">
+        {/* Filters and Search */}
+        <Card className="bg-white/10 backdrop-blur-xl border-white/20">
+          <CardContent className="pt-6">
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="flex-1 relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                <Input
+                  placeholder="Buscar produtos..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10 bg-white/5 border-white/20 text-white placeholder:text-gray-300"
+                />
+              </div>
+              
+              <div className="flex gap-2 flex-wrap">
+                <Button
+                  variant={filter === 'all' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setFilter('all')}
+                  className={filter === 'all' ? '' : 'bg-white/5 border-white/20 text-white hover:bg-white/10'}
+                >
+                  Todos ({products.length})
+                </Button>
+                <Button
+                  variant={filter === 'active' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setFilter('active')}
+                  className={filter === 'active' ? '' : 'bg-white/5 border-white/20 text-white hover:bg-white/10'}
+                >
+                  Ativos ({products.filter(p => p.ativo).length})
+                </Button>
+                <Button
+                  variant={filter === 'inactive' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setFilter('inactive')}
+                  className={filter === 'inactive' ? '' : 'bg-white/5 border-white/20 text-white hover:bg-white/10'}
+                >
+                  Inativos ({products.filter(p => !p.ativo).length})
+                </Button>
+                <Button
+                  variant={filter === 'low-stock' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setFilter('low-stock')}
+                  className={filter === 'low-stock' ? '' : 'bg-white/5 border-white/20 text-white hover:bg-white/10'}
+                >
+                  Estoque Baixo ({products.filter(p => p.quantidadeEstoque <= 5).length})
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Products Grid */}
+        {filteredProducts.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredProducts.map((product) => {
+              const stockStatus = getStockStatus(product.quantidadeEstoque);
+              
+              return (
+                <Card key={product.id} className="bg-white/95 backdrop-blur-sm hover:bg-white transition-all duration-300 hover:shadow-xl border-white/20">
+                  <CardHeader className="pb-2">
+                    <div className="flex justify-between items-start">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Badge variant={product.ativo ? 'default' : 'secondary'}>
+                            {product.ativo ? 'Ativo' : 'Inativo'}
+                          </Badge>
+                          <Badge variant={stockStatus.color as any}>
+                            {stockStatus.label}
+                          </Badge>
+                        </div>
+                        <CardTitle className="text-lg line-clamp-2 text-gray-900">{product.nome}</CardTitle>
+                      </div>
+                      
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="sm" className="text-gray-600 hover:text-gray-900">
+                            <MoreVertical className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem>
+                            <Eye className="h-4 w-4 mr-2" />
+                            Ver no Marketplace
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <Edit className="h-4 w-4 mr-2" />
+                            Editar
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleDuplicate(product.id)}>
+                            <Copy className="h-4 w-4 mr-2" />
+                            Duplicar
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleToggleStatus(product.id)}>
+                            <Package className="h-4 w-4 mr-2" />
+                            {product.ativo ? 'Inativar' : 'Ativar'}
+                          </DropdownMenuItem>
+                          <DropdownMenuItem 
+                            onClick={() => handleDelete(product.id)}
+                            className="text-red-600"
+                          >
+                            <Trash2 className="h-4 w-4 mr-2" />
+                            Excluir
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+                  </CardHeader>
+                  
+                  <CardContent>
+                    <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden mb-4">
+                      <img 
+                        src={product.imagem} 
+                        alt={product.nome}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-2xl font-bold text-green-600">
+                          {formatCurrency(product.preco)}
+                        </span>
+                        <span className="text-sm text-gray-600">
+                          Estoque: {product.quantidadeEstoque}
+                        </span>
+                      </div>
+                      
+                      <div className="flex flex-wrap gap-1">
+                        {product.tipoEquipamento.map((tipo) => (
+                          <Badge key={tipo} variant="outline" className="text-xs">
+                            {tipo}
+                          </Badge>
+                        ))}
+                      </div>
+                      
+                      <div className="text-sm text-gray-500">
+                        Criado em: {new Date(product.criadoEm).toLocaleDateString('pt-BR')}
+                      </div>
+                    </div>
+                  </CardContent>
+                  
+                  <CardFooter>
+                    <div className="flex gap-2 w-full">
+                      <Button variant="outline" size="sm" className="flex-1">
+                        <Edit className="h-4 w-4 mr-2" />
+                        Editar
+                      </Button>
+                      <Button 
+                        variant={product.ativo ? 'secondary' : 'default'}
+                        size="sm" 
+                        className="flex-1"
+                        onClick={() => handleToggleStatus(product.id)}
+                      >
+                        {product.ativo ? 'Inativar' : 'Ativar'}
+                      </Button>
+                    </div>
+                  </CardFooter>
+                </Card>
+              );
+            })}
+          </div>
+        ) : (
+          <Card className="bg-white/10 backdrop-blur-xl border-white/20">
             <CardContent className="pt-6">
-              <div className="flex flex-col md:flex-row gap-4">
-                <div className="flex-1 relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                  <Input
-                    placeholder="Buscar produtos..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10"
-                  />
-                </div>
-                
-                <div className="flex gap-2">
-                  <Button
-                    variant={filter === 'all' ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setFilter('all')}
-                  >
-                    Todos ({products.length})
-                  </Button>
-                  <Button
-                    variant={filter === 'active' ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setFilter('active')}
-                  >
-                    Ativos ({products.filter(p => p.ativo).length})
-                  </Button>
-                  <Button
-                    variant={filter === 'inactive' ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setFilter('inactive')}
-                  >
-                    Inativos ({products.filter(p => !p.ativo).length})
-                  </Button>
-                  <Button
-                    variant={filter === 'low-stock' ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setFilter('low-stock')}
-                  >
-                    Estoque Baixo ({products.filter(p => p.quantidadeEstoque <= 5).length})
-                  </Button>
-                </div>
+              <div className="text-center py-12">
+                <Package className="h-16 w-16 text-white/40 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-white mb-2">
+                  {searchTerm || filter !== 'all' ? 'Nenhum produto encontrado' : 'Nenhum produto cadastrado'}
+                </h3>
+                <p className="text-gray-300 mb-6">
+                  {searchTerm || filter !== 'all' 
+                    ? 'Tente ajustar os filtros ou termos de busca.'
+                    : 'Comece adicionando seu primeiro produto ao marketplace.'
+                  }
+                </p>
+                {!searchTerm && filter === 'all' && (
+                  <Link to="/loja/products/create">
+                    <Button className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900">
+                      <Plus className="h-4 w-4 mr-2" />
+                      Adicionar Primeiro Produto
+                    </Button>
+                  </Link>
+                )}
               </div>
             </CardContent>
           </Card>
-
-          {/* Products Grid */}
-          {filteredProducts.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredProducts.map((product) => {
-                const stockStatus = getStockStatus(product.quantidadeEstoque);
-                
-                return (
-                  <Card key={product.id} className="hover:shadow-lg transition-shadow">
-                    <CardHeader className="pb-2">
-                      <div className="flex justify-between items-start">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
-                            <Badge variant={product.ativo ? 'default' : 'secondary'}>
-                              {product.ativo ? 'Ativo' : 'Inativo'}
-                            </Badge>
-                            <Badge variant={stockStatus.color as any}>
-                              {stockStatus.label}
-                            </Badge>
-                          </div>
-                          <CardTitle className="text-lg line-clamp-2">{product.nome}</CardTitle>
-                        </div>
-                        
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm">
-                              <MoreVertical className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem>
-                              <Eye className="h-4 w-4 mr-2" />
-                              Ver no Marketplace
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                              <Edit className="h-4 w-4 mr-2" />
-                              Editar
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleDuplicate(product.id)}>
-                              <Copy className="h-4 w-4 mr-2" />
-                              Duplicar
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleToggleStatus(product.id)}>
-                              <Package className="h-4 w-4 mr-2" />
-                              {product.ativo ? 'Inativar' : 'Ativar'}
-                            </DropdownMenuItem>
-                            <DropdownMenuItem 
-                              onClick={() => handleDelete(product.id)}
-                              className="text-red-600"
-                            >
-                              <Trash2 className="h-4 w-4 mr-2" />
-                              Excluir
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
-                    </CardHeader>
-                    
-                    <CardContent>
-                      <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden mb-4">
-                        <img 
-                          src={product.imagem} 
-                          alt={product.nome}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <div className="flex justify-between items-center">
-                          <span className="text-2xl font-bold text-green-600">
-                            {formatCurrency(product.preco)}
-                          </span>
-                          <span className="text-sm text-gray-600">
-                            Estoque: {product.quantidadeEstoque}
-                          </span>
-                        </div>
-                        
-                        <div className="flex flex-wrap gap-1">
-                          {product.tipoEquipamento.map((tipo) => (
-                            <Badge key={tipo} variant="outline" className="text-xs">
-                              {tipo}
-                            </Badge>
-                          ))}
-                        </div>
-                        
-                        <div className="text-sm text-gray-500">
-                          Criado em: {new Date(product.criadoEm).toLocaleDateString('pt-BR')}
-                        </div>
-                      </div>
-                    </CardContent>
-                    
-                    <CardFooter>
-                      <div className="flex gap-2 w-full">
-                        <Button variant="outline" size="sm" className="flex-1">
-                          <Edit className="h-4 w-4 mr-2" />
-                          Editar
-                        </Button>
-                        <Button 
-                          variant={product.ativo ? 'secondary' : 'default'}
-                          size="sm" 
-                          className="flex-1"
-                          onClick={() => handleToggleStatus(product.id)}
-                        >
-                          {product.ativo ? 'Inativar' : 'Ativar'}
-                        </Button>
-                      </div>
-                    </CardFooter>
-                  </Card>
-                );
-              })}
-            </div>
-          ) : (
-            <Card>
-              <CardContent className="pt-6">
-                <div className="text-center py-12">
-                  <Package className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">
-                    {searchTerm || filter !== 'all' ? 'Nenhum produto encontrado' : 'Nenhum produto cadastrado'}
-                  </h3>
-                  <p className="text-gray-600 mb-6">
-                    {searchTerm || filter !== 'all' 
-                      ? 'Tente ajustar os filtros ou termos de busca.'
-                      : 'Comece adicionando seu primeiro produto ao marketplace.'
-                    }
-                  </p>
-                  {!searchTerm && filter === 'all' && (
-                    <Link to="/loja/products/create">
-                      <Button>
-                        <Plus className="h-4 w-4 mr-2" />
-                        Adicionar Primeiro Produto
-                      </Button>
-                    </Link>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          )}
-        </div>
-      </main>
-      
-      <Footer />
-    </div>
+        )}
+      </div>
+    </StoreLayout>
   );
 };
 
