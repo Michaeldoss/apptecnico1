@@ -70,6 +70,7 @@ import CompanyOrders from '@/pages/store/CompanyOrders';
 import CompanyFinancial from '@/pages/store/CompanyFinancial';
 import CompanyReviews from '@/pages/store/CompanyReviews';
 import CompanyInventory from '@/pages/store/CompanyInventory';
+import CompanyProfile from '@/pages/store/CompanyProfile';
 
 // Admin pages
 import AdminDashboard from '@/pages/admin/Dashboard';
@@ -143,11 +144,21 @@ function App() {
                       <CompanyInventory />
                     </ProtectedRoute>
                   } />
-                  <Route path="/loja/afiliados" element={
-                    <ProtectedRoute userType="company">
-                      <CompanyAffiliates />
-                    </ProtectedRoute>
-                  } />
+                   <Route path="/loja/afiliados" element={
+                     <ProtectedRoute userType="company">
+                       <CompanyAffiliates />
+                     </ProtectedRoute>
+                   } />
+                   <Route path="/loja/profile" element={
+                     <ProtectedRoute userType="company">
+                       <CompanyProfile />
+                     </ProtectedRoute>
+                   } />
+                   <Route path="/store/profile" element={
+                     <ProtectedRoute userType="company">
+                       <CompanyProfile />
+                     </ProtectedRoute>
+                   } />
                  
                  {/* Customer routes */}
                 <Route path="/cliente/painel" element={
