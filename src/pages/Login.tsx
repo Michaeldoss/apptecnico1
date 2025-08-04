@@ -25,11 +25,21 @@ const Login = () => {
 
   // Development-only logging
   if (process.env.NODE_ENV === 'development') {
-    console.log('Login - Componente renderizado');
-    console.log('Login - isAuthenticated:', isAuthenticated);
-    console.log('Login - userType:', userType);
-    console.log('Login - authLoading:', authLoading);
+    console.log('🔍 Login - Componente renderizado');
+    console.log('🔍 Login - isAuthenticated:', isAuthenticated);
+    console.log('🔍 Login - userType:', userType);
+    console.log('🔍 Login - authLoading:', authLoading);
   }
+
+  // Detectar se há sessão ativa sem login explícito
+  useEffect(() => {
+    if (isAuthenticated && !authLoading) {
+      console.log('🚨 SESSÃO ATIVA DETECTADA SEM LOGIN EXPLÍCITO!');
+      console.log('🚨 isAuthenticated:', isAuthenticated);
+      console.log('🚨 userType:', userType);
+      console.log('🚨 Isso indica que há uma sessão persistente que não foi limpa');
+    }
+  }, [isAuthenticated, userType, authLoading]);
 
   // Redirecionar se já estiver autenticado
   useEffect(() => {

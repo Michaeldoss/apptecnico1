@@ -122,48 +122,103 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const logout = async () => {
-    console.log('Iniciando logout...');
+    console.log('🚪 Iniciando logout completo...');
+    
     try {
-      // Primeiro limpar estados locais
+      // 1. Primeiro limpar estados locais IMEDIATAMENTE
       setUser(null);
       setSession(null);
       setUserType(null);
       setIsAuthenticated(false);
+      console.log('✅ Estados locais limpos');
       
-      // Depois fazer o signOut do Supabase
-      const { error } = await supabase.auth.signOut();
-      if (error) {
-        console.error('Erro no signOut do Supabase:', error);
+      // 2. Limpar TODOS os dados do navegador
+      localStorage.clear();
+      sessionStorage.clear();
+      console.log('✅ Storage local limpo');
+      
+      // 3. Tentar fazer signOut do Supabase (pode falhar, mas não importa)
+      try {
+        const { error } = await supabase.auth.signOut();
+        if (error) {
+          console.warn('⚠️ Aviso no signOut do Supabase:', error.message);
+        } else {
+          console.log('✅ SignOut do Supabase realizado');
+        }
+      } catch (supabaseError) {
+        console.warn('⚠️ Erro no signOut do Supabase (ignorado):', supabaseError);
       }
       
-      // Limpar qualquer cache local
+      console.log('🎉 Logout completo concluído');
+      
+      toast({ 
+        title: "Logout realizado", 
+        description: "Sessão encerrada com sucesso!" 
+      });
+      
+      // 4. Force refresh para garantir estado limpo
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 500);
+      
+    } catch (error) {
+      console.error('💥 Erro crítico no logout:', error);
+      
+      // Mesmo com erro, forçar limpeza
+      setUser(null);
+      setSession(null);
+      setUserType(null);
+      setIsAuthenticated(false);
       localStorage.clear();
       sessionStorage.clear();
       
-      console.log('Logout concluído com sucesso');
-      
       toast({ 
-        title: "Logout realizado", 
-        description: "Até logo!" 
+        title: "Logout forçado", 
+        description: "Sessão encerrada (com limpeza forçada)." 
       });
-    } catch (error) {
-      console.error('Erro no logout:', error);
-      // Mesmo com erro, limpar os estados
-      setUser(null);
-      setSession(null);
-      setUserType(null);
-      setIsAuthenticated(false);
       
-      toast({ 
-        title: "Logout realizado", 
-        description: "Sessão encerrada." 
-      });
+      // Force refresh mesmo com erro
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 500);
     }
   };
 
+  // Função para resetar completamente o estado de autenticação
+  const hardReset = async () => {
+    console.log('🔄 Executando hard reset do sistema de autenticação...');
+    
+    // Limpar todos os estados
+    setUser(null);
+    setSession(null);
+    setUserType(null);
+    setIsAuthenticated(false);
+    
+    // Limpar storage
+    localStorage.clear();
+    sessionStorage.clear();
+    
+    // Tentar fazer signOut do Supabase
+    try {
+      await supabase.auth.signOut();
+    } catch (error) {
+      console.warn('Erro no signOut durante hard reset:', error);
+    }
+    
+    console.log('✅ Hard reset concluído');
+  };
+
   useEffect(() => {
+    // Executar hard reset na inicialização se necessário
+    const shouldReset = localStorage.getItem('force_auth_reset');
+    if (shouldReset) {
+      console.log('🚨 Force reset detectado, executando...');
+      localStorage.removeItem('force_auth_reset');
+      hardReset();
+    }
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log('Auth state change:', event, session?.user?.email);
+      console.log('🔄 Auth state change:', event, session?.user?.email);
       
       if (event === 'SIGNED_OUT') {
         setSession(null);

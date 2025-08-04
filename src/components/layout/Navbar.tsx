@@ -25,17 +25,14 @@ const Navbar = () => {
     setIsMenuOpen(false);
   };
   const handleLogout = async () => {
-    console.log('Tentando fazer logout...');
-    try {
-      await logout();
-      console.log('Logout realizado, redirecionando...');
-      setIsMenuOpen(false);
-      navigate("/", { replace: true });
-      // Force refresh to ensure clean state
-      window.location.href = "/";
-    } catch (error) {
-      console.error('Erro no logout:', error);
-    }
+    console.log('🚪 Navbar - Iniciando logout...');
+    await logout();
+  };
+
+  const handleForceReset = () => {
+    console.log('🔥 Force reset solicitado...');
+    localStorage.setItem('force_auth_reset', 'true');
+    window.location.href = "/";
   };
   const getDashboardLink = () => {
     if (userType === "customer") return "/cliente/painel";
@@ -105,6 +102,9 @@ const Navbar = () => {
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => { localStorage.clear(); window.location.href = "/"; }} className="font-inter font-medium text-red-800">
                   Force Logout (Debug)
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleForceReset} className="font-inter font-medium text-purple-600">
+                  Reset Sistema (Debug)
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu> : <>
