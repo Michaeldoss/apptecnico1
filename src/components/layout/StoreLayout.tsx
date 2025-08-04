@@ -54,10 +54,10 @@ const StoreLayout: React.FC<StoreLayoutProps> = ({ children, title, subtitle }) 
       active: location.pathname === '/loja/inventory'
     },
     { 
-      href: '/loja/affiliates', 
-      icon: Users, 
+      href: '/loja/afiliados', 
+      icon: Users,
       label: 'Afiliados',
-      active: location.pathname === '/loja/affiliates'
+      active: location.pathname === '/loja/afiliados'
     },
     { 
       href: '/loja/financial', 
