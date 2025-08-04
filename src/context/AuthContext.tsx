@@ -122,12 +122,39 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const logout = async () => {
-    await supabase.auth.signOut();
-    setUser(null);
-    setSession(null);
-    setUserType(null);
-    setIsAuthenticated(false);
-    toast({ title: "Logout realizado", description: "Até logo!" });
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error('Erro no logout:', error);
+        toast({ 
+          title: "Erro no logout", 
+          description: "Tente novamente.", 
+          variant: "destructive" 
+        });
+        return;
+      }
+      
+      // Limpar estados locais
+      setUser(null);
+      setSession(null);
+      setUserType(null);
+      setIsAuthenticated(false);
+      
+      // Limpar localStorage como fallback
+      localStorage.removeItem('supabase.auth.token');
+      
+      toast({ 
+        title: "Logout realizado", 
+        description: "Até logo!" 
+      });
+    } catch (error) {
+      console.error('Erro no logout:', error);
+      toast({ 
+        title: "Erro no logout", 
+        description: "Tente novamente.", 
+        variant: "destructive" 
+      });
+    }
   };
 
   useEffect(() => {

@@ -24,9 +24,12 @@ const Navbar = () => {
     navigate("/login");
     setIsMenuOpen(false);
   };
-  const handleLogout = () => {
-    logout();
-    navigate("/");
+  const handleLogout = async () => {
+    if (confirm('Tem certeza que deseja sair?')) {
+      await logout();
+      navigate("/");
+      setIsMenuOpen(false);
+    }
   };
   const getDashboardLink = () => {
     if (userType === "customer") return "/cliente/painel";
@@ -159,10 +162,7 @@ const Navbar = () => {
                       <User className="h-5 w-5 mr-3 text-blue-600" />
                       <span className="text-gray-800 font-medium">Meu Perfil</span>
                     </Link>
-                    <Button variant="outline" size="sm" className="w-full border-2 border-red-500 text-red-600 hover:bg-red-600 hover:text-white font-inter font-semibold" onClick={() => {
-                handleLogout();
-                setIsMenuOpen(false);
-              }}>
+                    <Button variant="outline" size="sm" className="w-full border-2 border-red-500 text-red-600 hover:bg-red-600 hover:text-white font-inter font-semibold" onClick={handleLogout}>
                       Sair
                     </Button>
                   </> : <div className="flex flex-col space-y-3">
