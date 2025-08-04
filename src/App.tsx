@@ -71,6 +71,7 @@ import CompanyFinancial from '@/pages/store/CompanyFinancial';
 import CompanyReviews from '@/pages/store/CompanyReviews';
 import CompanyInventory from '@/pages/store/CompanyInventory';
 import CompanyProfile from '@/pages/store/CompanyProfile';
+import CompanySettings from '@/pages/store/CompanySettings';
 
 // Admin pages
 import AdminDashboard from '@/pages/admin/Dashboard';
@@ -152,9 +153,14 @@ function App() {
                    <Route path="/loja/profile" element={
                      <ProtectedRoute userType="company">
                        <CompanyProfile />
-                     </ProtectedRoute>
-                   } />
-                   <Route path="/store/profile" element={
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/loja/configuracoes" element={
+                    <ProtectedRoute userType="company">
+                      <CompanySettings />
+                    </ProtectedRoute>
+                  } />
+                    <Route path="/store/profile" element={
                      <ProtectedRoute userType="company">
                        <CompanyProfile />
                      </ProtectedRoute>
