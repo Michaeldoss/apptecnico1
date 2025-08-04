@@ -42,12 +42,12 @@ const CustomerClients = () => {
     <CustomerLayout title="Prontuário Técnico">
       <div className="space-y-6">
         {/* Main Content Card */}
-        <Card className="border-0 shadow-xl bg-white/95 backdrop-blur-sm">
+        <Card className="border-0 shadow-lg bg-white/95 backdrop-blur-sm rounded-xl">
           <Tabs defaultValue="cadastral" className="w-full">
-            <TabsList className="grid w-full grid-cols-6 bg-gradient-to-r from-blue-600 to-blue-500 shadow-lg rounded-t-xl p-1 mb-0">
+            <TabsList className="grid w-full grid-cols-6 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-1 mb-0">
               <TabsTrigger 
                 value="cadastral" 
-                className="data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-md text-white hover:bg-white/20 font-semibold transition-all duration-300 rounded-lg px-3 py-2"
+                className="data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-md text-white hover:bg-white/20 font-semibold transition-all duration-300 rounded-lg px-3 py-2"
               >
                 <User className="h-4 w-4 mr-2" />
                 <span className="hidden sm:inline">Dados Cadastrais</span>
@@ -55,7 +55,7 @@ const CustomerClients = () => {
               </TabsTrigger>
               <TabsTrigger 
                 value="local" 
-                className="data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-md text-white hover:bg-white/20 font-semibold transition-all duration-300 rounded-lg px-3 py-2"
+                className="data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-md text-white hover:bg-white/20 font-semibold transition-all duration-300 rounded-lg px-3 py-2"
               >
                 <Factory className="h-4 w-4 mr-2" />
                 <span className="hidden sm:inline">Estrutura Local</span>
@@ -63,7 +63,7 @@ const CustomerClients = () => {
               </TabsTrigger>
               <TabsTrigger 
                 value="equipment" 
-                className="data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-md text-white hover:bg-white/20 font-semibold transition-all duration-300 rounded-lg px-3 py-2"
+                className="data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-md text-white hover:bg-white/20 font-semibold transition-all duration-300 rounded-lg px-3 py-2"
               >
                 <Printer className="h-4 w-4 mr-2" />
                 <span className="hidden sm:inline">Equipamentos</span>
@@ -71,7 +71,7 @@ const CustomerClients = () => {
               </TabsTrigger>
               <TabsTrigger 
                 value="history" 
-                className="data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-md text-white hover:bg-white/20 font-semibold transition-all duration-300 rounded-lg px-3 py-2"
+                className="data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-md text-white hover:bg-white/20 font-semibold transition-all duration-300 rounded-lg px-3 py-2"
               >
                 <History className="h-4 w-4 mr-2" />
                 <span className="hidden sm:inline">Histórico</span>
@@ -79,7 +79,7 @@ const CustomerClients = () => {
               </TabsTrigger>
               <TabsTrigger 
                 value="documents" 
-                className="data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-md text-white hover:bg-white/20 font-semibold transition-all duration-300 rounded-lg px-3 py-2"
+                className="data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-md text-white hover:bg-white/20 font-semibold transition-all duration-300 rounded-lg px-3 py-2"
               >
                 <FileText className="h-4 w-4 mr-2" />
                 <span className="hidden sm:inline">Documentos</span>
@@ -87,7 +87,7 @@ const CustomerClients = () => {
               </TabsTrigger>
               <TabsTrigger 
                 value="actions" 
-                className="data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-md text-white hover:bg-white/20 font-semibold transition-all duration-300 rounded-lg px-3 py-2"
+                className="data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-md text-white hover:bg-white/20 font-semibold transition-all duration-300 rounded-lg px-3 py-2"
               >
                 <Settings className="h-4 w-4 mr-2" />
                 <span className="hidden sm:inline">Ações</span>
@@ -95,14 +95,14 @@ const CustomerClients = () => {
               </TabsTrigger>
             </TabsList>
 
-            <div className="p-6 bg-white rounded-b-xl">
+            <div className="p-6 bg-white/10 backdrop-blur-sm rounded-b-xl border border-white/20 border-t-0">
               <TabsContent value="cadastral" className="mt-0">
                 <ClientData clientData={clientData} />
               </TabsContent>
 
               <TabsContent value="local" className="mt-0">
-                <Card className="border border-blue-200 bg-white shadow-md">
-                  <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-t-lg">
+                <Card className="border-0 bg-white/10 backdrop-blur-sm shadow-md rounded-xl border border-white/20">
+                  <CardHeader className="bg-white/20 text-white rounded-t-xl border-b border-white/20">
                     <CardTitle className="flex items-center gap-3 text-xl">
                       <Factory className="h-6 w-6" />
                       Estrutura de Instalação
@@ -111,83 +111,83 @@ const CustomerClients = () => {
                   <CardContent className="space-y-6 pt-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <Label className="text-blue-700 font-semibold flex items-center gap-2">
+                        <Label className="text-white font-semibold flex items-center gap-2">
                           <MapPin className="h-4 w-4" />
                           Localização dos Equipamentos
                         </Label>
                         <Input 
                           value={clientData.location.equipmentLocation} 
                           readOnly 
-                          className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
+                          className="bg-white/10 border-white/20 text-white placeholder:text-white/60 mt-1"
                         />
                       </div>
                       <div>
-                        <Label className="text-blue-700 font-semibold flex items-center gap-2">
+                        <Label className="text-white font-semibold flex items-center gap-2">
                           <User className="h-4 w-4" />
                           Funcionários no Setor
                         </Label>
                         <Input 
                           value={clientData.location.employees.toString()} 
                           readOnly 
-                          className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
+                          className="bg-white/10 border-white/20 text-white placeholder:text-white/60 mt-1"
                         />
                       </div>
                       <div>
-                        <Label className="text-blue-700 font-semibold flex items-center gap-2">
+                        <Label className="text-white font-semibold flex items-center gap-2">
                           <Settings className="h-4 w-4" />
                           Instalação Elétrica
                         </Label>
                         <Input 
                           value={clientData.location.electricalInstallation} 
                           readOnly 
-                          className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
+                          className="bg-white/10 border-white/20 text-white placeholder:text-white/60 mt-1"
                         />
                       </div>
                       <div>
-                        <Label className="text-blue-700 font-semibold flex items-center gap-2">
+                        <Label className="text-white font-semibold flex items-center gap-2">
                           <AlertTriangle className="h-4 w-4" />
                           Condições Ambientais
                         </Label>
                         <Input 
                           value={clientData.location.environmentalConditions} 
                           readOnly 
-                          className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
+                          className="bg-white/10 border-white/20 text-white placeholder:text-white/60 mt-1"
                         />
                       </div>
                     </div>
 
-                    <Separator className="bg-blue-300 h-px my-6" />
+                    <Separator className="bg-white/20 h-px my-6" />
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="flex items-center justify-between p-4 border border-blue-300 rounded-lg bg-blue-50">
-                        <span className="text-blue-700 font-semibold">Aterramento</span>
+                      <div className="flex items-center justify-between p-4 bg-white/10 border border-white/20 rounded-lg">
+                        <span className="text-white font-semibold">Aterramento</span>
                         {clientData.location.grounding ? 
-                          <Badge className="bg-green-100 text-green-700 border-green-200">✔ Presente</Badge> : 
-                          <Badge className="bg-red-100 text-red-700 border-red-200">⚠ Ausente</Badge>
+                          <Badge className="bg-green-500/20 text-green-300 border-green-500/30">✔ Presente</Badge> : 
+                          <Badge className="bg-red-500/20 text-red-300 border-red-500/30">⚠ Ausente</Badge>
                         }
                       </div>
                       
-                      <div className="flex items-center justify-between p-4 border border-blue-300 rounded-lg bg-blue-50">
-                        <span className="text-blue-700 font-semibold">Ar-condicionado</span>
+                      <div className="flex items-center justify-between p-4 bg-white/10 border border-white/20 rounded-lg">
+                        <span className="text-white font-semibold">Ar-condicionado</span>
                         {clientData.location.airConditioning ? 
-                          <Badge className="bg-green-100 text-green-700 border-green-200">✔ Presente</Badge> : 
-                          <Badge className="bg-red-100 text-red-700 border-red-200">❌ Ausente</Badge>
+                          <Badge className="bg-green-500/20 text-green-300 border-green-500/30">✔ Presente</Badge> : 
+                          <Badge className="bg-red-500/20 text-red-300 border-red-500/30">❌ Ausente</Badge>
                         }
                       </div>
                       
-                      <div className="flex items-center justify-between p-4 border border-blue-300 rounded-lg bg-blue-50">
-                        <span className="text-blue-700 font-semibold">Nobreaks</span>
+                      <div className="flex items-center justify-between p-4 bg-white/10 border border-white/20 rounded-lg">
+                        <span className="text-white font-semibold">Nobreaks</span>
                         {clientData.location.hasNobreak ? 
-                          <Badge className="bg-green-100 text-green-700 border-green-200">Sim</Badge> : 
-                          <Badge className="bg-red-100 text-red-700 border-red-200">Não</Badge>
+                          <Badge className="bg-green-500/20 text-green-300 border-green-500/30">Sim</Badge> : 
+                          <Badge className="bg-red-500/20 text-red-300 border-red-500/30">Não</Badge>
                         }
                       </div>
                       
-                      <div className="flex items-center justify-between p-4 border border-blue-300 rounded-lg bg-blue-50">
-                        <span className="text-blue-700 font-semibold">Filtros/Estabilizadores</span>
+                      <div className="flex items-center justify-between p-4 bg-white/10 border border-white/20 rounded-lg">
+                        <span className="text-white font-semibold">Filtros/Estabilizadores</span>
                         {clientData.location.hasFilters ? 
-                          <Badge className="bg-green-100 text-green-700 border-green-200">Sim</Badge> : 
-                          <Badge className="bg-red-100 text-red-700 border-red-200">Não</Badge>
+                          <Badge className="bg-green-500/20 text-green-300 border-green-500/30">Sim</Badge> : 
+                          <Badge className="bg-red-500/20 text-red-300 border-red-500/30">Não</Badge>
                         }
                       </div>
                     </div>
