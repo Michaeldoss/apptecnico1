@@ -206,36 +206,36 @@ const Register = () => {
       <Navbar />
       
       {/* Header azul com gradiente - igual à home */}
-      <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-20 px-4 relative overflow-hidden">
+      <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-16 px-4 relative overflow-hidden">
         {/* Elementos decorativos de fundo */}
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-transparent to-purple-600/20"></div>
-        <div className="absolute top-20 left-20 w-72 h-72 bg-white/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-yellow-300/10 rounded-full blur-3xl"></div>
+        <div className="absolute top-10 left-10 w-32 h-32 bg-white/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-10 right-10 w-40 h-40 bg-yellow-300/10 rounded-full blur-3xl"></div>
         
-        <div className="max-w-7xl mx-auto text-center relative z-10">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6 leading-tight text-white drop-shadow-2xl">
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-black mb-4 leading-tight text-white drop-shadow-2xl">
             Criar Conta
           </h1>
-          <p className="text-xl md:text-2xl mb-8 text-gray-100 max-w-4xl mx-auto font-bold leading-relaxed drop-shadow-lg">
+          <p className="text-lg md:text-xl mb-8 text-gray-100 max-w-3xl mx-auto font-semibold leading-relaxed drop-shadow-lg">
             Preencha seus dados para começar a usar nossa plataforma
           </p>
 
           {/* Badges de Benefícios */}
-          <div className="flex flex-wrap justify-center gap-6">
-            <div className="bg-white/20 backdrop-blur-xl px-6 py-4 rounded-2xl border-2 border-white/30 flex items-center gap-3 hover:bg-white/30 transition-all duration-300 shadow-2xl">
-              <span className="text-white font-black text-lg drop-shadow-lg">📱 Acesso Imediato</span>
+          <div className="flex flex-wrap justify-center gap-4">
+            <div className="bg-white/20 backdrop-blur-xl px-4 py-2 rounded-xl border border-white/30 flex items-center gap-2 hover:bg-white/30 transition-all duration-300 shadow-xl">
+              <span className="text-white font-bold text-sm drop-shadow-lg">📱 Acesso Imediato</span>
             </div>
-            <div className="bg-white/20 backdrop-blur-xl px-6 py-4 rounded-2xl border-2 border-white/30 flex items-center gap-3 hover:bg-white/30 transition-all duration-300 shadow-2xl">
-              <span className="text-white font-black text-lg drop-shadow-lg">🔒 Dados Seguros</span>
+            <div className="bg-white/20 backdrop-blur-xl px-4 py-2 rounded-xl border border-white/30 flex items-center gap-2 hover:bg-white/30 transition-all duration-300 shadow-xl">
+              <span className="text-white font-bold text-sm drop-shadow-lg">🔒 Dados Seguros</span>
             </div>
-            <div className="bg-white/20 backdrop-blur-xl px-6 py-4 rounded-2xl border-2 border-white/30 flex items-center gap-3 hover:bg-white/30 transition-all duration-300 shadow-2xl">
-              <span className="text-white font-black text-lg drop-shadow-lg">⚡ Setup Rápido</span>
+            <div className="bg-white/20 backdrop-blur-xl px-4 py-2 rounded-xl border border-white/30 flex items-center gap-2 hover:bg-white/30 transition-all duration-300 shadow-xl">
+              <span className="text-white font-bold text-sm drop-shadow-lg">⚡ Setup Rápido</span>
             </div>
           </div>
         </div>
       </section>
       
-      <main className="flex-grow flex items-center justify-center px-6 py-16 bg-gradient-to-br from-background via-background/95 to-muted/30">
+      <main className="flex-grow flex items-center justify-center px-6 py-12 bg-gradient-to-br from-background via-background/95 to-muted/30">
         <div className="w-full max-w-4xl relative z-10">
           
           <BlurContainer className="p-8 bg-card/95 backdrop-blur-xl border border-border shadow-2xl rounded-3xl">
