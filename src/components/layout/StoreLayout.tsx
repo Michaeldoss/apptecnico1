@@ -89,7 +89,7 @@ const StoreLayout: React.FC<StoreLayoutProps> = ({ children, title, subtitle }) 
     <div className="min-h-screen flex flex-col bg-blue-600">
       <Navbar />
       
-      <div className="flex-1 flex container mx-auto px-4 py-6 gap-6 max-w-7xl">
+      <div className="flex-1 flex container mx-auto px-4 py-6 gap-6 max-w-7xl pt-24">
         {/* Sidebar */}
         {!isMobile && (
           <aside className="w-64 bg-white/10 backdrop-blur-xl rounded-lg border border-white/20 p-4 h-fit sticky top-6">
