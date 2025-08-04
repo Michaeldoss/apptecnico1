@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -14,13 +13,16 @@ import { toast } from '@/hooks/use-toast';
 import GoogleLoginButton from '@/components/auth/GoogleLoginButton';
 import GoogleAuthProvider from '@/components/auth/GoogleAuthProvider';
 import { supabase } from '@/integrations/supabase/client';
-
-
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { login, isAuthenticated, userType, isLoading: authLoading } = useAuth();
+  const {
+    login,
+    isAuthenticated,
+    userType,
+    isLoading: authLoading
+  } = useAuth();
   const navigate = useNavigate();
 
   // Development-only logging
@@ -47,70 +49,72 @@ const Login = () => {
       if (process.env.NODE_ENV === 'development') {
         console.log('Login - Usuário já autenticado, redirecionando...');
       }
-      
       switch (userType) {
         case 'technician':
           if (process.env.NODE_ENV === 'development') {
             console.log('Login - Redirecionando para dashboard do técnico');
           }
-          navigate('/tecnico/dashboard', { replace: true });
+          navigate('/tecnico/dashboard', {
+            replace: true
+          });
           break;
         case 'customer':
           if (process.env.NODE_ENV === 'development') {
             console.log('Login - Redirecionando para painel do cliente');
           }
-          navigate('/cliente/dashboard', { replace: true });
+          navigate('/cliente/dashboard', {
+            replace: true
+          });
           break;
         case 'company':
           if (process.env.NODE_ENV === 'development') {
             console.log('Login - Redirecionando para dashboard da empresa');
           }
-          navigate('/loja/dashboard', { replace: true });
+          navigate('/loja/dashboard', {
+            replace: true
+          });
           break;
         case 'admin':
           if (process.env.NODE_ENV === 'development') {
             console.log('Login - Redirecionando para admin');
           }
-          navigate('/admin/dashboard', { replace: true });
+          navigate('/admin/dashboard', {
+            replace: true
+          });
           break;
         default:
           if (process.env.NODE_ENV === 'development') {
             console.log('Login - Tipo de usuário desconhecido, redirecionando para home');
           }
-          navigate('/', { replace: true });
+          navigate('/', {
+            replace: true
+          });
       }
     }
   }, [isAuthenticated, userType, authLoading, navigate]);
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     console.log('🚀 Login Page - Tentativa de login para:', email);
-    
     if (!email || !password) {
       console.log('❌ Login Page - Email ou senha vazios');
       toast({
         variant: "destructive",
         title: "Campos obrigatórios",
-        description: "Preencha email e senha para continuar.",
+        description: "Preencha email e senha para continuar."
       });
       return;
     }
-
     console.log('⏳ Login Page - Iniciando loading...');
     setIsLoading(true);
-    
     try {
       console.log('🔄 Login Page - Chamando AuthContext.login...');
       const success = await login(email, password);
-      
       console.log('📊 Login Page - Resultado do login:', success);
-      
       if (success) {
         console.log('✅ Login Page - Login bem-sucedido, mostrando toast...');
         toast({
           title: "🎉 Login realizado!",
-          description: "Bem-vindo! Redirecionando para seu dashboard...",
+          description: "Bem-vindo! Redirecionando para seu dashboard..."
         });
         // O redirecionamento será feito pelo useEffect após o estado ser atualizado
       } else {
@@ -121,7 +125,7 @@ const Login = () => {
       toast({
         variant: "destructive",
         title: "Erro de conexão",
-        description: "Não foi possível conectar. Verifique sua internet e tente novamente.",
+        description: "Não foi possível conectar. Verifique sua internet e tente novamente."
       });
     } finally {
       console.log('🏁 Login Page - Finalizando loading...');
@@ -131,18 +135,14 @@ const Login = () => {
 
   // Mostrar loading enquanto verifica autenticação
   if (authLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
+    return <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
           <p className="mt-2 text-gray-600">Verificando autenticação...</p>
         </div>
-      </div>
-    );
+      </div>;
   }
-
-  return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800">
+  return <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800">
       <Navbar />
       
       {/* Elementos decorativos de fundo */}
@@ -150,7 +150,10 @@ const Login = () => {
       <div className="absolute top-20 left-20 w-72 h-72 bg-white/5 rounded-full blur-3xl"></div>
       <div className="absolute bottom-20 right-20 w-96 h-96 bg-yellow-300/10 rounded-full blur-3xl"></div>
       
-      <main className="flex-grow flex items-center justify-center px-6 relative z-10" style={{ paddingTop: '8rem', paddingBottom: '8rem' }}>
+      <main className="flex-grow flex items-center justify-center px-6 relative z-10" style={{
+      paddingTop: '8rem',
+      paddingBottom: '8rem'
+    }}>
         <div className="w-full max-w-md">
           <AnimatedContainer animation="scale" className="text-center mb-8">
             <h1 className="text-3xl font-bold text-white drop-shadow-lg">Bem-vindo de Volta</h1>
@@ -158,7 +161,11 @@ const Login = () => {
           </AnimatedContainer>
           
           <div className="bg-white/95 backdrop-blur-xl rounded-2xl p-8 shadow-2xl border-2 border-white/30">
-            <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            <form onSubmit={handleLogin} style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1.5rem'
+          }}>
               {/* Login com Google primeiro */}
               <div className="space-y-4">
                 <GoogleAuthProvider>
@@ -176,38 +183,17 @@ const Login = () => {
               <div className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="email" className="text-gray-900 font-semibold">Email</Label>
-                  <Input 
-                    id="email"
-                    type="email" 
-                    placeholder="nome@exemplo.com" 
-                    required 
-                    className="w-full rounded-lg border-2 border-gray-300 focus:border-blue-600 text-gray-900 bg-white"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    disabled={isLoading}
-                  />
+                  <Input id="email" type="email" placeholder="nome@exemplo.com" required className="w-full rounded-lg border-2 border-gray-300 focus:border-blue-600 text-gray-900 bg-white" value={email} onChange={e => setEmail(e.target.value)} disabled={isLoading} />
                 </div>
                 
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <Label htmlFor="password" className="text-gray-900 font-semibold">Senha</Label>
-                    <Link 
-                      to="/forgot-password" 
-                      className="text-sm text-blue-600 hover:underline font-medium"
-                    >
+                    <Link to="/forgot-password" className="text-sm text-blue-600 hover:underline font-medium">
                       Esqueceu a senha?
                     </Link>
                   </div>
-                  <Input 
-                    id="password"
-                    type="password" 
-                    placeholder="••••••••" 
-                    required 
-                    className="w-full rounded-lg border-2 border-gray-300 focus:border-blue-600 text-gray-900 bg-white"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    disabled={isLoading}
-                  />
+                  <Input id="password" type="password" placeholder="••••••••" required className="w-full rounded-lg border-2 border-gray-300 focus:border-blue-600 text-gray-900 bg-white" value={password} onChange={e => setPassword(e.target.value)} disabled={isLoading} />
                 </div>
                 
                 <div className="flex items-center space-x-2">
@@ -216,28 +202,16 @@ const Login = () => {
                 </div>
               </div>
               
-              <Button 
-                type="submit" 
-                className="w-full rounded-xl h-12 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 font-bold text-lg shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl border-0"
-                disabled={isLoading || !email || !password}
-              >
-                {isLoading ? (
-                  <span className="flex items-center">
-                    <svg 
-                      className="animate-spin -ml-1 mr-2 h-4 w-4" 
-                      style={{ color: '#111827' }} 
-                      xmlns="http://www.w3.org/2000/svg" 
-                      fill="none" 
-                      viewBox="0 0 24 24"
-                    >
+              <Button type="submit" className="w-full rounded-xl h-12 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 font-bold text-lg shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl border-0" disabled={isLoading || !email || !password}>
+                {isLoading ? <span className="flex items-center">
+                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4" style={{
+                  color: '#111827'
+                }} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
                     Entrando...
-                  </span>
-                ) : (
-                  'Entrar'
-                )}
+                  </span> : 'Entrar'}
               </Button>
             </form>
           </div>
@@ -249,17 +223,13 @@ const Login = () => {
                 Cadastre-se
               </Link>
             </p>
-            <p className="text-xs text-gray-200 drop-shadow-md">
-              Ou faça login com: cliente@exemplo.com.br | tecnico@exemplo.com.br | loja@exemplo.com.br
-            </p>
-            <p className="text-xs text-gray-300 drop-shadow-md">Senha: 123456</p>
+            
+            
           </div>
         </div>
       </main>
       
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default Login;
