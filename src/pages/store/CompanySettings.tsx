@@ -2,8 +2,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Navigate, Link } from 'react-router-dom';
-import Navbar from '@/components/layout/Navbar';
-import Footer from '@/components/layout/Footer';
+import StoreLayout from '@/components/layout/StoreLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -49,30 +48,19 @@ const CompanySettings = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      
-      <main className="flex-grow container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center">
-              <Settings className="h-10 w-10 text-tech-primary mr-4" />
-              <div>
-                <h1 className="text-3xl font-bold text-tech-primary font-inter">
-                  Configurações
-                </h1>
-                <p className="text-gray-secondary font-inter">
-                  Gerencie as configurações da sua loja
-                </p>
-              </div>
-            </div>
-            <Link to="/store/company-dashboard">
-              <Button variant="outline">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Voltar ao Dashboard
-              </Button>
-            </Link>
-          </div>
+    <StoreLayout 
+      title="Configurações do Sistema" 
+      subtitle="Gerencie as configurações da sua loja"
+    >
+      <div className="max-w-4xl mx-auto">
+        <div className="flex items-center justify-between mb-8">
+          <Link to="/loja/dashboard">
+            <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Voltar ao Dashboard
+            </Button>
+          </Link>
+        </div>
           
           <Tabs defaultValue="general">
             <TabsList className="w-full mb-6">
@@ -400,10 +388,7 @@ const CompanySettings = () => {
             </TabsContent>
           </Tabs>
         </div>
-      </main>
-      
-      <Footer />
-    </div>
+    </StoreLayout>
   );
 };
 

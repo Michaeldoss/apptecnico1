@@ -78,10 +78,10 @@ const StoreLayout: React.FC<StoreLayoutProps> = ({ children, title, subtitle }) 
       active: location.pathname === '/loja/profile'
     },
     { 
-      href: '/loja/settings', 
+      href: '/loja/configuracoes', 
       icon: Settings, 
       label: 'Configurações',
-      active: location.pathname === '/loja/settings'
+      active: location.pathname === '/loja/configuracoes'
     }
   ];
 
