@@ -4,10 +4,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { loginSchema, signupSchema, createRateLimiter } from '@/lib/validation';
 import type { User, Session } from '@supabase/supabase-js';
 
-// Tipagem para tipos de usuário
 export type UserType = 'technician' | 'customer' | 'admin' | 'company' | null;
 
-// Interface do contexto
 interface AuthContextType {
   isAuthenticated: boolean;
   userType: UserType;
@@ -19,22 +17,11 @@ interface AuthContextType {
   isLoading: boolean;
 }
 
-const AuthContext = createContext<AuthContextType>({
-  isAuthenticated: false,
-  userType: null,
-  user: null,
-  session: null,
-  login: async () => false,
-  signup: async () => false,
-  logout: () => {},
-  isLoading: true,
-});
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth deve ser usado dentro de AuthProvider');
-  }
+  if (!context) throw new Error('useAuth deve ser usado dentro de AuthProvider');
   return context;
 };
 
@@ -45,294 +32,93 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Rate limiting for login attempts
-  const loginRateLimit = createRateLimiter(5, 15 * 60 * 1000); // 5 attempts per 15 minutes
-
   const login = async (email: string, password: string): Promise<boolean> => {
-    try {
-      console.log('🔐 AuthContext - Iniciando login para:', email);
-      
-      // Rate limiting check
-      if (!loginRateLimit(email)) {
-        console.log('⛔ AuthContext - Rate limit atingido para:', email);
-        toast({ 
-          variant: "destructive", 
-          title: "Muitas tentativas", 
-          description: "Aguarde 15 minutos antes de tentar novamente." 
-        });
-        return false;
-      }
+    const validationResult = loginSchema.safeParse({ email, password });
+    if (!validationResult.success) {
+      toast({ variant: "destructive", title: "Erro", description: validationResult.error.errors[0].message });
+      return false;
+    }
 
-      // Validate input using Zod schemas
-      const validationResult = loginSchema.safeParse({ email, password });
-      
-      if (!validationResult.success) {
-        const firstError = validationResult.error.errors[0];
-        console.log('❌ AuthContext - Erro de validação:', firstError.message);
-        toast({ variant: "destructive", title: "Erro de validação", description: firstError.message });
-        return false;
-      }
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
-      console.log('✅ AuthContext - Dados validados, tentando login no Supabase...');
+    if (error) {
+      toast({ variant: "destructive", title: "Falha no login", description: error.message });
+      return false;
+    }
 
-      // Log security event (sem await para não bloquear)
-      try {
-        await supabase.rpc('log_security_event', {
-          event_type: 'login_attempt',
-          details: { email: validationResult.data.email }
-        });
-      } catch (logError) {
-        console.warn('Erro ao registrar evento de segurança:', logError);
-      }
-
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: validationResult.data.email,
-        password: validationResult.data.password,
-      });
-
-      console.log('🔍 AuthContext - Resposta do Supabase:', { data: !!data?.user, error: error?.message });
-
-      if (error) {
-        console.log('❌ AuthContext - Erro no login:', error);
-        
-        let userFriendlyMessage = 'Erro ao realizar login';
-        let shouldRedirectToRegister = false;
-        
-        if (error.message.includes('Invalid login credentials')) {
-          userFriendlyMessage = 'Email ou senha incorretos';
-          shouldRedirectToRegister = true;
-          console.log('🚫 AuthContext - Credenciais inválidas, sugerindo cadastro');
-        } else if (error.message.includes('Email not confirmed')) {
-          userFriendlyMessage = 'Email não verificado. Verifique sua caixa de entrada.';
-          console.log('📧 AuthContext - Email não confirmado');
-        } else if (error.message.includes('Too many requests')) {
-          userFriendlyMessage = 'Muitas tentativas. Aguarde um momento e tente novamente.';
-          console.log('⏰ AuthContext - Muitas tentativas');
-        } else {
-          console.log('🔥 AuthContext - Erro desconhecido:', error.message);
-          userFriendlyMessage = `Erro: ${error.message}`;
-        }
-        
-        if (shouldRedirectToRegister) {
-          toast({ 
-            variant: "destructive", 
-            title: "Usuário não encontrado", 
-            description: `${userFriendlyMessage}. Que tal criar uma conta?`,
-          });
-          
-          // Mostrar toast adicional para cadastro após 3 segundos
-          setTimeout(() => {
-            toast({
-              title: "✨ Novo por aqui?",
-              description: "Crie sua conta em poucos passos!",
-              action: (
-                <button 
-                  className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition-colors"
-                  onClick={() => window.location.href = '/register'}
-                >
-                  Cadastrar agora
-                </button>
-              )
-            });
-          }, 3000);
-        } else {
-          toast({ 
-            variant: "destructive", 
-            title: "Falha no login", 
-            description: userFriendlyMessage
-          });
-        }
-        
-        // Log security event (sem await para não bloquear)
-        try {
-          await supabase.rpc('log_security_event', {
-            event_type: 'login_failed',
-            details: { email: validationResult.data.email, error: error.message }
-          });
-        } catch (logError) {
-          console.warn('Erro ao registrar evento de segurança:', logError);
-        }
-        
-        return false;
-      }
-
-      const user = data.user;
-      setUser(user);
+    if (data?.user) {
+      setUser(data.user);
       setIsAuthenticated(true);
+      setSession(data.session);
 
-      // Detectar tipo do usuário usando a tabela usuarios
-      console.log('🔍 AuthContext - Detectando tipo de usuário para:', user.id);
-      
       const { data: userData, error: userError } = await supabase
         .from('usuarios')
         .select('tipo_usuario')
-        .eq('id', user.id)
+        .eq('id', data.user.id)
         .single();
 
-      if (userError) {
-        console.error('❌ AuthContext - Erro ao buscar tipo de usuário:', userError);
-        
-        // Fallback: tentar detectar pelas tabelas individuais
-        const tipos = [
-          { tabela: 'clientes', tipo: 'customer' },
-          { tabela: 'tecnicos', tipo: 'technician' },
-          { tabela: 'lojas', tipo: 'company' },
-          { tabela: 'admins', tipo: 'admin' },
-        ];
-
-        for (const { tabela, tipo } of tipos) {
-          const { data: resultado, error } = await supabase.from(tabela as any).select('*').eq('id', user.id).maybeSingle();
-          
-          if (error) {
-            if (process.env.NODE_ENV === 'development') {
-              console.warn(`Failed to check ${tabela}:`, error);
-            }
-            continue;
-          }
-          
-          if (resultado) {
-            setUserType(tipo as UserType);
-            setUser({ ...user, ...(resultado as any) });
-            
-            await supabase.rpc('log_security_event', {
-              event_type: 'login_success',
-              details: { email: user.email, type: tipo }
-            });
-            return true;
-          }
-        }
-        
-        // Se chegou aqui, usuário não foi encontrado em nenhuma tabela
-        toast({ 
-          variant: "destructive", 
-          title: "Perfil não encontrado", 
-          description: "Conta sem perfil associado. Contate o suporte." 
-        });
-        
-        // Fazer logout por segurança
-        await supabase.auth.signOut();
-        setIsAuthenticated(false);
-        setUserType(null);
-        return false;
-      } else {
-        // Sucesso: mapeando os tipos da tabela usuarios para os tipos do frontend
-        console.log('✅ AuthContext - Tipo de usuário encontrado na tabela usuarios:', userData.tipo_usuario);
-        
+      if (userData && !userError) {
         const tipoMap: Record<string, UserType> = {
-          'cliente': 'customer',
-          'tecnico': 'technician', 
-          'company': 'company',
-          'admin': 'admin'
+          cliente: 'customer',
+          tecnico: 'technician',
+          company: 'company',
+          admin: 'admin',
         };
-        
-        const mappedType = tipoMap[userData.tipo_usuario];
-        if (mappedType) {
-          setUserType(mappedType);
-          console.log('✅ AuthContext - Tipo mapeado:', mappedType);
-          
-          // Log security event
-          await supabase.rpc('log_security_event', {
-            event_type: 'login_success',
-            details: { email: user.email, type: mappedType }
-          });
-          
-          toast({ 
-            title: "Login realizado com sucesso!", 
-            description: `Bem-vindo de volta!` 
-          });
-          
-          return true;
-        } else {
-          console.error('❌ AuthContext - Tipo de usuário desconhecido:', userData.tipo_usuario);
-          toast({ 
-            variant: "destructive", 
-            title: "Erro de perfil", 
-            description: "Tipo de usuário inválido. Contate o suporte." 
-          });
-          return false;
-        }
+        setUserType(tipoMap[userData.tipo_usuario]);
+      } else {
+        setUserType(null);
+        toast({ variant: "destructive", title: "Erro", description: "Tipo de usuário não identificado" });
       }
-    } catch (err) {
-      console.error('❌ AuthContext - Erro durante login:', err);
-      const errorMessage = err instanceof Error ? err.message : 'Erro desconhecido';
-      toast({ variant: "destructive", title: "Erro", description: errorMessage });
-      return false;
+
+      toast({ title: "Login realizado", description: "Bem-vindo de volta!" });
+      return true;
     }
+
+    return false;
   };
 
   const signup = async (email: string, password: string, userData: any): Promise<boolean> => {
-    try {
-      // Validate input using Zod schemas
-      const validationResult = signupSchema.safeParse({
-        email,
-        password,
-        confirmPassword: password, // For validation only
-        nome: userData.nome,
-        type: userData.type
-      });
+    const validationResult = signupSchema.safeParse({
+      email,
+      password,
+      confirmPassword: password,
+      nome: userData.nome,
+      type: userData.type,
+    });
 
-      if (!validationResult.success) {
-        const firstError = validationResult.error.errors[0];
-        toast({ variant: "destructive", title: "Erro", description: firstError.message });
-        return false;
-      }
-
-      // Log security event
-      await supabase.rpc('log_security_event', {
-        event_type: 'signup_attempt',
-        details: { email: validationResult.data.email, type: userData.type }
-      });
-
-      const { data, error } = await supabase.auth.signUp({
-        email: validationResult.data.email,
-        password: validationResult.data.password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/login`,
-          data: { user_type: userData.type, name: userData.nome }
-        }
-      });
-
-      if (error) {
-        toast({ variant: "destructive", title: "Erro no cadastro", description: error.message });
-        await supabase.rpc('log_security_event', {
-          event_type: 'signup_failed',
-          details: { email: validationResult.data.email, error: error.message }
-        });
-        return false;
-      }
-
-      if (data.user) {
-        const userId = data.user.id;
-        
-        // Corrigir mapeamento de tipos: 'store' -> 'company'
-        const tabela = userData.type === 'technician' ? 'tecnicos' : 
-                     (userData.type === 'company' || userData.type === 'store') ? 'lojas' : 
-                     'clientes';
-        
-        // Filtrar apenas campos relevantes para evitar erro de inserção
-        const { password: _, confirmPassword: __, acceptTerms: ___, ...cleanUserData } = userData;
-        const payload = { id: userId, ...cleanUserData };
-
-        const { error: insertError } = await supabase.from(tabela as any).insert(payload);
-        if (insertError) {
-          toast({ variant: "destructive", title: "Erro ao salvar dados", description: insertError.message });
-          return false;
-        }
-
-        await supabase.rpc('log_security_event', {
-          event_type: 'signup_success',
-          details: { email: data.user.email, type: userData.type }
-        });
-
-        toast({ title: "Conta criada com sucesso", description: "Verifique seu email para ativar a conta." });
-        return true;
-      }
-
-      return false;
-    } catch (error: any) {
-      toast({ variant: "destructive", title: "Erro inesperado", description: error.message });
+    if (!validationResult.success) {
+      toast({ variant: "destructive", title: "Erro", description: validationResult.error.errors[0].message });
       return false;
     }
+
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: `${window.location.origin}/login`,
+        data: { user_type: userData.type, name: userData.nome },
+      },
+    });
+
+    if (error || !data.user) {
+      toast({ variant: "destructive", title: "Erro no cadastro", description: error?.message || "Erro desconhecido" });
+      return false;
+    }
+
+    const userId = data.user.id;
+    const tabela = userData.type === 'technician' ? 'tecnicos' : userData.type === 'company' ? 'lojas' : 'clientes';
+
+    const { password: _, confirmPassword: __, ...cleanUserData } = userData;
+
+    const { error: insertError } = await supabase.from(tabela as any).insert({ id: userId, ...cleanUserData });
+
+    if (insertError) {
+      toast({ variant: "destructive", title: "Erro ao salvar dados", description: insertError.message });
+      return false;
+    }
+
+    toast({ title: "Conta criada com sucesso", description: "Verifique seu email para ativar a conta." });
+    return true;
   };
 
   const logout = async () => {
@@ -345,48 +131,33 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_, session) => {
       setSession(session);
       setUser(session?.user ?? null);
+      setIsAuthenticated(!!session?.user);
 
       if (session?.user) {
-        const id = session.user.id;
-        const tipos = [
-          { tabela: 'clientes', tipo: 'customer' },
-          { tabela: 'tecnicos', tipo: 'technician' },
-          { tabela: 'lojas', tipo: 'company' },
-          { tabela: 'admins', tipo: 'admin' },
-        ];
+        const { data: userData } = await supabase
+          .from('usuarios')
+          .select('tipo_usuario')
+          .eq('id', session.user.id)
+          .single();
 
-        for (const { tabela, tipo } of tipos) {
-          const { data: resultado, error } = await supabase.from(tabela as any).select('*').eq('id', id).maybeSingle();
-          
-          if (error) {
-            if (process.env.NODE_ENV === 'development') {
-              console.warn(`Failed to check ${tabela} in auth state change:`, error);
-            }
-            continue;
-          }
-          
-          if (resultado) {
-            setUserType(tipo as UserType);
-            setIsAuthenticated(true);
-            setUser({ ...session.user, ...(resultado as any) });
-            break;
-          }
+        if (userData) {
+          const tipoMap: Record<string, UserType> = {
+            cliente: 'customer',
+            tecnico: 'technician',
+            company: 'company',
+            admin: 'admin',
+          };
+          setUserType(tipoMap[userData.tipo_usuario]);
         }
-      } else {
-        setIsAuthenticated(false);
-        setUser(null);
-        setUserType(null);
       }
 
       setIsLoading(false);
     });
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    });
+    supabase.auth.getSession().then(({ data: { session } }) => setSession(session));
 
     return () => subscription.unsubscribe();
   }, []);
