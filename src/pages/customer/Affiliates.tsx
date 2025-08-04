@@ -9,6 +9,7 @@ import { AffiliateWithdrawals } from '@/components/affiliate/AffiliateWithdrawal
 import { useAuth } from '@/context/AuthContext';
 import { Loader2 } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import CustomerLayout from '@/components/layout/CustomerLayout';
 
 const CustomerAffiliates = () => {
   const { user } = useAuth();
@@ -26,99 +27,144 @@ const CustomerAffiliates = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
-      </div>
+      <CustomerLayout title="Programa de Afiliados">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <Loader2 className="h-8 w-8 animate-spin text-white" />
+        </div>
+      </CustomerLayout>
     );
   }
 
   // Se não é afiliado, mostrar tela de setup
   if (!profile) {
     return (
-      <div className="p-6">
-        <AffiliateSetup 
-          onCreateProfile={createAffiliateProfile}
-          isLoading={isLoading}
-        />
-      </div>
+      <CustomerLayout title="Configurar Programa de Afiliados">
+        <div className="bg-white/10 backdrop-blur-xl rounded-lg border border-white/20 p-6">
+          <AffiliateSetup 
+            onCreateProfile={createAffiliateProfile}
+            isLoading={isLoading}
+          />
+        </div>
+      </CustomerLayout>
     );
   }
 
   // Se é afiliado, mostrar dashboard
   return (
-    <div className="p-6">
-      <Tabs defaultValue="overview" className="space-y-6">
-        <TabsList className={`grid w-full ${isMobile ? 'grid-cols-2' : 'grid-cols-5'}`}>
-          <TabsTrigger value="overview">Visão Geral</TabsTrigger>
-          {!isMobile && <TabsTrigger value="sales">Vendas</TabsTrigger>}
-          <TabsTrigger value="links">Minha Loja</TabsTrigger>
-          {!isMobile && <TabsTrigger value="withdrawals">Saques</TabsTrigger>}
-          {isMobile && (
-            <TabsTrigger value="more">Mais</TabsTrigger>
+    <CustomerLayout title="Programa de Afiliados">
+      <div className="space-y-6">
+        <Tabs defaultValue="overview" className="space-y-6">
+          <TabsList className={`grid w-full ${isMobile ? 'grid-cols-2' : 'grid-cols-5'} bg-white/10 border-white/20`}>
+            <TabsTrigger 
+              value="overview" 
+              className="text-white data-[state=active]:bg-white data-[state=active]:text-blue-600 border-white/20"
+            >
+              Visão Geral
+            </TabsTrigger>
+            {!isMobile && (
+              <TabsTrigger 
+                value="sales" 
+                className="text-white data-[state=active]:bg-white data-[state=active]:text-blue-600 border-white/20"
+              >
+                Vendas
+              </TabsTrigger>
+            )}
+            <TabsTrigger 
+              value="links" 
+              className="text-white data-[state=active]:bg-white data-[state=active]:text-blue-600 border-white/20"
+            >
+              Minha Loja
+            </TabsTrigger>
+            {!isMobile && (
+              <TabsTrigger 
+                value="withdrawals" 
+                className="text-white data-[state=active]:bg-white data-[state=active]:text-blue-600 border-white/20"
+              >
+                Saques
+              </TabsTrigger>
+            )}
+            {isMobile && (
+              <TabsTrigger 
+                value="more" 
+                className="text-white data-[state=active]:bg-white data-[state=active]:text-blue-600 border-white/20"
+              >
+                Mais
+              </TabsTrigger>
+            )}
+          </TabsList>
+
+          <TabsContent value="overview" className="bg-white/10 backdrop-blur-xl rounded-lg border border-white/20 p-6">
+            <AffiliateOverview 
+              stats={stats!} 
+              affiliateSlug={profile.affiliate_slug}
+            />
+          </TabsContent>
+
+          {!isMobile ? (
+            <>
+              <TabsContent value="sales" className="bg-white/10 backdrop-blur-xl rounded-lg border border-white/20 p-6">
+                <AffiliateSales sales={sales} />
+              </TabsContent>
+
+              <TabsContent value="links" className="bg-white/10 backdrop-blur-xl rounded-lg border border-white/20 p-6">
+                <AffiliateLinks 
+                  affiliateSlug={profile.affiliate_slug}
+                  getAffiliateLink={getAffiliateLink}
+                />
+              </TabsContent>
+
+              <TabsContent value="withdrawals" className="bg-white/10 backdrop-blur-xl rounded-lg border border-white/20 p-6">
+                <AffiliateWithdrawals 
+                  withdrawals={withdrawals}
+                  stats={stats!}
+                  onRequestWithdrawal={requestWithdrawal}
+                />
+              </TabsContent>
+            </>
+          ) : (
+            <>
+              <TabsContent value="links" className="bg-white/10 backdrop-blur-xl rounded-lg border border-white/20 p-6">
+                <AffiliateLinks 
+                  affiliateSlug={profile.affiliate_slug}
+                  getAffiliateLink={getAffiliateLink}
+                />
+              </TabsContent>
+
+              <TabsContent value="more" className="bg-white/10 backdrop-blur-xl rounded-lg border border-white/20 p-6">
+                <Tabs defaultValue="sales" className="space-y-4">
+                  <TabsList className="grid w-full grid-cols-2 bg-white/10 border-white/20">
+                    <TabsTrigger 
+                      value="sales" 
+                      className="text-white data-[state=active]:bg-white data-[state=active]:text-blue-600"
+                    >
+                      Vendas
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="withdrawals" 
+                      className="text-white data-[state=active]:bg-white data-[state=active]:text-blue-600"
+                    >
+                      Saques
+                    </TabsTrigger>
+                  </TabsList>
+
+                  <TabsContent value="sales">
+                    <AffiliateSales sales={sales} />
+                  </TabsContent>
+
+                  <TabsContent value="withdrawals">
+                    <AffiliateWithdrawals 
+                      withdrawals={withdrawals}
+                      stats={stats!}
+                      onRequestWithdrawal={requestWithdrawal}
+                    />
+                  </TabsContent>
+                </Tabs>
+              </TabsContent>
+            </>
           )}
-        </TabsList>
-
-        <TabsContent value="overview">
-          <AffiliateOverview 
-            stats={stats!} 
-            affiliateSlug={profile.affiliate_slug}
-          />
-        </TabsContent>
-
-        {!isMobile ? (
-          <>
-            <TabsContent value="sales">
-              <AffiliateSales sales={sales} />
-            </TabsContent>
-
-            <TabsContent value="links">
-              <AffiliateLinks 
-                affiliateSlug={profile.affiliate_slug}
-                getAffiliateLink={getAffiliateLink}
-              />
-            </TabsContent>
-
-            <TabsContent value="withdrawals">
-              <AffiliateWithdrawals 
-                withdrawals={withdrawals}
-                stats={stats!}
-                onRequestWithdrawal={requestWithdrawal}
-              />
-            </TabsContent>
-          </>
-        ) : (
-          <>
-            <TabsContent value="links">
-              <AffiliateLinks 
-                affiliateSlug={profile.affiliate_slug}
-                getAffiliateLink={getAffiliateLink}
-              />
-            </TabsContent>
-
-            <TabsContent value="more">
-              <Tabs defaultValue="sales" className="space-y-4">
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="sales">Vendas</TabsTrigger>
-                  <TabsTrigger value="withdrawals">Saques</TabsTrigger>
-                </TabsList>
-
-                <TabsContent value="sales">
-                  <AffiliateSales sales={sales} />
-                </TabsContent>
-
-                <TabsContent value="withdrawals">
-                  <AffiliateWithdrawals 
-                    withdrawals={withdrawals}
-                    stats={stats!}
-                    onRequestWithdrawal={requestWithdrawal}
-                  />
-                </TabsContent>
-              </Tabs>
-            </TabsContent>
-          </>
-        )}
-      </Tabs>
-    </div>
+        </Tabs>
+      </div>
+    </CustomerLayout>
   );
 };
 
