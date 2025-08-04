@@ -154,57 +154,68 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-background via-background/95 to-muted/30">
       <Navbar />
       
-      <main className="flex-grow flex items-center justify-center px-6 py-10 relative overflow-hidden">
+      <main className="flex-grow flex items-center justify-center px-6 py-10 pt-32 relative overflow-hidden">
         {/* Elementos decorativos de fundo */}
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-transparent to-purple-600/20"></div>
-        <div className="absolute top-20 left-20 w-72 h-72 bg-white/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-yellow-300/10 rounded-full blur-3xl"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-accent/10"></div>
+        <div className="absolute top-20 left-20 w-72 h-72 bg-primary/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-accent/10 rounded-full blur-3xl"></div>
         
         <div className="w-full max-w-4xl relative z-10">
           <AnimatedContainer animation="scale" className="text-center mb-8">
-            <h1 className="text-4xl md:text-5xl font-black text-white mb-4 animate-fade-in drop-shadow-2xl">Criar uma Conta</h1>
-            <p className="text-gray-100 mt-2 text-lg font-bold drop-shadow-lg">
-              {accountType === 'technician' 
-                ? 'Cadastre-se como técnico especializado para oferecer seus serviços' 
-                : accountType === 'store'
-                ? 'Cadastre-se como lojista para vender produtos e peças para equipamentos'
-                : 'Cadastre-se para encontrar técnicos especializados para seus equipamentos'}
+            <h1 className="text-4xl md:text-5xl font-black text-foreground mb-4 animate-fade-in">Criar Conta</h1>
+            <p className="text-muted-foreground mt-2 text-lg">
+              Preencha seus dados para começar a usar nossa plataforma
             </p>
           </AnimatedContainer>
           
-          <BlurContainer className="p-8 bg-white/95 backdrop-blur-xl border-2 border-white/30 shadow-3xl rounded-3xl">
+          <BlurContainer className="p-8 bg-card/95 backdrop-blur-xl border border-border shadow-2xl rounded-3xl">
             <Tabs defaultValue="client" className="mb-6" onValueChange={setAccountType}>
-              <TabsList className="grid w-full grid-cols-3 bg-blue-100/20 border-2 border-blue-200/30 rounded-xl">
-                <TabsTrigger value="client" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-500 data-[state=active]:to-yellow-600 data-[state=active]:text-gray-900 data-[state=active]:font-bold rounded-lg transition-all">Conta de Cliente</TabsTrigger>
-                <TabsTrigger value="technician" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-500 data-[state=active]:to-yellow-600 data-[state=active]:text-gray-900 data-[state=active]:font-bold rounded-lg transition-all">Conta de Técnico</TabsTrigger>
-                <TabsTrigger value="store" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-500 data-[state=active]:to-yellow-600 data-[state=active]:text-gray-900 data-[state=active]:font-bold rounded-lg transition-all">Conta de Lojista</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-3 bg-muted/50 border border-border rounded-xl p-1">
+                <TabsTrigger 
+                  value="client" 
+                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-lg transition-all duration-300 font-medium"
+                >
+                  Cliente
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="technician" 
+                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-lg transition-all duration-300 font-medium"
+                >
+                  Técnico
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="store" 
+                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-lg transition-all duration-300 font-medium"
+                >
+                  Lojista
+                </TabsTrigger>
               </TabsList>
               
               <TabsContent value="client" className="mt-6">
-                <div className="p-4 bg-blue-50/80 backdrop-blur-sm rounded-lg border border-blue-200/50 shadow-sm">
-                  <p className="text-sm text-gray-800 mb-2 flex items-center gap-2">
-                    <Wrench className="h-4 w-4 text-blue-600" />
+                <div className="p-4 bg-primary/5 backdrop-blur-sm rounded-lg border border-primary/20 shadow-sm">
+                  <p className="text-sm text-foreground mb-2 flex items-center gap-2">
+                    <Wrench className="h-4 w-4 text-primary" />
                     <span className="font-medium">Crie uma conta de cliente para encontrar técnicos especializados para seus equipamentos.</span>
                   </p>
                 </div>
               </TabsContent>
               
               <TabsContent value="technician" className="mt-6">
-                <div className="p-4 bg-blue-50/80 backdrop-blur-sm rounded-lg border border-blue-200/50 shadow-sm">
-                  <p className="text-sm text-gray-800 mb-2 flex items-center gap-2">
-                    <Wrench className="h-4 w-4 text-blue-600" />
+                <div className="p-4 bg-primary/5 backdrop-blur-sm rounded-lg border border-primary/20 shadow-sm">
+                  <p className="text-sm text-foreground mb-2 flex items-center gap-2">
+                    <Wrench className="h-4 w-4 text-primary" />
                     <span className="font-medium">Crie uma conta de técnico para oferecer seus serviços para máquinas industriais.</span>
                   </p>
                 </div>
               </TabsContent>
               
               <TabsContent value="store" className="mt-6">
-                <div className="p-4 bg-blue-50/80 backdrop-blur-sm rounded-lg border border-blue-200/50 shadow-sm">
-                  <p className="text-sm text-gray-800 mb-2 flex items-center gap-2">
-                    <Store className="h-4 w-4 text-blue-600" />
+                <div className="p-4 bg-primary/5 backdrop-blur-sm rounded-lg border border-primary/20 shadow-sm">
+                  <p className="text-sm text-foreground mb-2 flex items-center gap-2">
+                    <Store className="h-4 w-4 text-primary" />
                     <span className="font-medium">Crie uma conta de lojista para vender peças, insumos e equipamentos para o mercado gráfico.</span>
                   </p>
                 </div>
