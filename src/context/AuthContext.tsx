@@ -234,30 +234,32 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setIsAuthenticated(!!session?.user);
 
       if (session?.user) {
-        try {
-          const { data: userData, error } = await supabase
-            .from('usuarios')
-            .select('tipo_usuario')
-            .eq('id', session.user.id)
-            .single();
+        // Defer database call to prevent blocking auth state
+        setTimeout(async () => {
+          try {
+            const { data: userData, error } = await supabase
+              .from('usuarios')
+              .select('tipo_usuario')
+              .eq('id', session.user.id)
+              .maybeSingle();
 
-          if (error || !userData) {
-            console.error('Erro ao buscar tipo de usuário:', error);
-            // Se não encontrar o usuário na tabela usuarios, fazer fallback
+            if (error || !userData) {
+              console.error('Erro ao buscar tipo de usuário:', error);
+              setUserType(null);
+            } else {
+              const tipoMap: Record<string, UserType> = {
+                cliente: 'customer',
+                tecnico: 'technician',
+                company: 'company',
+                admin: 'admin',
+              };
+              setUserType(tipoMap[userData.tipo_usuario] || null);
+            }
+          } catch (error) {
+            console.error('Erro ao buscar dados do usuário:', error);
             setUserType(null);
-          } else {
-            const tipoMap: Record<string, UserType> = {
-              cliente: 'customer',
-              tecnico: 'technician',
-              company: 'company',
-              admin: 'admin',
-            };
-            setUserType(tipoMap[userData.tipo_usuario] || null);
           }
-        } catch (error) {
-          console.error('Erro ao buscar dados do usuário:', error);
-          setUserType(null);
-        }
+        }, 0);
       } else {
         setUserType(null);
       }
