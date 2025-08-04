@@ -25,10 +25,16 @@ const Navbar = () => {
     setIsMenuOpen(false);
   };
   const handleLogout = async () => {
-    if (confirm('Tem certeza que deseja sair?')) {
+    console.log('Tentando fazer logout...');
+    try {
       await logout();
-      navigate("/");
+      console.log('Logout realizado, redirecionando...');
       setIsMenuOpen(false);
+      navigate("/", { replace: true });
+      // Force refresh to ensure clean state
+      window.location.href = "/";
+    } catch (error) {
+      console.error('Erro no logout:', error);
     }
   };
   const getDashboardLink = () => {
@@ -94,7 +100,12 @@ const Navbar = () => {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout} className="font-inter font-medium text-red-600">Sair</DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout} className="font-inter font-medium text-red-600">
+                  Sair
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => { localStorage.clear(); window.location.href = "/"; }} className="font-inter font-medium text-red-800">
+                  Force Logout (Debug)
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu> : <>
               <Button variant="outline" size="sm" onClick={handleLoginClick} className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 font-inter font-semibold transition-all duration-200 border-0 shadow-lg hover:shadow-xl hover:scale-105">

@@ -122,26 +122,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const logout = async () => {
+    console.log('Iniciando logout...');
     try {
-      const { error } = await supabase.auth.signOut();
-      if (error) {
-        console.error('Erro no logout:', error);
-        toast({ 
-          title: "Erro no logout", 
-          description: "Tente novamente.", 
-          variant: "destructive" 
-        });
-        return;
-      }
-      
-      // Limpar estados locais
+      // Primeiro limpar estados locais
       setUser(null);
       setSession(null);
       setUserType(null);
       setIsAuthenticated(false);
       
-      // Limpar localStorage como fallback
-      localStorage.removeItem('supabase.auth.token');
+      // Depois fazer o signOut do Supabase
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error('Erro no signOut do Supabase:', error);
+      }
+      
+      // Limpar qualquer cache local
+      localStorage.clear();
+      sessionStorage.clear();
+      
+      console.log('Logout concluído com sucesso');
       
       toast({ 
         title: "Logout realizado", 
@@ -149,36 +148,63 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       });
     } catch (error) {
       console.error('Erro no logout:', error);
+      // Mesmo com erro, limpar os estados
+      setUser(null);
+      setSession(null);
+      setUserType(null);
+      setIsAuthenticated(false);
+      
       toast({ 
-        title: "Erro no logout", 
-        description: "Tente novamente.", 
-        variant: "destructive" 
+        title: "Logout realizado", 
+        description: "Sessão encerrada." 
       });
     }
   };
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log('Auth state change:', event, session?.user?.email);
+      
+      if (event === 'SIGNED_OUT') {
+        setSession(null);
+        setUser(null);
+        setUserType(null);
+        setIsAuthenticated(false);
+        setIsLoading(false);
+        return;
+      }
+
       setSession(session);
       setUser(session?.user ?? null);
       setIsAuthenticated(!!session?.user);
 
       if (session?.user) {
-        const { data: userData } = await supabase
-          .from('usuarios')
-          .select('tipo_usuario')
-          .eq('id', session.user.id)
-          .single();
+        try {
+          const { data: userData, error } = await supabase
+            .from('usuarios')
+            .select('tipo_usuario')
+            .eq('id', session.user.id)
+            .single();
 
-        if (userData) {
-          const tipoMap: Record<string, UserType> = {
-            cliente: 'customer',
-            tecnico: 'technician',
-            company: 'company',
-            admin: 'admin',
-          };
-          setUserType(tipoMap[userData.tipo_usuario]);
+          if (error || !userData) {
+            console.error('Erro ao buscar tipo de usuário:', error);
+            // Se não encontrar o usuário na tabela usuarios, fazer fallback
+            setUserType(null);
+          } else {
+            const tipoMap: Record<string, UserType> = {
+              cliente: 'customer',
+              tecnico: 'technician',
+              company: 'company',
+              admin: 'admin',
+            };
+            setUserType(tipoMap[userData.tipo_usuario] || null);
+          }
+        } catch (error) {
+          console.error('Erro ao buscar dados do usuário:', error);
+          setUserType(null);
         }
+      } else {
+        setUserType(null);
       }
 
       setIsLoading(false);
