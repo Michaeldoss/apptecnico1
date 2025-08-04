@@ -52,19 +52,48 @@ const CompanyAffiliates = () => {
   // Se é afiliado, mostrar dashboard
   return (
     <StoreLayout title="Programa de Afiliados" subtitle="Gerencie seus afiliados e comissões">
-      <div className="bg-white/10 backdrop-blur-xl rounded-lg border border-white/20 p-6">
+      <div className="space-y-6">
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className={`grid w-full ${isMobile ? 'grid-cols-2' : 'grid-cols-5'} bg-white/10`}>
-            <TabsTrigger value="overview" className="text-white data-[state=active]:bg-white data-[state=active]:text-blue-600">Visão Geral</TabsTrigger>
-            {!isMobile && <TabsTrigger value="sales" className="text-white data-[state=active]:bg-white data-[state=active]:text-blue-600">Vendas</TabsTrigger>}
-            <TabsTrigger value="links" className="text-white data-[state=active]:bg-white data-[state=active]:text-blue-600">Minha Loja</TabsTrigger>
-            {!isMobile && <TabsTrigger value="withdrawals" className="text-white data-[state=active]:bg-white data-[state=active]:text-blue-600">Saques</TabsTrigger>}
+          <TabsList className={`grid w-full ${isMobile ? 'grid-cols-2' : 'grid-cols-5'} bg-white/10 border-white/20`}>
+            <TabsTrigger 
+              value="overview" 
+              className="text-white data-[state=active]:bg-white data-[state=active]:text-blue-600 border-white/20"
+            >
+              Dashboard
+            </TabsTrigger>
+            {!isMobile && (
+              <TabsTrigger 
+                value="sales" 
+                className="text-white data-[state=active]:bg-white data-[state=active]:text-blue-600 border-white/20"
+              >
+                Vendas
+              </TabsTrigger>
+            )}
+            <TabsTrigger 
+              value="links" 
+              className="text-white data-[state=active]:bg-white data-[state=active]:text-blue-600 border-white/20"
+            >
+              Materiais
+            </TabsTrigger>
+            {!isMobile && (
+              <TabsTrigger 
+                value="withdrawals" 
+                className="text-white data-[state=active]:bg-white data-[state=active]:text-blue-600 border-white/20"
+              >
+                Financeiro
+              </TabsTrigger>
+            )}
             {isMobile && (
-              <TabsTrigger value="more" className="text-white data-[state=active]:bg-white data-[state=active]:text-blue-600">Mais</TabsTrigger>
+              <TabsTrigger 
+                value="more" 
+                className="text-white data-[state=active]:bg-white data-[state=active]:text-blue-600 border-white/20"
+              >
+                Mais
+              </TabsTrigger>
             )}
           </TabsList>
 
-          <TabsContent value="overview">
+          <TabsContent value="overview" className="bg-white/10 backdrop-blur-xl rounded-lg border border-white/20 p-6">
             <AffiliateOverview 
               stats={stats!} 
               affiliateSlug={profile.affiliate_slug}
@@ -73,18 +102,18 @@ const CompanyAffiliates = () => {
 
           {!isMobile ? (
             <>
-              <TabsContent value="sales">
+              <TabsContent value="sales" className="bg-white/10 backdrop-blur-xl rounded-lg border border-white/20 p-6">
                 <AffiliateSales sales={sales} />
               </TabsContent>
 
-              <TabsContent value="links">
+              <TabsContent value="links" className="bg-white/10 backdrop-blur-xl rounded-lg border border-white/20 p-6">
                 <AffiliateLinks 
                   affiliateSlug={profile.affiliate_slug}
                   getAffiliateLink={getAffiliateLink}
                 />
               </TabsContent>
 
-              <TabsContent value="withdrawals">
+              <TabsContent value="withdrawals" className="bg-white/10 backdrop-blur-xl rounded-lg border border-white/20 p-6">
                 <AffiliateWithdrawals 
                   withdrawals={withdrawals}
                   stats={stats!}
@@ -94,18 +123,28 @@ const CompanyAffiliates = () => {
             </>
           ) : (
             <>
-              <TabsContent value="links">
+              <TabsContent value="links" className="bg-white/10 backdrop-blur-xl rounded-lg border border-white/20 p-6">
                 <AffiliateLinks 
                   affiliateSlug={profile.affiliate_slug}
                   getAffiliateLink={getAffiliateLink}
                 />
               </TabsContent>
 
-              <TabsContent value="more">
+              <TabsContent value="more" className="bg-white/10 backdrop-blur-xl rounded-lg border border-white/20 p-6">
                 <Tabs defaultValue="sales" className="space-y-4">
-                  <TabsList className="grid w-full grid-cols-2 bg-white/10">
-                    <TabsTrigger value="sales" className="text-white data-[state=active]:bg-white data-[state=active]:text-blue-600">Vendas</TabsTrigger>
-                    <TabsTrigger value="withdrawals" className="text-white data-[state=active]:bg-white data-[state=active]:text-blue-600">Saques</TabsTrigger>
+                  <TabsList className="grid w-full grid-cols-2 bg-white/10 border-white/20">
+                    <TabsTrigger 
+                      value="sales" 
+                      className="text-white data-[state=active]:bg-white data-[state=active]:text-blue-600"
+                    >
+                      Vendas
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="withdrawals" 
+                      className="text-white data-[state=active]:bg-white data-[state=active]:text-blue-600"
+                    >
+                      Financeiro
+                    </TabsTrigger>
                   </TabsList>
 
                   <TabsContent value="sales">
