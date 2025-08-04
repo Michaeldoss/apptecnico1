@@ -20,7 +20,7 @@ import AnimatedContainer from '@/components/ui/AnimatedContainer';
 import BlurContainer from '@/components/ui/BlurContainer';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import { Printer, Scissors, Wrench, Upload, FileText, Clock, MapPin, CreditCard, Briefcase, Key as KeyIcon, Store, CheckCircle, Mail } from 'lucide-react';
+import { Printer, Scissors, Wrench, Upload, FileText, Clock, MapPin, CreditCard, Briefcase, Key as KeyIcon, Store, CheckCircle, Mail, User } from 'lucide-react';
 import GoogleAuthProvider from '@/components/auth/GoogleAuthProvider';
 import GoogleLoginButton from '@/components/auth/GoogleLoginButton';
 import { useAuth } from '@/context/AuthContext';
@@ -239,135 +239,146 @@ const Register = () => {
         <div className="w-full max-w-4xl relative z-10">
           
           <BlurContainer className="p-8 bg-card/95 backdrop-blur-xl border border-border shadow-2xl rounded-3xl">
-            <Tabs defaultValue="client" className="mb-6" onValueChange={setAccountType}>
+            <Tabs defaultValue="client" className="mb-8" onValueChange={setAccountType}>
               <TabsList className="grid w-full grid-cols-3 bg-muted/50 border border-border rounded-xl p-1">
                 <TabsTrigger 
                   value="client" 
-                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-lg transition-all duration-300 font-medium"
+                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-blue-700 data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all duration-300 font-medium flex items-center gap-2"
                 >
+                  <User className="h-4 w-4" />
                   Cliente
                 </TabsTrigger>
                 <TabsTrigger 
                   value="technician" 
-                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-lg transition-all duration-300 font-medium"
+                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-500 data-[state=active]:to-yellow-600 data-[state=active]:text-gray-900 data-[state=active]:shadow-md rounded-lg transition-all duration-300 font-medium flex items-center gap-2"
                 >
+                  <Wrench className="h-4 w-4" />
                   Técnico
                 </TabsTrigger>
                 <TabsTrigger 
                   value="store" 
-                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md rounded-lg transition-all duration-300 font-medium"
+                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-purple-700 data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all duration-300 font-medium flex items-center gap-2"
                 >
+                  <Store className="h-4 w-4" />
                   Lojista
                 </TabsTrigger>
               </TabsList>
               
-              <TabsContent value="client" className="mt-6">
-                <div className="p-4 bg-primary/5 backdrop-blur-sm rounded-lg border border-primary/20 shadow-sm">
-                  <p className="text-sm text-foreground mb-2 flex items-center gap-2">
-                    <Wrench className="h-4 w-4 text-primary" />
-                    <span className="font-medium">Crie uma conta de cliente para encontrar técnicos especializados para seus equipamentos.</span>
+              <TabsContent value="client" className="mt-8">
+                <div className="p-6 bg-gradient-to-r from-blue-50 to-blue-100 backdrop-blur-sm rounded-2xl border border-blue-200 shadow-lg">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+                      <User className="h-5 w-5 text-white" />
+                    </div>
+                    <h3 className="text-lg font-bold text-blue-900">Conta de Cliente</h3>
+                  </div>
+                  <p className="text-blue-800 font-medium">
+                    Encontre técnicos especializados para manutenção e reparo dos seus equipamentos industriais.
                   </p>
                 </div>
               </TabsContent>
               
-              <TabsContent value="technician" className="mt-6">
-                <div className="p-4 bg-primary/5 backdrop-blur-sm rounded-lg border border-primary/20 shadow-sm">
-                  <p className="text-sm text-foreground mb-2 flex items-center gap-2">
-                    <Wrench className="h-4 w-4 text-primary" />
-                    <span className="font-medium">Crie uma conta de técnico para oferecer seus serviços para máquinas industriais.</span>
+              <TabsContent value="technician" className="mt-8">
+                <div className="p-6 bg-gradient-to-r from-yellow-50 to-yellow-100 backdrop-blur-sm rounded-2xl border border-yellow-200 shadow-lg">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 bg-yellow-600 rounded-full flex items-center justify-center">
+                      <Wrench className="h-5 w-5 text-white" />
+                    </div>
+                    <h3 className="text-lg font-bold text-yellow-900">Conta de Técnico</h3>
+                  </div>
+                  <p className="text-yellow-800 font-medium">
+                    Ofereça seus serviços especializados para máquinas industriais e equipamentos gráficos.
                   </p>
                 </div>
               </TabsContent>
               
-              <TabsContent value="store" className="mt-6">
-                <div className="p-4 bg-primary/5 backdrop-blur-sm rounded-lg border border-primary/20 shadow-sm">
-                  <p className="text-sm text-foreground mb-2 flex items-center gap-2">
-                    <Store className="h-4 w-4 text-primary" />
-                    <span className="font-medium">Crie uma conta de lojista para vender peças, insumos e equipamentos para o mercado gráfico.</span>
+              <TabsContent value="store" className="mt-8">
+                <div className="p-6 bg-gradient-to-r from-purple-50 to-purple-100 backdrop-blur-sm rounded-2xl border border-purple-200 shadow-lg">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center">
+                      <Store className="h-5 w-5 text-white" />
+                    </div>
+                    <h3 className="text-lg font-bold text-purple-900">Conta de Lojista</h3>
+                  </div>
+                  <p className="text-purple-800 font-medium">
+                    Venda peças, insumos e equipamentos para o mercado gráfico e industrial.
                   </p>
                 </div>
               </TabsContent>
             </Tabs>
             
             <form onSubmit={handleRegister} className="space-y-8">
-              <div className="space-y-6 mb-8">
-                <div className="flex items-center gap-3 pb-2 border-b border-gray-200">
-                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <FileText className="h-5 w-5 text-blue-600" />
+              {/* Seção de Informações Pessoais */}
+              <div className="space-y-6">
+                <div className="flex items-center gap-4 pb-4 border-b-2 border-gradient-to-r from-blue-200 to-purple-200">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
+                    <User className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-800">Informações Pessoais</h3>
+                  <div>
+                    <h3 className="text-2xl font-bold text-gray-800">Informações Pessoais</h3>
+                    <p className="text-gray-600">Preencha seus dados básicos</p>
+                  </div>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                    <div className="space-y-2">
-                     <Label htmlFor="first-name">Nome</Label>
+                     <Label htmlFor="first-name" className="text-sm font-semibold text-gray-700">Nome *</Label>
                      <Input 
                        id="first-name"
                        name="first-name"
                        placeholder="João" 
                        required 
-                       className="rounded-lg"
+                       className="rounded-xl border-2 border-gray-200 focus:border-blue-500 transition-colors h-12"
                      />
                    </div>
                   
                    <div className="space-y-2">
-                     <Label htmlFor="last-name">Sobrenome</Label>
+                     <Label htmlFor="last-name" className="text-sm font-semibold text-gray-700">Sobrenome *</Label>
                      <Input 
                        id="last-name"
                        name="last-name"
                        placeholder="Silva" 
                        required 
-                       className="rounded-lg"
+                       className="rounded-xl border-2 border-gray-200 focus:border-blue-500 transition-colors h-12"
                      />
                    </div>
                   
                    <div className="space-y-2">
-                     <Label htmlFor="phone">Telefone</Label>
+                     <Label htmlFor="phone" className="text-sm font-semibold text-gray-700">Telefone *</Label>
                      <Input 
                        id="phone"
                        name="phone"
                        type="tel" 
                        placeholder="(11) 98765-4321" 
                        required 
-                       className="rounded-lg"
+                       className="rounded-xl border-2 border-gray-200 focus:border-blue-500 transition-colors h-12"
                      />
                    </div>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                    <div className="space-y-2">
-                     <Label htmlFor="email">Email</Label>
+                     <Label htmlFor="email" className="text-sm font-semibold text-gray-700">Email *</Label>
                      <Input 
                        id="email"
                        name="email"
                        type="email" 
                        placeholder="nome@exemplo.com" 
                        required 
-                       className="rounded-lg"
+                       className="rounded-xl border-2 border-gray-200 focus:border-blue-500 transition-colors h-12"
                      />
                    </div>
                   
                    <div className="space-y-2">
-                     <Label htmlFor="document">CPF</Label>
+                     <Label htmlFor="document" className="text-sm font-semibold text-gray-700">CPF *</Label>
                      <Input 
                        id="document"
                        name="document"
                        placeholder="000.000.000-00" 
                        required 
-                       className="rounded-lg"
+                       className="rounded-xl border-2 border-gray-200 focus:border-blue-500 transition-colors h-12"
                      />
                    </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="profile-picture">Foto de Perfil</Label>
-                  <Input 
-                    id="profile-picture"
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => handleFileChange('profile', e)}
-                    className="rounded-lg"
-                  />
                 </div>
               </div>
               

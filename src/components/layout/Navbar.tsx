@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { Menu, X, ChevronDown, User, LogIn, UserPlus, Wrench, Store } from "lucide-react";
+import { Menu, X, ChevronDown, User, LogIn, LogOut, UserPlus, Wrench, Store } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -92,19 +92,15 @@ const Navbar = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" side="bottom" className="bg-white border-gray-200 shadow-xl mr-4">
                 <DropdownMenuItem asChild>
-                  <Link to={userType === "customer" ? "/cliente/perfil" : userType === "technician" ? "/tecnico/perfil" : "/store/profile"} className="font-inter font-medium text-gray-800">
+                  <Link to={userType === "customer" ? "/cliente/perfil" : userType === "technician" ? "/tecnico/perfil" : "/store/profile"} className="font-inter font-medium text-gray-800 flex items-center gap-2">
+                    <User className="h-4 w-4" />
                     Perfil
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout} className="font-inter font-medium text-red-600">
+                <DropdownMenuItem onClick={handleLogout} className="font-inter font-medium text-red-600 flex items-center gap-2">
+                  <LogOut className="h-4 w-4" />
                   Sair
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => { localStorage.clear(); window.location.href = "/"; }} className="font-inter font-medium text-red-800">
-                  Force Logout (Debug)
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleForceReset} className="font-inter font-medium text-purple-600">
-                  Reset Sistema (Debug)
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu> : <>
