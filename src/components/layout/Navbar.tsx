@@ -60,12 +60,16 @@ const Navbar = () => {
     path: "/contact"
   }];
 
-  // Classes dinâmicas baseadas na página - sempre usar estilo da página inicial
-  const navbarClasses = "bg-transparent absolute w-full top-0 z-50 pt-4";
-  const textClasses = "text-white";
-  const logoClasses = "text-white";
-  const hoverClasses = "hover:text-blue-200";
-  const buttonClasses = "text-white hover:text-blue-200 hover:bg-white/10";
+  // Classes dinâmicas baseadas na página
+  const navbarClasses = isHomePage 
+    ? "bg-transparent absolute w-full top-0 z-50 pt-4" 
+    : "bg-white w-full top-0 z-50 shadow-md";
+  const textClasses = isHomePage ? "text-white" : "text-gray-800";
+  const logoClasses = isHomePage ? "text-white" : "text-gray-900";
+  const hoverClasses = isHomePage ? "hover:text-blue-200" : "hover:text-blue-600";
+  const buttonClasses = isHomePage 
+    ? "text-white hover:text-blue-200 hover:bg-white/10" 
+    : "text-gray-800 hover:text-blue-600 hover:bg-gray-100";
   return <nav className={navbarClasses}>
       <div className="container flex items-center justify-between h-16 px-4 md:px-6 mx-auto">
         {/* Logo */}
@@ -151,8 +155,8 @@ const Navbar = () => {
 
         {/* Mobile Menu Toggle */}
         <div className="md:hidden">
-          <Button variant="ghost" size="icon" onClick={toggleMenu} aria-label="Toggle Menu" className="text-white hover:text-blue-200 hover:bg-white/10 drop-shadow-lg">
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          <Button variant="ghost" size="icon" onClick={toggleMenu} aria-label="Toggle Menu" className={`${buttonClasses} drop-shadow-lg`}>
+            {isMenuOpen ? <X className={`h-6 w-6 ${textClasses}`} /> : <Menu className={`h-6 w-6 ${textClasses}`} />}
           </Button>
         </div>
 
