@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -20,11 +20,21 @@ import AnimatedContainer from '@/components/ui/AnimatedContainer';
 import BlurContainer from '@/components/ui/BlurContainer';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import { Printer, Scissors, Wrench, Upload, FileText, Clock, MapPin, CreditCard, Briefcase, Key as KeyIcon, Store } from 'lucide-react';
+import { Printer, Scissors, Wrench, Upload, FileText, Clock, MapPin, CreditCard, Briefcase, Key as KeyIcon, Store, CheckCircle, Mail } from 'lucide-react';
 import GoogleAuthProvider from '@/components/auth/GoogleAuthProvider';
 import GoogleLoginButton from '@/components/auth/GoogleLoginButton';
 import { useAuth } from '@/context/AuthContext';
 import { toast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import { 
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 
 const equipmentTypes = [
   { id: 'eco-solvent', label: 'Plotter eco solvente' },
@@ -58,6 +68,7 @@ const serviceTypes = [
 
 const Register = () => {
   const { signup } = useAuth();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [accountType, setAccountType] = useState('client');
   const [selectedEquipment, setSelectedEquipment] = useState<string[]>([]);
@@ -70,6 +81,28 @@ const Register = () => {
   });
   const [profilePicture, setProfilePicture] = useState(null);
   const [productCategories, setProductCategories] = useState<string[]>([]);
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
+
+  const sendConfirmationEmail = async (email: string, name: string, userType: string) => {
+    try {
+      const { data, error } = await supabase.functions.invoke('send-confirmation-email', {
+        body: {
+          email,
+          name,
+          userType
+        }
+      });
+
+      if (error) {
+        console.error('Erro ao enviar email de confirmação:', error);
+      } else {
+        console.log('Email de confirmação enviado com sucesso');
+      }
+    } catch (error) {
+      console.error('Erro ao enviar email de confirmação:', error);
+    }
+  };
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -83,9 +116,10 @@ const Register = () => {
       const lastName = formData.get('last-name') as string;
       const phone = formData.get('phone') as string;
       const document = formData.get('document') as string;
+      const fullName = `${firstName} ${lastName}`;
       
       const userData = {
-        nome: `${firstName} ${lastName}`,
+        nome: fullName,
         email,
         telefone: phone,
         cpf_cnpj: document,
@@ -97,10 +131,14 @@ const Register = () => {
       const success = await signup(email, password, userData);
       
       if (success) {
-        toast({ 
-          title: "Cadastro realizado com sucesso!", 
-          description: "Verifique seu email para confirmar a conta." 
-        });
+        // Enviar email de confirmação
+        await sendConfirmationEmail(email, fullName, accountType);
+        
+        // Guardar email para exibir no dialog
+        setUserEmail(email);
+        
+        // Mostrar dialog de sucesso
+        setShowSuccessDialog(true);
       } else {
         toast({ 
           variant: "destructive", 
@@ -111,9 +149,19 @@ const Register = () => {
       
     } catch (error) {
       console.error('Erro no cadastro:', error);
+      toast({ 
+        variant: "destructive", 
+        title: "Erro no cadastro", 
+        description: "Ocorreu um erro inesperado. Tente novamente." 
+      });
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleSuccessConfirm = () => {
+    setShowSuccessDialog(false);
+    navigate('/login');
   };
 
   const handleEquipmentChange = (equipmentId: string) => {
@@ -908,6 +956,45 @@ const Register = () => {
           </p>
         </div>
       </main>
+      
+      {/* Dialog de Sucesso */}
+      <AlertDialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
+        <AlertDialogContent className="max-w-md">
+          <AlertDialogHeader className="text-center">
+            <div className="flex justify-center mb-4">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                <CheckCircle className="w-8 h-8 text-green-600" />
+              </div>
+            </div>
+            <AlertDialogTitle className="text-2xl font-bold text-green-600">
+              Cadastro Realizado!
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-center space-y-3 mt-4">
+              <div className="flex items-center justify-center gap-2 text-lg font-medium text-gray-700">
+                <Mail className="w-5 h-5 text-blue-600" />
+                Conta criada com sucesso!
+              </div>
+              <p className="text-gray-600">
+                Enviamos um email de confirmação para:
+              </p>
+              <p className="font-semibold text-blue-600 bg-blue-50 px-3 py-2 rounded-lg">
+                {userEmail}
+              </p>
+              <p className="text-sm text-gray-500">
+                Verifique sua caixa de entrada e spam.
+              </p>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction 
+              onClick={handleSuccessConfirm}
+              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+            >
+              Ir para Login
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       
       <Footer />
     </div>
