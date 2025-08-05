@@ -27,17 +27,17 @@ const CompanyValues = () => {
     icon: <Zap className="h-8 w-8" />
   }];
   return (
-    <section className="py-16 bg-muted/30">
-      <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center mb-12">Nossos Valores</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <section className="section-padding bg-muted/30">
+      <div className="container-instalei">
+        <h2 className="text-3xl font-bold text-center mb-instalei-lg text-primary">Nossos Valores na Instalei</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-instalei-lg">
           {values.map((value, index) => (
-            <div key={index} className="bg-card p-6 rounded-lg border hover:shadow-lg transition-shadow">
-              <div className="flex items-center mb-4">
-                <div className="text-primary mr-3">
+            <div key={index} className="card-instalei hover:shadow-lg transition-shadow">
+              <div className="flex items-center mb-instalei-sm">
+                <div className="icon-accent mr-3">
                   {value.icon}
                 </div>
-                <h3 className="text-xl font-semibold">{value.title}</h3>
+                <h3 className="text-xl font-semibold text-primary">{value.title}</h3>
               </div>
               <p className="text-muted-foreground">{value.description}</p>
             </div>
