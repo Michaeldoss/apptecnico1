@@ -32,8 +32,22 @@ const UnifiedLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   
-  const { login } = useAuth();
+  const { login, userType } = useAuth();
   const navigate = useNavigate();
+
+  // Redirecionamento automático baseado no tipo de usuário
+  const redirectToUserDashboard = (userType: string | null) => {
+    const redirectPaths = {
+      customer: '/cliente/dashboard',
+      technician: '/tecnico/dashboard', 
+      company: '/loja/dashboard',
+      admin: '/admin/dashboard'
+    };
+    
+    if (userType && redirectPaths[userType as keyof typeof redirectPaths]) {
+      navigate(redirectPaths[userType as keyof typeof redirectPaths], { replace: true });
+    }
+  };
 
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -54,7 +68,18 @@ const UnifiedLogin = () => {
           title: "Login realizado com sucesso!",
           description: "Redirecionando para o dashboard...",
         });
-        // O AuthContext já redireciona automaticamente baseado no tipo de usuário
+        
+        // Redirecionar imediatamente
+        setTimeout(() => {
+          // Buscar o userType mais recente do contexto
+          const currentUserType = userType;
+          if (currentUserType) {
+            redirectToUserDashboard(currentUserType);
+          } else {
+            // Se ainda não tiver o userType, aguardar mais um pouco
+            setTimeout(() => redirectToUserDashboard(userType), 500);
+          }
+        }, 200);
       }
       
     } catch (error) {

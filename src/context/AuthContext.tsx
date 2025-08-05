@@ -66,20 +66,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         };
         const mappedUserType = tipoMap[userData.tipo_usuario];
         setUserType(mappedUserType);
-        
-        // Redirecionar automaticamente baseado no tipo de usuário
-        const redirectPaths = {
-          customer: '/cliente/dashboard',
-          technician: '/tecnico/dashboard',
-          company: '/loja/dashboard',
-          admin: '/admin/dashboard'
-        };
-        
-        if (mappedUserType && redirectPaths[mappedUserType]) {
-          setTimeout(() => {
-            window.location.href = redirectPaths[mappedUserType];
-          }, 1000);
-        }
       } else {
         setUserType(null);
         toast({ variant: "destructive", title: "Erro", description: "Tipo de usuário não identificado" });
