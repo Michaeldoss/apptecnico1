@@ -92,7 +92,7 @@ const PartsInventory: React.FC<PartsInventoryProps> = ({ searchQuery }) => {
       name: 'Correia Motor Principal',
       mcmCode: 'COR-MOT-003',
       category: 'Correia',
-      machine: 'Roland VersaCAMM',
+      machine: '',
       type: 'recondicionada',
       purchasePrice: 80.00,
       shippingCost: 20.00,

@@ -5,14 +5,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Building2, User, Settings, FileText, MapPin, Phone, Mail, Globe, AlertCircle } from 'lucide-react';
+import { Building2, User, Settings, FileText, MapPin, Phone, Mail, Globe, AlertCircle, Edit } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { useAuth } from '@/context/AuthContext';
 import { useClientData } from '@/hooks/useClientData';
 import ClientData from '@/components/customer/ClientData';
+import EditableClientData from '@/components/customer/EditableClientData';
 
 const CustomerProfile = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const { toast } = useToast();
   const { user } = useAuth();
   const { clientData, loading, error } = useClientData();
@@ -132,7 +134,36 @@ const CustomerProfile = () => {
           </TabsList>
           
           <TabsContent value="company" className="mt-6">
-            <ClientData clientData={clientData} />
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <h3 className="text-lg font-semibold">Dados da Empresa</h3>
+                <Button 
+                  onClick={() => setIsEditing(!isEditing)}
+                  variant={isEditing ? "outline" : "default"}
+                >
+                  <Edit className="h-4 w-4 mr-2" />
+                  {isEditing ? 'Cancelar Edição' : 'Editar Perfil'}
+                </Button>
+              </div>
+              
+              {isEditing ? (
+                <EditableClientData
+                  clientData={clientData}
+                  onSave={(updatedData) => {
+                    // Aqui você implementaria a lógica de salvamento
+                    console.log('Dados atualizados:', updatedData);
+                    setIsEditing(false);
+                    toast({
+                      title: "Perfil atualizado!",
+                      description: "Suas informações foram salvas com sucesso.",
+                    });
+                  }}
+                  onCancel={() => setIsEditing(false)}
+                />
+              ) : (
+                <ClientData clientData={clientData} />
+              )}
+            </div>
           </TabsContent>
           
           <TabsContent value="contacts" className="mt-6">

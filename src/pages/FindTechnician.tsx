@@ -129,7 +129,7 @@ const FindTechnician = () => {
             setSelectedState={setSelectedState}
             selectedCity={selectedCity}
             setSelectedCity={setSelectedCity}
-            selectedEquipmentType={selectedEquipmentType}
+            selectedEquipmentType={selectedEquipmentType as EquipmentType | "all" | ""}
             setSelectedEquipmentType={setSelectedEquipmentType}
             onSearch={handleSearch}
           />

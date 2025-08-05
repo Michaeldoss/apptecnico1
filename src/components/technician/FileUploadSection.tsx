@@ -22,7 +22,7 @@ const FileUploadSection = () => {
   const [files, setFiles] = useState<FileItem[]>([
     {
       id: '1',
-      name: 'manutencao_plotter_cliente_a.jpg',
+      name: '',
       type: 'image',
       size: '2.3 MB',
       uploadDate: '2024-01-15',

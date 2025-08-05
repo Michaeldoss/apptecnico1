@@ -23,7 +23,7 @@ const PartsAlerts = () => {
       mcmCode: 'COR-MOT-003',
       currentStock: 2,
       minStock: 4,
-      machine: 'Roland VersaCAMM',
+      machine: '',
       lastUsed: '2024-01-18'
     }
   ];
