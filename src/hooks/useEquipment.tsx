@@ -1,12 +1,12 @@
 
 import { useState } from 'react';
 import { Equipment } from '@/types/equipment';
-import { mockEquipment } from '@/data/mockEquipment';
+// Mock equipment removido - dados limpos
 import { useEquipmentOperations } from '@/hooks/useEquipmentOperations';
 import { useEquipmentFilter } from '@/hooks/useEquipmentFilter';
 
 export const useEquipment = () => {
-  const [equipment, setEquipment] = useState<Equipment[]>(mockEquipment);
+  const [equipment, setEquipment] = useState<Equipment[]>([]);
   
   const { searchQuery, setSearchQuery, filteredEquipment } = useEquipmentFilter(equipment);
   const { isLoading, error, addEquipment, updateEquipment, deleteEquipment } = useEquipmentOperations(equipment, setEquipment);

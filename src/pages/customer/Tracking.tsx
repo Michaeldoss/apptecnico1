@@ -16,17 +16,17 @@ const CustomerTracking = () => {
   const handleSearch = () => {
     if (!trackingCode.trim()) return;
     
-    // Simular busca com dados mockados
+    // Busca limpa - sem dados fake
     const mockResult = {
-      status: 'Em andamento',
-      technician: 'João Silva',
-      technicianPhone: '(11) 99999-9999',
-      lastUpdate: '24/06/2025 às 14:30',
+      status: 'Serviço não encontrado',
+      technician: '',
+      technicianPhone: '',
+      lastUpdate: '',
       code: trackingCode,
-      customerAddress: 'Rua das Flores, 123 - Vila Madalena, São Paulo - SP',
-      isTrackingActive: Math.random() > 0.3, // 70% chance de estar ativo
-      estimatedArrival: '15-20 min',
-      distance: '5.2 km'
+      customerAddress: '',
+      isTrackingActive: false,
+      estimatedArrival: '',
+      distance: ''
     };
     
     setSearchResult(mockResult);

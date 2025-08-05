@@ -155,7 +155,7 @@ Horário: ${new Date().toLocaleString()}`;
                   <div className="flex items-center gap-3">
                     <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
                     <div>
-                      <p className="font-medium">Carlos Silva</p>
+                      <p className="font-medium">Técnico Disponível</p>
                       <p className="text-sm text-gray-600">Especialista DTF/Sublimática</p>
                     </div>
                   </div>
@@ -169,7 +169,7 @@ Horário: ${new Date().toLocaleString()}`;
                   <div className="flex items-center gap-3">
                     <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
                     <div>
-                      <p className="font-medium">Roberto Santos</p>
+                      <p className="font-medium">Técnico Disponível</p>
                       <p className="text-sm text-gray-600">CNC/Laser/Eletrônica</p>
                     </div>
                   </div>
@@ -183,7 +183,7 @@ Horário: ${new Date().toLocaleString()}`;
                   <div className="flex items-center gap-3">
                     <div className="w-3 h-3 bg-yellow-500 rounded-full animate-pulse"></div>
                     <div>
-                      <p className="font-medium">Ana Costa</p>
+                      <p className="font-medium">Técnico Disponível</p>
                       <p className="text-sm text-gray-600">Prensas/Acabamento</p>
                     </div>
                   </div>

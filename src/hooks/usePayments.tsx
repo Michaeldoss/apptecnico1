@@ -3,86 +3,12 @@ import { useState, useEffect } from 'react';
 import { toast } from '@/hooks/use-toast';
 import { Payment, PaymentSummary, MonthlyEarnings, ServiceTypeEarnings } from '@/types/payment';
 
-// Mock data para demonstração
-const mockPayments: Payment[] = [
-  {
-    id: 1,
-    serviceId: 'OS-001',
-    clientId: 101,
-    clientName: 'João Silva',
-    technicianId: 1,
-    amount: 250.00,
-    status: 'released',
-    serviceStatus: 'completed',
-    paymentMethod: 'pix',
-    paidDate: '2024-01-10',
-    releasedDate: '2024-01-12',
-    transactionCode: 'TXN-001-2024',
-    serviceType: 'Manutenção',
-    equipment: 'Plotter Eco Solvente'
-  },
-  {
-    id: 2,
-    serviceId: 'OS-002',
-    clientId: 102,
-    clientName: 'Maria Santos',
-    technicianId: 1,
-    amount: 180.00,
-    status: 'retained',
-    serviceStatus: 'awaiting_confirmation',
-    paymentMethod: 'credit_card',
-    paidDate: '2024-01-15',
-    expectedReleaseDate: '2024-01-17',
-    transactionCode: 'TXN-002-2024',
-    serviceType: 'Orçamento',
-    equipment: 'Plotter de Recorte'
-  },
-  {
-    id: 3,
-    serviceId: 'OS-003',
-    clientId: 103,
-    clientName: 'Pedro Costa',
-    technicianId: 1,
-    amount: 320.00,
-    status: 'retained',
-    serviceStatus: 'in_progress',
-    paymentMethod: 'pix',
-    paidDate: '2024-01-16',
-    expectedReleaseDate: '2024-01-18',
-    transactionCode: 'TXN-003-2024',
-    serviceType: 'Instalação',
-    equipment: 'CNC Router'
-  },
-  {
-    id: 4,
-    serviceId: 'OS-004',
-    clientId: 104,
-    clientName: 'Ana Ferreira',
-    technicianId: 1,
-    amount: 150.00,
-    status: 'contested',
-    serviceStatus: 'contested',
-    paymentMethod: 'debit_card',
-    paidDate: '2024-01-14',
-    transactionCode: 'TXN-004-2024',
-    contestReason: 'Serviço não foi executado conforme solicitado',
-    serviceType: 'Visita Técnica',
-    equipment: 'Impressora UV'
-  }
-];
+// Dados limpos - array vazio
+const mockPayments: Payment[] = [];
 
-const mockMonthlyEarnings: MonthlyEarnings[] = [
-  { month: 'Nov', retained: 850, released: 1200 },
-  { month: 'Dez', retained: 650, released: 1800 },
-  { month: 'Jan', retained: 900, released: 1400 }
-];
+const mockMonthlyEarnings: MonthlyEarnings[] = [];
 
-const mockServiceTypeEarnings: ServiceTypeEarnings[] = [
-  { type: 'Manutenção', amount: 1250, count: 8 },
-  { type: 'Instalação', amount: 980, count: 4 },
-  { type: 'Orçamento', amount: 720, count: 12 },
-  { type: 'Visita Técnica', amount: 450, count: 6 }
-];
+const mockServiceTypeEarnings: ServiceTypeEarnings[] = [];
 
 export const usePayments = () => {
   const [payments, setPayments] = useState<Payment[]>(mockPayments);

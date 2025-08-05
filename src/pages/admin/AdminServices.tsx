@@ -22,65 +22,8 @@ import {
   DollarSign
 } from 'lucide-react';
 
-// Mock data para ordens de serviço
-const mockServices = [
-  {
-    id: 'OS-2024-001',
-    cliente: 'Empresa ABC Ltda',
-    tecnico: 'João Silva',
-    tipo_servico: 'Manutenção Preventiva',
-    descricao: 'Manutenção preventiva em equipamentos industriais',
-    valor: 450.00,
-    status: 'completed',
-    prioridade: 'normal',
-    data_criacao: '2024-03-12',
-    data_conclusao: '2024-03-15',
-    endereco: 'Rua Industrial, 123 - São Paulo',
-    telefone_contato: '(11) 99999-9999'
-  },
-  {
-    id: 'OS-2024-002',
-    cliente: 'Indústria XYZ',
-    tecnico: 'Maria Santos',
-    tipo_servico: 'Reparo Urgente',
-    descricao: 'Reparo em sistema elétrico industrial',
-    valor: 780.00,
-    status: 'in_progress',
-    prioridade: 'alta',
-    data_criacao: '2024-03-14',
-    data_conclusao: null,
-    endereco: 'Av. das Máquinas, 456 - Rio de Janeiro',
-    telefone_contato: '(21) 88888-8888'
-  },
-  {
-    id: 'OS-2024-003',
-    cliente: 'Fábrica 123',
-    tecnico: 'Carlos Lima',
-    tipo_servico: 'Instalação Equipamento',
-    descricao: 'Instalação de novo equipamento automatizado',
-    valor: 1200.00,
-    status: 'pending',
-    prioridade: 'normal',
-    data_criacao: '2024-03-13',
-    data_conclusao: null,
-    endereco: 'Distrito Industrial, 789 - Belo Horizonte',
-    telefone_contato: '(31) 77777-7777'
-  },
-  {
-    id: 'OS-2024-004',
-    cliente: 'Empresa DEF',
-    tecnico: 'Ana Costa',
-    tipo_servico: 'Diagnóstico',
-    descricao: 'Diagnóstico de falha em sistema hidráulico',
-    valor: 320.00,
-    status: 'cancelled',
-    prioridade: 'baixa',
-    data_criacao: '2024-03-10',
-    data_conclusao: null,
-    endereco: 'Zona Sul, 321 - Salvador',
-    telefone_contato: '(71) 66666-6666'
-  }
-];
+// Dados limpos - array vazio
+const mockServices = [];
 
 const AdminServices = () => {
   const [searchTerm, setSearchTerm] = useState('');

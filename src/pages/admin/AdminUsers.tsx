@@ -22,52 +22,7 @@ import {
 } from 'lucide-react';
 
 // Mock data
-const mockUsers = [
-  {
-    id: '1',
-    nome: 'João Silva',
-    email: 'joao@tecnico.com',
-    tipo_usuario: 'tecnico',
-    ativo: true,
-    telefone: '(11) 99999-9999',
-    cidade: 'São Paulo',
-    created_at: '2024-01-15',
-    last_login: '2024-03-15'
-  },
-  {
-    id: '2',
-    nome: 'Maria Santos',
-    email: 'maria@empresa.com',
-    tipo_usuario: 'cliente',
-    ativo: true,
-    telefone: '(11) 88888-8888',
-    cidade: 'Rio de Janeiro',
-    created_at: '2024-02-10',
-    last_login: '2024-03-14'
-  },
-  {
-    id: '3',
-    nome: 'Empresa ABC Ltda',
-    email: 'contato@empresaabc.com',
-    tipo_usuario: 'company',
-    ativo: true,
-    telefone: '(11) 77777-7777',
-    cidade: 'Belo Horizonte',
-    created_at: '2024-01-20',
-    last_login: '2024-03-13'
-  },
-  {
-    id: '4',
-    nome: 'Carlos Lima',
-    email: 'carlos@tecnico2.com',
-    tipo_usuario: 'tecnico',
-    ativo: false,
-    telefone: '(11) 66666-6666',
-    cidade: 'Salvador',
-    created_at: '2024-03-01',
-    last_login: '2024-03-10'
-  }
-];
+const mockUsers = [];
 
 const AdminUsers = () => {
   const [searchTerm, setSearchTerm] = useState('');

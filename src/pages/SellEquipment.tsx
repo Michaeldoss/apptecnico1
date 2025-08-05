@@ -14,73 +14,8 @@ import { SellEquipmentItem, equipmentConditionLabels } from '@/types/sellEquipme
 import { Link } from 'react-router-dom';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
-// Mock data para demonstração
-const mockEquipments: SellEquipmentItem[] = [
-  {
-    id: '1',
-    title: 'Plotter Roland VersaCAMM VS-640i Eco-Solvente',
-    type: 'eco-solvent',
-    brand: 'Roland',
-    model: 'VersaCAMM VS-640i',
-    year: 2022,
-    condition: 'seminovo',
-    price: 85000,
-    description: 'Plotter em excelente estado de conservação, pouco uso. Inclui software original e manual completo. Ideal para gráfica rápida.',
-    location: { city: 'São Paulo', state: 'SP' },
-    images: ['https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=600&h=400&fit=crop'],
-    contactInfo: {
-      name: 'João Silva',
-      phone: '(11) 99999-9999',
-      email: 'joao@exemplo.com',
-      whatsapp: '11999999999'
-    },
-    createdAt: '2024-01-15T10:00:00Z',
-    updatedAt: '2024-01-15T10:00:00Z',
-    featured: true
-  },
-  {
-    id: '2',
-    title: 'Plotter de Recorte Silhouette Cameo 4',
-    type: 'cutting',
-    brand: 'Silhouette',
-    model: 'Cameo 4',
-    year: 2023,
-    condition: 'novo',
-    price: 2500,
-    description: 'Plotter de recorte novo, ainda na caixa. Nunca foi usado. Acompanha software e materiais iniciais.',
-    location: { city: 'Rio de Janeiro', state: 'RJ' },
-    images: ['https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=600&h=400&fit=crop'],
-    contactInfo: {
-      name: 'Maria Santos',
-      phone: '(21) 88888-8888',
-      email: 'maria@exemplo.com',
-      whatsapp: '21888888888'
-    },
-    createdAt: '2024-01-14T15:30:00Z',
-    updatedAt: '2024-01-14T15:30:00Z',
-    featured: true
-  },
-  {
-    id: '3',
-    title: 'Impressora DTF Epson L1800 Modificada',
-    type: 'dtf-textile',
-    brand: 'Epson',
-    model: 'L1800',
-    year: 2021,
-    condition: 'usado',
-    price: 12000,
-    description: 'Impressora modificada para DTF, funcionando perfeitamente. Inclui sistema de tinta e pó DTF.',
-    location: { city: 'Belo Horizonte', state: 'MG' },
-    images: ['https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=600&h=400&fit=crop'],
-    contactInfo: {
-      name: 'Carlos Oliveira',
-      phone: '(31) 77777-7777',
-      email: 'carlos@exemplo.com'
-    },
-    createdAt: '2024-01-13T09:15:00Z',
-    updatedAt: '2024-01-13T09:15:00Z'
-  }
-];
+// Dados limpos - array vazio
+const mockEquipments: SellEquipmentItem[] = [];
 
 const SellEquipment = () => {
   const [equipments, setEquipments] = useState<SellEquipmentItem[]>(mockEquipments);

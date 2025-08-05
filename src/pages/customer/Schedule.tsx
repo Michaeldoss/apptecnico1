@@ -58,36 +58,8 @@ const CustomerSchedule = () => {
     );
   }
   
-  // Dados de exemplo para clientes
-  const appointments: Appointment[] = [
-    {
-      id: 1,
-      technician: 'João Silva',
-      serviceType: 'Manutenção de Notebook',
-      date: '2023-07-24',
-      time: '10:00',
-      address: 'Rua Vergueiro, 500, São Paulo - SP',
-      status: 'agendado',
-    },
-    {
-      id: 2,
-      technician: 'Maria Santos',
-      serviceType: 'Instalação de Software',
-      date: '2023-07-24',
-      time: '14:30',
-      address: 'Av. Paulista, 1000, São Paulo - SP',
-      status: 'agendado',
-    },
-    {
-      id: 3,
-      technician: 'Pedro Costa',
-      serviceType: 'Reparo de PC Desktop',
-      date: '2023-07-25',
-      time: '09:00',
-      address: 'Rua Augusta, 1200, São Paulo - SP',
-      status: 'agendado',
-    },
-  ];
+  // Dados limpos - array vazio
+  const appointments: Appointment[] = [];
   
   // Filtrar compromissos pela data selecionada
   const selectedDateISO = date?.toISOString().split('T')[0];

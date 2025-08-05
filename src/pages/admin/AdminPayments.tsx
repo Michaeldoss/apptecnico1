@@ -22,60 +22,7 @@ import {
 } from 'lucide-react';
 
 // Mock data para pagamentos
-const mockPayments = [
-  {
-    id: 'PAG-2024-001',
-    servico_id: 'OS-2024-001',
-    tecnico: 'João Silva',
-    cliente: 'Empresa ABC Ltda',
-    valor_total: 450.00,
-    taxa_plataforma: 22.50,
-    valor_tecnico: 427.50,
-    status: 'liberado',
-    meio_pagamento: 'PIX',
-    data_pagamento: '2024-03-15',
-    data_liberacao: '2024-03-17'
-  },
-  {
-    id: 'PAG-2024-002',
-    servico_id: 'OS-2024-002',
-    tecnico: 'Maria Santos',
-    cliente: 'Indústria XYZ',
-    valor_total: 780.00,
-    taxa_plataforma: 39.00,
-    valor_tecnico: 741.00,
-    status: 'pendente',
-    meio_pagamento: 'Cartão de Crédito',
-    data_pagamento: '2024-03-15',
-    data_liberacao: null
-  },
-  {
-    id: 'PAG-2024-003',
-    servico_id: 'OS-2024-003',
-    tecnico: 'Carlos Lima',
-    cliente: 'Fábrica 123',
-    valor_total: 1200.00,
-    taxa_plataforma: 60.00,
-    valor_tecnico: 1140.00,
-    status: 'processando',
-    meio_pagamento: 'Boleto',
-    data_pagamento: '2024-03-14',
-    data_liberacao: null
-  },
-  {
-    id: 'PAG-2024-004',
-    servico_id: 'OS-2024-004',
-    tecnico: 'Ana Costa',
-    cliente: 'Empresa DEF',
-    valor_total: 650.00,
-    taxa_plataforma: 32.50,
-    valor_tecnico: 617.50,
-    status: 'cancelado',
-    meio_pagamento: 'PIX',
-    data_pagamento: null,
-    data_liberacao: null
-  }
-];
+const mockPayments = [];
 
 const AdminPayments = () => {
   const [searchTerm, setSearchTerm] = useState('');

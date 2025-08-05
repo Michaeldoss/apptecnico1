@@ -2,61 +2,8 @@
 import { useState, useEffect } from 'react';
 import { ServiceOrder, ServiceOrderStatus } from '@/types/service-order';
 
-// Mock data para demonstração
-const mockServiceOrders: ServiceOrder[] = [
-  {
-    id: '1',
-    number: 'OS-261532820',
-    status: 'aberta',
-    createdAt: '2024-01-15T08:30:00Z',
-    updatedAt: '2024-01-15T08:30:00Z',
-    client: {
-      name: '',
-      document: '',
-      ie: '',
-      address: {
-        street: 'Rua das Impressoras',
-        number: '123',
-        neighborhood: 'Centro',
-        city: 'São Paulo',
-        state: 'SP',
-        zipCode: '01234-567'
-      },
-      phone: '(11) 98765-4321',
-      email: 'contato@graficadigital.com.br'
-    },
-    equipment: 'Epson SureColor F170',
-    serialNumber: 'X7YZ123456',
-    reportedProblem: 'Impressora não está puxando papel corretamente',
-    technician: 'Ricardo Silva',
-    attendant: 'Maria Santos',
-    items: [
-      {
-        id: '1',
-        code: 'ROL-001',
-        description: 'Rolo de Papel Transfer',
-        quantity: 2,
-        unitPrice: 45.00,
-        discount: 0,
-        total: 90.00
-      }
-    ],
-    subtotal: 90.00,
-    discount: 0,
-    total: 90.00,
-    paymentCondition: 'À vista',
-    servicesPerformed: 'Limpeza do sistema de alimentação de papel e calibração dos rolos',
-    observations: 'Cliente orientado sobre manutenção preventiva',
-    attachments: [],
-    history: [
-      {
-        action: 'OS Criada',
-        timestamp: '2024-01-15T08:30:00Z',
-        user: 'Ricardo Silva'
-      }
-    ]
-  }
-];
+// Dados limpos - array vazio
+const mockServiceOrders: ServiceOrder[] = [];
 
 export const useServiceOrders = () => {
   const [serviceOrders, setServiceOrders] = useState<ServiceOrder[]>([]);

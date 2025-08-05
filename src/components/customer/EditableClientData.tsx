@@ -214,7 +214,7 @@ const EditableClientData: React.FC<EditableClientDataProps> = ({
                 id="website"
                 value={formData.website || ''}
                 onChange={(e) => handleInputChange('website', e.target.value)}
-                placeholder="https://www.exemplo.com.br"
+                placeholder="https://www.empresa.com.br"
               />
             </div>
           </div>
