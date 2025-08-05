@@ -60,7 +60,20 @@ const UnifiedRegister = () => {
   };
 
   const handleRegistrationSuccess = () => {
-    navigate('/login');
+    // Redireciona automaticamente para o dashboard correto
+    switch (selectedUserType) {
+      case 'client':
+        navigate('/cliente/dashboard');
+        break;
+      case 'technician':
+        navigate('/tecnico/dashboard');
+        break;
+      case 'store':
+        navigate('/loja/dashboard');
+        break;
+      default:
+        navigate('/login');
+    }
   };
 
   const handleBack = () => {

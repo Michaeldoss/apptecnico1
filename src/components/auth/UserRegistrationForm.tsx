@@ -80,9 +80,13 @@ const UserRegistrationForm: React.FC<UserRegistrationFormProps> = ({
       if (success) {
         toast({
           title: "Conta criada com sucesso!",
-          description: "Bem-vindo! Complete seu perfil nas próximas etapas.",
+          description: "Redirecionando para seu dashboard...",
         });
-        onSuccess();
+        
+        // Aguarda um breve momento para mostrar a mensagem de sucesso
+        setTimeout(() => {
+          onSuccess();
+        }, 1000);
       }
       
     } catch (error: any) {
