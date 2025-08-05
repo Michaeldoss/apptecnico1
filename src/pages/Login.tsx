@@ -142,25 +142,25 @@ const Login = () => {
         </div>
       </div>;
   }
-  return <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800">
+  return <div className="min-h-screen flex flex-col bg-gradient-to-br from-instalei-purple-500 via-instalei-purple-600 to-instalei-purple-700">
       <Navbar />
       
       {/* Elementos decorativos de fundo */}
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-transparent to-purple-600/20"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-instalei-purple-500/20 via-transparent to-instalei-orange-500/20"></div>
       <div className="absolute top-20 left-20 w-72 h-72 bg-white/5 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-20 right-20 w-96 h-96 bg-yellow-300/10 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-20 right-20 w-96 h-96 bg-instalei-orange-500/10 rounded-full blur-3xl"></div>
       
       <main className="flex-grow flex items-center justify-center px-6 relative z-10" style={{
       paddingTop: '8rem',
       paddingBottom: '8rem'
     }}>
         <div className="w-full max-w-md">
-          <AnimatedContainer animation="scale" className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-white drop-shadow-lg">Bem-vindo de Volta</h1>
-            <p className="text-gray-100 mt-2 drop-shadow-md">Entre na sua conta</p>
+          <AnimatedContainer animation="scale" className="text-center mb-instalei-lg">
+            <h1 className="text-3xl font-bold text-white drop-shadow-lg">Bem-vindo de Volta à Instalei</h1>
+            <p className="text-instalei-gray-200 mt-2 drop-shadow-md">Entre na sua conta</p>
           </AnimatedContainer>
           
-          <div className="bg-white/95 backdrop-blur-xl rounded-2xl p-8 shadow-2xl border-2 border-white/30">
+          <div className="bg-white/95 backdrop-blur-xl rounded-instalei-lg p-instalei-lg shadow-2xl border-2 border-white/30">
             <form onSubmit={handleLogin} style={{
             display: 'flex',
             flexDirection: 'column',
@@ -177,50 +177,50 @@ const Login = () => {
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-border"></div>
                 </div>
-                <div className="relative px-4 bg-white text-sm text-gray-900 font-medium">Ou continue com email</div>
+                <div className="relative px-4 bg-white text-sm text-foreground font-medium">Ou continue com email</div>
               </div>
 
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-gray-900 font-semibold">Email</Label>
-                  <Input id="email" type="email" placeholder="nome@exemplo.com" required className="w-full rounded-lg border-2 border-gray-300 focus:border-blue-600 text-gray-900 bg-white" value={email} onChange={e => setEmail(e.target.value)} disabled={isLoading} />
+                  <Label htmlFor="email" className="text-primary font-semibold">Email</Label>
+                  <Input id="email" type="email" placeholder="nome@exemplo.com" required className="w-full rounded-instalei border-2 border-border focus:border-accent text-foreground bg-background" value={email} onChange={e => setEmail(e.target.value)} disabled={isLoading} />
                 </div>
                 
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <Label htmlFor="password" className="text-gray-900 font-semibold">Senha</Label>
-                    <Link to="/forgot-password" className="text-sm text-blue-600 hover:underline font-medium">
+                    <Label htmlFor="password" className="text-primary font-semibold">Senha</Label>
+                    <Link to="/forgot-password" className="text-sm text-accent hover:underline font-medium">
                       Esqueceu a senha?
                     </Link>
                   </div>
-                  <Input id="password" type="password" placeholder="••••••••" required className="w-full rounded-lg border-2 border-gray-300 focus:border-blue-600 text-gray-900 bg-white" value={password} onChange={e => setPassword(e.target.value)} disabled={isLoading} />
+                  <Input id="password" type="password" placeholder="••••••••" required className="w-full rounded-instalei border-2 border-border focus:border-accent text-foreground bg-background" value={password} onChange={e => setPassword(e.target.value)} disabled={isLoading} />
                 </div>
                 
                 <div className="flex items-center space-x-2">
                   <Checkbox id="remember" />
-                  <Label htmlFor="remember" className="text-sm text-gray-900">Lembrar de mim</Label>
+                  <Label htmlFor="remember" className="text-sm text-foreground">Lembrar de mim</Label>
                 </div>
               </div>
               
-              <Button type="submit" className="w-full rounded-xl h-12 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 font-bold text-lg shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl border-0" disabled={isLoading || !email || !password}>
+              <Button type="submit" className="btn-secondary w-full rounded-instalei h-12 text-lg shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl border-0" disabled={isLoading || !email || !password}>
                 {isLoading ? <span className="flex items-center">
                     <svg className="animate-spin -ml-1 mr-2 h-4 w-4" style={{
-                  color: '#111827'
+                  color: '#FFFFFF'
                 }} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    Entrando...
-                  </span> : 'Entrar'}
+                    Entrando na Instalei...
+                  </span> : 'Entrar na Instalei'}
               </Button>
             </form>
           </div>
           
-          <div className="text-center mt-6 space-y-2">
+          <div className="text-center mt-instalei-md space-y-2">
             <p className="text-sm text-white drop-shadow-md">
               Não tem uma conta?{' '}
-              <Link to="/register" className="text-yellow-300 font-medium hover:underline hover:text-yellow-200 transition-colors">
-                Cadastre-se
+              <Link to="/register" className="text-instalei-orange-300 font-medium hover:underline hover:text-instalei-orange-200 transition-colors">
+                Cadastre-se na Instalei
               </Link>
             </p>
             

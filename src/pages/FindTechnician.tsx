@@ -108,14 +108,14 @@ const FindTechnician = () => {
     : technicians;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Navbar />
 
       {/* Header */}
-      <header className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-16">
-        <div className="container mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">Encontre Técnicos Especializados</h1>
-          <p className="text-xl mb-8 text-white opacity-90">Localize profissionais qualificados para seus equipamentos</p>
+      <header className="bg-gradient-to-br from-instalei-purple-500 via-instalei-purple-600 to-instalei-purple-700 text-white section-padding pt-24">
+        <div className="container-instalei">
+          <h1 className="text-4xl md:text-5xl font-bold mb-instalei-sm text-white">Encontre Técnicos Especializados na Instalei</h1>
+          <p className="text-xl mb-instalei-lg text-instalei-gray-200 opacity-90">Localize profissionais qualificados para seus equipamentos</p>
           
           {/* Search Filters */}
           <TechnicianFilters 
@@ -137,9 +137,9 @@ const FindTechnician = () => {
       </header>
 
       {/* Equipment Categories Filter */}
-      <div className="bg-white border-b">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex flex-wrap gap-2">
+      <div className="bg-card border-b border-border">
+        <div className="container-instalei py-instalei-sm">
+          <div className="flex flex-wrap gap-instalei-xs">
             <Button 
               variant={selectedCategory === null ? "default" : "outline"}
               size="sm"
@@ -156,9 +156,9 @@ const FindTechnician = () => {
                 onClick={() => setSelectedCategory(category.id)}
                 className="flex items-center gap-2"
               >
-                {category.id === 'printers' && <Printer className="h-4 w-4" />}
-                {category.id === 'finishing' && <Scissors className="h-4 w-4" />}
-                {category.id === 'cnc' && <Wrench className="h-4 w-4" />}
+                {category.id === 'printers' && <Printer className="h-4 w-4 icon-accent" />}
+                {category.id === 'finishing' && <Scissors className="h-4 w-4 icon-accent" />}
+                {category.id === 'cnc' && <Wrench className="h-4 w-4 icon-accent" />}
                 {category.label}
               </Button>
             ))}
@@ -167,18 +167,18 @@ const FindTechnician = () => {
       </div>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
+      <main className="container-instalei section-padding">
         <Tabs defaultValue="map" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-6">
+          <TabsList className="grid w-full grid-cols-2 mb-instalei-md">
             <TabsTrigger value="map">Visualização em Mapa</TabsTrigger>
             <TabsTrigger value="list">Lista de Técnicos</TabsTrigger>
           </TabsList>
           
           <TabsContent value="map" className="w-full">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-instalei-md">
               {/* Map */}
               <div className="lg:col-span-2">
-                <BlurContainer className="h-[600px] rounded-xl overflow-hidden">
+                <BlurContainer className="h-[600px] rounded-instalei overflow-hidden">
                 <UniversalMap
                   technicians={filteredTechnicians}
                   selectedTechnician={selectedTechnician}

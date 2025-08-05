@@ -33,11 +33,11 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-blue-600">
+    <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
       
       {/* Adicionado pt-24 para compensar a navbar absoluta */}
-      <div className="flex-1 flex container mx-auto px-4 py-6 gap-6 max-w-7xl pt-24">
+      <div className="flex-1 flex container-instalei gap-instalei-md max-w-7xl pt-24">
         <MobileSidebar 
           isMenuOpen={isMenuOpen}
           toggleMenu={toggleMenu}
