@@ -92,6 +92,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       return false;
     }
 
+    console.log('🔐 Iniciando signup...', { email, userType: userData.type });
+    
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -101,7 +103,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       },
     });
 
+    console.log('🔐 Resultado do signUp:', { data: data?.user?.id, error });
+
     if (error || !data.user) {
+      console.error('❌ Erro no signUp:', error);
       toast({ variant: "destructive", title: "Erro no cadastro", description: error?.message || "Erro desconhecido" });
       return false;
     }
@@ -111,34 +116,51 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const { password: _, confirmPassword: __, ...cleanUserData } = userData;
 
+    console.log('📝 Inserindo dados na tabela específica...', { tabela, userId, cleanUserData });
+    
     const { error: insertError } = await supabase.from(tabela as any).insert({ id: userId, ...cleanUserData });
 
     if (insertError) {
+      console.error('❌ Erro ao inserir na tabela específica:', insertError);
       toast({ variant: "destructive", title: "Erro ao salvar dados", description: insertError.message });
       return false;
     }
 
+    console.log('✅ Dados inseridos na tabela específica com sucesso');
+
     // Inserir também na tabela usuarios para manter controle central
-    const { error: usuarioError } = await supabase.from('usuarios').insert({
+    const usuarioData = {
       id: userId,
       nome: userData.nome,
       email: userData.email,
       tipo_usuario: userData.type === 'customer' ? 'cliente' : userData.type
-    });
+    };
+    
+    console.log('📝 Inserindo dados na tabela usuarios...', usuarioData);
+    
+    const { error: usuarioError } = await supabase.from('usuarios').insert(usuarioData);
 
     if (usuarioError) {
-      console.warn('Aviso: Erro ao inserir na tabela usuarios:', usuarioError.message);
-      // Não falha o cadastro por causa disso, mas registra o aviso
+      console.error('❌ Erro ao inserir na tabela usuarios:', usuarioError);
+      toast({ variant: "destructive", title: "Erro ao salvar dados do usuário", description: usuarioError.message });
+      return false;
     }
+    
+    console.log('✅ Dados inseridos na tabela usuarios com sucesso');
 
     // Automaticamente faz login após o cadastro
+    console.log('🔐 Fazendo login automático...');
+    
     try {
       const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
+      console.log('🔐 Resultado do login automático:', { userId: loginData?.user?.id, error: loginError });
+
       if (loginError || !loginData.user) {
+        console.error('❌ Erro no login automático:', loginError);
         toast({ variant: "destructive", title: "Erro no login automático", description: "Conta criada, mas erro no login. Tente fazer login manualmente." });
         return false;
       }
