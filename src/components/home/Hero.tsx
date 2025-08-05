@@ -43,20 +43,20 @@ const Hero = () => {
         <div className="bg-white/95 backdrop-blur-xl rounded-instalei-xl p-instalei-lg shadow-3xl max-w-5xl mx-auto mb-instalei-xl border-2 border-white/30 hover:shadow-4xl transition-all duration-300">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-instalei-lg">
             <div className="relative group">
-              <label className="block text-lg font-black text-primary mb-instalei-sm">Tipo de equipamento</label>
-              <Search className="absolute left-5 top-14 transform text-muted-foreground h-6 w-6 group-focus-within:text-accent transition-colors" />
-              <Input placeholder="Ex: Impressora, CNC, Torno..." className="pl-14 h-14 text-foreground border-2 border-border focus:border-accent text-lg font-bold rounded-instalei shadow-lg hover:border-primary transition-all hover:shadow-xl" />
+              <label className="block text-lg font-black text-instalei-gray-700 mb-instalei-sm">Tipo de equipamento</label>
+              <Search className="absolute left-5 top-14 transform text-instalei-gray-500 h-6 w-6 group-focus-within:text-instalei-orange-500 transition-colors" />
+              <Input placeholder="Ex: Impressora, CNC, Torno..." className="pl-14 h-14 text-instalei-gray-800 border-2 border-instalei-gray-300 focus:border-instalei-orange-500 text-lg font-bold rounded-instalei shadow-lg hover:border-instalei-orange-400 transition-all hover:shadow-xl" />
             </div>
             
             <div className="relative group">
-              <label className="block text-lg font-black text-primary mb-instalei-sm">Localização</label>
-              <MapPin className="absolute left-5 top-14 transform text-muted-foreground h-6 w-6 group-focus-within:text-accent transition-colors" />
-              <Input placeholder="Cidade, estado ou CEP" className="pl-14 h-14 text-foreground border-2 border-border focus:border-accent text-lg font-bold rounded-instalei shadow-lg hover:border-primary transition-all hover:shadow-xl" />
+              <label className="block text-lg font-black text-instalei-gray-700 mb-instalei-sm">Localização</label>
+              <MapPin className="absolute left-5 top-14 transform text-instalei-gray-500 h-6 w-6 group-focus-within:text-instalei-orange-500 transition-colors" />
+              <Input placeholder="Cidade, estado ou CEP" className="pl-14 h-14 text-instalei-gray-800 border-2 border-instalei-gray-300 focus:border-instalei-orange-500 text-lg font-bold rounded-instalei shadow-lg hover:border-instalei-orange-400 transition-all hover:shadow-xl" />
             </div>
             
             <div className="flex flex-col justify-end">
               <Link to="/find-technician">
-                <Button className="btn-secondary w-full h-14 text-xl shadow-2xl transition-all duration-300 border-0 rounded-instalei group hover:scale-105 hover:shadow-3xl">
+                <Button className="bg-instalei-orange-500 hover:bg-instalei-orange-600 text-white w-full h-14 text-xl font-bold shadow-2xl transition-all duration-300 border-0 rounded-instalei group hover:scale-105 hover:shadow-3xl">
                   Buscar Técnicos na Instalei
                   <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-2 transition-transform" />
                 </Button>
@@ -84,13 +84,13 @@ const Hero = () => {
         {/* Botões de Ação Adicional - Instalei */}
         <div className="flex flex-wrap justify-center gap-instalei-md mb-instalei-xl">
           <Link to="/services">
-            <Button className="bg-gradient-to-r from-instalei-purple-600 to-instalei-purple-700 hover:from-instalei-purple-700 hover:to-instalei-purple-800 text-white font-bold px-instalei-lg py-instalei-sm text-lg rounded-instalei-lg shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-3xl flex items-center gap-3">
+            <Button className="bg-instalei-gray-600 hover:bg-instalei-gray-700 text-white font-bold px-instalei-lg py-instalei-sm text-lg rounded-instalei-lg shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-3xl flex items-center gap-3">
               <Calendar className="h-6 w-6" />
               Agendar Visita na Instalei
             </Button>
           </Link>
           <Link to="/contact">
-            <Button className="bg-gradient-to-r from-instalei-orange-600 to-instalei-orange-700 hover:from-instalei-orange-700 hover:to-instalei-orange-800 text-white font-bold px-instalei-lg py-instalei-sm text-lg rounded-instalei-lg shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-3xl flex items-center gap-3">
+            <Button className="bg-instalei-orange-500 hover:bg-instalei-orange-600 text-white font-bold px-instalei-lg py-instalei-sm text-lg rounded-instalei-lg shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-3xl flex items-center gap-3">
               <MessageCircle className="h-6 w-6" />
               Chat Online
             </Button>
