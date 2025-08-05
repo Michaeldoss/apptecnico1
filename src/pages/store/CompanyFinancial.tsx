@@ -390,7 +390,7 @@ const CompanyFinancial = () => {
                       <CheckCircle className="h-4 w-4 text-green-600" />
                       <span className="font-medium">CNPJ Verificado</span>
                     </div>
-                    <p className="text-sm text-gray-600">12.345.678/0001-90</p>
+                    <p className="text-sm text-gray-600">-</p>
                   </div>
                   
                   <div className="p-4 bg-yellow-50 rounded-lg">

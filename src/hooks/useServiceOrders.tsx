@@ -11,9 +11,9 @@ const mockServiceOrders: ServiceOrder[] = [
     createdAt: '2024-01-15T08:30:00Z',
     updatedAt: '2024-01-15T08:30:00Z',
     client: {
-      name: 'Gráfica Digital Ltda',
-      document: '12.345.678/0001-90',
-      ie: '123.456.789.012',
+      name: '',
+      document: '',
+      ie: '',
       address: {
         street: 'Rua das Impressoras',
         number: '123',

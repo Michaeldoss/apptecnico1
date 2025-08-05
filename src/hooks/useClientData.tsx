@@ -112,164 +112,96 @@ export const useClientData = () => {
           throw new Error('Usuário não autenticado');
         }
 
-        // Simula busca de dados mais completos do cliente
+        // Dados limpos sem informações fake
         const mockClientData: ClientData = {
-          id: user.id?.toString() || '2',
-          name: user.name || 'TechSoluções Ltda',
-          fantasyName: 'TechSoluções',
-          email: user.email || 'contato@techsolucoes.com.br',
-          alternativeEmails: ['financeiro@techsolucoes.com.br', 'comercial@techsolucoes.com.br'],
+          id: user.id?.toString() || '',
+          name: user.name || '',
+          fantasyName: '',
+          email: user.email || '',
+          alternativeEmails: [],
           type: 'juridica',
-          cnpj: '12.345.678/0001-90',
-          ie: '123.456.789.012',
-          im: '987654321',
-          whatsapp: '(11) 99999-8888',
-          phone: '(11) 3333-4444',
-          alternativePhones: ['(11) 3333-4445', '(11) 99999-7777'],
-          website: 'www.techsolucoes.com.br',
+          cnpj: '',
+          ie: '',
+          im: '',
+          whatsapp: '',
+          phone: '',
+          alternativePhones: [],
+          website: '',
           socialMedia: {
-            facebook: 'facebook.com/techsolucoes',
-            instagram: '@techsolucoes',
-            linkedin: 'linkedin.com/company/techsolucoes'
+            facebook: '',
+            instagram: '',
+            linkedin: ''
           },
-          foundedYear: 2015,
-          employeeCount: '25-50',
-          businessSegment: 'Tecnologia da Informação',
-          businessActivity: 'Desenvolvimento de software, consultoria em TI e suporte técnico',
-          description: 'Empresa especializada em soluções tecnológicas para pequenas e médias empresas, oferecendo consultoria em TI, desenvolvimento de sistemas e suporte técnico especializado. Atuamos no mercado há mais de 8 anos, com foco em inovação e excelência no atendimento aos nossos clientes.',
-          mission: 'Transformar negócios através da tecnologia, oferecendo soluções inovadoras e personalizadas que aumentem a produtividade e competitividade de nossos clientes.',
-          vision: 'Ser referência em soluções tecnológicas na região, reconhecida pela qualidade, inovação e compromisso com o sucesso dos nossos clientes.',
-          values: ['Inovação', 'Excelência', 'Transparência', 'Compromisso', 'Sustentabilidade', 'Ética Profissional'],
+          foundedYear: new Date().getFullYear(),
+          employeeCount: '',
+          businessSegment: '',
+          businessActivity: '',
+          description: '',
+          mission: '',
+          vision: '',
+          values: [],
           address: {
-            street: 'Av. Paulista',
-            number: '1000',
-            neighborhood: 'Bela Vista',
-            city: 'São Paulo',
-            state: 'SP',
-            zipCode: '01310-100',
-            complement: 'Sala 1205 - Torre A'
+            street: '',
+            number: '',
+            neighborhood: '',
+            city: '',
+            state: '',
+            zipCode: '',
+            complement: ''
           },
           billingAddress: {
-            street: 'Av. Paulista',
-            number: '1000',
-            neighborhood: 'Bela Vista',
-            city: 'São Paulo',
-            state: 'SP',
-            zipCode: '01310-100',
-            complement: 'Sala 1205 - Torre A'
+            street: '',
+            number: '',
+            neighborhood: '',
+            city: '',
+            state: '',
+            zipCode: '',
+            complement: ''
           },
           deliveryAddress: {
-            street: 'Rua da Consolação',
-            number: '500',
-            neighborhood: 'Consolação',
-            city: 'São Paulo',
-            state: 'SP',
-            zipCode: '01302-000',
-            complement: 'Depósito 2'
+            street: '',
+            number: '',
+            neighborhood: '',
+            city: '',
+            state: '',
+            zipCode: '',
+            complement: ''
           },
           legalRepresentative: {
-            name: 'Carlos Roberto Silva',
-            cpf: '123.456.789-00',
-            rg: '12.345.678-9',
-            position: 'Diretor Presidente',
-            phone: '(11) 99999-1111',
-            email: 'carlos.silva@techsolucoes.com.br',
-            birthDate: '15/03/1980',
+            name: '',
+            cpf: '',
+            rg: '',
+            position: '',
+            phone: '',
+            email: '',
+            birthDate: '',
             nationality: 'Brasileira',
-            maritalStatus: 'Casado',
+            maritalStatus: '',
             address: {
-              street: 'Rua das Flores',
-              number: '123',
-              neighborhood: 'Jardim Paulista',
-              city: 'São Paulo',
-              state: 'SP',
-              zipCode: '01401-000',
-              complement: 'Apartamento 45'
+              street: '',
+              number: '',
+              neighborhood: '',
+              city: '',
+              state: '',
+              zipCode: '',
+              complement: ''
             }
           },
-          partners: [
-            {
-              name: 'Carlos Roberto Silva',
-              cpf: '123.456.789-00',
-              position: 'Diretor Presidente',
-              participation: '60%',
-              phone: '(11) 99999-1111',
-              email: 'carlos.silva@techsolucoes.com.br',
-              address: {
-                street: 'Rua das Flores',
-                number: '123',
-                neighborhood: 'Jardim Paulista',
-                city: 'São Paulo',
-                state: 'SP',
-                zipCode: '01401-000',
-                complement: 'Apartamento 45'
-              }
-            },
-            {
-              name: 'Maria Fernanda Santos',
-              cpf: '987.654.321-00',
-              position: 'Diretora Técnica',
-              participation: '40%',
-              phone: '(11) 99999-2222',
-              email: 'maria.santos@techsolucoes.com.br',
-              address: {
-                street: 'Av. Brigadeiro Faria Lima',
-                number: '2000',
-                neighborhood: 'Itaim Bibi',
-                city: 'São Paulo',
-                state: 'SP',
-                zipCode: '01451-000',
-                complement: 'Cobertura 1'
-              }
-            }
-          ],
-          contacts: [
-            {
-              name: 'Carlos Silva',
-              position: 'Diretor de TI',
-              phone: '(11) 99999-1111',
-              email: 'carlos.silva@techsolucoes.com.br',
-              whatsapp: '(11) 99999-1111',
-              type: 'tecnico'
-            },
-            {
-              name: 'Maria Santos',
-              position: 'Gerente Financeiro',
-              phone: '(11) 99999-2222',
-              email: 'maria.santos@techsolucoes.com.br',
-              whatsapp: '(11) 99999-2222',
-              type: 'financeiro'
-            },
-            {
-              name: 'João Oliveira',
-              position: 'Coordenador Administrativo',
-              phone: '(11) 99999-3333',
-              email: 'joao.oliveira@techsolucoes.com.br',
-              whatsapp: '(11) 99999-3333',
-              type: 'administrativo'
-            },
-            {
-              name: 'Ana Costa',
-              position: 'Gerente Comercial',
-              phone: '(11) 99999-4444',
-              email: 'ana.costa@techsolucoes.com.br',
-              whatsapp: '(11) 99999-4444',
-              type: 'comercial'
-            }
-          ],
-          services: ['Consultoria em TI', 'Desenvolvimento de Sistemas', 'Suporte Técnico', 'Infraestrutura de Rede', 'Segurança da Informação'],
-          preferredServiceTime: 'Horário comercial (8h às 18h)',
-          specialRequirements: 'Preferência por atendimento presencial para questões críticas. Ambiente com alta segurança de dados. Necessário agendamento prévio para visitas técnicas.',
-          companySize: 'medium',
-          annualRevenue: 'R$ 2-5 milhões',
-          taxRegime: 'Lucro Presumido',
+          partners: [],
+          contacts: [],
+          services: [],
+          preferredServiceTime: '',
+          specialRequirements: '',
+          companySize: 'small',
+          annualRevenue: '',
+          taxRegime: '',
           bankData: {
-            bank: 'Banco do Brasil',
-            agency: '1234-5',
-            account: '12345-6',
-            accountType: 'Conta Corrente'
+            bank: '',
+            agency: '',
+            account: '',
+            accountType: ''
           },
-          observations: 'Cliente muito exigente com prazos. Sempre solicita relatórios detalhados dos serviços executados. Prefere comunicação por e-mail para questões formais.'
+          observations: ''
         };
 
         console.log('[DEBUG] Dados completos do cliente carregados:', mockClientData);

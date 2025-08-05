@@ -176,8 +176,8 @@ const ServiceOrderForm: React.FC<ServiceOrderFormProps> = ({ order, onSave, onCa
                   onChange={(e) => setFormData(prev => ({
                     ...prev,
                     client: { ...prev.client!, document: e.target.value }
-                  }))}
-                  placeholder="12.345.678/0001-90"
+                   }))}
+                   placeholder=""
                 />
               </div>
             </div>

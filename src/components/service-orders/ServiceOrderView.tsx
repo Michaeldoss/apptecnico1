@@ -95,8 +95,8 @@ const ServiceOrderView: React.FC<ServiceOrderViewProps> = ({ order, onBack, onEd
             <CardTitle className="text-center">MCM Assistência Técnica</CardTitle>
           </CardHeader>
           <CardContent className="text-center space-y-1">
-            <p className="font-medium">CNPJ: 12.345.678/0001-90 | IE: 123.456.789.012</p>
-            <p>Rua da Tecnologia, 123 - Centro - São Paulo/SP - CEP: 01234-567</p>
+            <p className="font-medium">CNPJ: - | IE: -</p>
+            <p>Endereço não informado</p>
             <p>Telefone: (11) 3333-4444 | E-mail: contato@mcmassistencia.com.br</p>
           </CardContent>
         </Card>

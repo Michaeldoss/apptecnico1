@@ -146,7 +146,7 @@ const CompanyProfile = () => {
                         <Label htmlFor="cnpj">CNPJ</Label>
                         <Input 
                           id="cnpj" 
-                          defaultValue={user?.cnpj || "12.345.678/0001-90"}
+                          defaultValue={user?.cnpj || ""}
                         />
                       </div>
                     </CardContent>
