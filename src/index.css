@@ -8,82 +8,82 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 222 84% 4.9%;
+    --foreground: 273 12% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 84% 4.9%;
+    --card-foreground: 273 12% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 84% 4.9%;
+    --popover-foreground: 273 12% 15%;
 
-    --primary: 221 83% 53%; /* blue-600 */
+    --primary: 273 96% 18%; /* roxo escuro Make */
     --primary-foreground: 0 0% 98%;
 
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 222 84% 4.9%;
+    --secondary: 273 17% 92%;
+    --secondary-foreground: 273 12% 15%;
 
-    --muted: 220 14% 96%;
-    --muted-foreground: 215 16% 47%;
+    --muted: 273 17% 92%;
+    --muted-foreground: 273 12% 47%;
 
-    --accent: 210 20% 98%; /* neutral gray-50 */
-    --accent-foreground: 222 84% 4.9%;
+    --accent: 25 95% 53%; /* laranja Make */
+    --accent-foreground: 0 0% 98%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 221 83% 53%;
+    --border: 273 17% 91%;
+    --input: 273 17% 91%;
+    --ring: 273 96% 18%;
 
     --radius: 1rem;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-background: 273 96% 18%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 273 100% 22%;
     --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 273 100% 25%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 273 100% 30%;
+    --sidebar-ring: 25 95% 53%;
   }
 
   .dark {
-    --background: 240 10% 3.9%;
+    --background: 273 96% 8%;
     --foreground: 0 0% 98%;
 
-    --card: 240 10% 3.9%;
+    --card: 273 96% 12%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 240 10% 3.9%;
+    --popover: 273 96% 12%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 221 83% 53%;
-    --primary-foreground: 0 0% 98%;
+    --primary: 273 100% 60%;
+    --primary-foreground: 273 96% 8%;
 
-    --secondary: 240 3.7% 15.9%;
+    --secondary: 273 96% 15%;
     --secondary-foreground: 0 0% 98%;
 
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
+    --muted: 273 96% 15%;
+    --muted-foreground: 273 10% 64.9%;
 
-    --accent: 45 93% 47%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 25 95% 53%;
+    --accent-foreground: 273 96% 8%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
+    --border: 273 96% 15%;
+    --input: 273 96% 15%;
+    --ring: 273 100% 60%;
 
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 273 96% 8%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 273 100% 60%;
+    --sidebar-primary-foreground: 273 96% 8%;
+    --sidebar-accent: 273 96% 15%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 273 96% 15%;
+    --sidebar-ring: 25 95% 53%;
   }
 }
 
@@ -106,94 +106,116 @@
     font-family: 'Inter', sans-serif;
   }
 
-  /* Tipografia global com cores da home */
+  /* Tipografia global com cores roxas do Make */
   h1, .text-3xl, .text-4xl, .text-5xl {
     @apply font-bold;
     font-weight: 700;
-    color: #111827; /* gray-900 */
+    color: hsl(273, 96%, 18%); /* roxo escuro */
   }
 
   h2, h3, .text-xl, .text-2xl {
     @apply font-semibold;
     font-weight: 600;
-    color: #111827; /* gray-900 */
+    color: hsl(273, 96%, 18%); /* roxo escuro */
   }
 
   p, span, div {
     font-weight: 400;
-    color: #374151; /* gray-700 */
+    color: hsl(273, 12%, 35%); /* roxo acinzentado */
   }
 
   .text-muted-foreground {
-    color: #6B7280; /* gray-500 */
+    color: hsl(273, 12%, 47%); /* roxo claro */
   }
 
-  /* Cores primárias consistentes */
+  /* Cores primárias do Make */
   .text-primary {
-    color: #2563EB !important; /* blue-600 */
+    color: hsl(273, 96%, 18%) !important; /* roxo escuro */
   }
 
   .text-secondary {
-    color: #4B5563 !important; /* gray-600 */
+    color: hsl(273, 12%, 47%) !important; /* roxo acinzentado */
   }
 
   .text-accent {
-    color: #EAB308 !important; /* yellow-500 */
+    color: hsl(25, 95%, 53%) !important; /* laranja Make */
   }
 
   .text-white {
     color: #FFFFFF !important;
   }
 
-  /* Botões com cores da home */
+  /* Botões com cores do Make */
   .btn-primary {
-    @apply bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:bg-blue-700 hover:shadow-lg hover:scale-105;
-    background-color: #2563EB;
+    @apply font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:shadow-lg hover:scale-105;
+    background: linear-gradient(135deg, hsl(273, 96%, 18%), hsl(273, 100%, 30%));
     color: #FFFFFF;
     font-weight: 600;
   }
 
+  .btn-primary:hover {
+    background: linear-gradient(135deg, hsl(273, 100%, 25%), hsl(273, 100%, 35%));
+  }
+
   .btn-secondary {
-    @apply bg-yellow-500 text-gray-900 font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:bg-yellow-600 hover:shadow-lg;
-    background-color: #EAB308;
-    color: #111827;
+    @apply font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:shadow-lg;
+    background-color: hsl(25, 95%, 53%);
+    color: #FFFFFF;
     font-weight: 600;
+  }
+
+  .btn-secondary:hover {
+    background-color: hsl(25, 95%, 48%);
   }
 
   .btn-outline {
-    @apply bg-white text-blue-600 border-2 border-blue-600 font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:bg-blue-600 hover:text-white hover:shadow-lg;
+    @apply bg-white font-semibold px-6 py-3 rounded-lg border-2 transition-all duration-200 hover:shadow-lg;
     background-color: #FFFFFF;
-    color: #2563EB;
-    border-color: #2563EB;
+    color: hsl(273, 96%, 18%);
+    border-color: hsl(273, 96%, 18%);
     font-weight: 600;
   }
 
-  /* Cards com cores consistentes */
-  .card-standard {
-    @apply bg-white border-2 border-gray-200 rounded-lg shadow-sm p-6 transition-all duration-200 hover:shadow-md hover:border-gray-300;
-    background-color: #FFFFFF;
-    border-color: #E5E7EB;
-    color: #111827;
+  .btn-outline:hover {
+    background-color: hsl(273, 96%, 18%);
+    color: #FFFFFF;
   }
 
-  /* Inputs com cores da home */
-  input, textarea, select {
-    @apply bg-white text-gray-900 border-2 border-gray-300 focus:border-blue-600 focus:ring-blue-600;
+  /* Cards com cores do Make */
+  .card-standard {
+    @apply bg-white border-2 rounded-lg shadow-sm p-6 transition-all duration-200 hover:shadow-md;
     background-color: #FFFFFF;
-    color: #111827;
-    border-color: #D1D5DB;
+    border-color: hsl(273, 17%, 91%);
+    color: hsl(273, 96%, 18%);
+  }
+
+  .card-standard:hover {
+    border-color: hsl(273, 96%, 18%);
+  }
+
+  /* Inputs com cores do Make */
+  input, textarea, select {
+    @apply bg-white border-2 transition-all duration-200;
+    background-color: #FFFFFF;
+    color: hsl(273, 96%, 18%);
+    border-color: hsl(273, 17%, 91%);
+  }
+
+  input:focus, textarea:focus, select:focus {
+    border-color: hsl(273, 96%, 18%);
+    box-shadow: 0 0 0 3px hsla(273, 96%, 18%, 0.1);
   }
 
   input::placeholder,
   textarea::placeholder {
-    color: #6B7280;
+    color: hsl(273, 12%, 47%);
     font-weight: 400;
   }
 
   /* Labels */
   label {
-    @apply text-gray-800 font-semibold;
-    color: #1F2937;
+    @apply font-semibold;
+    color: hsl(273, 96%, 18%);
     font-weight: 600;
   }
 
@@ -202,38 +224,36 @@
   input:focus-visible,
   textarea:focus-visible,
   select:focus-visible {
-    @apply ring-2 ring-blue-600 ring-offset-2;
     outline: none;
+    box-shadow: 0 0 0 3px hsla(273, 96%, 18%, 0.2);
   }
 
   /* Links */
   a {
-    @apply text-blue-600 hover:text-blue-700 transition-colors duration-200;
-    color: #2563EB;
+    @apply transition-colors duration-200;
+    color: hsl(273, 96%, 18%);
   }
 
   a:hover {
-    color: #1D4ED8;
+    color: hsl(25, 95%, 53%);
   }
 
-  /* Badges */
+  /* Badges com cores do Make */
   .badge-primary {
-    @apply bg-blue-600 text-white;
-    background-color: #2563EB;
+    background-color: hsl(273, 96%, 18%);
     color: #FFFFFF;
   }
 
   .badge-secondary {
-    @apply bg-yellow-500 text-gray-900;
-    background-color: #EAB308;
-    color: #111827;
+    background-color: hsl(25, 95%, 53%);
+    color: #FFFFFF;
   }
 
   .badge-outline {
-    @apply bg-white text-blue-600 border border-blue-600;
+    @apply bg-white border;
     background-color: #FFFFFF;
-    color: #2563EB;
-    border-color: #2563EB;
+    color: hsl(273, 96%, 18%);
+    border-color: hsl(273, 96%, 18%);
   }
 }
 
@@ -275,12 +295,12 @@
 }
 
 .scroll-container::-webkit-scrollbar-thumb {
-  background-color: rgba(37, 99, 235, 0.3); /* blue-600 */
+  background-color: hsla(273, 96%, 18%, 0.3); /* roxo Make */
   border-radius: 4px;
 }
 
 .scroll-container::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(37, 99, 235, 0.5); /* blue-600 */
+  background-color: hsla(273, 96%, 18%, 0.5); /* roxo Make */
 }
 
 /* Layout padronizado */

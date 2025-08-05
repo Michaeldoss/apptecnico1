@@ -63,23 +63,47 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Paleta consistente para todo o projeto - baseada na home
-				'tech-primary': {
-					DEFAULT: '#2563EB', // blue-600
-					hover: '#1D4ED8', // blue-700
+				// Paleta inspirada no Make - tons de roxo e laranja
+				'make-purple': {
+					50: 'hsl(273, 100%, 98%)',
+					100: 'hsl(273, 96%, 94%)',
+					200: 'hsl(273, 95%, 86%)',
+					300: 'hsl(273, 94%, 76%)',
+					400: 'hsl(273, 95%, 63%)',
+					500: 'hsl(273, 96%, 50%)',
+					600: 'hsl(273, 96%, 42%)',
+					700: 'hsl(273, 96%, 34%)',
+					800: 'hsl(273, 96%, 26%)',
+					900: 'hsl(273, 96%, 18%)',
+					950: 'hsl(273, 96%, 12%)',
 				},
-				'tech-secondary': '#3B82F6', // blue-500
-				'tech-accent': {
-					DEFAULT: '#EAB308', // yellow-500
-					hover: '#CA8A04', // yellow-600
+				'make-orange': {
+					50: 'hsl(25, 100%, 97%)',
+					100: 'hsl(25, 100%, 94%)',
+					200: 'hsl(25, 100%, 87%)',
+					300: 'hsl(25, 98%, 77%)',
+					400: 'hsl(25, 97%, 64%)',
+					500: 'hsl(25, 95%, 53%)',
+					600: 'hsl(25, 95%, 48%)',
+					700: 'hsl(25, 95%, 40%)',
+					800: 'hsl(25, 95%, 32%)',
+					900: 'hsl(25, 95%, 26%)',
+					950: 'hsl(25, 95%, 15%)',
 				},
-				'gray-primary': '#111827', // gray-900
-				'gray-secondary': '#4B5563', // gray-600
-				'gray-light': '#F9FAFB', // gray-50
-				'gray-border': '#E5E7EB', // gray-200
-				// Cores de contraste garantido
-				'contrast-text': '#111827',
-				'contrast-bg': '#FFFFFF',
+				// Tons de cinza adaptados ao Make
+				'make-gray': {
+					50: 'hsl(273, 20%, 98%)',
+					100: 'hsl(273, 17%, 94%)',
+					200: 'hsl(273, 15%, 87%)',
+					300: 'hsl(273, 13%, 76%)',
+					400: 'hsl(273, 12%, 63%)',
+					500: 'hsl(273, 12%, 47%)',
+					600: 'hsl(273, 12%, 35%)',
+					700: 'hsl(273, 12%, 25%)',
+					800: 'hsl(273, 12%, 18%)',
+					900: 'hsl(273, 12%, 15%)',
+					950: 'hsl(273, 12%, 9%)',
+				},
 				'success': {
 					DEFAULT: '#10B981',
 					hover: '#059669',
