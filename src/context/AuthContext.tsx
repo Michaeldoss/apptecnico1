@@ -427,12 +427,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             
             if (!userType) {
               console.error('❌ Tipo de usuário não encontrado');
+              // Forçar logout se não encontrar tipo de usuário
+              await supabase.auth.signOut();
             } else {
               console.log('✅ Tipo de usuário identificado:', userType);
             }
           } catch (error) {
             console.error('💥 Erro crítico ao buscar dados do usuário:', error);
             setUserType(null);
+            // Em caso de erro crítico, também fazer logout
+            await supabase.auth.signOut();
           }
         }, 0);
       } else {
