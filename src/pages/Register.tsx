@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -26,6 +26,7 @@ import GoogleLoginButton from '@/components/auth/GoogleLoginButton';
 import { useAuth } from '@/context/AuthContext';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { useViaCep } from '@/hooks/useViaCep';
 import { 
   AlertDialog,
   AlertDialogAction,
@@ -83,6 +84,9 @@ const Register = () => {
   const [productCategories, setProductCategories] = useState<string[]>([]);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [userEmail, setUserEmail] = useState('');
+  const [cep, setCep] = useState('');
+  const [cepValidated, setCepValidated] = useState(false);
+  const { fetchAddress, isLoading: cepLoading, error: cepError } = useViaCep();
 
   const sendConfirmationEmail = async (email: string, name: string, userType: string) => {
     try {
@@ -199,6 +203,34 @@ const Register = () => {
         }));
       }
     }
+  };
+
+  const handleCepChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const cepValue = e.target.value.replace(/\D/g, '');
+    setCep(cepValue);
+    
+    if (cepValue.length === 8) {
+      const addressData = await fetchAddress(cepValue);
+      if (addressData) {
+        const streetInput = document.getElementById('street') as HTMLInputElement;
+        const neighborhoodInput = document.getElementById('neighborhood') as HTMLInputElement;
+        const cityInput = document.getElementById('city') as HTMLInputElement;
+        const stateInput = document.getElementById('state') as HTMLInputElement;
+        
+        if (streetInput) streetInput.value = addressData.street;
+        if (neighborhoodInput) neighborhoodInput.value = addressData.neighborhood;
+        if (cityInput) cityInput.value = addressData.city;
+        if (stateInput) stateInput.value = addressData.state;
+        
+        setCepValidated(true);
+      }
+    } else {
+      setCepValidated(false);
+    }
+  };
+
+  const formatCep = (value: string) => {
+    return value.replace(/\D/g, '').replace(/(\d{5})(\d{3})/, '$1-$2');
   };
 
   return (
@@ -382,137 +414,198 @@ const Register = () => {
                 </div>
               </div>
               
-              <div className="border-t border-gray-200 pt-8 space-y-6">
-                <div className="flex items-center gap-3 pb-2 border-b border-gray-200">
-                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <MapPin className="h-5 w-5 text-blue-600" />
+              {/* Seção Endereço - apenas para cliente */}
+              {accountType === 'client' && (
+                <div className="border-t border-border pt-6 space-y-4">
+                  <div className="flex items-center gap-4 pb-4 border-b border-border">
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
+                      <MapPin className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-gray-800">Endereço</h3>
+                      <p className="text-gray-600">Informações de localização</p>
+                    </div>
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-800">Endereço</h3>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="space-y-2 md:col-span-2">
-                    <Label htmlFor="street">Rua/Avenida</Label>
-                    <Input 
-                      id="street"
-                      placeholder="Av. Paulista" 
-                      required 
-                      className="rounded-lg"
-                    />
-                  </div>
-                  
+
                   <div className="space-y-2">
-                    <Label htmlFor="number">Número</Label>
-                    <Input 
-                      id="number"
-                      placeholder="1000" 
-                      required 
-                      className="rounded-lg"
-                    />
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="complement">Complemento</Label>
-                    <Input 
-                      id="complement"
-                      placeholder="Apto 101" 
-                      className="rounded-lg"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="neighborhood">Bairro</Label>
-                    <Input 
-                      id="neighborhood"
-                      placeholder="Centro" 
-                      required 
-                      className="rounded-lg"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="zip">CEP</Label>
+                    <Label htmlFor="zip" className="text-sm font-semibold text-gray-700">CEP *</Label>
                     <Input 
                       id="zip"
+                      name="zip"
+                      value={formatCep(cep)}
+                      onChange={handleCepChange}
                       placeholder="00000-000" 
                       required 
-                      className="rounded-lg"
+                      className="rounded-xl border-2 border-gray-200 focus:border-blue-500 transition-colors h-12"
                     />
+                    {cepLoading && <p className="text-sm text-blue-600">Buscando endereço...</p>}
+                    {cepError && <p className="text-sm text-red-600">{cepError}</p>}
                   </div>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="city">Cidade</Label>
-                    <Input 
-                      id="city"
-                      placeholder="São Paulo" 
-                      required 
-                      className="rounded-lg"
-                    />
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="space-y-2 md:col-span-2">
+                      <Label htmlFor="street" className="text-sm font-semibold text-gray-700">Rua/Avenida *</Label>
+                      <Input 
+                        id="street"
+                        name="street"
+                        placeholder="Av. Paulista" 
+                        required 
+                        className="rounded-xl border-2 border-gray-200 focus:border-blue-500 transition-colors h-12"
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="number" className="text-sm font-semibold text-gray-700">Número *</Label>
+                      <Input 
+                        id="number"
+                        name="number"
+                        placeholder="1000" 
+                        required 
+                        className="rounded-xl border-2 border-gray-200 focus:border-blue-500 transition-colors h-12"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="complement" className="text-sm font-semibold text-gray-700">Complemento</Label>
+                      <Input 
+                        id="complement"
+                        name="complement"
+                        placeholder="Apto 101" 
+                        className="rounded-xl border-2 border-gray-200 focus:border-blue-500 transition-colors h-12"
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="neighborhood" className="text-sm font-semibold text-gray-700">Bairro *</Label>
+                      <Input 
+                        id="neighborhood"
+                        name="neighborhood"
+                        placeholder="Centro" 
+                        required 
+                        className="rounded-xl border-2 border-gray-200 focus:border-blue-500 transition-colors h-12"
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="city" className="text-sm font-semibold text-gray-700">Cidade *</Label>
+                      <Input 
+                        id="city"
+                        name="city"
+                        placeholder="São Paulo" 
+                        required 
+                        className="rounded-xl border-2 border-gray-200 focus:border-blue-500 transition-colors h-12"
+                      />
+                    </div>
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="state">Estado</Label>
+                    <Label htmlFor="state" className="text-sm font-semibold text-gray-700">Estado *</Label>
                     <Input 
                       id="state"
+                      name="state"
                       placeholder="SP" 
                       required 
-                      className="rounded-lg"
+                      className="rounded-xl border-2 border-gray-200 focus:border-blue-500 transition-colors h-12"
                     />
                   </div>
                 </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="address-proof">Comprovante de Residência</Label>
-                  <Input 
-                    id="address-proof"
-                    type="file"
-                    accept="image/*,.pdf"
-                    onChange={(e) => handleFileChange('addressProof', e)}
-                    className="rounded-lg"
-                  />
-                  <p className="text-xs text-gray-600 mt-1">
-                    Conta de luz, água ou telefone recente (últimos 3 meses)
-                  </p>
-                </div>
-              </div>
-              
-              {/* Documentos */}
-              <div className="border-t border-gray-200 pt-8 space-y-6">
-                <div className="flex items-center gap-3 pb-2 border-b border-gray-200">
-                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <FileText className="h-5 w-5 text-blue-600" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-gray-800">Documentos</h3>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="rg-file">RG (frente e verso)</Label>
-                    <Input 
-                      id="rg-file"
-                      type="file"
-                      accept="image/*,.pdf"
-                      onChange={(e) => handleFileChange('rg', e)}
-                      className="rounded-lg"
-                    />
+              )}
+
+              {/* Seção Documentos - apenas para cliente */}
+              {accountType === 'client' && (
+                <div className="border-t border-border pt-6 space-y-4">
+                  <div className="flex items-center gap-4 pb-4 border-b border-border">
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
+                      <FileText className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-gray-800">Documentos</h3>
+                      <p className="text-gray-600">Documentos de identificação</p>
+                    </div>
                   </div>
                   
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="rg-file" className="text-sm font-semibold text-gray-700">RG (frente e verso)</Label>
+                      <Input 
+                        id="rg-file"
+                        type="file"
+                        accept="image/*,.pdf"
+                        onChange={(e) => handleFileChange('rg', e)}
+                        className="rounded-xl border-2 border-gray-200 focus:border-blue-500 transition-colors h-12"
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="cpf-file" className="text-sm font-semibold text-gray-700">CPF</Label>
+                      <Input 
+                        id="cpf-file"
+                        type="file"
+                        accept="image/*,.pdf"
+                        onChange={(e) => handleFileChange('cpf', e)}
+                        className="rounded-xl border-2 border-gray-200 focus:border-blue-500 transition-colors h-12"
+                      />
+                    </div>
+                  </div>
+
                   <div className="space-y-2">
-                    <Label htmlFor="cpf-file">CPF</Label>
+                    <Label htmlFor="address-proof" className="text-sm font-semibold text-gray-700">Comprovante de Residência</Label>
                     <Input 
-                      id="cpf-file"
+                      id="address-proof"
                       type="file"
                       accept="image/*,.pdf"
-                      onChange={(e) => handleFileChange('cpf', e)}
-                      className="rounded-lg"
+                      onChange={(e) => handleFileChange('addressProof', e)}
+                      className="rounded-xl border-2 border-gray-200 focus:border-blue-500 transition-colors h-12"
                     />
+                    <p className="text-xs text-gray-600 mt-1">
+                      Conta de luz, água ou telefone recente (últimos 3 meses)
+                    </p>
                   </div>
                 </div>
-              </div>
+              )}
+
+              {/* Seção Senha - apenas para cliente */}
+              {accountType === 'client' && (
+                <div className="border-t border-border pt-6 space-y-4">
+                  <div className="flex items-center gap-4 pb-4 border-b border-border">
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
+                      <KeyIcon className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-gray-800">Senha de Acesso</h3>
+                      <p className="text-gray-600">Defina sua senha para entrar na plataforma</p>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="password" className="text-sm font-semibold text-gray-700">Senha *</Label>
+                      <Input 
+                        id="password"
+                        name="password"
+                        type="password" 
+                        placeholder="••••••••" 
+                        required 
+                        className="rounded-xl border-2 border-gray-200 focus:border-blue-500 transition-colors h-12"
+                      />
+                    </div>
+                   
+                    <div className="space-y-2">
+                      <Label htmlFor="confirm-password" className="text-sm font-semibold text-gray-700">Confirmar Senha *</Label>
+                      <Input 
+                        id="confirm-password"
+                        name="confirm-password"
+                        type="password" 
+                        placeholder="••••••••" 
+                        required 
+                        className="rounded-xl border-2 border-gray-200 focus:border-blue-500 transition-colors h-12"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
               
               {accountType === 'technician' && (
                 <>
