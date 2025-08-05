@@ -83,10 +83,8 @@ const UserRegistrationForm: React.FC<UserRegistrationFormProps> = ({
           description: "Redirecionando para seu dashboard...",
         });
         
-        // Aguarda um breve momento para mostrar a mensagem de sucesso
-        setTimeout(() => {
-          onSuccess();
-        }, 1000);
+        // O AuthContext irá redirecionar automaticamente após o signup
+        console.log('📝 Cadastro concluído, aguardando redirecionamento automático...');
       }
       
     } catch (error: any) {

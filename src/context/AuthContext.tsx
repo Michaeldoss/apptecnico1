@@ -118,6 +118,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       return false;
     }
 
+    // Inserir também na tabela usuarios para manter controle central
+    const { error: usuarioError } = await supabase.from('usuarios').insert({
+      id: userId,
+      nome: userData.nome,
+      email: userData.email,
+      tipo_usuario: userData.type === 'customer' ? 'cliente' : userData.type
+    });
+
+    if (usuarioError) {
+      console.warn('Aviso: Erro ao inserir na tabela usuarios:', usuarioError.message);
+      // Não falha o cadastro por causa disso, mas registra o aviso
+    }
+
     // Automaticamente faz login após o cadastro
     try {
       const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
@@ -149,7 +162,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           company: 'company',
           admin: 'admin',
         };
-        setUserType(tipoMap[userTypeData.tipo_usuario]);
+        const mappedUserType = tipoMap[userTypeData.tipo_usuario];
+        setUserType(mappedUserType);
+        
+        console.log('✅ Signup bem-sucedido, redirecionando para dashboard...', { mappedUserType });
+        
+        // Redirecionar automaticamente baseado no tipo de usuário após signup
+        const redirectPaths = {
+          customer: '/cliente/dashboard',
+          technician: '/tecnico/dashboard',
+          company: '/loja/dashboard',
+          admin: '/admin/dashboard'
+        };
+        
+        if (mappedUserType && redirectPaths[mappedUserType]) {
+          setTimeout(() => {
+            console.log('🚀 Redirecionando para:', redirectPaths[mappedUserType]);
+            window.location.href = redirectPaths[mappedUserType];
+          }, 500);
+        }
       }
 
       return true;
