@@ -95,7 +95,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       email,
       password,
       options: {
-        emailRedirectTo: `${window.location.origin}/login`,
+        emailRedirectTo: `${window.location.origin}/`,
         data: { user_type: userData.type, name: userData.nome },
       },
     });
@@ -117,8 +117,46 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       return false;
     }
 
-    toast({ title: "Conta criada com sucesso", description: "Verifique seu email para ativar a conta." });
-    return true;
+    // Automaticamente faz login após o cadastro
+    try {
+      const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (loginError || !loginData.user) {
+        toast({ variant: "destructive", title: "Erro no login automático", description: "Conta criada, mas erro no login. Tente fazer login manualmente." });
+        return false;
+      }
+
+      // Atualizar estados locais
+      setUser(loginData.user);
+      setSession(loginData.session);
+      setIsAuthenticated(true);
+      
+      // Buscar tipo de usuário
+      const { data: userTypeData } = await supabase
+        .from('usuarios')
+        .select('tipo_usuario')
+        .eq('id', loginData.user.id)
+        .single();
+
+      if (userTypeData) {
+        const tipoMap: Record<string, UserType> = {
+          cliente: 'customer',
+          tecnico: 'technician',
+          company: 'company',
+          admin: 'admin',
+        };
+        setUserType(tipoMap[userTypeData.tipo_usuario]);
+      }
+
+      return true;
+    } catch (loginError) {
+      console.error('Erro no login automático:', loginError);
+      toast({ variant: "destructive", title: "Erro no login automático", description: "Conta criada, mas erro no login. Tente fazer login manualmente." });
+      return false;
+    }
   };
 
   const logout = async () => {

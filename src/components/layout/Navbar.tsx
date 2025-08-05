@@ -112,44 +112,13 @@ const Navbar = () => {
                 <LogIn className="h-4 w-4 mr-2" /> Entrar
               </Button>
               
-              {/* Dropdown de Cadastros */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button size="sm" className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 font-inter font-semibold transition-all duration-200 border-0 shadow-lg hover:shadow-xl hover:scale-105">
-                    <UserPlus className="h-4 w-4 mr-2" /> Cadastre-se
-                    <ChevronDown className="h-4 w-4 ml-2" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" side="bottom" className="bg-white border-gray-200 shadow-xl w-52 mr-4">
-                  <DropdownMenuItem asChild>
-                    <Link to="/register" className="font-inter font-medium flex items-center gap-3 p-3">
-                      <User className="h-4 w-4 text-blue-600" />
-                      <div>
-                        <div className="font-semibold text-gray-800">Cliente</div>
-                        <div className="text-xs text-gray-600">Solicitar serviços</div>
-                      </div>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/technician" className="font-inter font-medium flex items-center gap-3 p-3">
-                      <Wrench className="h-4 w-4 text-yellow-600" />
-                      <div>
-                        <div className="font-semibold text-gray-800">Técnico</div>
-                        <div className="text-xs text-gray-600">Prestar serviços</div>
-                      </div>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/loja/register" className="font-inter font-medium flex items-center gap-3 p-3">
-                      <Store className="h-4 w-4 text-blue-600" />
-                      <div>
-                        <div className="font-semibold text-gray-800">Lojista</div>
-                        <div className="text-xs text-gray-600">Vender produtos</div>
-                      </div>
-                    </Link>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <Button 
+                size="sm" 
+                onClick={() => navigate('/register')}
+                className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 font-inter font-semibold transition-all duration-200 border-0 shadow-lg hover:shadow-xl hover:scale-105"
+              >
+                <UserPlus className="h-4 w-4 mr-2" /> Cadastre-se
+              </Button>
             </>}
         </div>
 
@@ -181,25 +150,16 @@ const Navbar = () => {
                       <LogIn className="h-4 w-4 mr-2" /> Entrar
                     </Button>
                     
-                    <div className="text-center text-sm font-semibold text-gray-800 mb-2 font-inter">Cadastre-se como:</div>
-                    
-                    <Link to="/register" onClick={() => setIsMenuOpen(false)}>
-                      <Button className="w-full justify-start bg-blue-600 text-white hover:bg-blue-700 font-inter font-semibold mb-2 shadow-lg">
-                        <User className="h-4 w-4 mr-2" /> Cliente
-                      </Button>
-                    </Link>
-                    
-                    <Link to="/technician" onClick={() => setIsMenuOpen(false)}>
-                      <Button className="w-full justify-start bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 font-inter font-semibold mb-2 shadow-lg">
-                        <Wrench className="h-4 w-4 mr-2" /> Técnico
-                      </Button>
-                    </Link>
-                    
-                    <Link to="/loja/register" onClick={() => setIsMenuOpen(false)}>
-                      <Button className="w-full justify-start bg-blue-700 text-white hover:bg-blue-800 font-inter font-semibold shadow-lg">
-                        <Store className="h-4 w-4 mr-2" /> Lojista
-                      </Button>
-                    </Link>
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-center bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 font-inter font-semibold border-0 shadow-lg" 
+                      onClick={() => {
+                        navigate('/register');
+                        setIsMenuOpen(false);
+                      }}
+                    >
+                      <UserPlus className="h-4 w-4 mr-2" /> Cadastre-se
+                    </Button>
                   </div>}
               </div>
             </div>
