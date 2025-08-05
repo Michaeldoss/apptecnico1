@@ -51,37 +51,87 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setIsAuthenticated(true);
       setSession(data.session);
 
-      console.log('🔍 Buscando tipo de usuário no login para:', data.user.id);
-      const { data: userData, error: userError } = await supabase
-        .from('usuarios')
-        .select('tipo_usuario')
-        .eq('id', data.user.id)
-        .maybeSingle();
-      
-      console.log('📋 Resultado da busca no login:', { userData, userError });
+      // Verificar tipo de usuário de forma sequencial
+      const userType = await checkUserTypeInTables(data.user.id);
+      setUserType(userType);
 
-      if (userData && !userError) {
-        console.log('✅ Dados do usuário encontrados:', userData);
-        const tipoMap: Record<string, UserType> = {
-          cliente: 'customer',
-          tecnico: 'technician',
-          company: 'company',
-          admin: 'admin',
+      if (userType) {
+        const redirectPaths = {
+          customer: '/cliente/dashboard',
+          technician: '/tecnico/dashboard',
+          company: '/loja/dashboard',
+          admin: '/admin/dashboard'
         };
-        const mappedUserType = tipoMap[userData.tipo_usuario];
-        console.log('🔄 Mapeando tipo de usuário:', { tipo_original: userData.tipo_usuario, tipo_mapeado: mappedUserType });
-        setUserType(mappedUserType);
+        
+        toast({ title: "Login realizado", description: "Bem-vindo de volta!" });
+        
+        setTimeout(() => {
+          window.location.href = redirectPaths[userType];
+        }, 500);
       } else {
-        console.error('❌ Erro ao buscar dados do usuário:', { userData, userError });
-        setUserType(null);
         toast({ variant: "destructive", title: "Erro", description: "Tipo de usuário não identificado" });
       }
 
-      toast({ title: "Login realizado", description: "Bem-vindo de volta!" });
       return true;
     }
 
     return false;
+  };
+
+  // Função para verificar tipo de usuário nas tabelas específicas
+  const checkUserTypeInTables = async (userId: string): Promise<UserType> => {
+    console.log('🔍 Verificando tipo de usuário nas tabelas específicas para:', userId);
+
+    // Verificar se é cliente
+    const { data: clienteData } = await supabase
+      .from('clientes')
+      .select('id')
+      .eq('id', userId)
+      .maybeSingle();
+
+    if (clienteData) {
+      console.log('✅ Usuário encontrado na tabela clientes');
+      return 'customer';
+    }
+
+    // Verificar se é técnico
+    const { data: tecnicoData } = await supabase
+      .from('tecnicos')
+      .select('id')
+      .eq('id', userId)
+      .maybeSingle();
+
+    if (tecnicoData) {
+      console.log('✅ Usuário encontrado na tabela tecnicos');
+      return 'technician';
+    }
+
+    // Verificar se é loja
+    const { data: lojaData } = await supabase
+      .from('lojas')
+      .select('id')
+      .eq('id', userId)
+      .maybeSingle();
+
+    if (lojaData) {
+      console.log('✅ Usuário encontrado na tabela lojas');
+      return 'company';
+    }
+
+    // Verificar se é admin na tabela usuarios
+    const { data: usuarioData } = await supabase
+      .from('usuarios')
+      .select('tipo_usuario')
+      .eq('id', userId)
+      .maybeSingle();
+
+    if (usuarioData?.tipo_usuario === 'admin') {
+      console.log('✅ Usuário encontrado como admin');
+      return 'admin';
+    }
+
+    console.log('❌ Usuário não encontrado em nenhuma tabela específica');
+    return null;
   };
 
   const signup = async (email: string, password: string, userData: any): Promise<boolean> => {
@@ -128,13 +178,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         id: userId,
         nome_empresa: userData.nome || userData.name || '',
         nome_contato: userData.nome || userData.name || '',
-        email: userData.email
+        email: email
       };
     } else {
       cleanUserData = {
         id: userId,
         nome: userData.nome || userData.name || '',
-        email: userData.email
+        email: email
       };
     }
 
@@ -150,11 +200,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     console.log('✅ Dados inseridos na tabela específica com sucesso');
 
-    // Inserir também na tabela usuarios para manter controle central
+    // Inserir também na tabela usuarios para controle central
     const usuarioData = {
       id: userId,
-      nome: userData.nome,
-      email: userData.email,
+      nome: userData.nome || userData.name || '',
+      email: email,
       tipo_usuario: userData.type === 'customer' ? 'cliente' : userData.type
     };
     
@@ -164,11 +214,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     if (usuarioError) {
       console.error('❌ Erro ao inserir na tabela usuarios:', usuarioError);
-      toast({ variant: "destructive", title: "Erro ao salvar dados do usuário", description: usuarioError.message });
-      return false;
+      // Não bloquear o fluxo se houver erro na tabela usuarios, pois o principal é a tabela específica
+      console.warn('⚠️ Continuando sem inserir na tabela usuarios');
+    } else {
+      console.log('✅ Dados inseridos na tabela usuarios com sucesso');
     }
-    
-    console.log('✅ Dados inseridos na tabela usuarios com sucesso');
 
     // Automaticamente faz login após o cadastro
     console.log('🔐 Fazendo login automático...');
@@ -192,28 +242,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setSession(loginData.session);
       setIsAuthenticated(true);
       
-      // Buscar tipo de usuário
-      const { data: userTypeData, error: userTypeError } = await supabase
-        .from('usuarios')
-        .select('tipo_usuario')
-        .eq('id', loginData.user.id)
-        .maybeSingle();
+      // Verificar tipo de usuário usando a nova função
+      const userType = await checkUserTypeInTables(loginData.user.id);
+      setUserType(userType);
 
-      console.log('🔍 Verificando tipo de usuário...', { userTypeData, userTypeError });
-      
-      if (userTypeData && !userTypeError) {
-        const tipoMap: Record<string, UserType> = {
-          cliente: 'customer',
-          tecnico: 'technician',
-          company: 'company',
-          admin: 'admin',
-        };
-        const mappedUserType = tipoMap[userTypeData.tipo_usuario];
-        setUserType(mappedUserType);
-        
-        console.log('✅ Signup bem-sucedido, redirecionando para dashboard...', { mappedUserType });
-        
-        // Redirecionar automaticamente baseado no tipo de usuário após signup
+      if (userType) {
         const redirectPaths = {
           customer: '/cliente/dashboard',
           technician: '/tecnico/dashboard',
@@ -221,14 +254,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           admin: '/admin/dashboard'
         };
         
-        if (mappedUserType && redirectPaths[mappedUserType]) {
-          setTimeout(() => {
-            console.log('🚀 Redirecionando para:', redirectPaths[mappedUserType]);
-            window.location.href = redirectPaths[mappedUserType];
-          }, 500);
-        }
+        console.log('✅ Signup bem-sucedido, redirecionando para dashboard...', { userType });
+        
+        toast({ title: "Cadastro realizado", description: "Bem-vindo! Redirecionando para seu dashboard..." });
+        
+        setTimeout(() => {
+          console.log('🚀 Redirecionando para:', redirectPaths[userType]);
+          window.location.href = redirectPaths[userType];
+        }, 1000);
       } else {
-        console.error('❌ Erro ao buscar tipo de usuário:', userTypeError);
+        console.error('❌ Erro ao buscar tipo de usuário após cadastro');
         toast({ 
           variant: "destructive", 
           title: "Erro no redirecionamento", 
@@ -361,27 +396,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setTimeout(async () => {
           try {
             console.log('🔍 Buscando tipo de usuário para:', session.user.id);
-            const { data: userData, error } = await supabase
-              .from('usuarios')
-              .select('tipo_usuario')
-              .eq('id', session.user.id)
-              .maybeSingle();
-
-            console.log('📋 Resultado da busca:', { userData, error });
-
-            if (error || !userData) {
-              console.error('❌ Erro ao buscar tipo de usuário:', error);
-              setUserType(null);
+            const userType = await checkUserTypeInTables(session.user.id);
+            setUserType(userType);
+            
+            if (!userType) {
+              console.error('❌ Tipo de usuário não encontrado');
             } else {
-              const tipoMap: Record<string, UserType> = {
-                cliente: 'customer',
-                tecnico: 'technician',
-                company: 'company',
-                admin: 'admin',
-              };
-              const mappedType = tipoMap[userData.tipo_usuario] || null;
-              console.log('✅ Tipo de usuário mapeado:', { original: userData.tipo_usuario, mapped: mappedType });
-              setUserType(mappedType);
+              console.log('✅ Tipo de usuário identificado:', userType);
             }
           } catch (error) {
             console.error('💥 Erro crítico ao buscar dados do usuário:', error);
