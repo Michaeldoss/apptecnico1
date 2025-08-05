@@ -9,14 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage 
-} from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { toast } from '@/hooks/use-toast';
 import { useAuth } from '@/context/AuthContext';
 import { useViaCep } from '@/hooks/useViaCep';
@@ -28,18 +21,15 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import GoogleLoginButton from '@/components/auth/GoogleLoginButton';
 import { User, MapPin, FileText, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
-
 const registerSchema = z.object({
   // CEP primeiro
   cep: z.string().min(8, "CEP deve ter 8 dígitos").max(9, "CEP inválido"),
-  
   // Dados pessoais
   firstName: z.string().min(2, "Nome deve ter pelo menos 2 caracteres"),
   lastName: z.string().min(2, "Sobrenome deve ter pelo menos 2 caracteres"),
   email: z.string().email("Email inválido"),
   phone: z.string().min(10, "Telefone deve ter pelo menos 10 dígitos"),
   cpf: z.string().min(11, "CPF deve ter 11 dígitos"),
-  
   // Endereço (preenchido automaticamente via CEP)
   street: z.string().min(5, "Rua deve ter pelo menos 5 caracteres"),
   number: z.string().min(1, "Número é obrigatório"),
@@ -47,26 +37,21 @@ const registerSchema = z.object({
   neighborhood: z.string().min(2, "Bairro deve ter pelo menos 2 caracteres"),
   city: z.string().min(2, "Cidade deve ter pelo menos 2 caracteres"),
   state: z.string().length(2, "Estado deve ter 2 caracteres"),
-  
   // Acesso
   password: z.string().min(6, "Senha deve ter pelo menos 6 caracteres"),
   confirmPassword: z.string(),
-  
   // Específicos por tipo
   companyName: z.string().optional(),
   cnpj: z.string().optional(),
   experience: z.string().optional(),
   specialties: z.string().optional(),
-  
   // Termos
-  acceptTerms: z.boolean().refine(val => val === true, "Você deve aceitar os termos"),
-}).refine((data) => data.password === data.confirmPassword, {
+  acceptTerms: z.boolean().refine(val => val === true, "Você deve aceitar os termos")
+}).refine(data => data.password === data.confirmPassword, {
   message: "As senhas não conferem",
-  path: ["confirmPassword"],
+  path: ["confirmPassword"]
 });
-
 type RegisterFormData = z.infer<typeof registerSchema>;
-
 const NewRegister = () => {
   const [userType, setUserType] = useState<'client' | 'technician' | 'store'>('client');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -74,11 +59,15 @@ const NewRegister = () => {
   const [profilePicture, setProfilePicture] = useState<File | null>(null);
   const [step, setStep] = useState(1);
   const [cepValidated, setCepValidated] = useState(false);
-  
-  const { signup } = useAuth();
+  const {
+    signup
+  } = useAuth();
   const navigate = useNavigate();
-  const { fetchAddress, isLoading: cepLoading, error: cepError } = useViaCep();
-
+  const {
+    fetchAddress,
+    isLoading: cepLoading,
+    error: cepError
+  } = useViaCep();
   const form = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -100,10 +89,9 @@ const NewRegister = () => {
       cnpj: '',
       experience: '',
       specialties: '',
-      acceptTerms: false,
-    },
+      acceptTerms: false
+    }
   });
-
   const watchedCep = form.watch('cep');
 
   // Auto-preencher endereço quando CEP é digitado
@@ -111,20 +99,17 @@ const NewRegister = () => {
     const handleCepLookup = async () => {
       if (watchedCep && watchedCep.length >= 8) {
         const cleanCep = watchedCep.replace(/\D/g, '');
-        
         if (cleanCep.length === 8) {
           const addressData = await fetchAddress(cleanCep);
-          
           if (addressData) {
             form.setValue('street', addressData.street);
             form.setValue('neighborhood', addressData.neighborhood);
             form.setValue('city', addressData.city);
             form.setValue('state', addressData.state);
             setCepValidated(true);
-            
             toast({
               title: "Endereço encontrado",
-              description: "Dados preenchidos automaticamente via CEP",
+              description: "Dados preenchidos automaticamente via CEP"
             });
           } else {
             setCepValidated(false);
@@ -132,36 +117,30 @@ const NewRegister = () => {
         }
       }
     };
-
     const timeoutId = setTimeout(handleCepLookup, 500);
     return () => clearTimeout(timeoutId);
   }, [watchedCep, fetchAddress, form]);
-
   const onSubmit = async (data: RegisterFormData) => {
     setIsSubmitting(true);
-    
     try {
       // Simular registro
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
+
       // Preparar dados do usuário
       const userData = {
         ...data,
         type: userType,
         documents,
-        profilePicture,
+        profilePicture
       };
-      
       console.log('Dados salvos:', userData);
-      
       toast({
         title: "Conta criada com sucesso!",
-        description: "Agora você pode fazer login com suas credenciais.",
+        description: "Agora você pode fazer login com suas credenciais."
       });
-      
+
       // Tentar login automático
       const loginSuccess = await signup(data.email, data.password, userData);
-      
       if (loginSuccess) {
         // Redirecionar baseado no tipo de usuário
         switch (userType) {
@@ -178,25 +157,22 @@ const NewRegister = () => {
         // Se login falhar, redirecionar para página de login
         navigate('/login');
       }
-      
     } catch (error) {
       console.error('Erro no cadastro:', error);
       toast({
         variant: "destructive",
         title: "Erro no cadastro",
-        description: "Ocorreu um erro. Tente novamente.",
+        description: "Ocorreu um erro. Tente novamente."
       });
     } finally {
       setIsSubmitting(false);
     }
   };
-
   const formatCep = (value: string) => {
     const cleanValue = value.replace(/\D/g, '');
     if (cleanValue.length <= 5) return cleanValue;
     return `${cleanValue.slice(0, 5)}-${cleanValue.slice(5, 8)}`;
   };
-
   const validateRealTime = (field: string, value: string) => {
     switch (field) {
       case 'email':
@@ -209,9 +185,7 @@ const NewRegister = () => {
         return true;
     }
   };
-
-  return (
-    <div className="min-h-screen flex flex-col">
+  return <div className="min-h-screen flex flex-col">
       <Navbar />
       
       <main className="flex-grow container mx-auto px-4 py-8">
@@ -225,11 +199,11 @@ const NewRegister = () => {
 
           <BlurContainer className="p-6">
             {/* Seletor de tipo de conta */}
-            <Tabs value={userType} onValueChange={(value) => setUserType(value as any)} className="mb-6">
+            <Tabs value={userType} onValueChange={value => setUserType(value as any)} className="mb-6">
               <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="client">Cliente</TabsTrigger>
-                <TabsTrigger value="technician">Técnico</TabsTrigger>
-                <TabsTrigger value="store">Lojista</TabsTrigger>
+                
+                
               </TabsList>
             </Tabs>
 
@@ -257,147 +231,89 @@ const NewRegister = () => {
                     {cepValidated && <CheckCircle className="h-4 w-4 text-green-600" />}
                   </div>
                   
-                  <FormField
-                    control={form.control}
-                    name="cep"
-                    render={({ field }) => (
-                      <FormItem>
+                  <FormField control={form.control} name="cep" render={({
+                  field
+                }) => <FormItem>
                         <FormLabel>CEP *</FormLabel>
                         <div className="relative">
                           <FormControl>
-                            <Input
-                              placeholder="00000-000"
-                              value={formatCep(field.value)}
-                              onChange={(e) => {
-                                const formatted = formatCep(e.target.value);
-                                field.onChange(formatted);
-                                setCepValidated(false);
-                              }}
-                              className={`${cepValidated ? 'border-green-500' : ''}`}
-                            />
+                            <Input placeholder="00000-000" value={formatCep(field.value)} onChange={e => {
+                        const formatted = formatCep(e.target.value);
+                        field.onChange(formatted);
+                        setCepValidated(false);
+                      }} className={`${cepValidated ? 'border-green-500' : ''}`} />
                           </FormControl>
-                          {cepLoading && (
-                            <Loader2 className="absolute right-3 top-3 h-4 w-4 animate-spin" />
-                          )}
+                          {cepLoading && <Loader2 className="absolute right-3 top-3 h-4 w-4 animate-spin" />}
                         </div>
-                        {cepError && (
-                          <p className="text-sm text-red-600 flex items-center gap-1">
+                        {cepError && <p className="text-sm text-red-600 flex items-center gap-1">
                             <AlertCircle className="h-3 w-3" />
                             {cepError}
-                          </p>
-                        )}
+                          </p>}
                         <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                      </FormItem>} />
                 </div>
 
                 {/* Endereço - preenchido automaticamente */}
                 <div className="grid md:grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="street"
-                    render={({ field }) => (
-                      <FormItem className="md:col-span-2">
+                  <FormField control={form.control} name="street" render={({
+                  field
+                }) => <FormItem className="md:col-span-2">
                         <FormLabel>Rua/Avenida *</FormLabel>
                         <FormControl>
-                          <Input
-                            placeholder="Será preenchido automaticamente"
-                            {...field}
-                            disabled={cepLoading}
-                            className="bg-muted/50"
-                          />
+                          <Input placeholder="Será preenchido automaticamente" {...field} disabled={cepLoading} className="bg-muted/50" />
                         </FormControl>
                         <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                      </FormItem>} />
                   
-                  <FormField
-                    control={form.control}
-                    name="number"
-                    render={({ field }) => (
-                      <FormItem>
+                  <FormField control={form.control} name="number" render={({
+                  field
+                }) => <FormItem>
                         <FormLabel>Número *</FormLabel>
                         <FormControl>
                           <Input placeholder="123" {...field} />
                         </FormControl>
                         <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                      </FormItem>} />
                   
-                  <FormField
-                    control={form.control}
-                    name="complement"
-                    render={({ field }) => (
-                      <FormItem>
+                  <FormField control={form.control} name="complement" render={({
+                  field
+                }) => <FormItem>
                         <FormLabel>Complemento</FormLabel>
                         <FormControl>
                           <Input placeholder="Apto 101, Sala 10..." {...field} />
                         </FormControl>
                         <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                      </FormItem>} />
                   
-                  <FormField
-                    control={form.control}
-                    name="neighborhood"
-                    render={({ field }) => (
-                      <FormItem>
+                  <FormField control={form.control} name="neighborhood" render={({
+                  field
+                }) => <FormItem>
                         <FormLabel>Bairro *</FormLabel>
                         <FormControl>
-                          <Input
-                            placeholder="Será preenchido automaticamente"
-                            {...field}
-                            disabled={cepLoading}
-                            className="bg-muted/50"
-                          />
+                          <Input placeholder="Será preenchido automaticamente" {...field} disabled={cepLoading} className="bg-muted/50" />
                         </FormControl>
                         <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                      </FormItem>} />
                   
-                  <FormField
-                    control={form.control}
-                    name="city"
-                    render={({ field }) => (
-                      <FormItem>
+                  <FormField control={form.control} name="city" render={({
+                  field
+                }) => <FormItem>
                         <FormLabel>Cidade *</FormLabel>
                         <FormControl>
-                          <Input
-                            placeholder="Será preenchido automaticamente"
-                            {...field}
-                            disabled={cepLoading}
-                            className="bg-muted/50"
-                          />
+                          <Input placeholder="Será preenchido automaticamente" {...field} disabled={cepLoading} className="bg-muted/50" />
                         </FormControl>
                         <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                      </FormItem>} />
                   
-                  <FormField
-                    control={form.control}
-                    name="state"
-                    render={({ field }) => (
-                      <FormItem>
+                  <FormField control={form.control} name="state" render={({
+                  field
+                }) => <FormItem>
                         <FormLabel>Estado *</FormLabel>
                         <FormControl>
-                          <Input
-                            placeholder="SP"
-                            {...field}
-                            disabled={cepLoading}
-                            className="bg-muted/50"
-                            maxLength={2}
-                          />
+                          <Input placeholder="SP" {...field} disabled={cepLoading} className="bg-muted/50" maxLength={2} />
                         </FormControl>
                         <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                      </FormItem>} />
                 </div>
 
                 {/* Dados pessoais */}
@@ -408,208 +324,136 @@ const NewRegister = () => {
                   </div>
                   
                   <div className="grid md:grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="firstName"
-                      render={({ field }) => (
-                        <FormItem>
+                    <FormField control={form.control} name="firstName" render={({
+                    field
+                  }) => <FormItem>
                           <FormLabel>Nome *</FormLabel>
                           <FormControl>
                             <Input placeholder="João" {...field} />
                           </FormControl>
                           <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                        </FormItem>} />
                     
-                    <FormField
-                      control={form.control}
-                      name="lastName"
-                      render={({ field }) => (
-                        <FormItem>
+                    <FormField control={form.control} name="lastName" render={({
+                    field
+                  }) => <FormItem>
                           <FormLabel>Sobrenome *</FormLabel>
                           <FormControl>
                             <Input placeholder="Silva" {...field} />
                           </FormControl>
                           <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                        </FormItem>} />
                     
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
+                    <FormField control={form.control} name="email" render={({
+                    field
+                  }) => <FormItem>
                           <FormLabel>Email *</FormLabel>
                           <FormControl>
-                            <Input
-                              type="email"
-                              placeholder="joao@exemplo.com"
-                              {...field}
-                              className={`${validateRealTime('email', field.value) && field.value ? 'border-green-500' : ''}`}
-                            />
+                            <Input type="email" placeholder="joao@exemplo.com" {...field} className={`${validateRealTime('email', field.value) && field.value ? 'border-green-500' : ''}`} />
                           </FormControl>
                           <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                        </FormItem>} />
                     
-                    <FormField
-                      control={form.control}
-                      name="phone"
-                      render={({ field }) => (
-                        <FormItem>
+                    <FormField control={form.control} name="phone" render={({
+                    field
+                  }) => <FormItem>
                           <FormLabel>Telefone *</FormLabel>
                           <FormControl>
-                            <Input
-                              placeholder="(11) 99999-9999"
-                              {...field}
-                              className={`${validateRealTime('phone', field.value) ? 'border-green-500' : ''}`}
-                            />
+                            <Input placeholder="(11) 99999-9999" {...field} className={`${validateRealTime('phone', field.value) ? 'border-green-500' : ''}`} />
                           </FormControl>
                           <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                        </FormItem>} />
                     
-                    <FormField
-                      control={form.control}
-                      name="cpf"
-                      render={({ field }) => (
-                        <FormItem>
+                    <FormField control={form.control} name="cpf" render={({
+                    field
+                  }) => <FormItem>
                           <FormLabel>CPF *</FormLabel>
                           <FormControl>
-                            <Input
-                              placeholder="000.000.000-00"
-                              {...field}
-                              className={`${validateRealTime('cpf', field.value) ? 'border-green-500' : ''}`}
-                            />
+                            <Input placeholder="000.000.000-00" {...field} className={`${validateRealTime('cpf', field.value) ? 'border-green-500' : ''}`} />
                           </FormControl>
                           <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                        </FormItem>} />
                   </div>
                 </div>
 
                 {/* Campos específicos por tipo */}
-                {userType === 'store' && (
-                  <div className="space-y-4">
+                {userType === 'store' && <div className="space-y-4">
                     <h3 className="text-lg font-semibold">Dados da Empresa</h3>
                     <div className="grid md:grid-cols-2 gap-4">
-                      <FormField
-                        control={form.control}
-                        name="companyName"
-                        render={({ field }) => (
-                          <FormItem>
+                      <FormField control={form.control} name="companyName" render={({
+                    field
+                  }) => <FormItem>
                             <FormLabel>Nome da Empresa *</FormLabel>
                             <FormControl>
                               <Input placeholder="Sua Empresa Ltda" {...field} />
                             </FormControl>
                             <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                          </FormItem>} />
                       
-                      <FormField
-                        control={form.control}
-                        name="cnpj"
-                        render={({ field }) => (
-                          <FormItem>
+                      <FormField control={form.control} name="cnpj" render={({
+                    field
+                  }) => <FormItem>
                             <FormLabel>CNPJ *</FormLabel>
                             <FormControl>
                               <Input placeholder="00.000.000/0001-00" {...field} />
                             </FormControl>
                             <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                          </FormItem>} />
                     </div>
-                  </div>
-                )}
+                  </div>}
 
-                {userType === 'technician' && (
-                  <div className="space-y-4">
+                {userType === 'technician' && <div className="space-y-4">
                     <h3 className="text-lg font-semibold">Informações Profissionais</h3>
-                    <FormField
-                      control={form.control}
-                      name="specialties"
-                      render={({ field }) => (
-                        <FormItem>
+                    <FormField control={form.control} name="specialties" render={({
+                  field
+                }) => <FormItem>
                           <FormLabel>Especialidades *</FormLabel>
                           <FormControl>
-                            <Textarea
-                              placeholder="Descreva suas especialidades técnicas..."
-                              {...field}
-                            />
+                            <Textarea placeholder="Descreva suas especialidades técnicas..." {...field} />
                           </FormControl>
                           <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                        </FormItem>} />
                     
-                    <FormField
-                      control={form.control}
-                      name="experience"
-                      render={({ field }) => (
-                        <FormItem>
+                    <FormField control={form.control} name="experience" render={({
+                  field
+                }) => <FormItem>
                           <FormLabel>Experiência *</FormLabel>
                           <FormControl>
-                            <Textarea
-                              placeholder="Descreva sua experiência profissional..."
-                              {...field}
-                            />
+                            <Textarea placeholder="Descreva sua experiência profissional..." {...field} />
                           </FormControl>
                           <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                )}
+                        </FormItem>} />
+                  </div>}
 
                 {/* Senha */}
                 <div className="grid md:grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
+                  <FormField control={form.control} name="password" render={({
+                  field
+                }) => <FormItem>
                         <FormLabel>Senha *</FormLabel>
                         <FormControl>
                           <Input type="password" placeholder="Mínimo 6 caracteres" {...field} />
                         </FormControl>
                         <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                      </FormItem>} />
                   
-                  <FormField
-                    control={form.control}
-                    name="confirmPassword"
-                    render={({ field }) => (
-                      <FormItem>
+                  <FormField control={form.control} name="confirmPassword" render={({
+                  field
+                }) => <FormItem>
                         <FormLabel>Confirmar Senha *</FormLabel>
                         <FormControl>
                           <Input type="password" placeholder="Repita a senha" {...field} />
                         </FormControl>
                         <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                      </FormItem>} />
                 </div>
 
                 {/* Termos */}
-                <FormField
-                  control={form.control}
-                  name="acceptTerms"
-                  render={({ field }) => (
-                    <FormItem className="flex items-center space-x-2">
+                <FormField control={form.control} name="acceptTerms" render={({
+                field
+              }) => <FormItem className="flex items-center space-x-2">
                       <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
+                        <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                       </FormControl>
                       <FormLabel className="text-sm">
                         Aceito os{' '}
@@ -622,23 +466,13 @@ const NewRegister = () => {
                         </Link>
                       </FormLabel>
                       <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    </FormItem>} />
 
-                <Button
-                  type="submit"
-                  className="w-full"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? (
-                    <div className="flex items-center gap-2">
+                <Button type="submit" className="w-full" disabled={isSubmitting}>
+                  {isSubmitting ? <div className="flex items-center gap-2">
                       <Loader2 className="h-4 w-4 animate-spin" />
                       Criando conta...
-                    </div>
-                  ) : (
-                    'Criar Conta'
-                  )}
+                    </div> : 'Criar Conta'}
                 </Button>
               </form>
             </Form>
@@ -654,8 +488,6 @@ const NewRegister = () => {
       </main>
       
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default NewRegister;
