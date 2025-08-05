@@ -213,7 +213,7 @@ const Register = () => {
       const addressData = await fetchAddress(cepValue);
       if (addressData) {
         // IDs diferentes para cada tipo de usuário
-        const prefix = accountType === 'technician' ? 'tech-' : accountType === 'store' ? 'store-' : '';
+        const prefix = accountType === 'technician' ? 'tech-' : accountType === 'store' ? 'store-' : 'client-';
         
         const streetInput = document.getElementById(`${prefix}street`) as HTMLInputElement;
         const neighborhoodInput = document.getElementById(`${prefix}neighborhood`) as HTMLInputElement;
@@ -300,16 +300,240 @@ const Register = () => {
               </TabsList>
               
               <TabsContent value="client" className="mt-8">
-                <div className="p-6 bg-gradient-to-r from-blue-50 to-blue-100 backdrop-blur-sm rounded-2xl border border-blue-200 shadow-lg">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
-                      <User className="h-5 w-5 text-white" />
+                <div className="space-y-6">
+                  <div className="p-6 bg-gradient-to-r from-blue-50 to-blue-100 backdrop-blur-sm rounded-2xl border border-blue-200 shadow-lg">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+                          <User className="h-5 w-5 text-white" />
+                        </div>
+                        <h3 className="text-lg font-bold text-blue-900">Conta de Cliente</h3>
+                      </div>
+                      <Link to="/login" className="text-sm text-blue-600 hover:text-blue-800 font-medium">
+                        Já tenho conta
+                      </Link>
                     </div>
-                    <h3 className="text-lg font-bold text-blue-900">Conta de Cliente</h3>
+                    <p className="text-blue-800 font-medium mb-4">
+                      Encontre técnicos especializados para manutenção e reparo dos seus equipamentos industriais.
+                    </p>
                   </div>
-                  <p className="text-blue-800 font-medium">
-                    Encontre técnicos especializados para manutenção e reparo dos seus equipamentos industriais.
-                  </p>
+
+                  {/* Google Login Section */}
+                  <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                    <h4 className="text-lg font-semibold text-gray-800 mb-4 text-center">Cadastro Rápido</h4>
+                    <GoogleAuthProvider>
+                      <GoogleLoginButton />
+                    </GoogleAuthProvider>
+                    <div className="relative my-6">
+                      <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-gray-300"></div>
+                      </div>
+                      <div className="relative flex justify-center text-sm">
+                        <span className="px-2 bg-gray-50 text-gray-500">ou cadastre-se com email</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Personal Data Section */}
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-4 pb-3 border-b border-gray-200">
+                      <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center">
+                        <User className="h-5 w-5 text-white" />
+                      </div>
+                      <h4 className="text-lg font-semibold text-gray-800">Dados Pessoais</h4>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="client-first-name" className="text-sm font-medium text-gray-700">Nome *</Label>
+                        <Input 
+                          id="client-first-name"
+                          name="first-name"
+                          placeholder="João" 
+                          required 
+                          className="rounded-lg border-gray-300 focus:border-blue-500 h-11"
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="client-last-name" className="text-sm font-medium text-gray-700">Sobrenome *</Label>
+                        <Input 
+                          id="client-last-name"
+                          name="last-name"
+                          placeholder="Silva" 
+                          required 
+                          className="rounded-lg border-gray-300 focus:border-blue-500 h-11"
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="client-cpf" className="text-sm font-medium text-gray-700">CPF *</Label>
+                        <Input 
+                          id="client-cpf"
+                          name="document"
+                          placeholder="000.000.000-00" 
+                          required 
+                          className="rounded-lg border-gray-300 focus:border-blue-500 h-11"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Address Section */}
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-4 pb-3 border-b border-gray-200">
+                      <div className="w-10 h-10 bg-gradient-to-br from-green-600 to-green-700 rounded-lg flex items-center justify-center">
+                        <MapPin className="h-5 w-5 text-white" />
+                      </div>
+                      <h4 className="text-lg font-semibold text-gray-800">Endereço</h4>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="client-cep" className="text-sm font-medium text-gray-700">CEP *</Label>
+                        <Input 
+                          id="client-cep"
+                          name="cep"
+                          placeholder="00000-000"
+                          value={formatCep(cep)}
+                          onChange={handleCepChange}
+                          required 
+                          className="rounded-lg border-gray-300 focus:border-blue-500 h-11"
+                        />
+                        {cepLoading && <p className="text-xs text-blue-600">Buscando endereço...</p>}
+                        {cepError && <p className="text-xs text-red-600">{cepError}</p>}
+                      </div>
+                      
+                      <div className="md:col-span-2 space-y-2">
+                        <Label htmlFor="client-street" className="text-sm font-medium text-gray-700">Logradouro *</Label>
+                        <Input 
+                          id="client-street"
+                          name="street"
+                          placeholder="Rua das Flores" 
+                          required 
+                          className="rounded-lg border-gray-300 focus:border-blue-500 h-11"
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="client-number" className="text-sm font-medium text-gray-700">Número *</Label>
+                        <Input 
+                          id="client-number"
+                          name="number"
+                          placeholder="123" 
+                          required 
+                          className="rounded-lg border-gray-300 focus:border-blue-500 h-11"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="client-neighborhood" className="text-sm font-medium text-gray-700">Bairro *</Label>
+                        <Input 
+                          id="client-neighborhood"
+                          name="neighborhood"
+                          placeholder="Centro" 
+                          required 
+                          className="rounded-lg border-gray-300 focus:border-blue-500 h-11"
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="client-city" className="text-sm font-medium text-gray-700">Cidade *</Label>
+                        <Input 
+                          id="client-city"
+                          name="city"
+                          placeholder="São Paulo" 
+                          required 
+                          className="rounded-lg border-gray-300 focus:border-blue-500 h-11"
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="client-state" className="text-sm font-medium text-gray-700">Estado *</Label>
+                        <Input 
+                          id="client-state"
+                          name="state"
+                          placeholder="SP" 
+                          required 
+                          className="rounded-lg border-gray-300 focus:border-blue-500 h-11"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="client-complement" className="text-sm font-medium text-gray-700">Complemento</Label>
+                      <Input 
+                        id="client-complement"
+                        name="complement"
+                        placeholder="Apartamento 12B" 
+                        className="rounded-lg border-gray-300 focus:border-blue-500 h-11"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Contact and Password Section */}
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-4 pb-3 border-b border-gray-200">
+                      <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-purple-700 rounded-lg flex items-center justify-center">
+                        <KeyIcon className="h-5 w-5 text-white" />
+                      </div>
+                      <h4 className="text-lg font-semibold text-gray-800">Contato e Acesso</h4>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="client-phone" className="text-sm font-medium text-gray-700">Telefone *</Label>
+                        <Input 
+                          id="client-phone"
+                          name="phone"
+                          type="tel" 
+                          placeholder="(11) 98765-4321" 
+                          required 
+                          className="rounded-lg border-gray-300 focus:border-blue-500 h-11"
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="client-email" className="text-sm font-medium text-gray-700">Email *</Label>
+                        <Input 
+                          id="client-email"
+                          name="email"
+                          type="email" 
+                          placeholder="joao@exemplo.com" 
+                          required 
+                          className="rounded-lg border-gray-300 focus:border-blue-500 h-11"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="client-password" className="text-sm font-medium text-gray-700">Senha *</Label>
+                        <Input 
+                          id="client-password"
+                          name="password"
+                          type="password" 
+                          placeholder="••••••••" 
+                          required 
+                          className="rounded-lg border-gray-300 focus:border-blue-500 h-11"
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="client-confirm-password" className="text-sm font-medium text-gray-700">Confirmar Senha *</Label>
+                        <Input 
+                          id="client-confirm-password"
+                          name="confirm-password"
+                          type="password" 
+                          placeholder="••••••••" 
+                          required 
+                          className="rounded-lg border-gray-300 focus:border-blue-500 h-11"
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </TabsContent>
               
