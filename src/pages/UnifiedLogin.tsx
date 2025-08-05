@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -32,8 +32,28 @@ const UnifiedLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   
-  const { login, userType } = useAuth();
+  const { login, userType, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
+  // Redirecionamento automático quando o usuário estiver autenticado e o userType estiver definido
+  useEffect(() => {
+    if (isAuthenticated && userType) {
+      console.log('🎯 UnifiedLogin - Usuário autenticado, redirecionando...', { userType });
+      
+      const redirectPaths = {
+        customer: '/cliente/dashboard',
+        technician: '/tecnico/dashboard', 
+        company: '/loja/dashboard',
+        admin: '/admin/dashboard'
+      };
+      
+      const targetPath = redirectPaths[userType as keyof typeof redirectPaths];
+      if (targetPath) {
+        console.log('🚀 Redirecionando para:', targetPath);
+        navigate(targetPath, { replace: true });
+      }
+    }
+  }, [isAuthenticated, userType, navigate]);
 
   // Redirecionamento automático baseado no tipo de usuário
   const redirectToUserDashboard = (userType: string | null) => {
@@ -45,6 +65,7 @@ const UnifiedLogin = () => {
     };
     
     if (userType && redirectPaths[userType as keyof typeof redirectPaths]) {
+      console.log('🔄 Redirecionamento manual para:', redirectPaths[userType as keyof typeof redirectPaths]);
       navigate(redirectPaths[userType as keyof typeof redirectPaths], { replace: true });
     }
   };
@@ -61,6 +82,7 @@ const UnifiedLogin = () => {
     setIsLoading(true);
     
     try {
+      console.log('🔐 Tentando fazer login...', data.email);
       const success = await login(data.email, data.password);
       
       if (success) {
@@ -68,22 +90,12 @@ const UnifiedLogin = () => {
           title: "Login realizado com sucesso!",
           description: "Redirecionando para o dashboard...",
         });
-        
-        // Redirecionar imediatamente
-        setTimeout(() => {
-          // Buscar o userType mais recente do contexto
-          const currentUserType = userType;
-          if (currentUserType) {
-            redirectToUserDashboard(currentUserType);
-          } else {
-            // Se ainda não tiver o userType, aguardar mais um pouco
-            setTimeout(() => redirectToUserDashboard(userType), 500);
-          }
-        }, 200);
+        console.log('✅ Login bem-sucedido, aguardando redirecionamento automático...');
+        // O useEffect irá cuidar do redirecionamento automático
       }
       
     } catch (error) {
-      console.error('Erro no login:', error);
+      console.error('❌ Erro no login:', error);
       toast({
         variant: "destructive",
         title: "Erro no login",
