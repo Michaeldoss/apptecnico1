@@ -212,10 +212,13 @@ const Register = () => {
     if (cepValue.length === 8) {
       const addressData = await fetchAddress(cepValue);
       if (addressData) {
-        const streetInput = document.getElementById('street') as HTMLInputElement;
-        const neighborhoodInput = document.getElementById('neighborhood') as HTMLInputElement;
-        const cityInput = document.getElementById('city') as HTMLInputElement;
-        const stateInput = document.getElementById('state') as HTMLInputElement;
+        // IDs diferentes para cada tipo de usuário
+        const prefix = accountType === 'technician' ? 'tech-' : accountType === 'store' ? 'store-' : '';
+        
+        const streetInput = document.getElementById(`${prefix}street`) as HTMLInputElement;
+        const neighborhoodInput = document.getElementById(`${prefix}neighborhood`) as HTMLInputElement;
+        const cityInput = document.getElementById(`${prefix}city`) as HTMLInputElement;
+        const stateInput = document.getElementById(`${prefix}state`) as HTMLInputElement;
         
         if (streetInput) streetInput.value = addressData.street;
         if (neighborhoodInput) neighborhoodInput.value = addressData.neighborhood;
@@ -609,6 +612,194 @@ const Register = () => {
               
               {accountType === 'technician' && (
                 <>
+                  {/* Seção Endereço - para técnico */}
+                  <div className="border-t border-border pt-6 space-y-4">
+                    <div className="flex items-center gap-4 pb-4 border-b border-border">
+                      <div className="w-12 h-12 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <MapPin className="h-6 w-6 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold text-gray-800">Endereço</h3>
+                        <p className="text-gray-600">Informações de localização</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="tech-zip" className="text-sm font-semibold text-gray-700">CEP *</Label>
+                      <Input 
+                        id="tech-zip"
+                        name="tech-zip"
+                        value={formatCep(cep)}
+                        onChange={handleCepChange}
+                        placeholder="00000-000" 
+                        required 
+                        className="rounded-xl border-2 border-gray-200 focus:border-yellow-500 transition-colors h-12"
+                      />
+                      {cepLoading && <p className="text-sm text-yellow-600">Buscando endereço...</p>}
+                      {cepError && <p className="text-sm text-red-600">{cepError}</p>}
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="space-y-2 md:col-span-2">
+                        <Label htmlFor="tech-street" className="text-sm font-semibold text-gray-700">Rua/Avenida *</Label>
+                        <Input 
+                          id="tech-street"
+                          name="tech-street"
+                          placeholder="Av. Paulista" 
+                          required 
+                          className="rounded-xl border-2 border-gray-200 focus:border-yellow-500 transition-colors h-12"
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="tech-number" className="text-sm font-semibold text-gray-700">Número *</Label>
+                        <Input 
+                          id="tech-number"
+                          name="tech-number"
+                          placeholder="1000" 
+                          required 
+                          className="rounded-xl border-2 border-gray-200 focus:border-yellow-500 transition-colors h-12"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="tech-complement" className="text-sm font-semibold text-gray-700">Complemento</Label>
+                        <Input 
+                          id="tech-complement"
+                          name="tech-complement"
+                          placeholder="Sala 1001" 
+                          className="rounded-xl border-2 border-gray-200 focus:border-yellow-500 transition-colors h-12"
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="tech-neighborhood" className="text-sm font-semibold text-gray-700">Bairro *</Label>
+                        <Input 
+                          id="tech-neighborhood"
+                          name="tech-neighborhood"
+                          placeholder="Centro" 
+                          required 
+                          className="rounded-xl border-2 border-gray-200 focus:border-yellow-500 transition-colors h-12"
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="tech-city" className="text-sm font-semibold text-gray-700">Cidade *</Label>
+                        <Input 
+                          id="tech-city"
+                          name="tech-city"
+                          placeholder="São Paulo" 
+                          required 
+                          className="rounded-xl border-2 border-gray-200 focus:border-yellow-500 transition-colors h-12"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="tech-state" className="text-sm font-semibold text-gray-700">Estado *</Label>
+                      <Input 
+                        id="tech-state"
+                        name="tech-state"
+                        placeholder="SP" 
+                        required 
+                        className="rounded-xl border-2 border-gray-200 focus:border-yellow-500 transition-colors h-12"
+                      />
+                    </div>
+                  </div>
+                
+                  {/* Seção Documentos - para técnico */}
+                  <div className="border-t border-border pt-6 space-y-4">
+                    <div className="flex items-center gap-4 pb-4 border-b border-border">
+                      <div className="w-12 h-12 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <FileText className="h-6 w-6 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold text-gray-800">Documentos</h3>
+                        <p className="text-gray-600">Documentos de identificação</p>
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="tech-rg-file" className="text-sm font-semibold text-gray-700">RG (frente e verso)</Label>
+                        <Input 
+                          id="tech-rg-file"
+                          type="file"
+                          accept="image/*,.pdf"
+                          onChange={(e) => handleFileChange('rg', e)}
+                          className="rounded-xl border-2 border-gray-200 focus:border-yellow-500 transition-colors h-12"
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="tech-cpf-file" className="text-sm font-semibold text-gray-700">CPF</Label>
+                        <Input 
+                          id="tech-cpf-file"
+                          type="file"
+                          accept="image/*,.pdf"
+                          onChange={(e) => handleFileChange('cpf', e)}
+                          className="rounded-xl border-2 border-gray-200 focus:border-yellow-500 transition-colors h-12"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="tech-address-proof" className="text-sm font-semibold text-gray-700">Comprovante de Residência</Label>
+                      <Input 
+                        id="tech-address-proof"
+                        type="file"
+                        accept="image/*,.pdf"
+                        onChange={(e) => handleFileChange('addressProof', e)}
+                        className="rounded-xl border-2 border-gray-200 focus:border-yellow-500 transition-colors h-12"
+                      />
+                      <p className="text-xs text-gray-600 mt-1">
+                        Conta de luz, água ou telefone recente (últimos 3 meses)
+                      </p>
+                    </div>
+                  </div>
+                
+                  {/* Seção Senha - para técnico */}
+                  <div className="border-t border-border pt-6 space-y-4">
+                    <div className="flex items-center gap-4 pb-4 border-b border-border">
+                      <div className="w-12 h-12 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <KeyIcon className="h-6 w-6 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold text-gray-800">Senha de Acesso</h3>
+                        <p className="text-gray-600">Defina sua senha para entrar na plataforma</p>
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="tech-password" className="text-sm font-semibold text-gray-700">Senha *</Label>
+                        <Input 
+                          id="tech-password"
+                          name="tech-password"
+                          type="password" 
+                          placeholder="••••••••" 
+                          required 
+                          className="rounded-xl border-2 border-gray-200 focus:border-yellow-500 transition-colors h-12"
+                        />
+                      </div>
+                     
+                      <div className="space-y-2">
+                        <Label htmlFor="tech-confirm-password" className="text-sm font-semibold text-gray-700">Confirmar Senha *</Label>
+                        <Input 
+                          id="tech-confirm-password"
+                          name="tech-confirm-password"
+                          type="password" 
+                          placeholder="••••••••" 
+                          required 
+                          className="rounded-xl border-2 border-gray-200 focus:border-yellow-500 transition-colors h-12"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                
                   {/* Informações Empresariais */}
                   <div className="border-t border-border pt-6 space-y-4">
                     <h3 className="text-lg font-medium flex items-center gap-2">
