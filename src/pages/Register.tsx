@@ -86,6 +86,12 @@ const Register = () => {
   const [userEmail, setUserEmail] = useState('');
   const [cep, setCep] = useState('');
   const [cepValidated, setCepValidated] = useState(false);
+  const [cpfValidation, setCpfValidation] = useState({
+    isValidating: false,
+    isValid: null as boolean | null,
+    message: '',
+    validated: false
+  });
   const { fetchAddress, isLoading: cepLoading, error: cepError } = useViaCep();
 
   const sendConfirmationEmail = async (email: string, name: string, userType: string) => {
@@ -110,6 +116,17 @@ const Register = () => {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Verificar se CPF foi validado para clientes
+    if (accountType === 'client' && !cpfValidation.isValid) {
+      toast({
+        title: "CPF não validado",
+        description: "Por favor, valide seu CPF na Receita Federal antes de continuar.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     setIsLoading(true);
     
     try {
@@ -127,7 +144,8 @@ const Register = () => {
         email,
         telefone: phone,
         cpf_cnpj: document,
-        type: accountType === 'client' ? 'customer' : accountType === 'store' ? 'company' : accountType
+        type: accountType === 'client' ? 'customer' : accountType === 'store' ? 'company' : accountType,
+        cpf_validated: accountType === 'client' ? cpfValidation.isValid : undefined
       };
 
       console.log('Tentando cadastrar:', userData);
@@ -234,6 +252,75 @@ const Register = () => {
 
   const formatCep = (value: string) => {
     return value.replace(/\D/g, '').replace(/(\d{5})(\d{3})/, '$1-$2');
+  };
+
+  const formatCpf = (value: string) => {
+    return value.replace(/\D/g, '').replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+  };
+
+  const validateCpf = async (cpf: string, nome: string, dataNascimento: string) => {
+    if (!cpf || !nome || !dataNascimento) {
+      return;
+    }
+
+    setCpfValidation({ isValidating: true, isValid: null, message: '', validated: false });
+
+    try {
+      const { data, error } = await supabase.functions.invoke('validate-cpf', {
+        body: {
+          cpf: cpf,
+          nome: nome,
+          data_nascimento: dataNascimento
+        }
+      });
+
+      if (error) {
+        console.error('Erro na validação do CPF:', error);
+        setCpfValidation({
+          isValidating: false,
+          isValid: false,
+          message: 'Erro ao validar CPF. Tente novamente.',
+          validated: false
+        });
+        return;
+      }
+
+      setCpfValidation({
+        isValidating: false,
+        isValid: data.valid,
+        message: data.message || (data.valid ? 'CPF validado com sucesso!' : 'CPF não pôde ser validado'),
+        validated: true
+      });
+
+      if (data.limitReached) {
+        toast({
+          title: "Limite de consultas atingido",
+          description: data.error,
+          variant: "destructive"
+        });
+      } else if (data.valid) {
+        toast({
+          title: "CPF Validado!",
+          description: "Os dados conferem com a Receita Federal.",
+          variant: "default"
+        });
+      } else {
+        toast({
+          title: "CPF não validado",
+          description: data.message || "Nome não confere com o CPF informado.",
+          variant: "destructive"
+        });
+      }
+
+    } catch (error) {
+      console.error('Erro na validação do CPF:', error);
+      setCpfValidation({
+        isValidating: false,
+        isValid: false,
+        message: 'Erro ao conectar com o serviço de validação.',
+        validated: false
+      });
+    }
   };
 
   return (
@@ -343,7 +430,7 @@ const Register = () => {
                       <h4 className="text-lg font-semibold text-gray-800">Dados Pessoais</h4>
                     </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="client-first-name" className="text-sm font-medium text-gray-700">Nome *</Label>
                         <Input 
@@ -365,7 +452,9 @@ const Register = () => {
                           className="rounded-lg border-gray-300 focus:border-blue-500 h-11"
                         />
                       </div>
-                      
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="client-cpf" className="text-sm font-medium text-gray-700">CPF *</Label>
                         <Input 
@@ -374,8 +463,75 @@ const Register = () => {
                           placeholder="000.000.000-00" 
                           required 
                           className="rounded-lg border-gray-300 focus:border-blue-500 h-11"
+                          onChange={(e) => {
+                            e.target.value = formatCpf(e.target.value);
+                          }}
                         />
                       </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="client-birth-date" className="text-sm font-medium text-gray-700">Data de Nascimento *</Label>
+                        <Input 
+                          id="client-birth-date"
+                          name="birth-date"
+                          type="date"
+                          required 
+                          className="rounded-lg border-gray-300 focus:border-blue-500 h-11"
+                        />
+                      </div>
+                    </div>
+                    
+                    {/* CPF Validation Button and Status */}
+                    <div className="space-y-3">
+                      <Button
+                        type="button"
+                        onClick={() => {
+                          const cpfInput = document.getElementById('client-cpf') as HTMLInputElement;
+                          const nameInput = document.getElementById('client-first-name') as HTMLInputElement;
+                          const lastnameInput = document.getElementById('client-last-name') as HTMLInputElement;
+                          const birthInput = document.getElementById('client-birth-date') as HTMLInputElement;
+                          
+                          const fullName = `${nameInput?.value || ''} ${lastnameInput?.value || ''}`.trim();
+                          
+                          if (cpfInput?.value && fullName && birthInput?.value) {
+                            validateCpf(cpfInput.value, fullName, birthInput.value);
+                          } else {
+                            toast({
+                              title: "Campos obrigatórios",
+                              description: "Preencha nome, sobrenome, CPF e data de nascimento.",
+                              variant: "destructive"
+                            });
+                          }
+                        }}
+                        disabled={cpfValidation.isValidating}
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                      >
+                        {cpfValidation.isValidating ? (
+                          <>
+                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                            Validando CPF...
+                          </>
+                        ) : (
+                          'Validar CPF na Receita Federal'
+                        )}
+                      </Button>
+                      
+                      {cpfValidation.validated && (
+                        <div className={`p-3 rounded-lg border-l-4 ${
+                          cpfValidation.isValid 
+                            ? 'bg-green-50 border-green-400 text-green-700' 
+                            : 'bg-red-50 border-red-400 text-red-700'
+                        }`}>
+                          <div className="flex items-center">
+                            {cpfValidation.isValid ? (
+                              <CheckCircle className="h-5 w-5 mr-2" />
+                            ) : (
+                              <div className="h-5 w-5 mr-2 rounded-full bg-red-500 text-white flex items-center justify-center text-xs">!</div>
+                            )}
+                            <span className="font-medium">{cpfValidation.message}</span>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
 
