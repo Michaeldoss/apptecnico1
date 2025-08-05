@@ -24,7 +24,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 const baseSchema = {
   nome: z.string().min(2, "Nome deve ter pelo menos 2 caracteres").max(100, "Nome muito longo"),
   email: z.string().email("Email inválido"),
-  cpf: z.string().min(11, "CPF deve ter 11 dígitos"),
+  cpf: z.string().optional(),
   password: z.string()
     .min(8, "Senha deve ter pelo menos 8 caracteres")
     .regex(/[A-Z]/, "Deve conter pelo menos uma letra maiúscula")
@@ -74,12 +74,6 @@ const UserRegistrationForm: React.FC<UserRegistrationFormProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [cpfValidation, setCpfValidation] = useState({
-    isValidating: false,
-    isValid: null as boolean | null,
-    message: '',
-    validated: false
-  });
 
   const { signup } = useAuth();
 
@@ -115,85 +109,21 @@ const UserRegistrationForm: React.FC<UserRegistrationFormProps> = ({
     return value.replace(/\D/g, '').replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
   };
 
-  const validateCpf = async (cpf: string, nome: string, dataNascimento?: string) => {
-    if (!cpf || !nome || (userType === 'client' && !dataNascimento)) {
-      return;
-    }
-
-    setCpfValidation({ isValidating: true, isValid: null, message: '', validated: false });
-
-    try {
-      const { data, error } = await supabase.functions.invoke('validate-cpf', {
-        body: {
-          cpf: cpf.replace(/\D/g, ''),
-          nome: nome,
-          data_nascimento: dataNascimento || ''
-        }
-      });
-
-      if (error) {
-        setCpfValidation({
-          isValidating: false,
-          isValid: false,
-          message: 'Erro ao validar CPF. Tente novamente.',
-          validated: false
-        });
-        return;
-      }
-
-      setCpfValidation({
-        isValidating: false,
-        isValid: data.valid,
-        message: data.message || (data.valid ? 'CPF validado com sucesso!' : 'CPF não validado'),
-        validated: true
-      });
-
-      if (data.valid) {
-        toast({
-          title: "CPF Validado!",
-          description: "Os dados conferem com a Receita Federal.",
-        });
-      } else if (!data.limitReached) {
-        toast({
-          title: "CPF não validado",
-          description: data.message || "Nome não confere com o CPF informado.",
-          variant: "destructive"
-        });
-      }
-
-    } catch (error) {
-      setCpfValidation({
-        isValidating: false,
-        isValid: false,
-        message: 'Erro ao conectar com o serviço de validação.',
-        validated: false
-      });
-    }
+  const validateCpfFormat = (cpf: string) => {
+    const cleanCpf = cpf.replace(/\D/g, '');
+    return cleanCpf.length === 11;
   };
 
   const onSubmit = async (data: any) => {
-    // Verificar validação do CPF para clientes
-    if (userType === 'client' && !cpfValidation.isValid) {
-      toast({
-        title: "CPF não validado",
-        description: "Por favor, valide seu CPF antes de continuar.",
-        variant: "destructive"
-      });
-      return;
-    }
-
     setIsLoading(true);
 
     try {
       const userData = {
         nome: data.nome,
         email: data.email,
-        cpf_cnpj: data.cpf.replace(/\D/g, ''),
+        cpf_cnpj: data.cpf ? data.cpf.replace(/\D/g, '') : null,
         type: userType === 'client' ? 'customer' : userType === 'store' ? 'company' : userType,
-        ...(userType === 'client' && { 
-          data_nascimento: data.dataNascimento,
-          cpf_validated: cpfValidation.isValid 
-        }),
+        ...(userType === 'client' && { data_nascimento: data.dataNascimento }),
         ...(userType === 'technician' && { especialidade: data.especialidade }),
         ...(userType === 'store' && { nome_empresa: data.nomeEmpresa }),
       };
@@ -208,12 +138,23 @@ const UserRegistrationForm: React.FC<UserRegistrationFormProps> = ({
         onSuccess();
       }
       
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erro no cadastro:', error);
+      
+      let errorMessage = "Ocorreu um erro inesperado. Tente novamente.";
+      
+      if (error?.message?.includes('already registered')) {
+        errorMessage = "Este email já está cadastrado. Tente fazer login.";
+      } else if (error?.message?.includes('invalid email')) {
+        errorMessage = "Email inválido. Verifique o endereço digitado.";
+      } else if (error?.message?.includes('weak password')) {
+        errorMessage = "Senha muito fraca. Use pelo menos 8 caracteres com letras e números.";
+      }
+      
       toast({
         variant: "destructive",
         title: "Erro no cadastro",
-        description: "Ocorreu um erro inesperado. Tente novamente.",
+        description: errorMessage,
       });
     } finally {
       setIsLoading(false);
@@ -336,32 +277,17 @@ const UserRegistrationForm: React.FC<UserRegistrationFormProps> = ({
                 name="cpf"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>CPF *</FormLabel>
-                    <div className="relative">
-                      <FormControl>
-                        <Input
-                          placeholder="000.000.000-00"
-                          value={formatCpf(field.value)}
-                          onChange={(e) => {
-                            const formatted = formatCpf(e.target.value);
-                            field.onChange(formatted);
-                            setCpfValidation({ isValidating: false, isValid: null, message: '', validated: false });
-                          }}
-                          className={`${cpfValidation.isValid === true ? 'border-green-500' : cpfValidation.isValid === false ? 'border-red-500' : ''}`}
-                        />
-                      </FormControl>
-                      {cpfValidation.isValidating && (
-                        <Loader2 className="absolute right-3 top-3 h-4 w-4 animate-spin" />
-                      )}
-                      {cpfValidation.isValid === true && (
-                        <CheckCircle className="absolute right-3 top-3 h-4 w-4 text-green-600" />
-                      )}
-                    </div>
-                    {cpfValidation.message && (
-                      <p className={`text-sm ${cpfValidation.isValid ? 'text-green-600' : 'text-red-600'}`}>
-                        {cpfValidation.message}
-                      </p>
-                    )}
+                    <FormLabel>CPF (opcional)</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="000.000.000-00"
+                        value={formatCpf(field.value || '')}
+                        onChange={(e) => {
+                          const formatted = formatCpf(e.target.value);
+                          field.onChange(formatted);
+                        }}
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -488,39 +414,19 @@ const UserRegistrationForm: React.FC<UserRegistrationFormProps> = ({
                 )}
               />
 
-              {/* Validar CPF para clientes */}
-              {userType === 'client' && (
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="w-full"
-                  onClick={() => {
-                    const cpf = form.getValues('cpf');
-                    const nome = form.getValues('nome');
-                    const dataNascimento = form.getValues('dataNascimento');
-                    validateCpf(cpf, nome, dataNascimento);
-                  }}
-                  disabled={cpfValidation.isValidating}
-                >
-                  {cpfValidation.isValidating ? (
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  ) : (
-                    <CheckCircle className="h-4 w-4 mr-2" />
-                  )}
-                  Validar CPF na Receita Federal
-                </Button>
-              )}
-
-              {/* Botão de cadastro */}
-              <Button
-                type="submit"
-                className={`w-full bg-gradient-to-r ${typeInfo.color} hover:opacity-90 text-white font-semibold`}
+              <Button 
+                type="submit" 
                 disabled={isLoading}
+                className={`w-full bg-gradient-to-r ${typeInfo.color} text-white font-semibold py-3 hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed`}
               >
                 {isLoading ? (
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                ) : null}
-                Criar Conta
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Criando conta...
+                  </>
+                ) : (
+                  'Criar Conta'
+                )}
               </Button>
             </form>
           </Form>
