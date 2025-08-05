@@ -261,8 +261,7 @@ const PartForm: React.FC<PartFormProps> = ({ isOpen, onClose }) => {
                   <div className="flex items-center gap-2">
                     <Input 
                       value={`R$ ${suggestedPrice.toFixed(2)}`}
-                      readOnly
-                      className="bg-gray-50"
+                      className="bg-background"
                     />
                     <Button 
                       type="button"

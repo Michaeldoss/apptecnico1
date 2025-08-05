@@ -63,7 +63,6 @@ const ClientData: React.FC<ClientDataProps> = ({ clientData }) => {
               </Label>
               <Input 
                 value={clientData.name || ''} 
-                readOnly 
                 className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
               />
             </div>
@@ -73,7 +72,6 @@ const ClientData: React.FC<ClientDataProps> = ({ clientData }) => {
                 <Label className="text-blue-700 font-semibold">Nome Fantasia</Label>
                 <Input 
                   value={clientData.fantasyName} 
-                  readOnly 
                   className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
                 />
               </div>
@@ -86,7 +84,6 @@ const ClientData: React.FC<ClientDataProps> = ({ clientData }) => {
               </Label>
               <Input 
                 value={clientData.email || ''} 
-                readOnly 
                 className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
               />
             </div>
@@ -98,7 +95,6 @@ const ClientData: React.FC<ClientDataProps> = ({ clientData }) => {
               </Label>
               <Input 
                 value={clientData.phone || ''} 
-                readOnly 
                 className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
               />
             </div>
@@ -108,7 +104,6 @@ const ClientData: React.FC<ClientDataProps> = ({ clientData }) => {
                 <Label className="text-blue-700 font-semibold">CNPJ</Label>
                 <Input 
                   value={clientData.cnpj} 
-                  readOnly 
                   className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
                 />
               </div>
@@ -119,7 +114,6 @@ const ClientData: React.FC<ClientDataProps> = ({ clientData }) => {
                 <Label className="text-blue-700 font-semibold">CPF</Label>
                 <Input 
                   value={clientData.cpf} 
-                  readOnly 
                   className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
                 />
               </div>
@@ -161,7 +155,6 @@ const ClientData: React.FC<ClientDataProps> = ({ clientData }) => {
                 <Label className="text-blue-700 font-semibold">Logradouro</Label>
                 <Input 
                   value={`${clientData.address.street || ''}, ${clientData.address.number || ''}`} 
-                  readOnly 
                   className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
                 />
               </div>
@@ -169,7 +162,6 @@ const ClientData: React.FC<ClientDataProps> = ({ clientData }) => {
                 <Label className="text-blue-700 font-semibold">Bairro</Label>
                 <Input 
                   value={clientData.address.neighborhood || ''} 
-                  readOnly 
                   className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
                 />
               </div>
@@ -177,7 +169,6 @@ const ClientData: React.FC<ClientDataProps> = ({ clientData }) => {
                 <Label className="text-blue-700 font-semibold">CEP</Label>
                 <Input 
                   value={clientData.address.zipCode || ''} 
-                  readOnly 
                   className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
                 />
               </div>
@@ -185,7 +176,6 @@ const ClientData: React.FC<ClientDataProps> = ({ clientData }) => {
                 <Label className="text-blue-700 font-semibold">Cidade</Label>
                 <Input 
                   value={clientData.address.city || ''} 
-                  readOnly 
                   className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
                 />
               </div>
@@ -193,7 +183,6 @@ const ClientData: React.FC<ClientDataProps> = ({ clientData }) => {
                 <Label className="text-blue-700 font-semibold">Estado</Label>
                 <Input 
                   value={clientData.address.state || ''} 
-                  readOnly 
                   className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
                 />
               </div>
@@ -202,7 +191,6 @@ const ClientData: React.FC<ClientDataProps> = ({ clientData }) => {
                   <Label className="text-blue-700 font-semibold">Complemento</Label>
                   <Input 
                     value={clientData.address.complement} 
-                    readOnly 
                     className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
                   />
                 </div>
@@ -284,7 +272,6 @@ const ClientData: React.FC<ClientDataProps> = ({ clientData }) => {
                   </Label>
                   <Input 
                     value={clientData.foundedYear.toString()} 
-                    readOnly 
                     className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
                   />
                 </div>
@@ -298,7 +285,6 @@ const ClientData: React.FC<ClientDataProps> = ({ clientData }) => {
                   </Label>
                   <Input 
                     value={clientData.employeeCount} 
-                    readOnly 
                     className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
                   />
                 </div>
@@ -312,7 +298,6 @@ const ClientData: React.FC<ClientDataProps> = ({ clientData }) => {
                   </Label>
                   <Input 
                     value={clientData.annualRevenue} 
-                    readOnly 
                     className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
                   />
                 </div>
@@ -326,7 +311,6 @@ const ClientData: React.FC<ClientDataProps> = ({ clientData }) => {
                   </Label>
                   <Input 
                     value={clientData.website} 
-                    readOnly 
                     className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
                   />
                 </div>

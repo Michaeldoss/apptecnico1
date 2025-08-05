@@ -81,7 +81,6 @@ export const AffiliateLinks: React.FC<AffiliateLinksProps> = ({
             <div className="flex gap-2">
               <Input 
                 value={generalLink} 
-                readOnly 
                 className="font-mono text-sm bg-white/10 border-white/20 text-white placeholder:text-blue-200"
               />
               <Button 
@@ -148,7 +147,6 @@ export const AffiliateLinks: React.FC<AffiliateLinksProps> = ({
                 <div className="flex gap-2">
                   <Input 
                     value={productLink} 
-                    readOnly 
                     className="font-mono text-sm bg-white/10 border-white/20 text-white"
                   />
                   <Button 

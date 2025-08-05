@@ -556,8 +556,7 @@ const ProductCreate = () => {
                         type="number"
                         step="0.01"
                         value={formData.precoSugerido.toFixed(2)}
-                        readOnly
-                        className="bg-gray-50"
+                        className="bg-background"
                       />
                     </div>
                   </div>

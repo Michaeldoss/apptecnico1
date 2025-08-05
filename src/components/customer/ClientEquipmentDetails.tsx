@@ -21,7 +21,6 @@ const ClientEquipmentDetails = ({ equipment }: ClientEquipmentDetailsProps) => {
                 <Label className="text-blue-700 font-semibold">Largura</Label>
                 <Input 
                   value={equipment.width} 
-                  readOnly 
                   className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
                 />
               </div>
@@ -29,7 +28,6 @@ const ClientEquipmentDetails = ({ equipment }: ClientEquipmentDetailsProps) => {
                 <Label className="text-blue-700 font-semibold">Cabeças</Label>
                 <Input 
                   value={equipment.heads} 
-                  readOnly 
                   className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
                 />
               </div>
@@ -45,7 +43,6 @@ const ClientEquipmentDetails = ({ equipment }: ClientEquipmentDetailsProps) => {
                   <Label className="text-sm text-blue-600">Modelo</Label>
                   <Input 
                     value={equipment.oven?.model} 
-                    readOnly 
                     className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
                   />
                 </div>
@@ -56,7 +53,6 @@ const ClientEquipmentDetails = ({ equipment }: ClientEquipmentDetailsProps) => {
                   </Label>
                   <Input 
                     value={equipment.oven?.temperature} 
-                    readOnly 
                     className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
                   />
                 </div>
@@ -64,7 +60,6 @@ const ClientEquipmentDetails = ({ equipment }: ClientEquipmentDetailsProps) => {
                   <Label className="text-sm text-blue-600">Esteira</Label>
                   <Input 
                     value={equipment.oven?.belt} 
-                    readOnly 
                     className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
                   />
                 </div>
@@ -75,7 +70,6 @@ const ClientEquipmentDetails = ({ equipment }: ClientEquipmentDetailsProps) => {
                   </Label>
                   <Input 
                     value={equipment.oven?.power} 
-                    readOnly 
                     className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
                   />
                 </div>
@@ -91,7 +85,6 @@ const ClientEquipmentDetails = ({ equipment }: ClientEquipmentDetailsProps) => {
                 <Label className="text-blue-700 font-semibold">Área Útil</Label>
                 <Input 
                   value={equipment.area} 
-                  readOnly 
                   className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
                 />
               </div>
@@ -99,7 +92,6 @@ const ClientEquipmentDetails = ({ equipment }: ClientEquipmentDetailsProps) => {
                 <Label className="text-blue-700 font-semibold">Tipo de Motor</Label>
                 <Input 
                   value={equipment.motorType} 
-                  readOnly 
                   className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
                 />
               </div>
@@ -107,7 +99,6 @@ const ClientEquipmentDetails = ({ equipment }: ClientEquipmentDetailsProps) => {
                 <Label className="text-blue-700 font-semibold">Controle</Label>
                 <Input 
                   value={equipment.control} 
-                  readOnly 
                   className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
                 />
               </div>
@@ -115,7 +106,6 @@ const ClientEquipmentDetails = ({ equipment }: ClientEquipmentDetailsProps) => {
                 <Label className="text-blue-700 font-semibold">Software</Label>
                 <Input 
                   value={equipment.software} 
-                  readOnly 
                   className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
                 />
               </div>
@@ -123,7 +113,6 @@ const ClientEquipmentDetails = ({ equipment }: ClientEquipmentDetailsProps) => {
                 <Label className="text-blue-700 font-semibold">Lubrificação</Label>
                 <Input 
                   value={equipment.lubrication} 
-                  readOnly 
                   className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
                 />
               </div>
@@ -147,7 +136,6 @@ const ClientEquipmentDetails = ({ equipment }: ClientEquipmentDetailsProps) => {
                 <Label className="text-blue-700 font-semibold">Tipo de Acionamento</Label>
                 <Input 
                   value={equipment.activation} 
-                  readOnly 
                   className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
                 />
               </div>
@@ -158,7 +146,6 @@ const ClientEquipmentDetails = ({ equipment }: ClientEquipmentDetailsProps) => {
                 </Label>
                 <Input 
                   value={equipment.voltage} 
-                  readOnly 
                   className="border border-blue-300 bg-white focus:border-blue-500 mt-1"
                 />
               </div>

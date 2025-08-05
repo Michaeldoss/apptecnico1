@@ -117,7 +117,6 @@ const CustomerClients = () => {
                         </Label>
                         <Input 
                           value={clientData.location.equipmentLocation} 
-                          readOnly 
                           className="bg-white/10 border-white/20 text-white placeholder:text-white/60 mt-1"
                         />
                       </div>
@@ -128,7 +127,6 @@ const CustomerClients = () => {
                         </Label>
                         <Input 
                           value={clientData.location.employees.toString()} 
-                          readOnly 
                           className="bg-white/10 border-white/20 text-white placeholder:text-white/60 mt-1"
                         />
                       </div>
@@ -139,7 +137,6 @@ const CustomerClients = () => {
                         </Label>
                         <Input 
                           value={clientData.location.electricalInstallation} 
-                          readOnly 
                           className="bg-white/10 border-white/20 text-white placeholder:text-white/60 mt-1"
                         />
                       </div>
@@ -150,7 +147,6 @@ const CustomerClients = () => {
                         </Label>
                         <Input 
                           value={clientData.location.environmentalConditions} 
-                          readOnly 
                           className="bg-white/10 border-white/20 text-white placeholder:text-white/60 mt-1"
                         />
                       </div>

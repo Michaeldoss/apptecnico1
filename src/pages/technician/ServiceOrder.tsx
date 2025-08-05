@@ -110,19 +110,19 @@ const ServiceOrderPage = () => {
           <CardContent className="grid md:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="client">Cliente</Label>
-              <Input id="client" value={service.client} readOnly />
+              <Input id="client" value={service.client} />
             </div>
             <div>
               <Label htmlFor="service-type">Tipo de Serviço</Label>
-              <Input id="service-type" value={service.type} readOnly />
+              <Input id="service-type" value={service.type} />
             </div>
             <div>
               <Label htmlFor="description">Descrição</Label>
-              <Input id="description" value={service.description} readOnly />
+              <Input id="description" value={service.description} />
             </div>
             <div>
               <Label htmlFor="address">Endereço</Label>
-              <Input id="address" value={service.address} readOnly />
+              <Input id="address" value={service.address} />
             </div>
           </CardContent>
         </Card>
