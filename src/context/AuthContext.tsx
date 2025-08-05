@@ -167,6 +167,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     console.log('🔐 Iniciando signup...', { email, userType: userData.type });
     
+    // 1. Primeiro, criar conta no Supabase Auth
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -185,29 +186,37 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const userId = data.user.id;
-    const tabela = userData.type === 'technician' ? 'tecnicos' : userData.type === 'company' ? 'lojas' : 'clientes';
+    console.log('✅ Conta criada no Auth, inserindo na tabela específica...', { userId, tipo: userData.type });
 
-    // Mapear campos específicos para cada tipo de usuário
-    let cleanUserData: any = {};
-    
-    if (userData.type === 'company') {
-      cleanUserData = {
+    // 2. Inserir na tabela específica baseada no tipo escolhido
+    let insertError: any = null;
+
+    if (userData.type === 'customer') {
+      const { error } = await supabase.from('clientes').insert({
         id: userId,
+        email: email,
+        nome: userData.nome || userData.name || ''
+      });
+      insertError = error;
+      console.log('📝 Resultado inserção clientes:', { error });
+    } else if (userData.type === 'technician') {
+      const { error } = await supabase.from('tecnicos').insert({
+        id: userId,
+        email: email,
+        nome: userData.nome || userData.name || ''
+      });
+      insertError = error;
+      console.log('📝 Resultado inserção tecnicos:', { error });
+    } else if (userData.type === 'company') {
+      const { error } = await supabase.from('lojas').insert({
+        id: userId,
+        email: email,
         nome_empresa: userData.nome || userData.name || '',
-        nome_contato: userData.nome || userData.name || '',
-        email: email
-      };
-    } else {
-      cleanUserData = {
-        id: userId,
-        nome: userData.nome || userData.name || '',
-        email: email
-      };
+        nome_contato: userData.nome || userData.name || ''
+      });
+      insertError = error;
+      console.log('📝 Resultado inserção lojas:', { error });
     }
-
-    console.log('📝 Inserindo dados na tabela específica...', { tabela, userId, cleanUserData });
-    
-    const { error: insertError } = await supabase.from(tabela as any).insert(cleanUserData);
 
     if (insertError) {
       console.error('❌ Erro ao inserir na tabela específica:', insertError);
@@ -215,9 +224,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       return false;
     }
 
-    console.log('✅ Dados inseridos na tabela específica com sucesso');
+    console.log('✅ Usuário inserido na tabela específica com sucesso');
 
-    // Inserir também na tabela usuarios para controle central
+    // 3. Inserir na tabela usuarios para controle central
     const usuarioData = {
       id: userId,
       nome: userData.nome || userData.name || '',
@@ -231,69 +240,69 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     if (usuarioError) {
       console.error('❌ Erro ao inserir na tabela usuarios:', usuarioError);
-      // Não bloquear o fluxo se houver erro na tabela usuarios, pois o principal é a tabela específica
-      console.warn('⚠️ Continuando sem inserir na tabela usuarios');
+      console.warn('⚠️ Continuando mesmo com erro na tabela usuarios');
     } else {
       console.log('✅ Dados inseridos na tabela usuarios com sucesso');
     }
 
-    // Automaticamente faz login após o cadastro
+    // 4. Fazer login automático após cadastro
     console.log('🔐 Fazendo login automático...');
     
-    try {
-      const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+    const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    console.log('🔐 Resultado do login automático:', { userId: loginData?.user?.id, error: loginError });
+
+    if (loginError || !loginData.user) {
+      console.error('❌ Erro no login automático:', loginError);
+      toast({ 
+        title: "Cadastro realizado", 
+        description: "Conta criada com sucesso! Faça login para continuar.",
+        variant: "default"
       });
-
-      console.log('🔐 Resultado do login automático:', { userId: loginData?.user?.id, error: loginError });
-
-      if (loginError || !loginData.user) {
-        console.error('❌ Erro no login automático:', loginError);
-        toast({ variant: "destructive", title: "Erro no login automático", description: "Conta criada, mas erro no login. Tente fazer login manualmente." });
-        return false;
-      }
-
-      // Atualizar estados locais
-      setUser(loginData.user);
-      setSession(loginData.session);
-      setIsAuthenticated(true);
-      
-      // Verificar tipo de usuário usando a nova função
-      const userType = await checkUserTypeInTables(loginData.user.id);
-      setUserType(userType);
-
-      if (userType) {
-        const redirectPaths = {
-          customer: '/cliente/dashboard',
-          technician: '/tecnico/dashboard',
-          company: '/loja/dashboard',
-          admin: '/admin/dashboard'
-        };
-        
-        console.log('✅ Signup bem-sucedido, redirecionando para dashboard...', { userType });
-        
-        toast({ title: "Cadastro realizado", description: "Bem-vindo! Redirecionando para seu dashboard..." });
-        
-        setTimeout(() => {
-          console.log('🚀 Redirecionando para:', redirectPaths[userType]);
-          window.location.href = redirectPaths[userType];
-        }, 1000);
-      } else {
-        console.error('❌ Erro ao buscar tipo de usuário após cadastro');
-        toast({ 
-          variant: "destructive", 
-          title: "Erro no redirecionamento", 
-          description: "Conta criada, mas erro ao identificar tipo de usuário. Faça login manualmente." 
-        });
-      }
-
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 2000);
       return true;
-    } catch (loginError) {
-      console.error('Erro no login automático:', loginError);
-      toast({ variant: "destructive", title: "Erro no login automático", description: "Conta criada, mas erro no login. Tente fazer login manualmente." });
-      return false;
     }
+
+    // 5. Atualizar estados locais
+    setUser(loginData.user);
+    setSession(loginData.session);
+    setIsAuthenticated(true);
+    
+    // 6. Verificar tipo de usuário e redirecionar
+    const userType = await checkUserTypeInTables(loginData.user.id);
+    setUserType(userType);
+
+    if (userType) {
+      const redirectPaths = {
+        customer: '/cliente/dashboard',
+        technician: '/tecnico/dashboard',
+        company: '/loja/dashboard',
+        admin: '/admin/dashboard'
+      };
+      
+      console.log('✅ Signup e login bem-sucedidos, redirecionando...', { userType });
+      
+      toast({ title: "Cadastro realizado", description: "Bem-vindo! Redirecionando para seu dashboard..." });
+      
+      setTimeout(() => {
+        console.log('🚀 Redirecionando para:', redirectPaths[userType]);
+        window.location.href = redirectPaths[userType];
+      }, 1000);
+    } else {
+      console.error('❌ Erro ao buscar tipo de usuário após cadastro');
+      toast({ 
+        variant: "destructive", 
+        title: "Erro no redirecionamento", 
+        description: "Conta criada, mas erro ao identificar tipo de usuário. Tente fazer login manualmente." 
+      });
+    }
+
+    return true;
   };
 
   const logout = async () => {
