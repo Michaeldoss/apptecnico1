@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         .from('usuarios')
         .select('tipo_usuario')
         .eq('id', data.user.id)
-        .single();
+        .maybeSingle();
 
       if (userData && !userError) {
         const tipoMap: Record<string, UserType> = {
@@ -149,13 +149,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setIsAuthenticated(true);
       
       // Buscar tipo de usuário
-      const { data: userTypeData } = await supabase
+      const { data: userTypeData, error: userTypeError } = await supabase
         .from('usuarios')
         .select('tipo_usuario')
         .eq('id', loginData.user.id)
-        .single();
+        .maybeSingle();
 
-      if (userTypeData) {
+      console.log('🔍 Verificando tipo de usuário...', { userTypeData, userTypeError });
+      
+      if (userTypeData && !userTypeError) {
         const tipoMap: Record<string, UserType> = {
           cliente: 'customer',
           tecnico: 'technician',
@@ -181,6 +183,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             window.location.href = redirectPaths[mappedUserType];
           }, 500);
         }
+      } else {
+        console.error('❌ Erro ao buscar tipo de usuário:', userTypeError);
+        toast({ 
+          variant: "destructive", 
+          title: "Erro no redirecionamento", 
+          description: "Conta criada, mas erro ao identificar tipo de usuário. Faça login manualmente." 
+        });
       }
 
       return true;
