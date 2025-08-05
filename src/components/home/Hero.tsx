@@ -27,15 +27,15 @@ const Hero = () => {
           </Link>
         </div>
 
-        {/* Título Principal - Modo Deus */}
+        {/* Título Principal - Instalei */}
         <div className="text-center mb-16">
           <h1 className="text-5xl md:text-7xl font-black mb-8 leading-tight text-white drop-shadow-2xl">
-            Encontre o <span className="text-yellow-300 bg-gradient-to-r from-yellow-300/30 to-yellow-400/30 rounded-2xl border-2 border-yellow-300/50 backdrop-blur-sm mx-px font-bold text-7xl px-[20px] py-0">técnico ideal</span><br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-white">para seu equipamento</span>
+            Encontre o <span className="text-instalei-orange-400 bg-gradient-to-r from-instalei-orange-500/30 to-instalei-orange-400/30 rounded-2xl border-2 border-instalei-orange-400/50 backdrop-blur-sm mx-px font-bold text-7xl px-[20px] py-0">técnico ideal</span><br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-instalei-purple-100 to-white">para seu equipamento</span>
           </h1>
           
-          <p className="text-2xl md:text-3xl mb-12 text-gray-100 max-w-4xl mx-auto font-bold leading-relaxed drop-shadow-lg">
-            Conectamos você com profissionais qualificados para manutenção e reparo de equipamentos industriais
+          <p className="text-2xl md:text-3xl mb-12 text-instalei-gray-100 max-w-4xl mx-auto font-bold leading-relaxed drop-shadow-lg">
+            Conectamos você com profissionais qualificados através da plataforma Instalei
           </p>
         </div>
 
@@ -56,7 +56,7 @@ const Hero = () => {
             
             <div className="flex flex-col justify-end">
               <Link to="/find-technician">
-                <Button className="w-full h-14 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 font-black text-xl shadow-2xl transition-all duration-300 border-0 rounded-xl group hover:scale-105 hover:shadow-3xl">
+                <Button className="w-full h-14 bg-gradient-to-r from-instalei-orange-500 to-instalei-orange-400 hover:from-instalei-orange-600 hover:to-instalei-orange-500 text-white font-black text-xl shadow-2xl transition-all duration-300 border-0 rounded-xl group hover:scale-105 hover:shadow-3xl">
                   Buscar Técnicos
                   <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-2 transition-transform" />
                 </Button>

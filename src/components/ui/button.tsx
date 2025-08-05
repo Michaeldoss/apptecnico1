@@ -11,16 +11,16 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-tech-primary text-white hover:bg-tech-primary-hover font-inter shadow-sm",
+        default: "bg-instalei-purple-800 text-white hover:bg-instalei-purple-700 font-inter shadow-sm",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-sm",
         outline:
-          "border border-tech-primary bg-white text-tech-primary hover:bg-tech-primary hover:text-white font-inter shadow-sm",
+          "border border-instalei-purple-800 bg-white text-instalei-purple-800 hover:bg-instalei-purple-800 hover:text-white font-inter shadow-sm",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-sm",
+          "bg-instalei-orange-500 text-white hover:bg-instalei-orange-400 font-inter shadow-sm",
         ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-tech-primary underline-offset-4 hover:underline",
-        secure: "bg-tech-accent text-white hover:bg-green-600 font-inter shadow-sm",
+        link: "text-instalei-purple-800 underline-offset-4 hover:underline",
+        secure: "bg-success text-white hover:bg-success-hover font-inter shadow-sm",
       },
       size: {
         default: "h-10 px-4 py-2 text-sm",

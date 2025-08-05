@@ -120,7 +120,7 @@ const Footer = () => {
           </div>
 
           <div className="border-t border-gray-200 mt-12 pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-600">
-            <p className="font-inter">&copy; {currentYear} AtendaJá. Todos os direitos reservados.</p>
+            <p className="font-inter">&copy; {currentYear} Instalei. Todos os direitos reservados.</p>
             <div className="flex space-x-4 mt-4 md:mt-0">
               <Link to="/terms" className="text-gray-600 hover:text-blue-600 transition-colors duration-200 font-inter">
                 Termos

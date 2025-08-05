@@ -108,14 +108,14 @@ const Navbar = () => {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu> : <>
-              <Button variant="outline" size="sm" onClick={handleLoginClick} className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 font-inter font-semibold transition-all duration-200 border-0 shadow-lg hover:shadow-xl hover:scale-105">
+              <Button variant="outline" size="sm" onClick={handleLoginClick} className="bg-gradient-to-r from-instalei-orange-500 to-instalei-orange-400 hover:from-instalei-orange-600 hover:to-instalei-orange-500 text-white font-inter font-semibold transition-all duration-200 border-0 shadow-lg hover:shadow-xl hover:scale-105">
                 <LogIn className="h-4 w-4 mr-2" /> Entrar
               </Button>
               
               <Button 
                 size="sm" 
                 onClick={() => navigate('/register')}
-                className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 font-inter font-semibold transition-all duration-200 border-0 shadow-lg hover:shadow-xl hover:scale-105"
+                className="bg-gradient-to-r from-instalei-purple-800 to-instalei-purple-700 hover:from-instalei-purple-700 hover:to-instalei-purple-600 text-white font-inter font-semibold transition-all duration-200 border-0 shadow-lg hover:shadow-xl hover:scale-105"
               >
                 <UserPlus className="h-4 w-4 mr-2" /> Cadastre-se
               </Button>
