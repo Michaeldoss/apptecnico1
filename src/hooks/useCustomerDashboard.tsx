@@ -1,4 +1,5 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { useAuth } from '@/context/AuthContext';
 
 interface CustomerStats {
   totalPaid: number;
@@ -213,7 +214,62 @@ const mockMostUsedParts: MostUsedPart[] = [
 ];
 
 export const useCustomerDashboard = () => {
-  const [stats] = useState<CustomerStats>({
+  const { user } = useAuth();
+  const [isNewUser, setIsNewUser] = useState(false);
+
+  // Verificar se é um usuário novo (sem dados)
+  useEffect(() => {
+    // Para novos usuários, vamos mostrar dados vazios inicialmente
+    // TODO: Implementar verificação real do banco de dados
+    if (user) {
+      // Por enquanto, considerar usuários específicos como "novos"
+      const newUserEmails = ['comercial@dossgroup.com.br', 'dossgroupequipa@gmail.com'];
+      setIsNewUser(newUserEmails.includes(user.email || ''));
+    }
+  }, [user]);
+
+  // Dados vazios para usuários novos
+  const emptyStats: CustomerStats = {
+    totalPaid: 0,
+    pendingPayments: 0,
+    weeklyGrowth: 0,
+    favoredTechnician: {
+      name: 'Nenhum técnico ainda',
+      amount: 0
+    },
+    monthlyOperatingCosts: 0,
+    averageCallCost: 0
+  };
+
+  const emptyServiceMetrics: CustomerServiceMetrics = {
+    activeServices: 0,
+    pendingQuotes: 0,
+    completedThisMonth: 0,
+    totalSpent: 0,
+    averageResponseTime: '--',
+    equipmentCount: 0,
+    emergencyCalls: 0,
+    preventiveMaintenance: 0
+  };
+
+  const emptyWeeklyPayments = [
+    { week: 'Sem 1', payments: 0 },
+    { week: 'Sem 2', payments: 0 },
+    { week: 'Sem 3', payments: 0 },
+    { week: 'Sem 4', payments: 0 }
+  ];
+
+  const emptyFinancialBreakdown: FinancialBreakdown[] = [
+    { category: 'Peças e Componentes', amount: 0, percentage: 0, trend: 'stable' },
+    { category: 'Mão de Obra', amount: 0, percentage: 0, trend: 'stable' },
+    { category: 'Deslocamento', amount: 0, percentage: 0, trend: 'stable' },
+    { category: 'Manutenção Preventiva', amount: 0, percentage: 0, trend: 'stable' }
+  ];
+
+  const emptyMostUsedParts: MostUsedPart[] = [];
+
+  // Dados com conteúdo para usuários existentes  
+  const populatedStats: CustomerStats = {
     totalPaid: 10800.00,
     pendingPayments: 1850.00,
     weeklyGrowth: 8.5,
@@ -223,9 +279,9 @@ export const useCustomerDashboard = () => {
     },
     monthlyOperatingCosts: 3600.00,
     averageCallCost: 275.00
-  });
+  };
 
-  const [serviceMetrics] = useState<CustomerServiceMetrics>({
+  const populatedServiceMetrics: CustomerServiceMetrics = {
     activeServices: 3,
     pendingQuotes: 2,
     completedThisMonth: 12,
@@ -234,16 +290,24 @@ export const useCustomerDashboard = () => {
     equipmentCount: 4,
     emergencyCalls: 5,
     preventiveMaintenance: 7
-  });
+  };
 
-  const weeklyPayments = [
+  const populatedWeeklyPayments = [
     { week: 'Sem 1', payments: 2400 },
     { week: 'Sem 2', payments: 3200 },
     { week: 'Sem 3', payments: 2850 },
     { week: 'Sem 4', payments: 3350 }
   ];
 
-  const equipmentCosts = mockEquipment.map(eq => ({
+  // Escolher dados baseado se é usuário novo ou não
+  const stats = isNewUser ? emptyStats : populatedStats;
+  const serviceMetrics = isNewUser ? emptyServiceMetrics : populatedServiceMetrics;
+  const weeklyPayments = isNewUser ? emptyWeeklyPayments : populatedWeeklyPayments;
+  const equipment = isNewUser ? [] : mockEquipment;
+  const financialBreakdown = isNewUser ? emptyFinancialBreakdown : mockFinancialBreakdown;
+  const mostUsedParts = isNewUser ? emptyMostUsedParts : mockMostUsedParts;
+
+  const equipmentCosts = equipment.map(eq => ({
     name: eq.type,
     cost: eq.totalCost,
     parts: eq.partsUsed,
@@ -252,24 +316,25 @@ export const useCustomerDashboard = () => {
 
   // New function to get equipment by ID
   const getEquipmentById = (id: number) => {
-    return mockEquipment.find(eq => eq.id === id);
+    return equipment.find(eq => eq.id === id);
   };
 
   // New function to get service orders by equipment
   const getServiceOrdersByEquipment = (equipmentId: number) => {
-    const equipment = getEquipmentById(equipmentId);
-    return equipment ? equipment.serviceOrders : [];
+    const foundEquipment = getEquipmentById(equipmentId);
+    return foundEquipment ? foundEquipment.serviceOrders : [];
   };
 
   return {
     stats,
     serviceMetrics,
-    equipment: mockEquipment,
+    equipment,
     weeklyPayments,
-    financialBreakdown: mockFinancialBreakdown,
-    mostUsedParts: mockMostUsedParts,
+    financialBreakdown,
+    mostUsedParts,
     equipmentCosts,
     getEquipmentById,
-    getServiceOrdersByEquipment
+    getServiceOrdersByEquipment,
+    isNewUser  // Exposar se é usuário novo para componentes que precisem
   };
 };

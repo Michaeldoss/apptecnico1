@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Navigate, Link } from 'react-router-dom';
 import Navbar from '@/components/layout/Navbar';
@@ -28,23 +28,57 @@ import {
 import DashboardChart from '@/components/store/DashboardChart';
 import OrdersList from '@/components/store/OrdersList';
 
-const salesData = [
-  { name: 'Jan', vendas: 4000, receita: 2400 },
-  { name: 'Fev', vendas: 3000, receita: 1398 },
-  { name: 'Mar', vendas: 2000, receita: 9800 },
-  { name: 'Abr', vendas: 2780, receita: 3908 },
-  { name: 'Mai', vendas: 1890, receita: 4800 },
-  { name: 'Jun', vendas: 2390, receita: 3800 },
-  { name: 'Jul', vendas: 3490, receita: 4300 },
-];
+const CompanyDashboard = () => {
+  const { isAuthenticated, userType, user } = useAuth();
+  const [isNewUser, setIsNewUser] = useState(false);
 
-const categoryData = [
-  { name: 'Impressoras', valor: 4000 },
-  { name: 'Peças', valor: 3000 },
-  { name: 'Suprimentos', valor: 2000 },
-  { name: 'Manutenção', valor: 2780 },
-  { name: 'Outros', valor: 1890 },
-];
+  // Verificar se é um usuário novo (sem dados)
+  useEffect(() => {
+    if (user) {
+      const newUserEmails = ['comercial@dossgroup.com.br', 'dossgroupequipa@gmail.com'];
+      setIsNewUser(newUserEmails.includes(user.email || ''));
+    }
+  }, [user]);
+
+  // Dados vazios para usuários novos
+  const emptySalesData = [
+    { name: 'Jan', vendas: 0, receita: 0 },
+    { name: 'Fev', vendas: 0, receita: 0 },
+    { name: 'Mar', vendas: 0, receita: 0 },
+    { name: 'Abr', vendas: 0, receita: 0 },
+    { name: 'Mai', vendas: 0, receita: 0 },
+    { name: 'Jun', vendas: 0, receita: 0 },
+    { name: 'Jul', vendas: 0, receita: 0 }
+  ];
+
+  const emptyCategoryData = [
+    { name: 'Impressoras', valor: 0 },
+    { name: 'Peças', valor: 0 },
+    { name: 'Suprimentos', valor: 0 },
+    { name: 'Manutenção', valor: 0 },
+    { name: 'Outros', valor: 0 }
+  ];
+
+  const emptyOrders: any[] = [];
+
+  // Dados com conteúdo para usuários existentes
+  const salesData = [
+    { name: 'Jan', vendas: 4000, receita: 2400 },
+    { name: 'Fev', vendas: 3000, receita: 1398 },
+    { name: 'Mar', vendas: 2000, receita: 9800 },
+    { name: 'Abr', vendas: 2780, receita: 3908 },
+    { name: 'Mai', vendas: 1890, receita: 4800 },
+    { name: 'Jun', vendas: 2390, receita: 3800 },
+    { name: 'Jul', vendas: 3490, receita: 4300 }
+  ];
+
+  const categoryData = [
+    { name: 'Impressoras', valor: 4000 },
+    { name: 'Peças', valor: 3000 },
+    { name: 'Suprimentos', valor: 2000 },
+    { name: 'Manutenção', valor: 2780 },
+    { name: 'Outros', valor: 1890 }
+  ];
 
 const sampleOrders = [
   {
@@ -67,8 +101,10 @@ const sampleOrders = [
   },
 ];
 
-const CompanyDashboard = () => {
-  const { isAuthenticated, userType } = useAuth();
+  // Escolher dados baseado se é usuário novo ou não
+  const currentSalesData = isNewUser ? emptySalesData : salesData;
+  const currentCategoryData = isNewUser ? emptyCategoryData : categoryData;
+  const currentOrders = isNewUser ? emptyOrders : sampleOrders;
 
   if (!isAuthenticated || userType !== 'company') {
     return <Navigate to="/login" />;
@@ -236,7 +272,7 @@ const CompanyDashboard = () => {
                     </CardHeader>
                     <CardContent>
                       <DashboardChart 
-                        data={salesData} 
+                        data={currentSalesData} 
                         type="area" 
                         dataKeys={['vendas', 'receita']}
                         height={300}
@@ -346,7 +382,7 @@ const CompanyDashboard = () => {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <OrdersList orders={sampleOrders} />
+                    <OrdersList orders={currentOrders} />
                   </CardContent>
                 </Card>
               </TabsContent>
