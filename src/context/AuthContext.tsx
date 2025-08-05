@@ -82,56 +82,73 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const checkUserTypeInTables = async (userId: string): Promise<UserType> => {
     console.log('🔍 Verificando tipo de usuário nas tabelas específicas para:', userId);
 
-    // Verificar se é cliente
-    const { data: clienteData } = await supabase
-      .from('clientes')
-      .select('id')
-      .eq('id', userId)
-      .maybeSingle();
+    try {
+      // Verificar se é cliente
+      console.log('🔎 Verificando na tabela clientes...');
+      const { data: clienteData, error: clienteError } = await supabase
+        .from('clientes')
+        .select('id')
+        .eq('id', userId)
+        .maybeSingle();
 
-    if (clienteData) {
-      console.log('✅ Usuário encontrado na tabela clientes');
-      return 'customer';
+      console.log('📋 Resultado clientes:', { clienteData, clienteError });
+
+      if (clienteData) {
+        console.log('✅ Usuário encontrado na tabela clientes');
+        return 'customer';
+      }
+
+      // Verificar se é técnico
+      console.log('🔎 Verificando na tabela tecnicos...');
+      const { data: tecnicoData, error: tecnicoError } = await supabase
+        .from('tecnicos')
+        .select('id')
+        .eq('id', userId)
+        .maybeSingle();
+
+      console.log('📋 Resultado tecnicos:', { tecnicoData, tecnicoError });
+
+      if (tecnicoData) {
+        console.log('✅ Usuário encontrado na tabela tecnicos');
+        return 'technician';
+      }
+
+      // Verificar se é loja
+      console.log('🔎 Verificando na tabela lojas...');
+      const { data: lojaData, error: lojaError } = await supabase
+        .from('lojas')
+        .select('id')
+        .eq('id', userId)
+        .maybeSingle();
+
+      console.log('📋 Resultado lojas:', { lojaData, lojaError });
+
+      if (lojaData) {
+        console.log('✅ Usuário encontrado na tabela lojas');
+        return 'company';
+      }
+
+      // Verificar se é admin na tabela usuarios
+      console.log('🔎 Verificando na tabela usuarios...');
+      const { data: usuarioData, error: usuarioError } = await supabase
+        .from('usuarios')
+        .select('tipo_usuario')
+        .eq('id', userId)
+        .maybeSingle();
+
+      console.log('📋 Resultado usuarios:', { usuarioData, usuarioError });
+
+      if (usuarioData?.tipo_usuario === 'admin') {
+        console.log('✅ Usuário encontrado como admin');
+        return 'admin';
+      }
+
+      console.log('❌ Usuário não encontrado em nenhuma tabela específica');
+      return null;
+    } catch (error) {
+      console.error('💥 Erro crítico ao verificar tipo de usuário:', error);
+      return null;
     }
-
-    // Verificar se é técnico
-    const { data: tecnicoData } = await supabase
-      .from('tecnicos')
-      .select('id')
-      .eq('id', userId)
-      .maybeSingle();
-
-    if (tecnicoData) {
-      console.log('✅ Usuário encontrado na tabela tecnicos');
-      return 'technician';
-    }
-
-    // Verificar se é loja
-    const { data: lojaData } = await supabase
-      .from('lojas')
-      .select('id')
-      .eq('id', userId)
-      .maybeSingle();
-
-    if (lojaData) {
-      console.log('✅ Usuário encontrado na tabela lojas');
-      return 'company';
-    }
-
-    // Verificar se é admin na tabela usuarios
-    const { data: usuarioData } = await supabase
-      .from('usuarios')
-      .select('tipo_usuario')
-      .eq('id', userId)
-      .maybeSingle();
-
-    if (usuarioData?.tipo_usuario === 'admin') {
-      console.log('✅ Usuário encontrado como admin');
-      return 'admin';
-    }
-
-    console.log('❌ Usuário não encontrado em nenhuma tabela específica');
-    return null;
   };
 
   const signup = async (email: string, password: string, userData: any): Promise<boolean> => {
