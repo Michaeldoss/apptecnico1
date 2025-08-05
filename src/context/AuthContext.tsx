@@ -51,13 +51,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setIsAuthenticated(true);
       setSession(data.session);
 
+      console.log('🔍 Buscando tipo de usuário no login para:', data.user.id);
       const { data: userData, error: userError } = await supabase
         .from('usuarios')
         .select('tipo_usuario')
         .eq('id', data.user.id)
         .maybeSingle();
+      
+      console.log('📋 Resultado da busca no login:', { userData, userError });
 
       if (userData && !userError) {
+        console.log('✅ Dados do usuário encontrados:', userData);
         const tipoMap: Record<string, UserType> = {
           cliente: 'customer',
           tecnico: 'technician',
@@ -65,8 +69,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           admin: 'admin',
         };
         const mappedUserType = tipoMap[userData.tipo_usuario];
+        console.log('🔄 Mapeando tipo de usuário:', { tipo_original: userData.tipo_usuario, tipo_mapeado: mappedUserType });
         setUserType(mappedUserType);
       } else {
+        console.error('❌ Erro ao buscar dados do usuário:', { userData, userError });
         setUserType(null);
         toast({ variant: "destructive", title: "Erro", description: "Tipo de usuário não identificado" });
       }
@@ -338,14 +344,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         // Defer database call to prevent blocking auth state
         setTimeout(async () => {
           try {
+            console.log('🔍 Buscando tipo de usuário para:', session.user.id);
             const { data: userData, error } = await supabase
               .from('usuarios')
               .select('tipo_usuario')
               .eq('id', session.user.id)
               .maybeSingle();
 
+            console.log('📋 Resultado da busca:', { userData, error });
+
             if (error || !userData) {
-              console.error('Erro ao buscar tipo de usuário:', error);
+              console.error('❌ Erro ao buscar tipo de usuário:', error);
               setUserType(null);
             } else {
               const tipoMap: Record<string, UserType> = {
@@ -354,10 +363,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 company: 'company',
                 admin: 'admin',
               };
-              setUserType(tipoMap[userData.tipo_usuario] || null);
+              const mappedType = tipoMap[userData.tipo_usuario] || null;
+              console.log('✅ Tipo de usuário mapeado:', { original: userData.tipo_usuario, mapped: mappedType });
+              setUserType(mappedType);
             }
           } catch (error) {
-            console.error('Erro ao buscar dados do usuário:', error);
+            console.error('💥 Erro crítico ao buscar dados do usuário:', error);
             setUserType(null);
           }
         }, 0);
