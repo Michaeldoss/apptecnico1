@@ -63,46 +63,46 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Paleta Instalei - tons de roxo e laranja
+				// Paleta Instalei - Sistema de cores completo
 				'instalei-purple': {
-					50: 'hsl(273, 100%, 98%)',
-					100: 'hsl(273, 96%, 94%)',
-					200: 'hsl(273, 96%, 90%)',
-					300: 'hsl(273, 96%, 85%)', // lavanda
-					400: 'hsl(273, 96%, 70%)',
-					500: 'hsl(273, 96%, 50%)', // medium
-					600: 'hsl(273, 96%, 40%)',
-					700: 'hsl(273, 96%, 30%)',
-					800: 'hsl(273, 96%, 25%)', // dark
-					900: 'hsl(273, 96%, 20%)',
-					950: 'hsl(273, 96%, 15%)',
+					50: 'hsl(273, 100%, 97%)',
+					100: 'hsl(273, 85%, 93%)',
+					200: 'hsl(273, 85%, 85%)',
+					300: 'hsl(273, 85%, 75%)',
+					400: 'hsl(273, 85%, 60%)',
+					500: 'hsl(273, 100%, 40%)', // Roxo principal
+					600: 'hsl(273, 100%, 35%)',
+					700: 'hsl(273, 100%, 25%)',
+					800: 'hsl(273, 100%, 20%)',
+					900: 'hsl(273, 100%, 15%)',
+					950: 'hsl(273, 100%, 10%)',
 				},
 				'instalei-orange': {
 					50: 'hsl(27, 100%, 97%)',
-					100: 'hsl(27, 100%, 94%)',
-					200: 'hsl(27, 100%, 87%)',
-					300: 'hsl(27, 100%, 80%)',
-					400: 'hsl(27, 100%, 70%)', // light #FFA726
-					500: 'hsl(27, 100%, 55%)', // vibrant #FF6F00
-					600: 'hsl(27, 100%, 50%)',
+					100: 'hsl(27, 100%, 93%)',
+					200: 'hsl(27, 100%, 85%)',
+					300: 'hsl(27, 100%, 75%)',
+					400: 'hsl(27, 100%, 65%)',
+					500: 'hsl(27, 100%, 50%)', // Laranja principal #FF7A00
+					600: 'hsl(27, 100%, 45%)',
 					700: 'hsl(27, 100%, 40%)',
-					800: 'hsl(27, 100%, 30%)',
-					900: 'hsl(27, 100%, 20%)',
-					950: 'hsl(27, 100%, 15%)',
+					800: 'hsl(27, 100%, 35%)',
+					900: 'hsl(27, 100%, 30%)',
+					950: 'hsl(27, 100%, 25%)',
 				},
-				// Tons de cinza Instalei
+				// Sistema de cinzas Instalei
 				'instalei-gray': {
-					50: 'hsl(0, 0%, 98%)', // #FAFAFA
-					100: 'hsl(0, 0%, 93%)', // #EDEDED - text light
-					200: 'hsl(0, 0%, 87%)',
+					50: 'hsl(0, 0%, 98%)',
+					100: 'hsl(0, 0%, 93%)',
+					200: 'hsl(0, 0%, 87%)', // #DDDDDD - text light
 					300: 'hsl(0, 0%, 76%)',
 					400: 'hsl(0, 0%, 63%)',
 					500: 'hsl(0, 0%, 47%)',
-					600: 'hsl(0, 0%, 31%)', // #4F4F4F - text medium
-					700: 'hsl(0, 0%, 25%)',
-					800: 'hsl(0, 0%, 20%)', // #333333 - text dark
-					900: 'hsl(0, 0%, 15%)',
-					950: 'hsl(0, 0%, 9%)',
+					600: 'hsl(0, 0%, 27%)', // #444444 - text medium
+					700: 'hsl(0, 0%, 20%)',
+					800: 'hsl(0, 0%, 13%)', // #222222 - text dark
+					900: 'hsl(0, 0%, 9%)',
+					950: 'hsl(0, 0%, 4%)',
 				},
 				'success': {
 					DEFAULT: '#10B981',
@@ -133,7 +133,19 @@ export default {
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
-				sm: 'calc(var(--radius) - 4px)'
+				sm: 'calc(var(--radius) - 4px)',
+				'instalei': '12px',
+				'instalei-sm': '8px',
+				'instalei-lg': '16px',
+				'instalei-xl': '20px'
+			},
+			spacing: {
+				'instalei-xs': '8px',
+				'instalei-sm': '16px',
+				'instalei-md': '24px',
+				'instalei-lg': '32px',
+				'instalei-xl': '48px',
+				'instalei-2xl': '64px'
 			},
 			keyframes: {
 				'accordion-down': {

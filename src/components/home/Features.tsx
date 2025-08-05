@@ -22,142 +22,142 @@ import {
 
 const Features = () => {
   return (
-    <section className="py-20 bg-gray-50">
-      <div className="container mx-auto px-4">
+    <section className="section-padding bg-muted/30">
+      <div className="container-instalei">
         {/* Como Funciona */}
-        <div className="text-center mb-20">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            Como funciona
+        <div className="text-center mb-instalei-2xl">
+          <h2 className="text-4xl md:text-5xl font-bold text-primary mb-instalei-md">
+            Como funciona a Instalei
           </h2>
-          <p className="text-xl text-gray-700 max-w-3xl mx-auto font-medium">
-            Em poucos passos você encontra o técnico ideal para seu equipamento
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto font-medium">
+            Em poucos passos você encontra o técnico ideal para seu equipamento através da nossa plataforma
           </p>
         </div>
 
         {/* Passos */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-instalei-lg mb-instalei-2xl">
           <div className="text-center">
-            <div className="bg-blue-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+            <div className="bg-gradient-to-br from-instalei-purple-500 to-instalei-purple-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-instalei-md shadow-lg hover:scale-110 transition-transform duration-200">
               <span className="text-3xl font-bold text-white">1</span>
             </div>
-            <h3 className="text-2xl font-bold mb-4 text-gray-900">Descreva seu problema</h3>
-            <p className="text-gray-700 text-lg font-medium">
+            <h3 className="text-2xl font-bold mb-instalei-sm text-primary">Descreva seu problema</h3>
+            <p className="text-muted-foreground text-lg font-medium">
               Conte-nos que tipo de equipamento precisa de manutenção e onde está localizado
             </p>
           </div>
 
           <div className="text-center">
-            <div className="bg-blue-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+            <div className="bg-gradient-to-br from-instalei-purple-500 to-instalei-purple-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-instalei-md shadow-lg hover:scale-110 transition-transform duration-200">
               <span className="text-3xl font-bold text-white">2</span>
             </div>
-            <h3 className="text-2xl font-bold mb-4 text-gray-900">Receba propostas</h3>
-            <p className="text-gray-700 text-lg font-medium">
+            <h3 className="text-2xl font-bold mb-instalei-sm text-primary">Receba propostas</h3>
+            <p className="text-muted-foreground text-lg font-medium">
               Técnicos qualificados da sua região enviarão orçamentos personalizados
             </p>
           </div>
 
           <div className="text-center">
-            <div className="bg-blue-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+            <div className="bg-gradient-to-br from-instalei-purple-500 to-instalei-purple-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-instalei-md shadow-lg hover:scale-110 transition-transform duration-200">
               <span className="text-3xl font-bold text-white">3</span>
             </div>
-            <h3 className="text-2xl font-bold mb-4 text-gray-900">Escolha o melhor</h3>
-            <p className="text-gray-700 text-lg font-medium">
+            <h3 className="text-2xl font-bold mb-instalei-sm text-primary">Escolha o melhor</h3>
+            <p className="text-muted-foreground text-lg font-medium">
               Compare preços, avaliações e escolha o técnico ideal para você
             </p>
           </div>
         </div>
 
         {/* Por que escolher */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8">
-            Por que escolher nossa plataforma?
+        <div className="text-center mb-instalei-xl">
+          <h2 className="text-4xl md:text-5xl font-bold text-primary mb-instalei-lg">
+            Por que escolher a Instalei?
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-instalei-md mb-instalei-2xl">
           {[
             {
               icon: <Shield className="h-10 w-10 text-white" />,
               title: "Segurança Garantida",
               description: "Todos os técnicos são verificados e avaliados",
-              color: "bg-green-600"
+              color: "bg-gradient-to-br from-instalei-purple-500 to-instalei-purple-600"
             },
             {
               icon: <Clock className="h-10 w-10 text-white" />,
               title: "Resposta Rápida",
               description: "Receba propostas em até 1 hora",
-              color: "bg-orange-600"
+              color: "bg-gradient-to-br from-instalei-orange-500 to-instalei-orange-600"
             },
             {
               icon: <Star className="h-10 w-10 text-white" />,
               title: "Melhor Qualidade",
               description: "Apenas profissionais com alta avaliação",
-              color: "bg-yellow-600"
+              color: "bg-gradient-to-br from-instalei-purple-600 to-instalei-purple-700"
             },
             {
               icon: <CreditCard className="h-10 w-10 text-white" />,
               title: "Pagamento Seguro",
               description: "Pague apenas quando o serviço for concluído",
-              color: "bg-purple-600"
+              color: "bg-gradient-to-br from-instalei-orange-600 to-instalei-orange-700"
             }
           ].map((feature, index) => (
-            <Card key={index} className="text-center hover:shadow-xl transition-all duration-300 border-2 border-gray-200 hover:border-blue-300">
-              <CardContent className="p-8">
-                <div className={`${feature.color} w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg`}>
+            <Card key={index} className="card-instalei text-center group">
+              <CardContent className="p-instalei-md">
+                <div className={`${feature.color} w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-instalei-md shadow-lg group-hover:scale-110 transition-transform duration-200`}>
                   {feature.icon}
                 </div>
-                <h3 className="text-xl font-bold mb-4 text-gray-900">{feature.title}</h3>
-                <p className="text-gray-700 font-medium">{feature.description}</p>
+                <h3 className="text-xl font-bold mb-instalei-sm text-primary">{feature.title}</h3>
+                <p className="text-muted-foreground font-medium">{feature.description}</p>
               </CardContent>
             </Card>
           ))}
         </div>
 
         {/* Seção de Cadastros */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-instalei-md mb-instalei-2xl">
           {/* Cliente */}
-          <div className="bg-white rounded-2xl p-8 shadow-xl border-2 border-blue-200 hover:border-blue-400 transition-all duration-300 text-center group hover:shadow-2xl flex flex-col">
-            <div className="bg-blue-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
+          <div className="card-instalei text-center group flex flex-col">
+            <div className="bg-gradient-to-br from-instalei-purple-500 to-instalei-purple-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-instalei-md shadow-lg group-hover:scale-110 transition-transform duration-300">
               <User className="h-10 w-10 text-white" />
             </div>
-            <h3 className="text-2xl font-bold mb-4 text-gray-900">Cadastro de Cliente</h3>
-            <p className="text-gray-700 mb-6 font-medium flex-grow">
-              Encontre os melhores técnicos para seus equipamentos
+            <h3 className="text-2xl font-bold mb-instalei-sm text-primary">Cadastro de Cliente</h3>
+            <p className="text-muted-foreground mb-instalei-md font-medium flex-grow">
+              Encontre os melhores técnicos para seus equipamentos na Instalei
             </p>
             <Link to="/register" className="mt-auto">
-              <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 text-lg shadow-lg transition-all duration-200 hover:scale-105">
+              <Button className="btn-primary w-full">
                 Cadastrar como Cliente
               </Button>
             </Link>
           </div>
 
           {/* Técnico */}
-          <div className="bg-white rounded-2xl p-8 shadow-xl border-2 border-green-200 hover:border-green-400 transition-all duration-300 text-center group hover:shadow-2xl flex flex-col">
-            <div className="bg-green-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
+          <div className="card-instalei text-center group flex flex-col">
+            <div className="bg-gradient-to-br from-instalei-orange-500 to-instalei-orange-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-instalei-md shadow-lg group-hover:scale-110 transition-transform duration-300">
               <Wrench className="h-10 w-10 text-white" />
             </div>
-            <h3 className="text-2xl font-bold mb-4 text-gray-900">Cadastro de Técnico</h3>
-            <p className="text-gray-700 mb-6 font-medium flex-grow">
-              Conecte-se com clientes e expanda seus negócios
+            <h3 className="text-2xl font-bold mb-instalei-sm text-primary">Cadastro de Técnico</h3>
+            <p className="text-muted-foreground mb-instalei-md font-medium flex-grow">
+              Conecte-se com clientes e expanda seus negócios através da Instalei
             </p>
             <Link to="/technician" className="mt-auto">
-              <Button className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 text-lg shadow-lg transition-all duration-200 hover:scale-105">
+              <Button className="btn-secondary w-full">
                 Cadastrar como Técnico
               </Button>
             </Link>
           </div>
 
           {/* Lojista */}
-          <div className="bg-white rounded-2xl p-8 shadow-xl border-2 border-purple-200 hover:border-purple-400 transition-all duration-300 text-center group hover:shadow-2xl flex flex-col">
-            <div className="bg-purple-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
+          <div className="card-instalei text-center group flex flex-col">
+            <div className="bg-gradient-to-br from-instalei-purple-600 to-instalei-purple-700 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-instalei-md shadow-lg group-hover:scale-110 transition-transform duration-300">
               <Store className="h-10 w-10 text-white" />
             </div>
-            <h3 className="text-2xl font-bold mb-4 text-gray-900">Cadastro de Lojista</h3>
-            <p className="text-gray-700 mb-6 font-medium flex-grow">
-              Venda produtos e peças para técnicos e clientes
+            <h3 className="text-2xl font-bold mb-instalei-sm text-primary">Cadastro de Lojista</h3>
+            <p className="text-muted-foreground mb-instalei-md font-medium flex-grow">
+              Venda produtos e peças para técnicos e clientes na Instalei
             </p>
             <Link to="/loja/register" className="mt-auto">
-              <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 text-lg shadow-lg transition-all duration-200 hover:scale-105">
+              <Button className="btn-outline w-full">
                 Cadastrar como Lojista
               </Button>
             </Link>
@@ -165,33 +165,33 @@ const Features = () => {
         </div>
 
         {/* CTA para Comunidade */}
-        <div className="bg-gradient-to-r from-blue-700 to-blue-800 rounded-2xl p-12 text-center text-white shadow-2xl">
-          <h3 className="text-3xl md:text-4xl font-bold mb-6 drop-shadow-lg">
-            Comunidade AtendaJá
+        <div className="card-gradient rounded-instalei-xl p-instalei-2xl text-center text-white shadow-2xl">
+          <h3 className="text-3xl md:text-4xl font-bold mb-instalei-md drop-shadow-lg">
+            Comunidade Instalei
           </h3>
-          <p className="text-xl mb-8 text-blue-100 font-medium max-w-2xl mx-auto drop-shadow-sm">
-            Participe das nossas comunidades e conecte-se com outros profissionais
+          <p className="text-xl mb-instalei-lg text-instalei-gray-200 font-medium max-w-2xl mx-auto drop-shadow-sm">
+            Participe das nossas comunidades e conecte-se com outros profissionais da Instalei
           </p>
           
           {/* Links de Comunidade */}
-          <div className="flex flex-wrap justify-center gap-4">
-            <a href="#" className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition-colors">
+          <div className="flex flex-wrap justify-center gap-instalei-sm">
+            <a href="#" className="bg-green-500 hover:bg-green-600 text-white px-instalei-md py-instalei-sm rounded-instalei flex items-center gap-2 transition-all duration-200 hover:scale-105 hover:shadow-lg">
               <MessageCircle className="h-5 w-5" />
               WhatsApp
             </a>
-            <a href="#" className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition-colors">
+            <a href="#" className="bg-blue-500 hover:bg-blue-600 text-white px-instalei-md py-instalei-sm rounded-instalei flex items-center gap-2 transition-all duration-200 hover:scale-105 hover:shadow-lg">
               <Send className="h-5 w-5" />
               Telegram
             </a>
-            <a href="#" className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition-colors">
+            <a href="#" className="bg-red-600 hover:bg-red-700 text-white px-instalei-md py-instalei-sm rounded-instalei flex items-center gap-2 transition-all duration-200 hover:scale-105 hover:shadow-lg">
               <Youtube className="h-5 w-5" />
               YouTube
             </a>
-            <a href="#" className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition-colors">
+            <a href="#" className="bg-blue-600 hover:bg-blue-700 text-white px-instalei-md py-instalei-sm rounded-instalei flex items-center gap-2 transition-all duration-200 hover:scale-105 hover:shadow-lg">
               <Facebook className="h-5 w-5" />
               Facebook
             </a>
-            <a href="#" className="bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition-colors">
+            <a href="#" className="bg-pink-500 hover:bg-pink-600 text-white px-instalei-md py-instalei-sm rounded-instalei flex items-center gap-2 transition-all duration-200 hover:scale-105 hover:shadow-lg">
               <Instagram className="h-5 w-5" />
               Instagram
             </a>
