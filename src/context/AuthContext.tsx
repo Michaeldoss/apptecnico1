@@ -120,11 +120,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const userId = data.user.id;
     const tabela = userData.type === 'technician' ? 'tecnicos' : userData.type === 'company' ? 'lojas' : 'clientes';
 
-    const { password: _, confirmPassword: __, ...cleanUserData } = userData;
+    // Mapear campos específicos para cada tipo de usuário
+    let cleanUserData: any = {};
+    
+    if (userData.type === 'company') {
+      cleanUserData = {
+        id: userId,
+        nome_empresa: userData.nome || userData.name || '',
+        nome_contato: userData.nome || userData.name || '',
+        email: userData.email
+      };
+    } else {
+      cleanUserData = {
+        id: userId,
+        nome: userData.nome || userData.name || '',
+        email: userData.email
+      };
+    }
 
     console.log('📝 Inserindo dados na tabela específica...', { tabela, userId, cleanUserData });
     
-    const { error: insertError } = await supabase.from(tabela as any).insert({ id: userId, ...cleanUserData });
+    const { error: insertError } = await supabase.from(tabela as any).insert(cleanUserData);
 
     if (insertError) {
       console.error('❌ Erro ao inserir na tabela específica:', insertError);
