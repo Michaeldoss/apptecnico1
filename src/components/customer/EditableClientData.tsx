@@ -56,7 +56,12 @@ const EditableClientData: React.FC<EditableClientDataProps> = ({
   onSave,
   onCancel
 }) => {
-  const [formData, setFormData] = useState<ClientData>(clientData);
+  const [formData, setFormData] = useState<ClientData>({
+    ...clientData,
+    // Garantir que arrays existam
+    contacts: clientData.contacts || [],
+    services: clientData.services || []
+  });
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 

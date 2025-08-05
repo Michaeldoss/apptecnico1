@@ -112,10 +112,10 @@ export const useClientData = () => {
           throw new Error('Usuário não autenticado');
         }
 
-        // Dados limpos sem informações fake
+        // Dados iniciais vazios para preenchimento manual
         const mockClientData: ClientData = {
           id: user.id?.toString() || '',
-          name: user.name || '',
+          name: user.name || 'Digite o nome da empresa',
           fantasyName: '',
           email: user.email || '',
           alternativeEmails: [],
