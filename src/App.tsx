@@ -12,6 +12,8 @@ import Index from '@/pages/Index';
 import NotFound from '@/pages/NotFound';
 import Login from '@/pages/Login';
 import NewRegister from '@/pages/NewRegister';
+import UnifiedLogin from '@/pages/UnifiedLogin';
+import UnifiedRegister from '@/pages/UnifiedRegister';
 import ProfileComplete from '@/pages/customer/ProfileComplete';
 import CustomerAffiliates from '@/pages/customer/Affiliates';
 import TechnicianAffiliates from '@/pages/technician/Affiliates';
@@ -94,8 +96,11 @@ function App() {
               <Routes>
                 {/* Public routes */}
                 <Route path="/" element={<Index />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<NewRegister />} />
+                <Route path="/login" element={<UnifiedLogin />} />
+                <Route path="/register" element={<UnifiedRegister />} />
+                {/* Legacy routes - redirecting to new unified system */}
+                <Route path="/old-login" element={<Login />} />
+                <Route path="/old-register" element={<NewRegister />} />
                 <Route path="/cliente/register" element={<ClientRegister />} />
                 <Route path="/technician" element={<TechnicianRegister />} />
                 <Route path="/tecnico/register" element={<TechnicianRegister />} />
