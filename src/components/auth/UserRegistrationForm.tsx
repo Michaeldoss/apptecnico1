@@ -20,39 +20,16 @@ import GoogleLoginButton from '@/components/auth/GoogleLoginButton';
 import { Eye, EyeOff, User, Mail, Lock, Building, Calendar, Briefcase, Loader2, CheckCircle, X } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
-// Schema base para todos os tipos de usuário
-const baseSchema = {
+// Schema simplificado para o primeiro passo do cadastro
+const registrationSchema = z.object({
   nome: z.string().min(2, "Nome deve ter pelo menos 2 caracteres").max(100, "Nome muito longo"),
   email: z.string().email("Email inválido"),
-  cpf: z.string().optional(),
   password: z.string()
     .min(8, "Senha deve ter pelo menos 8 caracteres")
     .regex(/[A-Z]/, "Deve conter pelo menos uma letra maiúscula")
     .regex(/[a-z]/, "Deve conter pelo menos uma letra minúscula")
     .regex(/[0-9]/, "Deve conter pelo menos um número"),
   confirmPassword: z.string(),
-};
-
-// Schemas específicos por tipo
-const clientSchema = z.object({
-  ...baseSchema,
-  dataNascimento: z.string().optional(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Senhas não coincidem",
-  path: ["confirmPassword"],
-});
-
-const technicianSchema = z.object({
-  ...baseSchema,
-  especialidade: z.string().optional(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Senhas não coincidem",
-  path: ["confirmPassword"],
-});
-
-const storeSchema = z.object({
-  ...baseSchema,
-  nomeEmpresa: z.string().min(2, "Nome da empresa é obrigatório"),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Senhas não coincidem",
   path: ["confirmPassword"],
@@ -77,42 +54,16 @@ const UserRegistrationForm: React.FC<UserRegistrationFormProps> = ({
 
   const { signup } = useAuth();
 
-  // Selecionar schema baseado no tipo
-  const getSchema = () => {
-    switch (userType) {
-      case 'client':
-        return clientSchema;
-      case 'technician':
-        return technicianSchema;
-      case 'store':
-        return storeSchema;
-      default:
-        return clientSchema;
-    }
-  };
-
   const form = useForm({
-    resolver: zodResolver(getSchema()),
+    resolver: zodResolver(registrationSchema),
     defaultValues: {
       nome: '',
       email: '',
-      cpf: '',
       password: '',
       confirmPassword: '',
-      ...(userType === 'client' && { dataNascimento: '' }),
-      ...(userType === 'technician' && { especialidade: '' }),
-      ...(userType === 'store' && { nomeEmpresa: '' }),
     },
   });
 
-  const formatCpf = (value: string) => {
-    return value.replace(/\D/g, '').replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
-  };
-
-  const validateCpfFormat = (cpf: string) => {
-    const cleanCpf = cpf.replace(/\D/g, '');
-    return cleanCpf.length === 11;
-  };
 
   const onSubmit = async (data: any) => {
     setIsLoading(true);
@@ -121,11 +72,7 @@ const UserRegistrationForm: React.FC<UserRegistrationFormProps> = ({
       const userData = {
         nome: data.nome,
         email: data.email,
-        cpf_cnpj: data.cpf ? data.cpf.replace(/\D/g, '') : null,
         type: userType === 'client' ? 'customer' : userType === 'store' ? 'company' : userType,
-        ...(userType === 'client' && { data_nascimento: data.dataNascimento }),
-        ...(userType === 'technician' && { especialidade: data.especialidade }),
-        ...(userType === 'store' && { nome_empresa: data.nomeEmpresa }),
       };
 
       const success = await signup(data.email, data.password, userData);
@@ -133,7 +80,7 @@ const UserRegistrationForm: React.FC<UserRegistrationFormProps> = ({
       if (success) {
         toast({
           title: "Conta criada com sucesso!",
-          description: "Você será redirecionado para fazer login.",
+          description: "Bem-vindo! Complete seu perfil nas próximas etapas.",
         });
         onSuccess();
       }
@@ -209,7 +156,7 @@ const UserRegistrationForm: React.FC<UserRegistrationFormProps> = ({
           
           <CardTitle className="text-2xl font-bold">{typeInfo.title}</CardTitle>
           <CardDescription className="text-muted-foreground">
-            {typeInfo.description}
+            Preencha os dados básicos para criar sua conta
           </CardDescription>
         </CardHeader>
 
@@ -270,86 +217,6 @@ const UserRegistrationForm: React.FC<UserRegistrationFormProps> = ({
                   </FormItem>
                 )}
               />
-
-              {/* CPF */}
-              <FormField
-                control={form.control}
-                name="cpf"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>CPF (opcional)</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="000.000.000-00"
-                        value={formatCpf(field.value || '')}
-                        onChange={(e) => {
-                          const formatted = formatCpf(e.target.value);
-                          field.onChange(formatted);
-                        }}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Campo específico por tipo de usuário */}
-              {userType === 'client' && (
-                <FormField
-                  control={form.control}
-                  name="dataNascimento"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="flex items-center gap-2">
-                        <Calendar className="h-4 w-4" />
-                        Data de Nascimento (opcional)
-                      </FormLabel>
-                      <FormControl>
-                        <Input type="date" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              )}
-
-              {userType === 'technician' && (
-                <FormField
-                  control={form.control}
-                  name="especialidade"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="flex items-center gap-2">
-                        <Briefcase className="h-4 w-4" />
-                        Área de Especialidade (opcional)
-                      </FormLabel>
-                      <FormControl>
-                        <Input placeholder="Ex: Ar condicionado, Refrigeração..." {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              )}
-
-              {userType === 'store' && (
-                <FormField
-                  control={form.control}
-                  name="nomeEmpresa"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="flex items-center gap-2">
-                        <Building className="h-4 w-4" />
-                        Nome da Empresa *
-                      </FormLabel>
-                      <FormControl>
-                        <Input placeholder="Nome da sua empresa" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              )}
 
               {/* Senha */}
               <FormField
