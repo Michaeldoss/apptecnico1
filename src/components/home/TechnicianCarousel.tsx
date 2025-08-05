@@ -16,47 +16,8 @@ interface FeaturedTechnician {
   responseTime: string;
   availability: string;
 }
-const featuredTechnicians: FeaturedTechnician[] = [{
-  id: 1,
-  name: "Carlos Silva",
-  photo: "/placeholder.svg",
-  rating: 4.9,
-  reviewCount: 127,
-  specialties: ["Impressoras Industriais", "Manutenção Preventiva"],
-  location: "São Paulo, SP",
-  responseTime: "30 min",
-  availability: "Disponível"
-}, {
-  id: 2,
-  name: "Maria Santos",
-  photo: "/placeholder.svg",
-  rating: 4.8,
-  reviewCount: 98,
-  specialties: ["Equipamentos de Solda", "Instalações"],
-  location: "Rio de Janeiro, RJ",
-  responseTime: "45 min",
-  availability: "Disponível"
-}, {
-  id: 3,
-  name: "João Oliveira",
-  photo: "/placeholder.svg",
-  rating: 4.9,
-  reviewCount: 156,
-  specialties: ["Automação Industrial", "Reparo de Máquinas"],
-  location: "Belo Horizonte, MG",
-  responseTime: "20 min",
-  availability: "Ocupado"
-}, {
-  id: 4,
-  name: "Ana Costa",
-  photo: "/placeholder.svg",
-  rating: 5.0,
-  reviewCount: 89,
-  specialties: ["Sistemas Hidráulicos", "Manutenção"],
-  location: "Curitiba, PR",
-  responseTime: "35 min",
-  availability: "Disponível"
-}];
+// Dados fake removidos - array vazio
+const featuredTechnicians: FeaturedTechnician[] = [];
 const TechnicianCarousel = () => {
   const renderStars = (rating: number) => {
     return Array.from({

@@ -1,112 +1,13 @@
-
 import { useState, useEffect, useCallback } from 'react';
 import { ChatMessage, ChatConversation, TechnicianSettings } from '@/types/chat';
 import { useAuth } from '@/context/AuthContext';
 import { toast } from '@/hooks/use-toast';
 
-// Dados mockados com configurações mais realistas
-const mockConversations: ChatConversation[] = [
-  {
-    id: 1,
-    participantId: 101,
-    participantName: 'Carlos Silva',
-    participantPhone: '(11) 99999-1234',
-    lastMessage: 'Preciso de ajuda com minha plotter',
-    lastMessageTime: '10:30',
-    unreadCount: 2,
-    avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
-    needsResponse: true,
-    reminderSent: false,
-  },
-  {
-    id: 2,
-    participantId: 102,
-    participantName: 'Ana Ferreira',
-    participantPhone: '(11) 98888-5678',
-    lastMessage: 'Quando você pode vir?',
-    lastMessageTime: '09:15',
-    unreadCount: 1,
-    avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
-    needsResponse: true,
-    reminderSent: false,
-  },
-  {
-    id: 3,
-    participantId: 103,
-    participantName: 'Roberto Mendes',
-    participantPhone: '(11) 97777-9012',
-    lastMessage: 'Obrigado pelo excelente serviço!',
-    lastMessageTime: 'Ontem',
-    unreadCount: 0,
-    avatar: 'https://randomuser.me/api/portraits/men/67.jpg',
-    needsResponse: false,
-  },
-];
+// Dados fake removidos - array vazio
+const mockConversations: ChatConversation[] = [];
 
-// Mensagens mockadas
-const mockMessages: Record<number, ChatMessage[]> = {
-  1: [
-    {
-      id: 1,
-      senderId: 101,
-      senderName: 'Carlos Silva',
-      receiverId: 1,
-      content: 'Oi, minha plotter eco solvente não está funcionando direito',
-      timestamp: '2024-01-15T10:15:00',
-      read: false,
-      delivered: true,
-      type: 'text',
-    },
-    {
-      id: 2,
-      senderId: 101,
-      senderName: 'Carlos Silva',
-      receiverId: 1,
-      content: 'As cores estão saindo distorcidas, pode me ajudar?',
-      timestamp: '2024-01-15T10:30:00',
-      read: false,
-      delivered: true,
-      type: 'text',
-    },
-  ],
-  2: [
-    {
-      id: 3,
-      senderId: 102,
-      senderName: 'Ana Ferreira',
-      receiverId: 1,
-      content: 'Preciso de manutenção na minha plotter de recorte',
-      timestamp: '2024-01-15T09:10:00',
-      read: true,
-      delivered: true,
-      type: 'text',
-    },
-    {
-      id: 4,
-      senderId: 102,
-      senderName: 'Ana Ferreira',
-      receiverId: 1,
-      content: 'Quando você pode vir verificar?',
-      timestamp: '2024-01-15T09:15:00',
-      read: false,
-      delivered: true,
-      type: 'text',
-    },
-  ],
-  3: [
-    {
-      id: 5,
-      senderId: 103,
-      senderName: 'Roberto Mendes',
-      receiverId: 1,
-      content: 'Obrigado pelo excelente serviço na minha CNC!',
-      timestamp: '2024-01-14T16:30:00',
-      read: true,
-      delivered: true,
-      type: 'text',
-    },
-  ],
-};
+// Mensagens mockadas - vazias
+const mockMessages: Record<number, ChatMessage[]> = {};
 
 export const useChat = () => {
   const { user } = useAuth();
