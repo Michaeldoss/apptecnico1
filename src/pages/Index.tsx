@@ -2,11 +2,11 @@
 import React from "react";
 import Navbar from "@/components/layout/Navbar";
 import Hero from "@/components/home/Hero";
+import HowItWorks from "@/components/home/HowItWorks";
+import Benefits from "@/components/home/Benefits";
 import Features from "@/components/home/Features";
-import MainServices from "@/components/home/MainServices";
+import Testimonials from "@/components/home/Testimonials";
 import ServiceCategories from "@/components/home/ServiceCategories";
-import TopTechniciansCarousel from "@/components/home/TopTechniciansCarousel";
-import TechnicianCarousel from "@/components/home/TechnicianCarousel";
 import MainCities from "@/components/home/MainCities";
 import CompanyValues from "@/components/home/CompanyValues";
 import Footer from "@/components/layout/Footer";
@@ -16,11 +16,11 @@ const Index = () => {
     <div className="min-h-screen">
       <Navbar />
       <Hero />
+      <HowItWorks />
+      <Benefits />
       <Features />
-      <MainServices />
+      <Testimonials />
       <ServiceCategories />
-      <TopTechniciansCarousel />
-      <TechnicianCarousel />
       <MainCities />
       <CompanyValues />
       <Footer />
