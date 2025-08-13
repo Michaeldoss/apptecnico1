@@ -30,19 +30,19 @@ const About = () => {
       name: "Lucas Mendes",
       role: "CEO & Fundador",
       description: "Engenheiro com 12 anos de experiência em tecnologia e gestão de plataformas digitais",
-      gradient: "from-blue-500 to-purple-600"
+      gradient: "from-primary to-primary-dark"
     },
     {
       name: "Ana Carolina",
       role: "CTO",
       description: "Especialista em desenvolvimento de aplicações mobile e sistemas de matching",
-      gradient: "from-purple-500 to-pink-600"
+      gradient: "from-primary to-accent"
     },
     {
       name: "Roberto Silva",
       role: "Head de Operações",
       description: "Especialista em logística e gestão de redes de prestadores de serviços técnicos",
-      gradient: "from-green-500 to-blue-600"
+      gradient: "from-accent to-primary"
     }
   ];
 
