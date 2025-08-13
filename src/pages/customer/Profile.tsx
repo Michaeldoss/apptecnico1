@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Building2, User, Settings, FileText, MapPin, Phone, Mail, Globe, AlertCircle, Edit } from 'lucide-react';
+import { Building2, User, Settings, FileText, MapPin, Phone, Mail, Globe, AlertCircle, Edit, Clock } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { useAuth } from '@/context/AuthContext';
 import { useClientData } from '@/hooks/useClientData';
@@ -178,38 +178,54 @@ const CustomerProfile = () => {
                 </CardHeader>
                 <CardContent className="pt-6">
                   <div className="grid gap-6">
-                    {clientData.contacts.map((contact: any, index: number) => (
-                      <Card key={index} className="border border-gray-200">
-                        <CardContent className="pt-4">
-                          <div className="flex items-start justify-between">
-                            <div className="space-y-2">
-                              <h4 className="font-semibold text-lg text-gray-900">{contact.name}</h4>
-                              <p className="text-blue-600 font-medium">{contact.position}</p>
-                              <div className="space-y-1 text-sm text-gray-600">
-                                <div className="flex items-center gap-2">
-                                  <Phone className="h-4 w-4" />
-                                  <span>{contact.phone}</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                  <Mail className="h-4 w-4" />
-                                  <span>{contact.email}</span>
+                    {clientData.contacts && clientData.contacts.length > 0 ? (
+                      clientData.contacts.map((contact: any, index: number) => (
+                        <Card key={index} className="border border-gray-200">
+                          <CardContent className="pt-4">
+                            <div className="flex items-start justify-between">
+                              <div className="space-y-2">
+                                <h4 className="font-semibold text-lg text-gray-900">{contact.name || 'Nome não informado'}</h4>
+                                <p className="text-blue-600 font-medium">{contact.position || 'Cargo não informado'}</p>
+                                <div className="space-y-1 text-sm text-gray-600">
+                                  {contact.phone && (
+                                    <div className="flex items-center gap-2">
+                                      <Phone className="h-4 w-4" />
+                                      <span>{contact.phone}</span>
+                                    </div>
+                                  )}
+                                  {contact.email && (
+                                    <div className="flex items-center gap-2">
+                                      <Mail className="h-4 w-4" />
+                                      <span>{contact.email}</span>
+                                    </div>
+                                  )}
                                 </div>
                               </div>
+                              <div className="flex flex-col gap-2">
+                                <Button variant="outline" size="sm">
+                                  <Phone className="h-4 w-4 mr-1" />
+                                  Ligar
+                                </Button>
+                                <Button variant="outline" size="sm">
+                                  <Mail className="h-4 w-4 mr-1" />
+                                  E-mail
+                                </Button>
+                              </div>
                             </div>
-                            <div className="flex flex-col gap-2">
-                              <Button variant="outline" size="sm">
-                                <Phone className="h-4 w-4 mr-1" />
-                                Ligar
-                              </Button>
-                              <Button variant="outline" size="sm">
-                                <Mail className="h-4 w-4 mr-1" />
-                                E-mail
-                              </Button>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
+                          </CardContent>
+                        </Card>
+                      ))
+                    ) : (
+                      <div className="text-center py-8">
+                        <User className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                        <h3 className="text-lg font-semibold text-gray-900 mb-2">Nenhum contato cadastrado</h3>
+                        <p className="text-gray-600 mb-4">Adicione contatos para facilitar a comunicação</p>
+                        <Button onClick={() => setIsEditing(true)}>
+                          <User className="h-4 w-4 mr-2" />
+                          Adicionar Contato
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -227,18 +243,30 @@ const CustomerProfile = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="pt-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {clientData.services.map((service: string, index: number) => (
-                      <Card key={index} className="border border-green-200 bg-green-50">
-                        <CardContent className="pt-4">
-                          <div className="flex items-center justify-between">
-                            <span className="font-medium text-green-800">{service}</span>
-                            <div className="h-2 w-2 bg-green-500 rounded-full"></div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
+                  {clientData.services && clientData.services.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {clientData.services.map((service: string, index: number) => (
+                        <Card key={index} className="border border-green-200 bg-green-50">
+                          <CardContent className="pt-4">
+                            <div className="flex items-center justify-between">
+                              <span className="font-medium text-green-800">{service}</span>
+                              <div className="h-2 w-2 bg-green-500 rounded-full"></div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-8">
+                      <Settings className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">Nenhum serviço contratado</h3>
+                      <p className="text-gray-600 mb-4">Contrate serviços para começar a utilizar a plataforma</p>
+                      <Button>
+                        <Settings className="h-4 w-4 mr-2" />
+                        Ver Serviços Disponíveis
+                      </Button>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 
@@ -248,19 +276,35 @@ const CustomerProfile = () => {
                   <CardTitle className="text-xl">Preferências de Atendimento</CardTitle>
                 </CardHeader>
                 <CardContent className="pt-6 space-y-4">
-                  <div>
-                    <h4 className="font-semibold text-yellow-800 mb-2">Horário Preferencial</h4>
-                    <p className="text-gray-700 bg-yellow-50 p-3 rounded-lg border border-yellow-200">
-                      {clientData.preferredServiceTime}
-                    </p>
-                  </div>
-                  
-                  <div>
-                    <h4 className="font-semibold text-yellow-800 mb-2">Observações Especiais</h4>
-                    <p className="text-gray-700 bg-yellow-50 p-3 rounded-lg border border-yellow-200 leading-relaxed">
-                      {clientData.specialRequirements}
-                    </p>
-                  </div>
+                  {clientData.preferredServiceTime ? (
+                    <>
+                      <div>
+                        <h4 className="font-semibold text-yellow-800 mb-2">Horário Preferencial</h4>
+                        <p className="text-gray-700 bg-yellow-50 p-3 rounded-lg border border-yellow-200">
+                          {clientData.preferredServiceTime}
+                        </p>
+                      </div>
+                      
+                      {clientData.specialRequirements && (
+                        <div>
+                          <h4 className="font-semibold text-yellow-800 mb-2">Observações Especiais</h4>
+                          <p className="text-gray-700 bg-yellow-50 p-3 rounded-lg border border-yellow-200 leading-relaxed">
+                            {clientData.specialRequirements}
+                          </p>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <div className="text-center py-8">
+                      <Clock className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">Preferências não definidas</h3>
+                      <p className="text-gray-600 mb-4">Configure suas preferências de atendimento</p>
+                      <Button onClick={() => setIsEditing(true)}>
+                        <Settings className="h-4 w-4 mr-2" />
+                        Configurar Preferências
+                      </Button>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </div>
@@ -275,35 +319,65 @@ const CustomerProfile = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="pt-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-3">
-                    <h4 className="font-semibold text-purple-800">Documentos Legais</h4>
-                    <div className="space-y-2">
-                      <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg border border-purple-200">
-                        <span className="text-sm font-medium text-purple-800">CNPJ</span>
-                        <span className="text-sm text-gray-700">{clientData.cnpj}</span>
+                {clientData.cnpj || clientData.ie || clientData.annualRevenue || clientData.foundedYear ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-3">
+                      <h4 className="font-semibold text-purple-800">Documentos Legais</h4>
+                      <div className="space-y-2">
+                        {clientData.cnpj && (
+                          <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg border border-purple-200">
+                            <span className="text-sm font-medium text-purple-800">CNPJ</span>
+                            <span className="text-sm text-gray-700">{clientData.cnpj}</span>
+                          </div>
+                        )}
+                        {clientData.ie && (
+                          <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg border border-purple-200">
+                            <span className="text-sm font-medium text-purple-800">Inscrição Estadual</span>
+                            <span className="text-sm text-gray-700">{clientData.ie}</span>
+                          </div>
+                        )}
+                        {!clientData.cnpj && !clientData.ie && (
+                          <div className="text-center py-4 text-gray-500">
+                            <p>Nenhum documento legal cadastrado</p>
+                          </div>
+                        )}
                       </div>
-                      <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg border border-purple-200">
-                        <span className="text-sm font-medium text-purple-800">Inscrição Estadual</span>
-                        <span className="text-sm text-gray-700">{clientData.ie}</span>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <h4 className="font-semibold text-purple-800">Informações Corporativas</h4>
+                      <div className="space-y-2">
+                        {clientData.annualRevenue && (
+                          <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg border border-purple-200">
+                            <span className="text-sm font-medium text-purple-800">Faturamento Anual</span>
+                            <span className="text-sm text-gray-700">{clientData.annualRevenue}</span>
+                          </div>
+                        )}
+                        {clientData.foundedYear && (
+                          <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg border border-purple-200">
+                            <span className="text-sm font-medium text-purple-800">Ano de Fundação</span>
+                            <span className="text-sm text-gray-700">{clientData.foundedYear}</span>
+                          </div>
+                        )}
+                        {!clientData.annualRevenue && !clientData.foundedYear && (
+                          <div className="text-center py-4 text-gray-500">
+                            <p>Informações corporativas não cadastradas</p>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
-                  
-                  <div className="space-y-3">
-                    <h4 className="font-semibold text-purple-800">Informações Corporativas</h4>
-                    <div className="space-y-2">
-                      <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg border border-purple-200">
-                        <span className="text-sm font-medium text-purple-800">Faturamento Anual</span>
-                        <span className="text-sm text-gray-700">{clientData.annualRevenue || 'Não informado'}</span>
-                      </div>
-                      <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg border border-purple-200">
-                        <span className="text-sm font-medium text-purple-800">Ano de Fundação</span>
-                        <span className="text-sm text-gray-700">{clientData.foundedYear}</span>
-                      </div>
-                    </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Documentos não cadastrados</h3>
+                    <p className="text-gray-600 mb-4">Complete as informações da empresa</p>
+                    <Button onClick={() => setIsEditing(true)}>
+                      <FileText className="h-4 w-4 mr-2" />
+                      Adicionar Documentos
+                    </Button>
                   </div>
-                </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
