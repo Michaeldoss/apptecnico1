@@ -86,7 +86,7 @@ const StoreLayout: React.FC<StoreLayoutProps> = ({ children, title, subtitle }) 
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-blue-600">
+    <div className="min-h-screen flex flex-col bg-primary">
       <Navbar />
       
       <div className="flex-1 flex container mx-auto px-4 py-6 gap-6 max-w-7xl pt-24">
@@ -99,11 +99,11 @@ const StoreLayout: React.FC<StoreLayoutProps> = ({ children, title, subtitle }) 
                   key={item.href}
                   to={item.href}
                   className={cn(
-                    "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-200 hover:bg-blue-400/50 font-inter font-medium",
-                    item.active ? "bg-white text-blue-600 shadow-sm" : "text-white hover:text-blue-100"
+                    "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-200 hover:bg-primary/50 font-inter font-medium",
+                    item.active ? "bg-white text-primary shadow-sm" : "text-white hover:text-secondary"
                   )}
                 >
-                  <item.icon className={cn("h-4 w-4 flex-shrink-0", item.active ? "text-blue-600" : "text-yellow-400")} />
+                  <item.icon className={cn("h-4 w-4 flex-shrink-0", item.active ? "text-primary" : "text-accent")} />
                   <span className="truncate">{item.label}</span>
                 </Link>
               ))}
