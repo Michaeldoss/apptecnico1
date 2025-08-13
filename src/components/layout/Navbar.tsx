@@ -66,10 +66,10 @@ const Navbar = () => {
     : "bg-white w-full top-0 z-50 shadow-md";
   const textClasses = isHomePage ? "text-white" : "text-gray-800";
   const logoClasses = isHomePage ? "text-white" : "text-gray-900";
-  const hoverClasses = isHomePage ? "hover:text-blue-200" : "hover:text-blue-600";
-  const buttonClasses = isHomePage 
-    ? "text-white hover:text-blue-200 hover:bg-white/10" 
-    : "text-gray-800 hover:text-blue-600 hover:bg-gray-100";
+  const hoverClasses = isHomePage ? "hover:text-secondary" : "hover:text-primary";
+  const baseClasses = isHomePage 
+    ? "text-white hover:text-secondary hover:bg-white/10" 
+    : "text-gray-800 hover:text-primary hover:bg-gray-100";
   return <nav className={navbarClasses}>
       <div className="container flex items-center justify-between h-16 px-4 md:px-6 mx-auto">
         {/* Logo */}
@@ -88,7 +88,7 @@ const Navbar = () => {
         <div className="hidden md:flex md:items-center md:gap-3">
           {isAuthenticated ? <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className={`flex items-center gap-2 font-inter font-medium ${buttonClasses} drop-shadow-lg`}>
+                <Button variant="ghost" className={`flex items-center gap-2 font-inter font-medium ${baseClasses} drop-shadow-lg`}>
                   <User className="h-4 w-4" />
                   <span className={textClasses}>Minha Conta</span>
                   <ChevronDown className="h-4 w-4" />
@@ -124,7 +124,7 @@ const Navbar = () => {
 
         {/* Mobile Menu Toggle */}
         <div className="md:hidden">
-          <Button variant="ghost" size="icon" onClick={toggleMenu} aria-label="Toggle Menu" className={`${buttonClasses} drop-shadow-lg`}>
+          <Button variant="ghost" size="icon" onClick={toggleMenu} aria-label="Toggle Menu" className={`${baseClasses} drop-shadow-lg`}>
             {isMenuOpen ? <X className={`h-6 w-6 ${textClasses}`} /> : <Menu className={`h-6 w-6 ${textClasses}`} />}
           </Button>
         </div>
@@ -132,27 +132,27 @@ const Navbar = () => {
         {/* Mobile Menu */}
         {isMenuOpen && <div className="absolute top-20 left-0 w-full bg-white border-b border-gray-200 shadow-xl z-50 md:hidden">
             <div className="flex flex-col space-y-2 px-4 py-6">
-              {menuItems.map(item => <Link key={item.path} to={item.path} className="text-sm font-medium p-3 rounded-lg hover:bg-blue-50 text-gray-800 hover:text-blue-600 transition-colors duration-200 font-inter" onClick={() => setIsMenuOpen(false)}>
+              {menuItems.map(item => <Link key={item.path} to={item.path} className="text-sm font-medium p-3 rounded-lg hover:bg-primary/10 text-gray-800 hover:text-primary transition-colors duration-200 font-inter" onClick={() => setIsMenuOpen(false)}>
                   {item.label}
                 </Link>)}
               
               <div className="border-t border-gray-200 pt-4 mt-4">
                 {isAuthenticated ? <>
-                    <Link to={userType === "customer" ? "/cliente/perfil" : userType === "technician" ? "/tecnico/perfil" : "/store/profile"} className="flex items-center p-3 rounded-lg hover:bg-blue-50 w-full mb-3 transition-colors duration-200 font-inter" onClick={() => setIsMenuOpen(false)}>
-                      <User className="h-5 w-5 mr-3 text-blue-600" />
+                    <Link to={userType === "customer" ? "/cliente/perfil" : userType === "technician" ? "/tecnico/perfil" : "/store/profile"} className="flex items-center p-3 rounded-lg hover:bg-primary/10 w-full mb-3 transition-colors duration-200 font-inter" onClick={() => setIsMenuOpen(false)}>
+                      <User className="h-5 w-5 mr-3 text-primary" />
                       <span className="text-gray-800 font-medium">Meu Perfil</span>
                     </Link>
                     <Button variant="outline" size="sm" className="w-full border-2 border-red-500 text-red-600 hover:bg-red-600 hover:text-white font-inter font-semibold" onClick={handleLogout}>
                       Sair
                     </Button>
                   </> : <div className="flex flex-col space-y-3">
-                    <Button variant="outline" className="w-full justify-center bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 font-inter font-semibold border-0 shadow-lg" onClick={handleLoginClick}>
+                    <Button variant="outline" className="w-full justify-center bg-gradient-to-r from-accent to-accent-dark hover:from-accent-dark hover:to-accent text-instalei-text-dark font-inter font-semibold border-0 shadow-lg" onClick={handleLoginClick}>
                       <LogIn className="h-4 w-4 mr-2" /> Entrar
                     </Button>
                     
                     <Button 
                       variant="outline" 
-                      className="w-full justify-center bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 font-inter font-semibold border-0 shadow-lg" 
+                      className="w-full justify-center bg-gradient-to-r from-accent to-accent-dark hover:from-accent-dark hover:to-accent text-instalei-text-dark font-inter font-semibold border-0 shadow-lg" 
                       onClick={() => {
                         navigate('/register');
                         setIsMenuOpen(false);

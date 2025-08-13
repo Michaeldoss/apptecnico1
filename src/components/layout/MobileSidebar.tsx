@@ -46,7 +46,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isMenuOpen, toggleMenu, c
       {isMobile && (
         <button 
           onClick={toggleMenu}
-          className="fixed top-20 left-4 z-50 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 p-2.5 rounded-full shadow-xl md:hidden transition-all duration-200 hover:scale-105"
+          className="fixed top-20 left-4 z-50 bg-gradient-to-r from-accent to-accent-dark hover:from-accent-dark hover:to-accent text-instalei-text-dark p-2.5 rounded-full shadow-xl md:hidden transition-all duration-200 hover:scale-105"
         >
           {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
@@ -64,14 +64,14 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isMenuOpen, toggleMenu, c
       <aside 
         className={cn(
           "w-64 shrink-0 transition-all duration-300",
-          isMobile ? "fixed left-0 top-16 bottom-0 bg-gradient-to-b from-blue-400 to-blue-500 z-40 h-[calc(100vh-4rem)] px-3 pt-16 pb-6 shadow-2xl overflow-y-auto" : "hidden md:block bg-gradient-to-b from-blue-400 to-blue-500 rounded-xl p-4 shadow-xl",
+          isMobile ? "fixed left-0 top-16 bottom-0 bg-gradient-to-b from-primary to-primary-dark z-40 h-[calc(100vh-4rem)] px-3 pt-16 pb-6 shadow-2xl overflow-y-auto" : "hidden md:block bg-gradient-to-b from-primary to-primary-dark rounded-xl p-4 shadow-xl",
           isMobile && !isMenuOpen ? "-translate-x-full" : isMobile && isMenuOpen ? "translate-x-0" : ""
         )}
       >
         <div className="space-y-2 py-4">
-          <div className="mb-6 pb-4 border-b border-blue-300">
+          <div className="mb-6 pb-4 border-b border-white/30">
             <h2 className="text-lg font-bold text-white">Menu Principal</h2>
-            <p className="text-blue-100 text-xs">Acesse suas funcionalidades</p>
+            <p className="text-white/80 text-xs">Acesse suas funcionalidades</p>
           </div>
           
           <SidebarItem 
@@ -167,7 +167,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isMenuOpen, toggleMenu, c
           </SidebarItem>
         </div>
         
-        <div className="pt-4 mt-6 border-t border-blue-300">
+        <div className="pt-4 mt-6 border-t border-white/30">
           <button 
             onClick={() => {
               handleLogout();

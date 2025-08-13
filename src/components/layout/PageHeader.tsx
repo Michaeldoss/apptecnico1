@@ -29,7 +29,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
           </h1>
           {subtitle && (
             <p className={cn(
-              "text-blue-100 text-lg font-medium",
+              "text-white/80 text-lg font-medium",
               isMobile ? "text-center text-base" : ""
             )}>
               {subtitle}

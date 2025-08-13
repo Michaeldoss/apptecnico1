@@ -38,11 +38,11 @@ const SidebarItem = ({ href, icon: Icon, children, active, badge, onClick }: Sid
       to={href}
       className={cn(
         "flex items-center gap-3 rounded-lg px-4 py-3 text-base transition-all duration-200 hover:bg-gray-light font-inter font-medium relative w-full",
-        active ? "bg-tech-primary text-white shadow-sm" : "text-blue-300 hover:text-blue-200"
+        active ? "bg-tech-primary text-white shadow-sm" : "text-white/80 hover:text-white"
       )}
       onClick={onClick}
     >
-      <Icon className={cn("h-5 w-5 flex-shrink-0", active ? "text-white" : "text-yellow-400")} />
+      <Icon className={cn("h-5 w-5 flex-shrink-0", active ? "text-white" : "text-accent")} />
       <span className="flex-1 min-w-0 text-left w-full">{children}</span>
       
       {badge && badge > 0 && (
@@ -87,7 +87,7 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 relative">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-primary via-primary-dark to-sidebar-background relative">
       {/* Background pattern overlay */}
       <div className="absolute inset-0 bg-[url('/placeholder.svg')] opacity-5 bg-cover bg-center"></div>
       
