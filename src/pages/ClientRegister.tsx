@@ -205,11 +205,11 @@ const ClientRegister = () => {
       const success = await signup(data.email, data.password, userData);
       
       if (success) {
-        toast({
-          title: "Cadastro realizado!",
-          description: "Bem-vindo à plataforma. Faça login para continuar.",
-        });
-        navigate('/login');
+                      toast({
+                        title: "Cadastro realizado!",
+                        description: "Complete seu perfil para ter acesso completo à plataforma.",
+                      });
+                      navigate('/customer/profile-complete');
       } else {
         toast({ 
           variant: "destructive", 
@@ -278,22 +278,22 @@ const ClientRegister = () => {
           <div className="bg-card rounded-lg border shadow-sm p-6">
             <Tabs defaultValue="register" className="w-full">
               <TabsList className="grid w-full grid-cols-2 mb-8">
-                <TabsTrigger value="register">Novo Cadastro</TabsTrigger>
-                <TabsTrigger value="login">Já tem conta</TabsTrigger>
+                <TabsTrigger value="register">Cadastro Rápido</TabsTrigger>
+                <TabsTrigger value="login">Já tem conta?</TabsTrigger>
               </TabsList>
               
               <TabsContent value="register">
                 <div className="space-y-4">
                   {/* Google Login Section */}
-                  <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 mb-6">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-4 text-center">Cadastro Rápido</h4>
+                  <div className="bg-primary/5 p-6 rounded-xl border border-primary/20 mb-6">
+                    <h4 className="text-lg font-semibold mb-4 text-center">Comece agora com o Google</h4>
                     <GoogleLoginButton />
                     <div className="relative my-6">
                       <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-gray-300"></div>
+                        <div className="w-full border-t border-border"></div>
                       </div>
                       <div className="relative flex justify-center text-sm">
-                        <span className="px-2 bg-gray-50 text-gray-500">ou cadastre-se com email</span>
+                        <span className="px-2 bg-card text-muted-foreground">ou preencha os dados básicos</span>
                       </div>
                     </div>
                   </div>
@@ -301,8 +301,11 @@ const ClientRegister = () => {
                   <div className="border-b pb-2">
                     <h2 className="text-xl font-semibold flex items-center">
                       <User className="mr-2 h-5 w-5" /> 
-                      Dados Pessoais
+                      Dados Básicos para Cadastro
                     </h2>
+                    <p className="text-muted-foreground text-sm mt-1">
+                      Complete seu perfil detalhado após o primeiro login
+                    </p>
                   </div>
                   
                   <Form {...form}>

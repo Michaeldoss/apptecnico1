@@ -186,11 +186,16 @@ function App() {
                    <CustomerProfile />
                  </ProtectedRoute>
                } />
-                <Route path="/cliente/completar-perfil" element={
-                  <ProtectedRoute userType="customer">
-                    <ProfileComplete />
-                  </ProtectedRoute>
-                } />
+                 <Route path="/customer/profile-complete" element={
+                   <ProtectedRoute userType="customer">
+                     <ProfileComplete />
+                   </ProtectedRoute>
+                 } />
+                 <Route path="/cliente/completar-perfil" element={
+                   <ProtectedRoute userType="customer">
+                     <ProfileComplete />
+                   </ProtectedRoute>
+                 } />
                 <Route path="/cliente/afiliados" element={
                   <ProtectedRoute userType="customer">
                     <CustomerAffiliates />
