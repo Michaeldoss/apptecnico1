@@ -24,11 +24,11 @@ const TechnicianCarousel = () => {
       length: 5
     }, (_, i) => <Star key={i} size={16} className={`${i < Math.floor(rating) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`} />);
   };
-  return <section className="py-12 md:py-16 bg-gradient-to-br from-blue-50 to-white">
+  return <section className="py-12 md:py-16 bg-gradient-to-br from-background to-secondary/20">
       <div className="container mx-auto px-4">
         <div className="text-center mb-8 md:mb-12">
           
-          <h2 className="text-3xl md:text-4xl font-bold text-blue-900 mb-4 font-inter">
+          <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4 font-inter">
             Profissionais do Mês
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto font-inter">
@@ -55,7 +55,7 @@ const TechnicianCarousel = () => {
                         </div>
 
                         {/* Nome - altura fixa */}
-                        <h3 className="text-xl font-bold text-blue-900 font-inter h-7 flex items-center">
+                        <h3 className="text-xl font-bold text-primary font-inter h-7 flex items-center">
                           {technician.name}
                         </h3>
                       </div>
@@ -92,7 +92,7 @@ const TechnicianCarousel = () => {
 
                         {/* Botão sempre no final - posição fixa */}
                         <Link to={`/technician/profile/${technician.id}`} className="w-full">
-                          <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 font-inter">
+                          <Button className="w-full bg-primary hover:bg-primary-dark text-primary-foreground font-semibold py-2 px-4 rounded-lg transition-all duration-300 font-inter">
                             Ver Perfil
                           </Button>
                         </Link>
@@ -101,14 +101,14 @@ const TechnicianCarousel = () => {
                   </Card>
                 </CarouselItem>)}
             </CarouselContent>
-            <CarouselPrevious className="bg-white border-2 border-blue-200 text-blue-600 hover:bg-blue-50" />
-            <CarouselNext className="bg-white border-2 border-blue-200 text-blue-600 hover:bg-blue-50" />
+            <CarouselPrevious className="bg-white border-2 border-primary/20 text-primary hover:bg-primary/10" />
+            <CarouselNext className="bg-white border-2 border-primary/20 text-primary hover:bg-primary/10" />
           </Carousel>
         </div>
 
         <div className="text-center mt-8">
           <Link to="/find-technician">
-            <Button variant="outline" className="border-2 border-blue-600 text-blue-800 hover:bg-blue-50 font-semibold px-6 py-3 rounded-lg font-inter">
+            <Button variant="outline" className="border-2 border-primary text-primary hover:bg-primary/10 font-semibold px-6 py-3 rounded-lg font-inter">
               Ver Todos os Técnicos
             </Button>
           </Link>

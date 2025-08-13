@@ -30,17 +30,17 @@ const TopTechniciansCarousel = () => {
     }, (_, i) => <Star key={i} size={16} className={`${i < Math.floor(rating) ? 'text-yellow-500 fill-yellow-500' : 'text-gray-300'}`} />);
   };
 
-  return <section className="py-20 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 relative overflow-hidden">
+  return <section className="py-20 bg-gradient-to-br from-background via-secondary/10 to-background relative overflow-hidden">
       {/* Elementos decorativos de fundo */}
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-100/30 via-transparent to-purple-100/30"></div>
-      <div className="absolute top-20 left-20 w-72 h-72 bg-blue-200/20 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-20 right-20 w-96 h-96 bg-yellow-200/20 rounded-full blur-3xl"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-accent/10"></div>
+      <div className="absolute top-20 left-20 w-72 h-72 bg-primary/10 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-20 right-20 w-96 h-96 bg-accent/10 rounded-full blur-3xl"></div>
       
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
           
-          <h2 className="text-4xl md:text-6xl font-black text-gray-900 mb-6 font-inter leading-tight">
-            Os <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800">Melhores Técnicos</span><br />
+          <h2 className="text-4xl md:text-6xl font-black text-primary mb-6 font-inter leading-tight">
+            Os <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-accent to-primary-dark">Melhores Técnicos</span><br />
             de Cada Estado
           </h2>
           <p className="text-xl md:text-2xl text-gray-700 max-w-3xl mx-auto font-bold leading-relaxed">
@@ -71,8 +71,8 @@ const TopTechniciansCarousel = () => {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="bg-white/95 backdrop-blur-sm border-3 border-blue-300 text-blue-700 hover:bg-blue-50 shadow-2xl -left-6 w-14 h-14 hover:scale-110 transition-all duration-300" />
-              <CarouselNext className="bg-white/95 backdrop-blur-sm border-3 border-blue-300 text-blue-700 hover:bg-blue-50 shadow-2xl -right-6 w-14 h-14 hover:scale-110 transition-all duration-300" />
+              <CarouselPrevious className="bg-white/95 backdrop-blur-sm border-3 border-primary/30 text-primary hover:bg-primary/10 shadow-2xl -left-6 w-14 h-14 hover:scale-110 transition-all duration-300" />
+              <CarouselNext className="bg-white/95 backdrop-blur-sm border-3 border-primary/30 text-primary hover:bg-primary/10 shadow-2xl -right-6 w-14 h-14 hover:scale-110 transition-all duration-300" />
             </Carousel>
           ) : (
             <div className="text-center py-20">
@@ -91,7 +91,7 @@ const TopTechniciansCarousel = () => {
 
         <div className="text-center mt-12">
           <Link to="/find-technician">
-            <Button variant="outline" className="border-3 border-blue-600 text-blue-800 hover:bg-blue-50 font-black px-12 py-4 rounded-2xl font-inter text-xl shadow-2xl hover:shadow-3xl hover:scale-105 transition-all duration-300 bg-white/95 backdrop-blur-sm">
+            <Button variant="outline" className="border-3 border-primary text-primary hover:bg-primary/10 font-black px-12 py-4 rounded-2xl font-inter text-xl shadow-2xl hover:shadow-3xl hover:scale-105 transition-all duration-300 bg-white/95 backdrop-blur-sm">
               <Trophy className="mr-3 h-6 w-6" />
               Encontrar Técnicos
             </Button>

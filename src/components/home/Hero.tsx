@@ -6,22 +6,22 @@ import { Search, MapPin, ArrowRight, Star, Users, CheckCircle2, Wrench, Phone, M
 
 const Hero = () => {
   return (
-    <section className="bg-gradient-to-br from-instalei-purple-500 via-instalei-purple-600 to-instalei-purple-700 text-white section-padding min-h-[90vh] flex items-center relative overflow-hidden">
+    <section className="bg-gradient-to-br from-primary via-primary/95 to-primary-dark text-primary-foreground section-padding min-h-[90vh] flex items-center relative overflow-hidden">
       {/* Elementos decorativos de fundo */}
-      <div className="absolute inset-0 bg-gradient-to-r from-instalei-purple-500/20 via-transparent to-instalei-orange-500/20"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-accent/20"></div>
       <div className="absolute top-20 left-20 w-72 h-72 bg-white/5 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-20 right-20 w-96 h-96 bg-instalei-orange-500/10 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-20 right-20 w-96 h-96 bg-accent/10 rounded-full blur-3xl"></div>
       
       <div className="container-instalei w-full relative z-10">
         {/* Título Principal - Instalei */}
         <div className="text-center mb-instalei-xl">
-          <h1 className="text-5xl md:text-7xl font-black mb-instalei-lg leading-tight text-white drop-shadow-2xl">
-            Encontre o <span className="text-instalei-orange-400 bg-gradient-to-r from-instalei-orange-500/30 to-instalei-orange-400/30 rounded-instalei-lg border-2 border-instalei-orange-400/50 backdrop-blur-sm px-6 py-2 inline-block font-bold">técnico ideal</span><br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-instalei-gray-200 to-white">para seu equipamento</span>
+          <h1 className="text-5xl md:text-7xl font-black mb-instalei-lg leading-tight text-primary-foreground drop-shadow-2xl">
+            Encontre o <span className="text-accent bg-gradient-to-r from-accent/30 to-accent/20 rounded-instalei-lg border-2 border-accent/50 backdrop-blur-sm px-6 py-2 inline-block font-bold">técnico ideal</span><br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-foreground via-secondary-foreground to-primary-foreground">para seu equipamento</span>
           </h1>
           
-          <p className="text-xl md:text-2xl mb-instalei-lg text-white/90 max-w-4xl mx-auto font-semibold leading-relaxed drop-shadow-lg">
-            Conectamos você com profissionais qualificados na plataforma <span className="text-instalei-orange-300 font-black">Instalei</span>
+          <p className="text-xl md:text-2xl mb-instalei-lg text-primary-foreground/90 max-w-4xl mx-auto font-semibold leading-relaxed drop-shadow-lg">
+            Conectamos você com profissionais qualificados na plataforma <span className="text-accent font-black">Instalei</span>
           </p>
         </div>
 

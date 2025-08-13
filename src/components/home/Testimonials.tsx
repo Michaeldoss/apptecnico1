@@ -40,9 +40,9 @@ const Testimonials = () => {
 
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, i) => (
-      <Star 
+        <Star 
         key={i} 
-        className={`h-5 w-5 ${i < rating ? 'text-instalei-orange-500 fill-instalei-orange-500' : 'text-gray-300'}`} 
+        className={`h-5 w-5 ${i < rating ? 'text-accent fill-accent' : 'text-gray-300'}`} 
       />
     ));
   };
@@ -51,7 +51,7 @@ const Testimonials = () => {
     <section className="section-padding bg-white">
       <div className="container-instalei">
         <div className="text-center mb-instalei-2xl">
-          <h2 className="text-4xl md:text-5xl font-black text-gray-800 mb-instalei-lg">
+          <h2 className="text-4xl md:text-5xl font-black text-primary mb-instalei-lg">
             O que nossos clientes dizem
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto font-semibold leading-relaxed">
@@ -61,13 +61,13 @@ const Testimonials = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-instalei-lg">
           {testimonials.map((testimonial, index) => (
-            <Card key={index} className="group border-2 border-instalei-purple-100 hover:border-instalei-purple-300 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 bg-white relative overflow-hidden">
+            <Card key={index} className="group border-2 border-primary/20 hover:border-primary/40 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 bg-white relative overflow-hidden">
               <div className="absolute top-4 right-4">
-                <Quote className="h-8 w-8 text-instalei-purple-200" />
+                <Quote className="h-8 w-8 text-primary/30" />
               </div>
               <CardContent className="p-instalei-lg">
                 <div className="flex items-center mb-instalei-md">
-                  <div className="bg-gradient-to-br from-instalei-purple-500 to-instalei-purple-600 w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                  <div className="bg-gradient-to-br from-primary to-primary-dark w-12 h-12 rounded-full flex items-center justify-center text-primary-foreground font-bold text-lg shadow-lg">
                     {testimonial.avatar}
                   </div>
                   <div className="ml-4">
