@@ -13,7 +13,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { toast } from '@/hooks/use-toast';
 import { useAuth } from '@/context/AuthContext';
 import { useViaCep } from '@/hooks/useViaCep';
-import { ProfileCompleteness } from '@/components/profile/ProfileCompleteness';
+import ProfileCompleteness from '@/components/profile/ProfileCompleteness';
 import { DocumentUpload } from '@/components/documents/DocumentUpload';
 import AnimatedContainer from '@/components/ui/AnimatedContainer';
 import BlurContainer from '@/components/ui/BlurContainer';

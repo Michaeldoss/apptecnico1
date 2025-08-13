@@ -11,10 +11,17 @@ import { useAuth } from '@/context/AuthContext';
 import { useClientData } from '@/hooks/useClientData';
 import ClientData from '@/components/customer/ClientData';
 import EditableClientData from '@/components/customer/EditableClientData';
+import ProfileCompleteness from '@/components/profile/ProfileCompleteness';
+import ContactsEditor from '@/components/customer/ContactsEditor';
+import ServicesEditor from '@/components/customer/ServicesEditor';
+import DocumentsUpload from '@/components/customer/DocumentsUpload';
 
 const CustomerProfile = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [editingContacts, setEditingContacts] = useState(false);
+  const [editingServices, setEditingServices] = useState(false);
+  const [editingDocuments, setEditingDocuments] = useState(false);
   const { toast } = useToast();
   const { user } = useAuth();
   const { clientData, loading, error } = useClientData();
@@ -51,6 +58,9 @@ const CustomerProfile = () => {
   return (
     <CustomerLayout title="Perfil da Empresa">
       <div className="space-y-6">
+        {/* Barra de Completude do Perfil */}
+        <ProfileCompleteness clientData={clientData} />
+        
         {/* Header do Perfil */}
         <Card className="border border-blue-200 bg-gradient-to-r from-blue-50 to-white shadow-lg">
           <CardHeader>
@@ -76,10 +86,12 @@ const CustomerProfile = () => {
                     <Building2 className="h-4 w-4" />
                     <span>{clientData.businessSegment}</span>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <MapPin className="h-4 w-4" />
-                    <span>{clientData.address.city}, {clientData.address.state}</span>
-                  </div>
+                  {clientData.address && (
+                    <div className="flex items-center gap-1">
+                      <MapPin className="h-4 w-4" />
+                      <span>{clientData.address.city}, {clientData.address.state}</span>
+                    </div>
+                  )}
                   <div className="flex items-center gap-1">
                     <Mail className="h-4 w-4" />
                     <span>{clientData.email}</span>
@@ -92,9 +104,14 @@ const CustomerProfile = () => {
                   )}
                 </div>
                 
-                <CardDescription className="text-base leading-relaxed">
-                  {clientData.description.substring(0, 200)}...
-                </CardDescription>
+                {clientData.description && (
+                  <CardDescription className="text-base leading-relaxed">
+                    {clientData.description.length > 200 ? 
+                      `${clientData.description.substring(0, 200)}...` : 
+                      clientData.description
+                    }
+                  </CardDescription>
+                )}
               </div>
             </div>
           </CardHeader>
@@ -168,218 +185,297 @@ const CustomerProfile = () => {
           
           <TabsContent value="contacts" className="mt-6">
             <div className="grid gap-6">
-              {/* Informações de Contato Principais */}
-              <Card className="border border-blue-200 bg-white shadow-md">
-                <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-t-lg">
-                  <CardTitle className="flex items-center gap-3 text-xl">
-                    <Phone className="h-6 w-6" />
-                    Contatos Principais
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="pt-6">
-                  <div className="grid gap-6">
-                    {clientData.contacts && clientData.contacts.length > 0 ? (
-                      clientData.contacts.map((contact: any, index: number) => (
-                        <Card key={index} className="border border-gray-200">
-                          <CardContent className="pt-4">
-                            <div className="flex items-start justify-between">
-                              <div className="space-y-2">
-                                <h4 className="font-semibold text-lg text-gray-900">{contact.name || 'Nome não informado'}</h4>
-                                <p className="text-blue-600 font-medium">{contact.position || 'Cargo não informado'}</p>
-                                <div className="space-y-1 text-sm text-gray-600">
-                                  {contact.phone && (
-                                    <div className="flex items-center gap-2">
-                                      <Phone className="h-4 w-4" />
-                                      <span>{contact.phone}</span>
-                                    </div>
-                                  )}
-                                  {contact.email && (
-                                    <div className="flex items-center gap-2">
-                                      <Mail className="h-4 w-4" />
-                                      <span>{contact.email}</span>
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
-                              <div className="flex flex-col gap-2">
-                                <Button variant="outline" size="sm">
-                                  <Phone className="h-4 w-4 mr-1" />
-                                  Ligar
-                                </Button>
-                                <Button variant="outline" size="sm">
-                                  <Mail className="h-4 w-4 mr-1" />
-                                  E-mail
-                                </Button>
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))
-                    ) : (
-                      <div className="text-center py-8">
-                        <User className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                        <h3 className="text-lg font-semibold text-gray-900 mb-2">Nenhum contato cadastrado</h3>
-                        <p className="text-gray-600 mb-4">Adicione contatos para facilitar a comunicação</p>
-                        <Button onClick={() => setIsEditing(true)}>
-                          <User className="h-4 w-4 mr-2" />
-                          Adicionar Contato
+              {editingContacts ? (
+                <ContactsEditor
+                  contacts={clientData.contacts || []}
+                  onSave={(contacts) => {
+                    console.log('Salvando contatos:', contacts);
+                    setEditingContacts(false);
+                    toast({
+                      title: "Contatos atualizados!",
+                      description: "Os contatos foram salvos com sucesso.",
+                    });
+                  }}
+                  onCancel={() => setEditingContacts(false)}
+                />
+              ) : (
+                <>
+                  {/* Informações de Contato Principais */}
+                  <Card className="border border-blue-200 bg-white shadow-md">
+                    <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-t-lg">
+                      <CardTitle className="flex items-center justify-between text-xl">
+                        <div className="flex items-center gap-3">
+                          <Phone className="h-6 w-6" />
+                          Contatos Principais
+                        </div>
+                        <Button
+                          onClick={() => setEditingContacts(true)}
+                          size="sm"
+                          variant="secondary"
+                        >
+                          <Edit className="h-4 w-4 mr-2" />
+                          Editar
                         </Button>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="pt-6">
+                      <div className="grid gap-6">
+                        {clientData.contacts && clientData.contacts.length > 0 ? (
+                          clientData.contacts.map((contact: any, index: number) => (
+                            <Card key={index} className="border border-gray-200">
+                              <CardContent className="pt-4">
+                                <div className="flex items-start justify-between">
+                                  <div className="space-y-2">
+                                    <h4 className="font-semibold text-lg text-gray-900">{contact.name || 'Nome não informado'}</h4>
+                                    <p className="text-blue-600 font-medium">{contact.position || 'Cargo não informado'}</p>
+                                    <div className="space-y-1 text-sm text-gray-600">
+                                      {contact.phone && (
+                                        <div className="flex items-center gap-2">
+                                          <Phone className="h-4 w-4" />
+                                          <span>{contact.phone}</span>
+                                        </div>
+                                      )}
+                                      {contact.email && (
+                                        <div className="flex items-center gap-2">
+                                          <Mail className="h-4 w-4" />
+                                          <span>{contact.email}</span>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                  <div className="flex flex-col gap-2">
+                                    <Button variant="outline" size="sm">
+                                      <Phone className="h-4 w-4 mr-1" />
+                                      Ligar
+                                    </Button>
+                                    <Button variant="outline" size="sm">
+                                      <Mail className="h-4 w-4 mr-1" />
+                                      E-mail
+                                    </Button>
+                                  </div>
+                                </div>
+                              </CardContent>
+                            </Card>
+                          ))
+                        ) : (
+                          <div className="text-center py-8">
+                            <User className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                            <h3 className="text-lg font-semibold text-gray-900 mb-2">Nenhum contato cadastrado</h3>
+                            <p className="text-gray-600 mb-4">Adicione contatos para facilitar a comunicação</p>
+                            <Button onClick={() => setEditingContacts(true)}>
+                              <User className="h-4 w-4 mr-2" />
+                              Adicionar Contato
+                            </Button>
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
+                    </CardContent>
+                  </Card>
+                </>
+              )}
             </div>
           </TabsContent>
           
           <TabsContent value="services" className="mt-6">
             <div className="grid gap-6">
-              {/* Serviços Contratados */}
-              <Card className="border border-green-200 bg-white shadow-md">
-                <CardHeader className="bg-gradient-to-r from-green-600 to-green-500 text-white rounded-t-lg">
-                  <CardTitle className="flex items-center gap-3 text-xl">
-                    <Settings className="h-6 w-6" />
-                    Serviços Contratados
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="pt-6">
-                  {clientData.services && clientData.services.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {clientData.services.map((service: string, index: number) => (
-                        <Card key={index} className="border border-green-200 bg-green-50">
-                          <CardContent className="pt-4">
-                            <div className="flex items-center justify-between">
-                              <span className="font-medium text-green-800">{service}</span>
-                              <div className="h-2 w-2 bg-green-500 rounded-full"></div>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-center py-8">
-                      <Settings className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">Nenhum serviço contratado</h3>
-                      <p className="text-gray-600 mb-4">Contrate serviços para começar a utilizar a plataforma</p>
-                      <Button>
-                        <Settings className="h-4 w-4 mr-2" />
-                        Ver Serviços Disponíveis
-                      </Button>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              {/* Preferências de Atendimento */}
-              <Card className="border border-yellow-200 bg-white shadow-md">
-                <CardHeader className="bg-gradient-to-r from-yellow-600 to-yellow-500 text-white rounded-t-lg">
-                  <CardTitle className="text-xl">Preferências de Atendimento</CardTitle>
-                </CardHeader>
-                <CardContent className="pt-6 space-y-4">
-                  {clientData.preferredServiceTime ? (
-                    <>
-                      <div>
-                        <h4 className="font-semibold text-yellow-800 mb-2">Horário Preferencial</h4>
-                        <p className="text-gray-700 bg-yellow-50 p-3 rounded-lg border border-yellow-200">
-                          {clientData.preferredServiceTime}
-                        </p>
-                      </div>
-                      
-                      {clientData.specialRequirements && (
-                        <div>
-                          <h4 className="font-semibold text-yellow-800 mb-2">Observações Especiais</h4>
-                          <p className="text-gray-700 bg-yellow-50 p-3 rounded-lg border border-yellow-200 leading-relaxed">
-                            {clientData.specialRequirements}
-                          </p>
+              {editingServices ? (
+                <ServicesEditor
+                  services={clientData.services || []}
+                  onSave={(services) => {
+                    console.log('Salvando serviços:', services);
+                    setEditingServices(false);
+                    toast({
+                      title: "Serviços atualizados!",
+                      description: "Seus serviços de interesse foram salvos com sucesso.",
+                    });
+                  }}
+                  onCancel={() => setEditingServices(false)}
+                />
+              ) : (
+                <>
+                  {/* Serviços Contratados */}
+                  <Card className="border border-green-200 bg-white shadow-md">
+                    <CardHeader className="bg-gradient-to-r from-green-600 to-green-500 text-white rounded-t-lg">
+                      <CardTitle className="flex items-center justify-between text-xl">
+                        <div className="flex items-center gap-3">
+                          <Settings className="h-6 w-6" />
+                          Serviços Contratados
+                        </div>
+                        <Button
+                          onClick={() => setEditingServices(true)}
+                          size="sm"
+                          variant="secondary"
+                        >
+                          <Edit className="h-4 w-4 mr-2" />
+                          Editar
+                        </Button>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="pt-6">
+                      {clientData.services && clientData.services.length > 0 ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {clientData.services.map((service: string, index: number) => (
+                            <Card key={index} className="border border-green-200 bg-green-50">
+                              <CardContent className="pt-4">
+                                <div className="flex items-center justify-between">
+                                  <span className="font-medium text-green-800">{service}</span>
+                                  <div className="h-2 w-2 bg-green-500 rounded-full"></div>
+                                </div>
+                              </CardContent>
+                            </Card>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="text-center py-8">
+                          <Settings className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                          <h3 className="text-lg font-semibold text-gray-900 mb-2">Nenhum serviço contratado</h3>
+                          <p className="text-gray-600 mb-4">Contrate serviços para começar a utilizar a plataforma</p>
+                          <Button onClick={() => setEditingServices(true)}>
+                            <Settings className="h-4 w-4 mr-2" />
+                            Ver Serviços Disponíveis
+                          </Button>
                         </div>
                       )}
-                    </>
-                  ) : (
-                    <div className="text-center py-8">
-                      <Clock className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">Preferências não definidas</h3>
-                      <p className="text-gray-600 mb-4">Configure suas preferências de atendimento</p>
-                      <Button onClick={() => setIsEditing(true)}>
-                        <Settings className="h-4 w-4 mr-2" />
-                        Configurar Preferências
-                      </Button>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
+                    </CardContent>
+                  </Card>
+
+                  {/* Preferências de Atendimento */}
+                  <Card className="border border-yellow-200 bg-white shadow-md">
+                    <CardHeader className="bg-gradient-to-r from-yellow-600 to-yellow-500 text-white rounded-t-lg">
+                      <CardTitle className="text-xl">Preferências de Atendimento</CardTitle>
+                    </CardHeader>
+                    <CardContent className="pt-6 space-y-4">
+                      {clientData.preferredServiceTime ? (
+                        <>
+                          <div>
+                            <h4 className="font-semibold text-yellow-800 mb-2">Horário Preferencial</h4>
+                            <p className="text-gray-700 bg-yellow-50 p-3 rounded-lg border border-yellow-200">
+                              {clientData.preferredServiceTime}
+                            </p>
+                          </div>
+                          
+                          {clientData.specialRequirements && (
+                            <div>
+                              <h4 className="font-semibold text-yellow-800 mb-2">Observações Especiais</h4>
+                              <p className="text-gray-700 bg-yellow-50 p-3 rounded-lg border border-yellow-200 leading-relaxed">
+                                {clientData.specialRequirements}
+                              </p>
+                            </div>
+                          )}
+                        </>
+                      ) : (
+                        <div className="text-center py-8">
+                          <Clock className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                          <h3 className="text-lg font-semibold text-gray-900 mb-2">Preferências não definidas</h3>
+                          <p className="text-gray-600 mb-4">Configure suas preferências de atendimento</p>
+                          <Button onClick={() => setIsEditing(true)}>
+                            <Settings className="h-4 w-4 mr-2" />
+                            Configurar Preferências
+                          </Button>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                </>
+              )}
             </div>
           </TabsContent>
 
           <TabsContent value="documents" className="mt-6">
-            <Card className="border border-purple-200 bg-white shadow-md">
-              <CardHeader className="bg-gradient-to-r from-purple-600 to-purple-500 text-white rounded-t-lg">
-                <CardTitle className="flex items-center gap-3 text-xl">
-                  <FileText className="h-6 w-6" />
-                  Documentos da Empresa
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="pt-6">
-                {clientData.cnpj || clientData.ie || clientData.annualRevenue || clientData.foundedYear ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-3">
-                      <h4 className="font-semibold text-purple-800">Documentos Legais</h4>
-                      <div className="space-y-2">
-                        {clientData.cnpj && (
-                          <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg border border-purple-200">
-                            <span className="text-sm font-medium text-purple-800">CNPJ</span>
-                            <span className="text-sm text-gray-700">{clientData.cnpj}</span>
-                          </div>
-                        )}
-                        {clientData.ie && (
-                          <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg border border-purple-200">
-                            <span className="text-sm font-medium text-purple-800">Inscrição Estadual</span>
-                            <span className="text-sm text-gray-700">{clientData.ie}</span>
-                          </div>
-                        )}
-                        {!clientData.cnpj && !clientData.ie && (
-                          <div className="text-center py-4 text-gray-500">
-                            <p>Nenhum documento legal cadastrado</p>
-                          </div>
-                        )}
-                      </div>
+            {editingDocuments ? (
+              <DocumentsUpload
+                documents={(clientData as any).documents || []}
+                onSave={(documents) => {
+                  console.log('Salvando documentos:', documents);
+                  setEditingDocuments(false);
+                  toast({
+                    title: "Documentos enviados!",
+                    description: "Seus documentos foram enviados para análise.",
+                  });
+                }}
+                onCancel={() => setEditingDocuments(false)}
+              />
+            ) : (
+              <Card className="border border-purple-200 bg-white shadow-md">
+                <CardHeader className="bg-gradient-to-r from-purple-600 to-purple-500 text-white rounded-t-lg">
+                  <CardTitle className="flex items-center justify-between text-xl">
+                    <div className="flex items-center gap-3">
+                      <FileText className="h-6 w-6" />
+                      Documentos da Empresa
                     </div>
-                    
-                    <div className="space-y-3">
-                      <h4 className="font-semibold text-purple-800">Informações Corporativas</h4>
-                      <div className="space-y-2">
-                        {clientData.annualRevenue && (
-                          <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg border border-purple-200">
-                            <span className="text-sm font-medium text-purple-800">Faturamento Anual</span>
-                            <span className="text-sm text-gray-700">{clientData.annualRevenue}</span>
-                          </div>
-                        )}
-                        {clientData.foundedYear && (
-                          <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg border border-purple-200">
-                            <span className="text-sm font-medium text-purple-800">Ano de Fundação</span>
-                            <span className="text-sm text-gray-700">{clientData.foundedYear}</span>
-                          </div>
-                        )}
-                        {!clientData.annualRevenue && !clientData.foundedYear && (
-                          <div className="text-center py-4 text-gray-500">
-                            <p>Informações corporativas não cadastradas</p>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="text-center py-8">
-                    <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Documentos não cadastrados</h3>
-                    <p className="text-gray-600 mb-4">Complete as informações da empresa</p>
-                    <Button onClick={() => setIsEditing(true)}>
-                      <FileText className="h-4 w-4 mr-2" />
-                      Adicionar Documentos
+                    <Button
+                      onClick={() => setEditingDocuments(true)}
+                      size="sm"
+                      variant="secondary"
+                    >
+                      <Edit className="h-4 w-4 mr-2" />
+                      Gerenciar
                     </Button>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-6">
+                  {clientData.cnpj || clientData.ie || clientData.annualRevenue || clientData.foundedYear || ((clientData as any).documents && (clientData as any).documents.length > 0) ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-3">
+                        <h4 className="font-semibold text-purple-800">Documentos Legais</h4>
+                        <div className="space-y-2">
+                          {clientData.cnpj && (
+                            <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg border border-purple-200">
+                              <span className="text-sm font-medium text-purple-800">CNPJ</span>
+                              <span className="text-sm text-gray-700">{clientData.cnpj}</span>
+                            </div>
+                          )}
+                          {clientData.ie && (
+                            <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg border border-purple-200">
+                              <span className="text-sm font-medium text-purple-800">Inscrição Estadual</span>
+                              <span className="text-sm text-gray-700">{clientData.ie}</span>
+                            </div>
+                          )}
+                          {!clientData.cnpj && !clientData.ie && (
+                            <div className="text-center py-4 text-gray-500">
+                              <p>Nenhum documento legal cadastrado</p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-3">
+                        <h4 className="font-semibold text-purple-800">Informações Corporativas</h4>
+                        <div className="space-y-2">
+                          {clientData.annualRevenue && (
+                            <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg border border-purple-200">
+                              <span className="text-sm font-medium text-purple-800">Faturamento Anual</span>
+                              <span className="text-sm text-gray-700">{clientData.annualRevenue}</span>
+                            </div>
+                          )}
+                          {clientData.foundedYear && (
+                            <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg border border-purple-200">
+                              <span className="text-sm font-medium text-purple-800">Ano de Fundação</span>
+                              <span className="text-sm text-gray-700">{clientData.foundedYear}</span>
+                            </div>
+                          )}
+                          {!clientData.annualRevenue && !clientData.foundedYear && (
+                            <div className="text-center py-4 text-gray-500">
+                              <p>Informações corporativas não cadastradas</p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-center py-8">
+                      <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">Documentos não cadastrados</h3>
+                      <p className="text-gray-600 mb-4">Complete as informações da empresa enviando os documentos necessários</p>
+                      <Button onClick={() => setEditingDocuments(true)}>
+                        <FileText className="h-4 w-4 mr-2" />
+                        Enviar Documentos
+                      </Button>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
           </TabsContent>
         </Tabs>
       </div>

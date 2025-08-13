@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { ProfileCompleteness } from '@/components/profile/ProfileCompleteness';
+import ProfileCompleteness from '@/components/profile/ProfileCompleteness';
 import { DocumentUpload } from '@/components/documents/DocumentUpload';
 import CustomerLayout from '@/components/layout/CustomerLayout';
 import { Button } from '@/components/ui/button';
@@ -79,8 +79,12 @@ const ProfileComplete = () => {
         <div className="grid lg:grid-cols-3 gap-6">
           <div className="lg:col-span-1">
             <ProfileCompleteness 
-              profileData={profileData}
-              userType="client"
+              clientData={{
+                name: profileData.name,
+                email: profileData.email,
+                phone: profileData.phone,
+                documents: Object.values(profileData.documents).some(Boolean) ? [{}] : []
+              }}
             />
           </div>
 
