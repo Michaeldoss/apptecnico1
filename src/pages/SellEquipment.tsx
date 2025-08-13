@@ -82,11 +82,11 @@ const SellEquipment = () => {
       
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-16 relative overflow-hidden">
+        <section className="bg-gradient-to-br from-primary via-primary-dark to-sidebar-background text-white py-16 relative overflow-hidden">
           {/* Elementos decorativos de fundo */}
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-transparent to-purple-600/20"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-accent/20"></div>
           <div className="absolute top-10 left-10 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
-          <div className="absolute bottom-10 right-10 w-40 h-40 bg-yellow-300/10 rounded-full blur-2xl"></div>
+          <div className="absolute bottom-10 right-10 w-40 h-40 bg-accent/10 rounded-full blur-2xl"></div>
           
           <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-4xl mx-auto text-center">
@@ -98,7 +98,7 @@ const SellEquipment = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link to="/sell-equipment/create">
-                  <Button size="lg" className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold shadow-lg">
+                  <Button size="lg" className="bg-accent hover:bg-accent-dark text-instalei-text-dark font-semibold shadow-lg">
                     <Plus className="h-5 w-5 mr-2" />
                     Anunciar Equipamento
                   </Button>
@@ -120,7 +120,7 @@ const SellEquipment = () => {
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">Equipamentos em Destaque</h2>
                 <p className="text-gray-600">Anúncios premium que ficam em evidência</p>
               </div>
-              <Badge className="bg-yellow-500 text-black font-semibold px-3 py-1">
+              <Badge className="bg-accent text-instalei-text-dark font-semibold px-3 py-1">
                 <StarIcon className="h-4 w-4 mr-1" />
                 Premium
               </Badge>
@@ -148,8 +148,8 @@ const SellEquipment = () => {
                 ))}
               </CarouselContent>
               <div className="flex justify-center mt-4 gap-2">
-                <CarouselPrevious className="static transform-none mx-0 bg-white/80 backdrop-blur-sm border-blue-600" />
-                <CarouselNext className="static transform-none mx-0 bg-white/80 backdrop-blur-sm border-blue-600" />
+                <CarouselPrevious className="static transform-none mx-0 bg-white/80 backdrop-blur-sm border-primary" />
+                <CarouselNext className="static transform-none mx-0 bg-white/80 backdrop-blur-sm border-primary" />
               </div>
             </Carousel>
             
@@ -157,7 +157,7 @@ const SellEquipment = () => {
               <p className="text-sm text-gray-600 mb-2">
                 Destaque seu anúncio e tenha mais visibilidade
               </p>
-              <Button variant="outline" className="text-yellow-600 border-yellow-600 hover:bg-yellow-600 hover:text-white">
+              <Button variant="outline" className="text-accent border-accent hover:bg-accent hover:text-instalei-text-dark">
                 <StarIcon className="h-4 w-4 mr-2" />
                 Promover Meu Anúncio
               </Button>

@@ -147,7 +147,7 @@ const About = () => {
                     <Users className="h-12 w-12 text-white group-hover:scale-110 transition-transform duration-300" />
                   </div>
                   <CardTitle className="text-2xl font-bold group-hover:text-primary transition-colors duration-300">{member.name}</CardTitle>
-                  <CardDescription className="text-primary font-semibold text-lg">{member.role}</CardDescription>
+                  <CardDescription className="text-accent font-semibold text-lg">{member.role}</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground text-base leading-relaxed">{member.description}</p>
