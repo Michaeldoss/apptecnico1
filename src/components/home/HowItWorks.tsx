@@ -28,10 +28,10 @@ const HowItWorks = () => {
     <section className="section-padding bg-white">
       <div className="container-instalei">
         <div className="text-center mb-instalei-2xl">
-          <h2 className="text-4xl md:text-5xl font-black text-gray-800 mb-instalei-md">
+          <h2 className="text-4xl md:text-5xl font-black text-primary mb-instalei-md">
             Como funciona a Instalei
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto font-semibold leading-relaxed">
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto font-semibold leading-relaxed">
             Em poucos passos você encontra o técnico ideal para seu equipamento
           </p>
         </div>
@@ -46,8 +46,8 @@ const HowItWorks = () => {
                 <div className="bg-instalei-orange-500 text-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-instalei-md text-2xl font-bold shadow-lg">
                   {index + 1}
                 </div>
-                <h3 className="text-2xl font-bold mb-instalei-md text-gray-800">{step.title}</h3>
-                <p className="text-gray-600 font-medium text-lg leading-relaxed">{step.description}</p>
+                <h3 className="text-2xl font-bold mb-instalei-md text-primary">{step.title}</h3>
+                <p className="text-muted-foreground font-medium text-lg leading-relaxed">{step.description}</p>
               </CardContent>
             </Card>
           ))}

@@ -46,10 +46,10 @@ const Benefits = () => {
     <section className="section-padding bg-gray-50">
       <div className="container-instalei">
         <div className="text-center mb-instalei-2xl">
-          <h2 className="text-4xl md:text-5xl font-black text-gray-800 mb-instalei-lg">
+          <h2 className="text-4xl md:text-5xl font-black text-primary mb-instalei-lg">
             Por que escolher a Instalei?
           </h2>
-          <p className="text-xl text-gray-600 max-w-4xl mx-auto font-semibold leading-relaxed">
+          <p className="text-xl text-muted-foreground max-w-4xl mx-auto font-semibold leading-relaxed">
             Conectamos você com os melhores técnicos do mercado com total segurança e praticidade
           </p>
         </div>
@@ -61,8 +61,8 @@ const Benefits = () => {
                 <div className={`${benefit.color} w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-instalei-lg shadow-2xl group-hover:scale-110 transition-transform duration-300`}>
                   {benefit.icon}
                 </div>
-                <h3 className="text-xl font-bold mb-instalei-md text-gray-800">{benefit.title}</h3>
-                <p className="text-gray-600 font-medium leading-relaxed">{benefit.description}</p>
+                <h3 className="text-xl font-bold mb-instalei-md text-primary">{benefit.title}</h3>
+                <p className="text-muted-foreground font-medium leading-relaxed">{benefit.description}</p>
               </CardContent>
             </Card>
           ))}
