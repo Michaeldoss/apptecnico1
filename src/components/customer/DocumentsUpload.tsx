@@ -31,12 +31,13 @@ interface Document {
 }
 
 interface DocumentsUploadProps {
-  documents: Document[];
-  onSave: (documents: Document[]) => void;
-  onCancel: () => void;
+  documents?: Document[];
+  onSave?: (documents: Document[]) => void;
+  onCancel?: () => void;
+  onDocumentsChange?: (documents: any[]) => void;
 }
 
-const DocumentsUpload: React.FC<DocumentsUploadProps> = ({ documents, onSave, onCancel }) => {
+const DocumentsUpload: React.FC<DocumentsUploadProps> = ({ documents, onSave, onCancel, onDocumentsChange }) => {
   const [uploadedDocuments, setUploadedDocuments] = useState<Document[]>(documents || []);
   const [uploading, setUploading] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);

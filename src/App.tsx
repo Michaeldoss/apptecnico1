@@ -14,7 +14,7 @@ import Login from '@/pages/Login';
 import NewRegister from '@/pages/NewRegister';
 import UnifiedLogin from '@/pages/UnifiedLogin';
 import UnifiedRegister from '@/pages/UnifiedRegister';
-import ProfileComplete from '@/pages/customer/ProfileComplete';
+
 import CustomerAffiliates from '@/pages/customer/Affiliates';
 import TechnicianAffiliates from '@/pages/technician/Affiliates';
 import CompanyAffiliates from '@/pages/store/CompanyAffiliates';
@@ -186,16 +186,6 @@ function App() {
                    <CustomerProfile />
                  </ProtectedRoute>
                } />
-                 <Route path="/customer/profile-complete" element={
-                   <ProtectedRoute userType="customer">
-                     <ProfileComplete />
-                   </ProtectedRoute>
-                 } />
-                 <Route path="/cliente/completar-perfil" element={
-                   <ProtectedRoute userType="customer">
-                     <ProfileComplete />
-                   </ProtectedRoute>
-                 } />
                 <Route path="/cliente/afiliados" element={
                   <ProtectedRoute userType="customer">
                     <CustomerAffiliates />

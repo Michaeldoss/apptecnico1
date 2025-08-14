@@ -1,55 +1,155 @@
-
 import React, { useState } from 'react';
+import { useAuth } from '@/context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import CustomerLayout from '@/components/layout/CustomerLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Building2, User, Settings, FileText, MapPin, Phone, Mail, Globe, AlertCircle, Edit, Clock } from 'lucide-react';
-import { useToast } from '@/components/ui/use-toast';
-import { useAuth } from '@/context/AuthContext';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Building2, User, Settings, FileText, CheckCircle, Save, X } from 'lucide-react';
+import { toast } from '@/hooks/use-toast';
 import { useClientData } from '@/hooks/useClientData';
-import ClientData from '@/components/customer/ClientData';
-import EditableClientData from '@/components/customer/EditableClientData';
-import ProfileCompleteness from '@/components/profile/ProfileCompleteness';
 import ContactsEditor from '@/components/customer/ContactsEditor';
 import ServicesEditor from '@/components/customer/ServicesEditor';
 import DocumentsUpload from '@/components/customer/DocumentsUpload';
+import ImageUpload from '@/components/ui/image-upload';
 
 const CustomerProfile = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [editingContacts, setEditingContacts] = useState(false);
-  const [editingServices, setEditingServices] = useState(false);
-  const [editingDocuments, setEditingDocuments] = useState(false);
-  const { toast } = useToast();
   const { user } = useAuth();
+  const navigate = useNavigate();
   const { clientData, loading, error } = useClientData();
   
+  const [activeTab, setActiveTab] = useState('basic');
+  const [editingBasic, setEditingBasic] = useState(false);
+  const [documents, setDocuments] = useState([]);
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+  
+  const [profileData, setProfileData] = useState({
+    name: clientData?.name || user?.name || '',
+    email: clientData?.email || user?.email || '',
+    phone: clientData?.phone || '',
+    company: clientData?.name || '',
+    businessSegment: clientData?.businessSegment || '',
+    description: clientData?.description || '',
+    address: {
+      street: clientData?.address?.street || '',
+      number: clientData?.address?.number || '',
+      complement: clientData?.address?.complement || '',
+      neighborhood: clientData?.address?.neighborhood || '',
+      city: clientData?.address?.city || '',
+      state: clientData?.address?.state || '',
+      cep: (clientData?.address as any)?.cep || ''
+    },
+    documents: {
+      rg: false,
+      cpf: false,
+      addressProof: false,
+      companyDocs: false,
+    },
+    profilePicture: !!profileImage,
+    contacts: clientData?.contacts || [],
+    services: clientData?.services || []
+  });
+  
+  const handleBasicDataChange = (field: string, value: string) => {
+    if (field.includes('.')) {
+      const [parent, child] = field.split('.');
+      setProfileData(prev => ({
+        ...prev,
+        [parent]: {
+          ...prev[parent as keyof typeof prev] as any,
+          [child]: value
+        }
+      }));
+    } else {
+      setProfileData(prev => ({
+        ...prev,
+        [field]: value
+      }));
+    }
+  };
+
+  const handleContactsChange = (contacts: any[]) => {
+    setProfileData(prev => ({
+      ...prev,
+      contacts
+    }));
+  };
+
+  const handleServicesChange = (services: any[]) => {
+    setProfileData(prev => ({
+      ...prev,
+      services
+    }));
+  };
+
+  const handleDocumentsChange = (newDocuments: any[]) => {
+    setDocuments(newDocuments);
+    const documentStatus = {
+      rg: newDocuments.some(doc => doc.id === 'rg' && doc.uploaded),
+      cpf: newDocuments.some(doc => doc.id === 'cpf' && doc.uploaded),
+      addressProof: newDocuments.some(doc => doc.id === 'addressProof' && doc.uploaded),
+      companyDocs: newDocuments.some(doc => doc.id === 'companyDocs' && doc.uploaded),
+    };
+    
+    setProfileData(prev => ({
+      ...prev,
+      documents: documentStatus
+    }));
+  };
+
+  const handleImageChange = (file: File | null, imageUrl: string | null) => {
+    setProfileImage(imageUrl);
+    setProfileData(prev => ({
+      ...prev,
+      profilePicture: !!imageUrl
+    }));
+    
+    if (imageUrl) {
+      toast({
+        title: "Foto atualizada",
+        description: "Sua foto de perfil foi atualizada com sucesso.",
+      });
+    }
+  };
+
+  const saveBasicData = () => {
+    console.log('Salvando dados básicos:', profileData);
+    setEditingBasic(false);
+    toast({
+      title: "Perfil atualizado!",
+      description: "Suas informações foram salvas com sucesso.",
+    });
+  };
+
+  const getCompletionPercentage = () => {
+    let completed = 0;
+    let total = 10;
+
+    if (profileData.name) completed++;
+    if (profileData.email) completed++;
+    if (profileData.phone) completed++;
+    if (profileData.company) completed++;
+    if (profileData.businessSegment) completed++;
+    if (profileData.profilePicture) completed++;
+    if (Object.values(profileData.documents).some(Boolean)) completed++;
+    if (profileData.contacts.length > 0) completed++;
+    if (profileData.services.length > 0) completed++;
+    if (profileData.address.street) completed++;
+
+    return Math.round((completed / total) * 100);
+  };
+
   if (loading) {
     return (
       <CustomerLayout title="Perfil da Empresa">
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">Carregando informações...</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Carregando informações...</p>
           </div>
-        </div>
-      </CustomerLayout>
-    );
-  }
-
-  if (error || !clientData) {
-    return (
-      <CustomerLayout title="Perfil da Empresa">
-        <div className="flex items-center justify-center min-h-[400px]">
-          <Card className="max-w-md">
-            <CardContent className="pt-6 text-center">
-              <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Erro ao carregar dados</h3>
-              <p className="text-gray-600">{error || 'Não foi possível carregar as informações da empresa.'}</p>
-            </CardContent>
-          </Card>
         </div>
       </CustomerLayout>
     );
@@ -58,426 +158,356 @@ const CustomerProfile = () => {
   return (
     <CustomerLayout title="Perfil da Empresa">
       <div className="space-y-6">
-        {/* Barra de Completude do Perfil */}
-        <ProfileCompleteness clientData={clientData} />
-        
-        {/* Header do Perfil */}
-        <Card className="border border-blue-200 bg-gradient-to-r from-blue-50 to-white shadow-lg">
-          <CardHeader>
-            <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
-              <Avatar className="h-24 w-24 border-4 border-blue-200">
-                <AvatarImage src="" alt={clientData.name} />
-                <AvatarFallback className="text-2xl bg-blue-100 text-blue-700">
-                  {clientData.name.split(' ').map(n => n[0]).join('').substring(0, 2)}
-                </AvatarFallback>
-              </Avatar>
-              
-              <div className="flex-1 space-y-2">
-                <div className="flex items-center gap-3">
-                  <CardTitle className="text-2xl text-blue-900">{clientData.name}</CardTitle>
-                  <div className="flex items-center gap-2 text-green-600">
-                    <div className="h-2 w-2 bg-green-500 rounded-full"></div>
-                    <span className="text-sm font-medium">Cliente Ativo</span>
+        {/* Welcome Header com Progresso */}
+        <div className="text-center bg-gradient-to-r from-primary/10 to-primary/5 p-6 rounded-lg border border-primary/20">
+          <h1 className="text-2xl font-bold text-primary">Perfil da Empresa</h1>
+          <p className="text-muted-foreground mt-2">
+            Gerencie suas informações e complete seu perfil para ter mais credibilidade
+          </p>
+          <div className="mt-4">
+            <div className="flex items-center justify-center gap-2 text-sm">
+              <span>Completude do Perfil:</span>
+              <div className="bg-background rounded-full w-32 h-2">
+                <div 
+                  className="bg-primary rounded-full h-2 transition-all duration-300"
+                  style={{ width: `${getCompletionPercentage()}%` }}
+                />
+              </div>
+              <span className="font-medium text-primary">{getCompletionPercentage()}%</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid lg:grid-cols-4 gap-6">
+          {/* Progress Sidebar */}
+          <div className="lg:col-span-1">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <CheckCircle className="h-5 w-5" />
+                  Status do Perfil
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-sm">
+                    <span>Dados Básicos</span>
+                    <span className={profileData.name && profileData.email && profileData.phone ? 'text-green-600' : 'text-muted-foreground'}>
+                      {profileData.name && profileData.email && profileData.phone ? '✓' : '○'}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span>Foto de Perfil</span>
+                    <span className={profileData.profilePicture ? 'text-green-600' : 'text-muted-foreground'}>
+                      {profileData.profilePicture ? '✓' : '○'}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span>Empresa</span>
+                    <span className={profileData.company ? 'text-green-600' : 'text-muted-foreground'}>
+                      {profileData.company ? '✓' : '○'}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span>Endereço</span>
+                    <span className={profileData.address.street ? 'text-green-600' : 'text-muted-foreground'}>
+                      {profileData.address.street ? '✓' : '○'}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span>Contatos</span>
+                    <span className={profileData.contacts.length > 0 ? 'text-green-600' : 'text-muted-foreground'}>
+                      {profileData.contacts.length > 0 ? '✓' : '○'}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span>Serviços</span>
+                    <span className={profileData.services.length > 0 ? 'text-green-600' : 'text-muted-foreground'}>
+                      {profileData.services.length > 0 ? '✓' : '○'}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span>Documentos</span>
+                    <span className={Object.values(profileData.documents).some(Boolean) ? 'text-green-600' : 'text-muted-foreground'}>
+                      {Object.values(profileData.documents).some(Boolean) ? '✓' : '○'}
+                    </span>
                   </div>
                 </div>
-                
-                <div className="flex flex-wrap gap-4 text-sm text-gray-600">
-                  <div className="flex items-center gap-1">
-                    <Building2 className="h-4 w-4" />
-                    <span>{clientData.businessSegment}</span>
-                  </div>
-                  {clientData.address && (
-                    <div className="flex items-center gap-1">
-                      <MapPin className="h-4 w-4" />
-                      <span>{clientData.address.city}, {clientData.address.state}</span>
-                    </div>
-                  )}
-                  <div className="flex items-center gap-1">
-                    <Mail className="h-4 w-4" />
-                    <span>{clientData.email}</span>
-                  </div>
-                  {clientData.website && (
-                    <div className="flex items-center gap-1">
-                      <Globe className="h-4 w-4" />
-                      <span>{clientData.website}</span>
+
+                <div className="pt-4 border-t">
+                  <p className="text-xs text-muted-foreground mb-2">
+                    Perfis mais completos têm {getCompletionPercentage() >= 80 ? 'mais' : 'até 3x mais'} credibilidade com técnicos
+                  </p>
+                  {getCompletionPercentage() >= 80 && (
+                    <div className="flex items-center gap-2 text-green-600 text-sm">
+                      <CheckCircle className="h-4 w-4" />
+                      <span className="font-medium">Perfil Verificado</span>
                     </div>
                   )}
                 </div>
-                
-                {clientData.description && (
-                  <CardDescription className="text-base leading-relaxed">
-                    {clientData.description.length > 200 ? 
-                      `${clientData.description.substring(0, 200)}...` : 
-                      clientData.description
-                    }
-                  </CardDescription>
-                )}
-              </div>
-            </div>
-          </CardHeader>
-        </Card>
-        
-        {/* Tabs de Navegação */}
-        <Tabs defaultValue="company" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 h-12 bg-blue-50 border border-blue-200">
-            <TabsTrigger 
-              value="company" 
-              className="flex items-center gap-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white"
-            >
-              <Building2 className="h-4 w-4" />
-              <span className="hidden sm:inline">Empresa</span>
-            </TabsTrigger>
-            <TabsTrigger 
-              value="contacts" 
-              className="flex items-center gap-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white"
-            >
-              <User className="h-4 w-4" />
-              <span className="hidden sm:inline">Contatos</span>
-            </TabsTrigger>
-            <TabsTrigger 
-              value="services" 
-              className="flex items-center gap-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white"
-            >
-              <Settings className="h-4 w-4" />
-              <span className="hidden sm:inline">Serviços</span>
-            </TabsTrigger>
-            <TabsTrigger 
-              value="documents" 
-              className="flex items-center gap-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white"
-            >
-              <FileText className="h-4 w-4" />
-              <span className="hidden sm:inline">Documentos</span>
-            </TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="company" className="mt-6">
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <h3 className="text-lg font-semibold">Dados da Empresa</h3>
-                <Button 
-                  onClick={() => setIsEditing(!isEditing)}
-                  variant={isEditing ? "outline" : "default"}
-                >
-                  <Edit className="h-4 w-4 mr-2" />
-                  {isEditing ? 'Cancelar Edição' : 'Editar Perfil'}
-                </Button>
-              </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Main Content */}
+          <div className="lg:col-span-3">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <TabsList className="grid w-full grid-cols-4">
+                <TabsTrigger value="basic">Básico</TabsTrigger>
+                <TabsTrigger value="contacts">Contatos</TabsTrigger>
+                <TabsTrigger value="services">Serviços</TabsTrigger>
+                <TabsTrigger value="documents">Documentos</TabsTrigger>
+              </TabsList>
               
-              {isEditing ? (
-                <EditableClientData
-                  clientData={clientData}
-                  onSave={(updatedData) => {
-                    // Aqui você implementaria a lógica de salvamento
-                    console.log('Dados atualizados:', updatedData);
-                    setIsEditing(false);
-                    toast({
-                      title: "Perfil atualizado!",
-                      description: "Suas informações foram salvas com sucesso.",
-                    });
-                  }}
-                  onCancel={() => setIsEditing(false)}
-                />
-              ) : (
-                <ClientData clientData={clientData} />
-              )}
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="contacts" className="mt-6">
-            <div className="grid gap-6">
-              {editingContacts ? (
-                <ContactsEditor
-                  contacts={clientData.contacts || []}
-                  onSave={(contacts) => {
-                    console.log('Salvando contatos:', contacts);
-                    setEditingContacts(false);
-                    toast({
-                      title: "Contatos atualizados!",
-                      description: "Os contatos foram salvos com sucesso.",
-                    });
-                  }}
-                  onCancel={() => setEditingContacts(false)}
-                />
-              ) : (
-                <>
-                  {/* Informações de Contato Principais */}
-                  <Card className="border border-blue-200 bg-white shadow-md">
-                    <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-t-lg">
-                      <CardTitle className="flex items-center justify-between text-xl">
-                        <div className="flex items-center gap-3">
-                          <Phone className="h-6 w-6" />
-                          Contatos Principais
-                        </div>
-                        <Button
-                          onClick={() => setEditingContacts(true)}
-                          size="sm"
-                          variant="secondary"
+              <TabsContent value="basic" className="space-y-4">
+                <Card>
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <CardTitle className="flex items-center gap-2">
+                          <User className="h-5 w-5" />
+                          Informações Básicas
+                        </CardTitle>
+                        <CardDescription>
+                          Complete suas informações pessoais e da empresa
+                        </CardDescription>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button 
+                          onClick={() => editingBasic ? saveBasicData() : setEditingBasic(true)}
+                          variant={editingBasic ? "default" : "outline"}
                         >
-                          <Edit className="h-4 w-4 mr-2" />
-                          Editar
-                        </Button>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="pt-6">
-                      <div className="grid gap-6">
-                        {clientData.contacts && clientData.contacts.length > 0 ? (
-                          clientData.contacts.map((contact: any, index: number) => (
-                            <Card key={index} className="border border-gray-200">
-                              <CardContent className="pt-4">
-                                <div className="flex items-start justify-between">
-                                  <div className="space-y-2">
-                                    <h4 className="font-semibold text-lg text-gray-900">{contact.name || 'Nome não informado'}</h4>
-                                    <p className="text-blue-600 font-medium">{contact.position || 'Cargo não informado'}</p>
-                                    <div className="space-y-1 text-sm text-gray-600">
-                                      {contact.phone && (
-                                        <div className="flex items-center gap-2">
-                                          <Phone className="h-4 w-4" />
-                                          <span>{contact.phone}</span>
-                                        </div>
-                                      )}
-                                      {contact.email && (
-                                        <div className="flex items-center gap-2">
-                                          <Mail className="h-4 w-4" />
-                                          <span>{contact.email}</span>
-                                        </div>
-                                      )}
-                                    </div>
-                                  </div>
-                                  <div className="flex flex-col gap-2">
-                                    <Button variant="outline" size="sm">
-                                      <Phone className="h-4 w-4 mr-1" />
-                                      Ligar
-                                    </Button>
-                                    <Button variant="outline" size="sm">
-                                      <Mail className="h-4 w-4 mr-1" />
-                                      E-mail
-                                    </Button>
-                                  </div>
-                                </div>
-                              </CardContent>
-                            </Card>
-                          ))
-                        ) : (
-                          <div className="text-center py-8">
-                            <User className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                            <h3 className="text-lg font-semibold text-gray-900 mb-2">Nenhum contato cadastrado</h3>
-                            <p className="text-gray-600 mb-4">Adicione contatos para facilitar a comunicação</p>
-                            <Button onClick={() => setEditingContacts(true)}>
+                          {editingBasic ? (
+                            <>
+                              <Save className="h-4 w-4 mr-2" />
+                              Salvar
+                            </>
+                          ) : (
+                            <>
                               <User className="h-4 w-4 mr-2" />
-                              Adicionar Contato
-                            </Button>
-                          </div>
+                              Editar
+                            </>
+                          )}
+                        </Button>
+                        {editingBasic && (
+                          <Button 
+                            onClick={() => setEditingBasic(false)}
+                            variant="outline"
+                          >
+                            <X className="h-4 w-4 mr-2" />
+                            Cancelar
+                          </Button>
                         )}
                       </div>
-                    </CardContent>
-                  </Card>
-                </>
-              )}
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="services" className="mt-6">
-            <div className="grid gap-6">
-              {editingServices ? (
-                <ServicesEditor
-                  services={clientData.services || []}
-                  onSave={(services) => {
-                    console.log('Salvando serviços:', services);
-                    setEditingServices(false);
-                    toast({
-                      title: "Serviços atualizados!",
-                      description: "Seus serviços de interesse foram salvos com sucesso.",
-                    });
-                  }}
-                  onCancel={() => setEditingServices(false)}
-                />
-              ) : (
-                <>
-                  {/* Serviços Contratados */}
-                  <Card className="border border-green-200 bg-white shadow-md">
-                    <CardHeader className="bg-gradient-to-r from-green-600 to-green-500 text-white rounded-t-lg">
-                      <CardTitle className="flex items-center justify-between text-xl">
-                        <div className="flex items-center gap-3">
-                          <Settings className="h-6 w-6" />
-                          Serviços Contratados
-                        </div>
-                        <Button
-                          onClick={() => setEditingServices(true)}
-                          size="sm"
-                          variant="secondary"
-                        >
-                          <Edit className="h-4 w-4 mr-2" />
-                          Editar
-                        </Button>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="pt-6">
-                      {clientData.services && clientData.services.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {clientData.services.map((service: string, index: number) => (
-                            <Card key={index} className="border border-green-200 bg-green-50">
-                              <CardContent className="pt-4">
-                                <div className="flex items-center justify-between">
-                                  <span className="font-medium text-green-800">{service}</span>
-                                  <div className="h-2 w-2 bg-green-500 rounded-full"></div>
-                                </div>
-                              </CardContent>
-                            </Card>
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="text-center py-8">
-                          <Settings className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                          <h3 className="text-lg font-semibold text-gray-900 mb-2">Nenhum serviço contratado</h3>
-                          <p className="text-gray-600 mb-4">Contrate serviços para começar a utilizar a plataforma</p>
-                          <Button onClick={() => setEditingServices(true)}>
-                            <Settings className="h-4 w-4 mr-2" />
-                            Ver Serviços Disponíveis
-                          </Button>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-
-                  {/* Preferências de Atendimento */}
-                  <Card className="border border-yellow-200 bg-white shadow-md">
-                    <CardHeader className="bg-gradient-to-r from-yellow-600 to-yellow-500 text-white rounded-t-lg">
-                      <CardTitle className="text-xl">Preferências de Atendimento</CardTitle>
-                    </CardHeader>
-                    <CardContent className="pt-6 space-y-4">
-                      {clientData.preferredServiceTime ? (
-                        <>
-                          <div>
-                            <h4 className="font-semibold text-yellow-800 mb-2">Horário Preferencial</h4>
-                            <p className="text-gray-700 bg-yellow-50 p-3 rounded-lg border border-yellow-200">
-                              {clientData.preferredServiceTime}
-                            </p>
-                          </div>
-                          
-                          {clientData.specialRequirements && (
-                            <div>
-                              <h4 className="font-semibold text-yellow-800 mb-2">Observações Especiais</h4>
-                              <p className="text-gray-700 bg-yellow-50 p-3 rounded-lg border border-yellow-200 leading-relaxed">
-                                {clientData.specialRequirements}
-                              </p>
-                            </div>
-                          )}
-                        </>
-                      ) : (
-                        <div className="text-center py-8">
-                          <Clock className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                          <h3 className="text-lg font-semibold text-gray-900 mb-2">Preferências não definidas</h3>
-                          <p className="text-gray-600 mb-4">Configure suas preferências de atendimento</p>
-                          <Button onClick={() => setIsEditing(true)}>
-                            <Settings className="h-4 w-4 mr-2" />
-                            Configurar Preferências
-                          </Button>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                </>
-              )}
-            </div>
-          </TabsContent>
-
-          <TabsContent value="documents" className="mt-6">
-            {editingDocuments ? (
-              <DocumentsUpload
-                documents={(clientData as any).documents || []}
-                onSave={(documents) => {
-                  console.log('Salvando documentos:', documents);
-                  setEditingDocuments(false);
-                  toast({
-                    title: "Documentos enviados!",
-                    description: "Seus documentos foram enviados para análise.",
-                  });
-                }}
-                onCancel={() => setEditingDocuments(false)}
-              />
-            ) : (
-              <Card className="border border-purple-200 bg-white shadow-md">
-                <CardHeader className="bg-gradient-to-r from-purple-600 to-purple-500 text-white rounded-t-lg">
-                  <CardTitle className="flex items-center justify-between text-xl">
-                    <div className="flex items-center gap-3">
-                      <FileText className="h-6 w-6" />
-                      Documentos da Empresa
                     </div>
-                    <Button
-                      onClick={() => setEditingDocuments(true)}
-                      size="sm"
-                      variant="secondary"
-                    >
-                      <Edit className="h-4 w-4 mr-2" />
-                      Gerenciar
-                    </Button>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="pt-6">
-                  {clientData.cnpj || clientData.ie || clientData.annualRevenue || clientData.foundedYear || ((clientData as any).documents && (clientData as any).documents.length > 0) ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-3">
-                        <h4 className="font-semibold text-purple-800">Documentos Legais</h4>
-                        <div className="space-y-2">
-                          {clientData.cnpj && (
-                            <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg border border-purple-200">
-                              <span className="text-sm font-medium text-purple-800">CNPJ</span>
-                              <span className="text-sm text-gray-700">{clientData.cnpj}</span>
-                            </div>
-                          )}
-                          {clientData.ie && (
-                            <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg border border-purple-200">
-                              <span className="text-sm font-medium text-purple-800">Inscrição Estadual</span>
-                              <span className="text-sm text-gray-700">{clientData.ie}</span>
-                            </div>
-                          )}
-                          {!clientData.cnpj && !clientData.ie && (
-                            <div className="text-center py-4 text-gray-500">
-                              <p>Nenhum documento legal cadastrado</p>
-                            </div>
-                          )}
-                        </div>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {/* Foto de Perfil */}
+                    <div className="flex flex-col items-center space-y-4">
+                      <ImageUpload
+                        currentImage={profileImage || undefined}
+                        onImageChange={handleImageChange}
+                        size="lg"
+                      />
+                    </div>
+
+                    {/* Dados Pessoais */}
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="name">Nome Completo</Label>
+                        <Input
+                          id="name"
+                          value={profileData.name}
+                          onChange={(e) => handleBasicDataChange('name', e.target.value)}
+                          readOnly={!editingBasic}
+                        />
                       </div>
                       
-                      <div className="space-y-3">
-                        <h4 className="font-semibold text-purple-800">Informações Corporativas</h4>
+                      <div className="space-y-2">
+                        <Label htmlFor="email">Email</Label>
+                        <Input
+                          id="email"
+                          type="email"
+                          value={profileData.email}
+                          onChange={(e) => handleBasicDataChange('email', e.target.value)}
+                          readOnly={!editingBasic}
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="phone">Telefone</Label>
+                        <Input
+                          id="phone"
+                          value={profileData.phone}
+                          onChange={(e) => handleBasicDataChange('phone', e.target.value)}
+                          placeholder="(11) 99999-9999"
+                          readOnly={!editingBasic}
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="company">Nome da Empresa</Label>
+                        <Input
+                          id="company"
+                          value={profileData.company}
+                          onChange={(e) => handleBasicDataChange('company', e.target.value)}
+                          placeholder="Sua Empresa Ltda"
+                          readOnly={!editingBasic}
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="businessSegment">Segmento</Label>
+                        <Input
+                          id="businessSegment"
+                          value={profileData.businessSegment}
+                          onChange={(e) => handleBasicDataChange('businessSegment', e.target.value)}
+                          placeholder="Ex: Tecnologia, Saúde, Educação"
+                          readOnly={!editingBasic}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Descrição */}
+                    <div className="space-y-2">
+                      <Label htmlFor="description">Descrição da Empresa</Label>
+                      <Textarea
+                        id="description"
+                        value={profileData.description}
+                        onChange={(e) => handleBasicDataChange('description', e.target.value)}
+                        placeholder="Descreva sua empresa e atividades principais..."
+                        rows={3}
+                        readOnly={!editingBasic}
+                      />
+                    </div>
+
+                    {/* Endereço */}
+                    <div className="space-y-4">
+                      <h4 className="font-medium">Endereço Comercial</h4>
+                      <div className="grid md:grid-cols-3 gap-4">
                         <div className="space-y-2">
-                          {clientData.annualRevenue && (
-                            <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg border border-purple-200">
-                              <span className="text-sm font-medium text-purple-800">Faturamento Anual</span>
-                              <span className="text-sm text-gray-700">{clientData.annualRevenue}</span>
-                            </div>
-                          )}
-                          {clientData.foundedYear && (
-                            <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg border border-purple-200">
-                              <span className="text-sm font-medium text-purple-800">Ano de Fundação</span>
-                              <span className="text-sm text-gray-700">{clientData.foundedYear}</span>
-                            </div>
-                          )}
-                          {!clientData.annualRevenue && !clientData.foundedYear && (
-                            <div className="text-center py-4 text-gray-500">
-                              <p>Informações corporativas não cadastradas</p>
-                            </div>
-                          )}
+                          <Label htmlFor="street">Rua/Avenida</Label>
+                          <Input
+                            id="street"
+                            value={profileData.address.street}
+                            onChange={(e) => handleBasicDataChange('address.street', e.target.value)}
+                            readOnly={!editingBasic}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="number">Número</Label>
+                          <Input
+                            id="number"
+                            value={profileData.address.number}
+                            onChange={(e) => handleBasicDataChange('address.number', e.target.value)}
+                            readOnly={!editingBasic}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="neighborhood">Bairro</Label>
+                          <Input
+                            id="neighborhood"
+                            value={profileData.address.neighborhood}
+                            onChange={(e) => handleBasicDataChange('address.neighborhood', e.target.value)}
+                            readOnly={!editingBasic}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="city">Cidade</Label>
+                          <Input
+                            id="city"
+                            value={profileData.address.city}
+                            onChange={(e) => handleBasicDataChange('address.city', e.target.value)}
+                            readOnly={!editingBasic}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="state">Estado</Label>
+                          <Input
+                            id="state"
+                            value={profileData.address.state}
+                            onChange={(e) => handleBasicDataChange('address.state', e.target.value)}
+                            readOnly={!editingBasic}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="cep">CEP</Label>
+                          <Input
+                            id="cep"
+                            value={profileData.address.cep}
+                            onChange={(e) => handleBasicDataChange('address.cep', e.target.value)}
+                            readOnly={!editingBasic}
+                          />
                         </div>
                       </div>
                     </div>
-                  ) : (
-                    <div className="text-center py-8">
-                      <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">Documentos não cadastrados</h3>
-                      <p className="text-gray-600 mb-4">Complete as informações da empresa enviando os documentos necessários</p>
-                      <Button onClick={() => setEditingDocuments(true)}>
-                        <FileText className="h-4 w-4 mr-2" />
-                        Enviar Documentos
-                      </Button>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            )}
-          </TabsContent>
-        </Tabs>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+              
+              <TabsContent value="contacts" className="space-y-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <User className="h-5 w-5" />
+                      Contatos da Empresa
+                    </CardTitle>
+                    <CardDescription>
+                      Adicione contatos importantes da sua empresa
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ContactsEditor
+                      contacts={profileData.contacts}
+                      onSave={handleContactsChange}
+                      onCancel={() => {}}
+                    />
+                  </CardContent>
+                </Card>
+              </TabsContent>
+              
+              <TabsContent value="services" className="space-y-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Building2 className="h-5 w-5" />
+                      Serviços de Interesse
+                    </CardTitle>
+                    <CardDescription>
+                      Selecione os tipos de serviços que sua empresa necessita
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ServicesEditor
+                      services={profileData.services}
+                      onSave={handleServicesChange}
+                      onCancel={() => {}}
+                    />
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="documents" className="space-y-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <FileText className="h-5 w-5" />
+                      Documentos para Verificação
+                    </CardTitle>
+                    <CardDescription>
+                      Envie os documentos necessários para verificação do seu perfil
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <DocumentsUpload
+                      onDocumentsChange={handleDocumentsChange}
+                    />
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
+          </div>
+        </div>
       </div>
     </CustomerLayout>
   );
