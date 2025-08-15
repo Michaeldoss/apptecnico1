@@ -190,48 +190,83 @@ const CustomerProfile = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <div className="flex items-center justify-between text-sm">
+                  <button 
+                    onClick={() => setActiveTab('basic')}
+                    className={`w-full flex items-center justify-between text-sm p-2 rounded-md transition-colors hover:bg-accent ${
+                      activeTab === 'basic' ? 'bg-accent' : ''
+                    }`}
+                  >
                     <span>Dados Básicos</span>
                     <span className={profileData.name && profileData.email && profileData.phone ? 'text-green-600' : 'text-muted-foreground'}>
                       {profileData.name && profileData.email && profileData.phone ? '✓' : '○'}
                     </span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
+                  </button>
+                  <button 
+                    onClick={() => setActiveTab('basic')}
+                    className={`w-full flex items-center justify-between text-sm p-2 rounded-md transition-colors hover:bg-accent ${
+                      activeTab === 'basic' ? 'bg-accent' : ''
+                    }`}
+                  >
                     <span>Foto de Perfil</span>
                     <span className={profileData.profilePicture ? 'text-green-600' : 'text-muted-foreground'}>
                       {profileData.profilePicture ? '✓' : '○'}
                     </span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
+                  </button>
+                  <button 
+                    onClick={() => setActiveTab('basic')}
+                    className={`w-full flex items-center justify-between text-sm p-2 rounded-md transition-colors hover:bg-accent ${
+                      activeTab === 'basic' ? 'bg-accent' : ''
+                    }`}
+                  >
                     <span>Empresa</span>
                     <span className={profileData.company ? 'text-green-600' : 'text-muted-foreground'}>
                       {profileData.company ? '✓' : '○'}
                     </span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
+                  </button>
+                  <button 
+                    onClick={() => setActiveTab('basic')}
+                    className={`w-full flex items-center justify-between text-sm p-2 rounded-md transition-colors hover:bg-accent ${
+                      activeTab === 'basic' ? 'bg-accent' : ''
+                    }`}
+                  >
                     <span>Endereço</span>
                     <span className={profileData.address.street ? 'text-green-600' : 'text-muted-foreground'}>
                       {profileData.address.street ? '✓' : '○'}
                     </span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
+                  </button>
+                  <button 
+                    onClick={() => setActiveTab('contacts')}
+                    className={`w-full flex items-center justify-between text-sm p-2 rounded-md transition-colors hover:bg-accent ${
+                      activeTab === 'contacts' ? 'bg-accent' : ''
+                    }`}
+                  >
                     <span>Contatos</span>
                     <span className={profileData.contacts.length > 0 ? 'text-green-600' : 'text-muted-foreground'}>
                       {profileData.contacts.length > 0 ? '✓' : '○'}
                     </span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
+                  </button>
+                  <button 
+                    onClick={() => setActiveTab('services')}
+                    className={`w-full flex items-center justify-between text-sm p-2 rounded-md transition-colors hover:bg-accent ${
+                      activeTab === 'services' ? 'bg-accent' : ''
+                    }`}
+                  >
                     <span>Serviços</span>
                     <span className={profileData.services.length > 0 ? 'text-green-600' : 'text-muted-foreground'}>
                       {profileData.services.length > 0 ? '✓' : '○'}
                     </span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
+                  </button>
+                  <button 
+                    onClick={() => setActiveTab('documents')}
+                    className={`w-full flex items-center justify-between text-sm p-2 rounded-md transition-colors hover:bg-accent ${
+                      activeTab === 'documents' ? 'bg-accent' : ''
+                    }`}
+                  >
                     <span>Documentos</span>
                     <span className={Object.values(profileData.documents).some(Boolean) ? 'text-green-600' : 'text-muted-foreground'}>
                       {Object.values(profileData.documents).some(Boolean) ? '✓' : '○'}
                     </span>
-                  </div>
+                  </button>
                 </div>
 
                 <div className="pt-4 border-t">
