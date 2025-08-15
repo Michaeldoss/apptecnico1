@@ -46,7 +46,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isMenuOpen, toggleMenu, c
       {isMobile && (
         <button 
           onClick={toggleMenu}
-          className="fixed top-20 left-4 z-50 bg-gradient-to-r from-accent to-accent-dark hover:from-accent-dark hover:to-accent text-instalei-text-dark p-2.5 rounded-full shadow-xl md:hidden transition-all duration-200 hover:scale-105"
+          className="fixed top-20 left-4 z-50 bg-gradient-to-r from-sidebar-accent to-sidebar-accent/80 hover:from-sidebar-accent/90 hover:to-sidebar-accent text-sidebar-accent-foreground p-2.5 rounded-full shadow-xl md:hidden transition-all duration-200 hover:scale-105 border border-white/20 backdrop-blur-sm"
         >
           {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
@@ -64,14 +64,14 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isMenuOpen, toggleMenu, c
       <aside 
         className={cn(
           "w-64 shrink-0 transition-all duration-300",
-          isMobile ? "fixed left-0 top-16 bottom-0 bg-gradient-to-b from-primary to-primary-dark z-40 h-[calc(100vh-4rem)] px-3 pt-16 pb-6 shadow-2xl overflow-y-auto" : "hidden md:block bg-gradient-to-b from-primary to-primary-dark rounded-xl p-4 shadow-xl",
+          isMobile ? "fixed left-0 top-16 bottom-0 bg-gradient-to-br from-sidebar via-sidebar-primary/90 to-sidebar-primary z-40 h-[calc(100vh-4rem)] px-3 pt-16 pb-6 shadow-2xl overflow-y-auto border-r border-sidebar-border/20" : "hidden md:block bg-gradient-to-br from-sidebar via-sidebar-primary/90 to-sidebar-primary rounded-xl p-4 shadow-xl border border-sidebar-border/20",
           isMobile && !isMenuOpen ? "-translate-x-full" : isMobile && isMenuOpen ? "translate-x-0" : ""
         )}
       >
         <div className="space-y-2 py-4">
-          <div className="mb-6 pb-4 border-b border-white/30">
-            <h2 className="text-lg font-bold text-white">Menu Principal</h2>
-            <p className="text-white/80 text-xs">Acesse suas funcionalidades</p>
+          <div className="mb-6 pb-4 border-b border-sidebar-border/40">
+            <h2 className="text-lg font-bold text-sidebar-foreground">Menu Principal</h2>
+            <p className="text-sidebar-foreground/70 text-xs">Acesse suas funcionalidades</p>
           </div>
           
           <SidebarItem 
@@ -86,10 +86,10 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isMenuOpen, toggleMenu, c
           <SidebarItem 
             to="/cliente/perfil" 
             icon={User} 
-            active={path === '/cliente/perfil' || path === '/cliente/profile'}
+            active={path === '/cliente/perfil' || path === '/cliente/profile' || path === '/cliente/clientes'}
             onClick={closeMenu}
           >
-            Perfil
+            Meu Perfil
           </SidebarItem>
           
           <SidebarItem 
@@ -157,25 +157,17 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isMenuOpen, toggleMenu, c
             Afiliados
           </SidebarItem>
           
-          <SidebarItem 
-            to="/cliente/clientes" 
-            icon={User} 
-            active={path.startsWith('/cliente/clientes')}
-            onClick={closeMenu}
-          >
-            Meu Cadastro
-          </SidebarItem>
         </div>
         
-        <div className="pt-4 mt-6 border-t border-white/30">
+        <div className="pt-4 mt-6 border-t border-sidebar-border/40">
           <button 
             onClick={() => {
               handleLogout();
               closeMenu();
             }}
-            className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-200 hover:bg-red-500 text-white hover:text-red-100 w-full text-left font-inter font-medium bg-red-600 shadow-lg"
+            className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-200 hover:bg-destructive/90 hover:shadow-lg text-sidebar-foreground hover:text-destructive-foreground w-full text-left font-inter font-medium bg-destructive shadow-md"
           >
-            <LogOut className="h-4 w-4 text-white flex-shrink-0" />
+            <LogOut className="h-4 w-4 flex-shrink-0" />
             <span>Sair</span>
           </button>
         </div>
