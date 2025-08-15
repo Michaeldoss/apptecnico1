@@ -63,8 +63,8 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isMenuOpen, toggleMenu, c
       {/* Sidebar */}
       <aside 
         className={cn(
-          "w-64 shrink-0 transition-all duration-300",
-          isMobile ? "fixed left-0 top-16 bottom-0 bg-gradient-to-br from-sidebar via-sidebar-primary/90 to-sidebar-primary z-40 h-[calc(100vh-4rem)] px-3 pt-16 pb-6 shadow-2xl overflow-y-auto border-r border-sidebar-border/20" : "hidden md:block bg-gradient-to-br from-sidebar via-sidebar-primary/90 to-sidebar-primary rounded-xl p-4 shadow-xl border border-sidebar-border/20",
+          "shrink-0 transition-all duration-300",
+          isMobile ? "fixed left-0 top-16 bottom-0 w-64 bg-gradient-to-br from-sidebar via-sidebar-primary/90 to-sidebar-primary z-40 h-[calc(100vh-4rem)] px-3 pt-16 pb-6 shadow-2xl overflow-y-auto border-r border-sidebar-border/20" : "w-72 bg-gradient-to-br from-sidebar via-sidebar-primary/90 to-sidebar-primary rounded-xl p-4 shadow-xl border border-sidebar-border/20 sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto",
           isMobile && !isMenuOpen ? "-translate-x-full" : isMobile && isMenuOpen ? "translate-x-0" : ""
         )}
       >

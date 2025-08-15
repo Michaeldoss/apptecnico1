@@ -37,7 +37,7 @@ const CustomerLayout: React.FC<CustomerLayoutProps> = ({ children, title }) => {
       <Navbar />
       
       {/* Adicionado pt-24 para compensar a navbar absoluta */}
-      <div className="flex-1 flex container-instalei gap-instalei-md max-w-7xl pt-24">
+      <div className="flex-1 flex container mx-auto px-4 gap-6 max-w-7xl pt-24">
         <MobileSidebar 
           isMenuOpen={isMenuOpen}
           toggleMenu={toggleMenu}
