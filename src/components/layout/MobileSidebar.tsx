@@ -69,9 +69,9 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isMenuOpen, toggleMenu, c
         )}
       >
         <div className="space-y-2 py-4">
-          <div className="mb-6 pb-4 border-b border-sidebar-border/40">
-            <h2 className="text-lg font-bold text-sidebar-foreground">Menu Principal</h2>
-            <p className="text-sidebar-foreground/70 text-xs">Acesse suas funcionalidades</p>
+          <div className="mb-6 pb-4 border-b border-white/20">
+            <h2 className="text-lg font-bold text-white">Menu Principal</h2>
+            <p className="text-white/70 text-xs">Acesse suas funcionalidades</p>
           </div>
           
           <SidebarItem 
@@ -159,13 +159,13 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isMenuOpen, toggleMenu, c
           
         </div>
         
-        <div className="pt-4 mt-6 border-t border-sidebar-border/40">
+        <div className="pt-4 mt-6 border-t border-white/20">
           <button 
             onClick={() => {
               handleLogout();
               closeMenu();
             }}
-            className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-200 hover:bg-destructive/90 hover:shadow-lg text-sidebar-foreground hover:text-destructive-foreground w-full text-left font-inter font-medium bg-destructive shadow-md"
+            className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-200 hover:bg-red-600/90 hover:shadow-lg text-white hover:text-white w-full text-left font-inter font-medium bg-red-500/80 shadow-md"
           >
             <LogOut className="h-4 w-4 flex-shrink-0" />
             <span>Sair</span>
