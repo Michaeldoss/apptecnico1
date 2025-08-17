@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Building2, User, Settings, FileText, CheckCircle, Save, X } from 'lucide-react';
+import { Building2, User, Settings, FileText, CheckCircle, Save, X, Camera, Users, Wrench, Folder, Home, Phone, Building } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { useClientData } from '@/hooks/useClientData';
 import ContactsEditor from '@/components/customer/ContactsEditor';
@@ -165,15 +165,16 @@ const CustomerProfile = () => {
             Gerencie suas informações e complete seu perfil para ter mais credibilidade
           </p>
           <div className="mt-4">
-            <div className="flex items-center justify-center gap-2 text-sm">
-              <span>Completude do Perfil:</span>
-              <div className="bg-background rounded-full w-32 h-2">
+            <div className="flex items-center justify-center gap-3 text-sm">
+              <span className="text-muted-foreground">Completude do Perfil:</span>
+              <div className="relative bg-muted rounded-full w-48 h-3 overflow-hidden">
                 <div 
-                  className="bg-primary rounded-full h-2 transition-all duration-300"
+                  className="absolute left-0 top-0 h-full bg-gradient-to-r from-primary to-primary/80 rounded-full transition-all duration-500 ease-out shadow-sm"
                   style={{ width: `${getCompletionPercentage()}%` }}
                 />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse opacity-50" />
               </div>
-              <span className="font-medium text-primary">{getCompletionPercentage()}%</span>
+              <span className="font-semibold text-primary text-base">{getCompletionPercentage()}%</span>
             </div>
           </div>
         </div>
@@ -189,83 +190,201 @@ const CustomerProfile = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <button 
                     onClick={() => setActiveTab('basic')}
-                    className={`w-full flex items-center justify-between text-sm p-3 rounded-md transition-all duration-200 hover:bg-accent/50 border ${
-                      activeTab === 'basic' ? 'bg-primary/10 border-primary/30 text-primary font-medium shadow-sm' : 'border-transparent text-foreground hover:text-foreground/80'
+                    className={`w-full flex items-center gap-3 text-sm p-4 rounded-lg transition-all duration-200 hover:bg-accent/50 border group ${
+                      activeTab === 'basic' ? 'bg-primary/10 border-primary/30 text-primary font-medium shadow-sm' : 'border-border/50 text-foreground hover:text-foreground/80 hover:border-primary/20'
                     }`}
                   >
-                    <span>Dados Básicos</span>
-                    <span className={profileData.name && profileData.email && profileData.phone ? 'text-emerald-600 dark:text-emerald-400' : 'text-muted-foreground'}>
-                      {profileData.name && profileData.email && profileData.phone ? '✓' : '○'}
-                    </span>
+                    <div className={`flex items-center justify-center w-8 h-8 rounded-full ${
+                      profileData.name && profileData.email && profileData.phone 
+                        ? 'bg-emerald-100 dark:bg-emerald-900/30' 
+                        : 'bg-muted'
+                    }`}>
+                      {profileData.name && profileData.email && profileData.phone ? (
+                        <CheckCircle className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                      ) : (
+                        <User className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                      )}
+                    </div>
+                    <div className="flex-1 text-left">
+                      <div className="font-medium">Dados Básicos</div>
+                      <div className="text-xs text-muted-foreground">Nome, email e telefone</div>
+                    </div>
+                    <div className={`w-2 h-2 rounded-full ${
+                      profileData.name && profileData.email && profileData.phone 
+                        ? 'bg-emerald-500' 
+                        : 'bg-muted-foreground/40'
+                    }`} />
                   </button>
+
                   <button 
                     onClick={() => setActiveTab('basic')}
-                    className={`w-full flex items-center justify-between text-sm p-3 rounded-md transition-all duration-200 hover:bg-accent/50 border ${
-                      activeTab === 'basic' ? 'bg-primary/10 border-primary/30 text-primary font-medium shadow-sm' : 'border-transparent text-foreground hover:text-foreground/80'
+                    className={`w-full flex items-center gap-3 text-sm p-4 rounded-lg transition-all duration-200 hover:bg-accent/50 border group ${
+                      activeTab === 'basic' ? 'bg-primary/10 border-primary/30 text-primary font-medium shadow-sm' : 'border-border/50 text-foreground hover:text-foreground/80 hover:border-primary/20'
                     }`}
                   >
-                    <span>Foto de Perfil</span>
-                    <span className={profileData.profilePicture ? 'text-emerald-600 dark:text-emerald-400' : 'text-muted-foreground'}>
-                      {profileData.profilePicture ? '✓' : '○'}
-                    </span>
+                    <div className={`flex items-center justify-center w-8 h-8 rounded-full ${
+                      profileData.profilePicture 
+                        ? 'bg-emerald-100 dark:bg-emerald-900/30' 
+                        : 'bg-muted'
+                    }`}>
+                      {profileData.profilePicture ? (
+                        <CheckCircle className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                      ) : (
+                        <Camera className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                      )}
+                    </div>
+                    <div className="flex-1 text-left">
+                      <div className="font-medium">Foto de Perfil</div>
+                      <div className="text-xs text-muted-foreground">Imagem de identificação</div>
+                    </div>
+                    <div className={`w-2 h-2 rounded-full ${
+                      profileData.profilePicture 
+                        ? 'bg-emerald-500' 
+                        : 'bg-muted-foreground/40'
+                    }`} />
                   </button>
+
                   <button 
                     onClick={() => setActiveTab('basic')}
-                    className={`w-full flex items-center justify-between text-sm p-3 rounded-md transition-all duration-200 hover:bg-accent/50 border ${
-                      activeTab === 'basic' ? 'bg-primary/10 border-primary/30 text-primary font-medium shadow-sm' : 'border-transparent text-foreground hover:text-foreground/80'
+                    className={`w-full flex items-center gap-3 text-sm p-4 rounded-lg transition-all duration-200 hover:bg-accent/50 border group ${
+                      activeTab === 'basic' ? 'bg-primary/10 border-primary/30 text-primary font-medium shadow-sm' : 'border-border/50 text-foreground hover:text-foreground/80 hover:border-primary/20'
                     }`}
                   >
-                    <span>Empresa</span>
-                    <span className={profileData.company ? 'text-emerald-600 dark:text-emerald-400' : 'text-muted-foreground'}>
-                      {profileData.company ? '✓' : '○'}
-                    </span>
+                    <div className={`flex items-center justify-center w-8 h-8 rounded-full ${
+                      profileData.company 
+                        ? 'bg-emerald-100 dark:bg-emerald-900/30' 
+                        : 'bg-muted'
+                    }`}>
+                      {profileData.company ? (
+                        <CheckCircle className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                      ) : (
+                        <Building className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                      )}
+                    </div>
+                    <div className="flex-1 text-left">
+                      <div className="font-medium">Empresa</div>
+                      <div className="text-xs text-muted-foreground">Informações da empresa</div>
+                    </div>
+                    <div className={`w-2 h-2 rounded-full ${
+                      profileData.company 
+                        ? 'bg-emerald-500' 
+                        : 'bg-muted-foreground/40'
+                    }`} />
                   </button>
+
                   <button 
                     onClick={() => setActiveTab('basic')}
-                    className={`w-full flex items-center justify-between text-sm p-3 rounded-md transition-all duration-200 hover:bg-accent/50 border ${
-                      activeTab === 'basic' ? 'bg-primary/10 border-primary/30 text-primary font-medium shadow-sm' : 'border-transparent text-foreground hover:text-foreground/80'
+                    className={`w-full flex items-center gap-3 text-sm p-4 rounded-lg transition-all duration-200 hover:bg-accent/50 border group ${
+                      activeTab === 'basic' ? 'bg-primary/10 border-primary/30 text-primary font-medium shadow-sm' : 'border-border/50 text-foreground hover:text-foreground/80 hover:border-primary/20'
                     }`}
                   >
-                    <span>Endereço</span>
-                    <span className={profileData.address.street ? 'text-emerald-600 dark:text-emerald-400' : 'text-muted-foreground'}>
-                      {profileData.address.street ? '✓' : '○'}
-                    </span>
+                    <div className={`flex items-center justify-center w-8 h-8 rounded-full ${
+                      profileData.address.street 
+                        ? 'bg-emerald-100 dark:bg-emerald-900/30' 
+                        : 'bg-muted'
+                    }`}>
+                      {profileData.address.street ? (
+                        <CheckCircle className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                      ) : (
+                        <Home className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                      )}
+                    </div>
+                    <div className="flex-1 text-left">
+                      <div className="font-medium">Endereço</div>
+                      <div className="text-xs text-muted-foreground">Localização da empresa</div>
+                    </div>
+                    <div className={`w-2 h-2 rounded-full ${
+                      profileData.address.street 
+                        ? 'bg-emerald-500' 
+                        : 'bg-muted-foreground/40'
+                    }`} />
                   </button>
+
                   <button 
                     onClick={() => setActiveTab('contacts')}
-                    className={`w-full flex items-center justify-between text-sm p-3 rounded-md transition-all duration-200 hover:bg-accent/50 border ${
-                      activeTab === 'contacts' ? 'bg-primary/10 border-primary/30 text-primary font-medium shadow-sm' : 'border-transparent text-foreground hover:text-foreground/80'
+                    className={`w-full flex items-center gap-3 text-sm p-4 rounded-lg transition-all duration-200 hover:bg-accent/50 border group ${
+                      activeTab === 'contacts' ? 'bg-primary/10 border-primary/30 text-primary font-medium shadow-sm' : 'border-border/50 text-foreground hover:text-foreground/80 hover:border-primary/20'
                     }`}
                   >
-                    <span>Contatos</span>
-                    <span className={profileData.contacts.length > 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-muted-foreground'}>
-                      {profileData.contacts.length > 0 ? '✓' : '○'}
-                    </span>
+                    <div className={`flex items-center justify-center w-8 h-8 rounded-full ${
+                      profileData.contacts.length > 0 
+                        ? 'bg-emerald-100 dark:bg-emerald-900/30' 
+                        : 'bg-muted'
+                    }`}>
+                      {profileData.contacts.length > 0 ? (
+                        <CheckCircle className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                      ) : (
+                        <Phone className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                      )}
+                    </div>
+                    <div className="flex-1 text-left">
+                      <div className="font-medium">Contatos</div>
+                      <div className="text-xs text-muted-foreground">Telefones e responsáveis</div>
+                    </div>
+                    <div className={`w-2 h-2 rounded-full ${
+                      profileData.contacts.length > 0 
+                        ? 'bg-emerald-500' 
+                        : 'bg-muted-foreground/40'
+                    }`} />
                   </button>
+
                   <button 
                     onClick={() => setActiveTab('services')}
-                    className={`w-full flex items-center justify-between text-sm p-3 rounded-md transition-all duration-200 hover:bg-accent/50 border ${
-                      activeTab === 'services' ? 'bg-primary/10 border-primary/30 text-primary font-medium shadow-sm' : 'border-transparent text-foreground hover:text-foreground/80'
+                    className={`w-full flex items-center gap-3 text-sm p-4 rounded-lg transition-all duration-200 hover:bg-accent/50 border group ${
+                      activeTab === 'services' ? 'bg-primary/10 border-primary/30 text-primary font-medium shadow-sm' : 'border-border/50 text-foreground hover:text-foreground/80 hover:border-primary/20'
                     }`}
                   >
-                    <span>Serviços</span>
-                    <span className={profileData.services.length > 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-muted-foreground'}>
-                      {profileData.services.length > 0 ? '✓' : '○'}
-                    </span>
+                    <div className={`flex items-center justify-center w-8 h-8 rounded-full ${
+                      profileData.services.length > 0 
+                        ? 'bg-emerald-100 dark:bg-emerald-900/30' 
+                        : 'bg-muted'
+                    }`}>
+                      {profileData.services.length > 0 ? (
+                        <CheckCircle className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                      ) : (
+                        <Wrench className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                      )}
+                    </div>
+                    <div className="flex-1 text-left">
+                      <div className="font-medium">Serviços</div>
+                      <div className="text-xs text-muted-foreground">Serviços oferecidos</div>
+                    </div>
+                    <div className={`w-2 h-2 rounded-full ${
+                      profileData.services.length > 0 
+                        ? 'bg-emerald-500' 
+                        : 'bg-muted-foreground/40'
+                    }`} />
                   </button>
+
                   <button 
                     onClick={() => setActiveTab('documents')}
-                    className={`w-full flex items-center justify-between text-sm p-3 rounded-md transition-all duration-200 hover:bg-accent/50 border ${
-                      activeTab === 'documents' ? 'bg-primary/10 border-primary/30 text-primary font-medium shadow-sm' : 'border-transparent text-foreground hover:text-foreground/80'
+                    className={`w-full flex items-center gap-3 text-sm p-4 rounded-lg transition-all duration-200 hover:bg-accent/50 border group ${
+                      activeTab === 'documents' ? 'bg-primary/10 border-primary/30 text-primary font-medium shadow-sm' : 'border-border/50 text-foreground hover:text-foreground/80 hover:border-primary/20'
                     }`}
                   >
-                    <span>Documentos</span>
-                    <span className={Object.values(profileData.documents).some(Boolean) ? 'text-emerald-600 dark:text-emerald-400' : 'text-muted-foreground'}>
-                      {Object.values(profileData.documents).some(Boolean) ? '✓' : '○'}
-                    </span>
+                    <div className={`flex items-center justify-center w-8 h-8 rounded-full ${
+                      Object.values(profileData.documents).some(Boolean) 
+                        ? 'bg-emerald-100 dark:bg-emerald-900/30' 
+                        : 'bg-muted'
+                    }`}>
+                      {Object.values(profileData.documents).some(Boolean) ? (
+                        <CheckCircle className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                      ) : (
+                        <Folder className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                      )}
+                    </div>
+                    <div className="flex-1 text-left">
+                      <div className="font-medium">Documentos</div>
+                      <div className="text-xs text-muted-foreground">Contratos e certificações</div>
+                    </div>
+                    <div className={`w-2 h-2 rounded-full ${
+                      Object.values(profileData.documents).some(Boolean) 
+                        ? 'bg-emerald-500' 
+                        : 'bg-muted-foreground/40'
+                    }`} />
                   </button>
                 </div>
 
