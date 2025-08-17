@@ -19,7 +19,7 @@ const SidebarItem = ({ to, icon: Icon, children, active, onClick }: SidebarItemP
         "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-200 font-inter font-medium group",
         active 
           ? "bg-white/95 text-sidebar-primary shadow-md border border-white/30 backdrop-blur-sm" 
-          : "text-white/90 hover:text-white hover:bg-white/10 hover:shadow-sm"
+          : "text-white hover:text-white hover:bg-white/10 hover:shadow-sm"
       )}
       onClick={onClick}
     >
