@@ -60,26 +60,28 @@ const Navbar = () => {
     path: "/contact"
   }];
 
-  // Classes dinâmicas baseadas na página
+  // Classes dinâmicas baseadas na página - Design Moderno
   const navbarClasses = isHomePage 
-    ? "bg-transparent absolute w-full top-0 z-50 pt-4" 
-    : "bg-white w-full top-0 z-50 shadow-md";
-  const textClasses = isHomePage ? "text-white" : "text-gray-800";
-  const logoClasses = isHomePage ? "text-white" : "text-gray-900";
-  const hoverClasses = isHomePage ? "hover:text-secondary" : "hover:text-primary";
+    ? "bg-transparent absolute w-full top-0 z-50 pt-6" 
+    : "bg-white/95 backdrop-blur-xl w-full top-0 z-50 shadow-xl border-b border-instalei-gray-200";
+  const textClasses = isHomePage ? "text-white" : "text-instalei-gray-800";
+  const logoClasses = isHomePage ? "text-white font-black" : "text-instalei-purple-500 font-black";
+  const hoverClasses = isHomePage ? "hover:text-instalei-orange-300" : "hover:text-instalei-purple-500";
   const baseClasses = isHomePage 
-    ? "text-white hover:text-secondary hover:bg-white/10" 
-    : "text-gray-800 hover:text-primary hover:bg-gray-100";
+    ? "text-white hover:text-instalei-orange-300 hover:bg-white/15 backdrop-blur-sm rounded-xl transition-all duration-300" 
+    : "text-instalei-gray-800 hover:text-instalei-purple-500 hover:bg-instalei-purple-50 rounded-xl transition-all duration-300";
   return <nav className={navbarClasses}>
       <div className="container flex items-center justify-between h-16 px-4 md:px-6 mx-auto">
-        {/* Logo */}
-        <Link to="/" className="flex items-center">
-          <span className={`text-2xl font-bold font-inter ${logoClasses} drop-shadow-lg`}>Instalei</span>
+        {/* Logo Moderno */}
+        <Link to="/" className="flex items-center group">
+          <span className={`text-3xl font-black font-inter ${logoClasses} drop-shadow-lg group-hover:scale-105 transition-transform duration-300`}>
+            Instalei
+          </span>
         </Link>
 
-        {/* Desktop Navigation Links */}
-        <div className="hidden md:flex md:items-center md:gap-6">
-          {menuItems.map(item => <Link key={item.path} to={item.path} className={`text-sm font-medium transition-colors duration-200 font-inter ${textClasses} ${hoverClasses} drop-shadow-lg`}>
+        {/* Desktop Navigation Links Modernos */}
+        <div className="hidden md:flex md:items-center md:gap-2">
+          {menuItems.map(item => <Link key={item.path} to={item.path} className={`text-sm font-semibold transition-all duration-300 font-inter px-4 py-2 rounded-xl ${textClasses} ${hoverClasses} drop-shadow-lg hover:scale-105 hover:shadow-lg`}>
               {item.label}
             </Link>)}
         </div>
@@ -108,14 +110,14 @@ const Navbar = () => {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu> : <>
-              <Button variant="outline" size="sm" onClick={handleLoginClick} className="bg-gradient-to-r from-instalei-orange-500 to-instalei-orange-400 hover:from-instalei-orange-600 hover:to-instalei-orange-500 text-white font-inter font-semibold transition-all duration-200 border-0 shadow-lg hover:shadow-xl hover:scale-105">
+              <Button variant="secondary" size="sm" onClick={handleLoginClick} className="font-inter font-bold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 rounded-2xl">
                 <LogIn className="h-4 w-4 mr-2" /> Entrar
               </Button>
               
               <Button 
                 size="sm" 
                 onClick={() => navigate('/register')}
-                className="bg-gradient-to-r from-instalei-purple-800 to-instalei-purple-700 hover:from-instalei-purple-700 hover:to-instalei-purple-600 text-white font-inter font-semibold transition-all duration-200 border-0 shadow-lg hover:shadow-xl hover:scale-105"
+                className="font-inter font-bold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 rounded-2xl"
               >
                 <UserPlus className="h-4 w-4 mr-2" /> Cadastre-se
               </Button>

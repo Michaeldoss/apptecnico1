@@ -6,96 +6,100 @@ import { Search, MapPin, ArrowRight, Star, Users, CheckCircle2, Wrench, Phone, M
 
 const Hero = () => {
   return (
-    <section className="bg-gradient-to-br from-primary via-primary/95 to-primary-dark text-primary-foreground section-padding min-h-[90vh] flex items-center relative overflow-hidden">
-      {/* Elementos decorativos de fundo */}
-      <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-accent/20"></div>
-      <div className="absolute top-20 left-20 w-72 h-72 bg-white/5 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-20 right-20 w-96 h-96 bg-accent/10 rounded-full blur-3xl"></div>
+    <section className="bg-gradient-to-br from-instalei-purple-500 via-instalei-purple-600 to-instalei-purple-700 text-white section-padding min-h-[95vh] flex items-center relative overflow-hidden">
+      {/* Elementos decorativos de fundo modernos */}
+      <div className="absolute inset-0 bg-gradient-to-r from-instalei-purple-600/30 via-transparent to-instalei-orange-500/20"></div>
+      <div className="absolute top-16 left-16 w-80 h-80 bg-white/8 rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute bottom-16 right-16 w-96 h-96 bg-instalei-orange-500/15 rounded-full blur-3xl animate-pulse delay-1000"></div>
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-radial from-white/5 to-transparent rounded-full blur-3xl"></div>
       
       <div className="container-instalei w-full relative z-10">
         {/* Título Principal - Instalei */}
         <div className="text-center mb-instalei-xl">
-          <h1 className="text-5xl md:text-7xl font-black mb-instalei-lg leading-tight text-primary-foreground drop-shadow-2xl">
-            Encontre o <span className="text-accent bg-gradient-to-r from-accent/30 to-accent/20 rounded-instalei-lg border-2 border-accent/50 backdrop-blur-sm px-6 py-2 inline-block font-bold">técnico ideal</span><br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-foreground via-secondary-foreground to-primary-foreground">para seu equipamento</span>
+          <h1 className="text-6xl md:text-8xl font-black mb-12 leading-[0.9] text-white drop-shadow-2xl">
+            Encontre o <span className="text-instalei-orange-400 bg-gradient-to-r from-instalei-orange-500/20 to-instalei-orange-400/10 rounded-3xl border-2 border-instalei-orange-400/40 backdrop-blur-lg px-8 py-3 inline-block font-black relative">
+              <span className="relative z-10">técnico ideal</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-instalei-orange-500/30 to-instalei-orange-400/20 rounded-3xl blur-sm"></div>
+            </span><br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-instalei-purple-100 to-white font-black">para seu equipamento</span>
           </h1>
           
-          <p className="text-xl md:text-2xl mb-instalei-lg text-primary-foreground/90 max-w-4xl mx-auto font-semibold leading-relaxed drop-shadow-lg">
-            Conectamos você com profissionais qualificados na plataforma <span className="text-accent font-black">Instalei</span>
+          <p className="text-2xl md:text-3xl mb-16 text-white/95 max-w-5xl mx-auto font-medium leading-relaxed drop-shadow-xl">
+            Conectamos você com profissionais qualificados na plataforma <span className="text-instalei-orange-300 font-black text-3xl md:text-4xl">Instalei</span>
           </p>
         </div>
 
-        {/* Formulário de Busca - Instalei */}
-        <div className="bg-white/95 backdrop-blur-xl rounded-instalei-xl p-instalei-lg shadow-3xl max-w-5xl mx-auto mb-instalei-xl border-2 border-white/30 hover:shadow-4xl transition-all duration-300">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-instalei-lg">
+        {/* Formulário de Busca Moderno */}
+        <div className="bg-white/98 backdrop-blur-2xl rounded-3xl p-12 shadow-2xl max-w-6xl mx-auto mb-20 border border-white/30 hover:shadow-3xl transition-all duration-500 hover:-translate-y-2">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="relative group">
-              <label className="block text-lg font-bold text-gray-700 mb-instalei-sm">Tipo de equipamento</label>
-              <Search className="absolute left-5 top-14 transform text-gray-500 h-6 w-6 group-focus-within:text-instalei-orange-500 transition-colors" />
-              <Input placeholder="Ex: Impressora, CNC, Torno..." className="pl-14 h-14 text-gray-800 border-2 border-gray-300 focus:border-instalei-orange-500 text-lg font-semibold rounded-instalei shadow-lg hover:border-instalei-orange-400 transition-all hover:shadow-xl" />
+              <label className="block text-xl font-bold text-instalei-gray-800 mb-4 font-inter">Tipo de equipamento</label>
+              <Search className="absolute left-6 top-16 transform text-instalei-gray-500 h-6 w-6 group-focus-within:text-instalei-orange-500 transition-all duration-300" />
+              <Input placeholder="Ex: Impressora, CNC, Torno..." className="pl-16 h-16 text-instalei-gray-800 border-2 border-instalei-gray-200 focus:border-instalei-orange-500 text-lg font-medium rounded-2xl shadow-lg hover:border-instalei-orange-400 transition-all duration-300 hover:shadow-xl focus:shadow-xl bg-white/90 backdrop-blur-sm" />
             </div>
             
             <div className="relative group">
-              <label className="block text-lg font-bold text-gray-700 mb-instalei-sm">Localização</label>
-              <MapPin className="absolute left-5 top-14 transform text-gray-500 h-6 w-6 group-focus-within:text-instalei-orange-500 transition-colors" />
-              <Input placeholder="Cidade, estado ou CEP" className="pl-14 h-14 text-gray-800 border-2 border-gray-300 focus:border-instalei-orange-500 text-lg font-semibold rounded-instalei shadow-lg hover:border-instalei-orange-400 transition-all hover:shadow-xl" />
+              <label className="block text-xl font-bold text-instalei-gray-800 mb-4 font-inter">Localização</label>
+              <MapPin className="absolute left-6 top-16 transform text-instalei-gray-500 h-6 w-6 group-focus-within:text-instalei-orange-500 transition-all duration-300" />
+              <Input placeholder="Cidade, estado ou CEP" className="pl-16 h-16 text-instalei-gray-800 border-2 border-instalei-gray-200 focus:border-instalei-orange-500 text-lg font-medium rounded-2xl shadow-lg hover:border-instalei-orange-400 transition-all duration-300 hover:shadow-xl focus:shadow-xl bg-white/90 backdrop-blur-sm" />
             </div>
             
             <div className="flex flex-col justify-end">
               <Link to="/find-technician">
-                <Button className="bg-instalei-orange-500 hover:bg-instalei-orange-600 text-white w-full h-14 text-lg font-bold shadow-2xl transition-all duration-300 border-0 rounded-instalei group hover:scale-105 hover:shadow-3xl">
+                <Button variant="secondary" size="lg" className="w-full h-16 text-xl font-bold group">
                   Buscar Técnicos
-                  <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-2 transition-transform" />
+                  <ArrowRight className="ml-3 h-7 w-7 group-hover:translate-x-2 transition-transform duration-300" />
                 </Button>
               </Link>
             </div>
           </div>
         </div>
 
-        {/* Badges de Benefícios - Instalei */}
-        <div className="flex flex-wrap justify-center gap-instalei-lg mb-instalei-xl">
-          <div className="bg-white/20 backdrop-blur-xl px-instalei-lg py-instalei-md rounded-instalei-lg border-2 border-white/30 flex items-center gap-4 hover:bg-white/30 transition-all duration-300 shadow-2xl hover:scale-105 hover:shadow-3xl">
-            <CheckCircle2 className="h-7 w-7 text-green-300" />
-            <span className="text-white font-bold text-lg drop-shadow-lg">Técnicos Verificados</span>
+        {/* Badges de Benefícios Modernos */}
+        <div className="flex flex-wrap justify-center gap-8 mb-20">
+          <div className="bg-white/15 backdrop-blur-2xl px-8 py-6 rounded-2xl border border-white/20 flex items-center gap-5 hover:bg-white/25 transition-all duration-500 shadow-2xl hover:scale-110 hover:shadow-3xl hover:-translate-y-2 group">
+            <CheckCircle2 className="h-8 w-8 text-green-300 group-hover:scale-110 transition-transform duration-300" />
+            <span className="text-white font-bold text-xl drop-shadow-lg font-inter">Técnicos Verificados</span>
           </div>
-          <div className="bg-white/20 backdrop-blur-xl px-instalei-lg py-instalei-md rounded-instalei-lg border-2 border-white/30 flex items-center gap-4 hover:bg-white/30 transition-all duration-300 shadow-2xl hover:scale-105 hover:shadow-3xl">
-            <Star className="h-7 w-7 text-instalei-orange-300" />
-            <span className="text-white font-bold text-lg drop-shadow-lg">Orçamento Grátis</span>
+          <div className="bg-white/15 backdrop-blur-2xl px-8 py-6 rounded-2xl border border-white/20 flex items-center gap-5 hover:bg-white/25 transition-all duration-500 shadow-2xl hover:scale-110 hover:shadow-3xl hover:-translate-y-2 group">
+            <Star className="h-8 w-8 text-instalei-orange-300 group-hover:scale-110 transition-transform duration-300" />
+            <span className="text-white font-bold text-xl drop-shadow-lg font-inter">Orçamento Grátis</span>
           </div>
-          <div className="bg-white/20 backdrop-blur-xl px-instalei-lg py-instalei-md rounded-instalei-lg border-2 border-white/30 flex items-center gap-4 hover:bg-white/30 transition-all duration-300 shadow-2xl hover:scale-105 hover:shadow-3xl">
-            <Users className="h-7 w-7 text-blue-300" />
-            <span className="text-white font-bold text-lg drop-shadow-lg">+5.000 Profissionais</span>
+          <div className="bg-white/15 backdrop-blur-2xl px-8 py-6 rounded-2xl border border-white/20 flex items-center gap-5 hover:bg-white/25 transition-all duration-500 shadow-2xl hover:scale-110 hover:shadow-3xl hover:-translate-y-2 group">
+            <Users className="h-8 w-8 text-blue-300 group-hover:scale-110 transition-transform duration-300" />
+            <span className="text-white font-bold text-xl drop-shadow-lg font-inter">+5.000 Profissionais</span>
           </div>
         </div>
 
-        {/* Botões de Ação Principais */}
-        <div className="flex flex-wrap justify-center gap-instalei-md mb-instalei-xl">
+        {/* Botões de Ação Principais Modernos */}
+        <div className="flex flex-wrap justify-center gap-6 mb-20">
           <Link to="/services">
-            <Button className="bg-white/10 hover:bg-white/20 text-white border-2 border-white/30 font-bold px-instalei-lg py-instalei-sm text-lg rounded-instalei-lg shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-3xl flex items-center gap-3 backdrop-blur-xl">
-              <Calendar className="h-6 w-6" />
+            <Button variant="outline" size="lg" className="text-white border-white/40 bg-white/10 hover:bg-white/20 backdrop-blur-2xl px-10 py-4 text-xl font-bold rounded-2xl shadow-2xl flex items-center gap-4">
+              <Calendar className="h-7 w-7" />
               Agendar Visita
             </Button>
           </Link>
           <Link to="/contact">
-            <Button className="bg-instalei-orange-500 hover:bg-instalei-orange-600 text-white font-bold px-instalei-lg py-instalei-sm text-lg rounded-instalei-lg shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-3xl flex items-center gap-3">
-              <MessageCircle className="h-6 w-6" />
+            <Button variant="secondary" size="lg" className="px-10 py-4 text-xl font-bold rounded-2xl shadow-2xl flex items-center gap-4">
+              <MessageCircle className="h-7 w-7" />
               Chat Online
             </Button>
           </Link>
         </div>
 
-        {/* Estatísticas - Instalei */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-instalei-lg text-center">
-          <div className="bg-white/20 backdrop-blur-xl rounded-instalei-lg p-instalei-lg border-2 border-white/30 shadow-2xl hover:bg-white/25 transition-all duration-300 hover:scale-105 hover:shadow-3xl">
-            <div className="text-4xl md:text-5xl font-black text-instalei-orange-300 mb-instalei-sm drop-shadow-lg">98%</div>
-            <div className="text-white/90 font-bold text-lg md:text-xl drop-shadow-lg">Taxa de Satisfação</div>
+        {/* Estatísticas Modernas */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+          <div className="bg-white/15 backdrop-blur-2xl rounded-3xl p-10 border border-white/20 shadow-2xl hover:bg-white/25 transition-all duration-500 hover:scale-110 hover:shadow-3xl hover:-translate-y-4 group">
+            <div className="text-5xl md:text-6xl font-black text-instalei-orange-300 mb-4 drop-shadow-2xl group-hover:scale-110 transition-transform duration-300">98%</div>
+            <div className="text-white/95 font-bold text-xl md:text-2xl drop-shadow-lg font-inter">Taxa de Satisfação</div>
           </div>
-          <div className="bg-white/20 backdrop-blur-xl rounded-instalei-lg p-instalei-lg border-2 border-white/30 shadow-2xl hover:bg-white/25 transition-all duration-300 hover:scale-105 hover:shadow-3xl">
-            <div className="text-4xl md:text-5xl font-black text-instalei-orange-300 mb-instalei-sm drop-shadow-lg">24h</div>
-            <div className="text-white/90 font-bold text-lg md:text-xl drop-shadow-lg">Tempo Médio de Resposta</div>
+          <div className="bg-white/15 backdrop-blur-2xl rounded-3xl p-10 border border-white/20 shadow-2xl hover:bg-white/25 transition-all duration-500 hover:scale-110 hover:shadow-3xl hover:-translate-y-4 group">
+            <div className="text-5xl md:text-6xl font-black text-instalei-orange-300 mb-4 drop-shadow-2xl group-hover:scale-110 transition-transform duration-300">24h</div>
+            <div className="text-white/95 font-bold text-xl md:text-2xl drop-shadow-lg font-inter">Tempo Médio de Resposta</div>
           </div>
-          <div className="bg-white/20 backdrop-blur-xl rounded-instalei-lg p-instalei-lg border-2 border-white/30 shadow-2xl hover:bg-white/25 transition-all duration-300 hover:scale-105 hover:shadow-3xl">
-            <div className="text-4xl md:text-5xl font-black text-instalei-orange-300 mb-instalei-sm drop-shadow-lg">15K+</div>
-            <div className="text-white/90 font-bold text-lg md:text-xl drop-shadow-lg">Serviços Realizados</div>
+          <div className="bg-white/15 backdrop-blur-2xl rounded-3xl p-10 border border-white/20 shadow-2xl hover:bg-white/25 transition-all duration-500 hover:scale-110 hover:shadow-3xl hover:-translate-y-4 group">
+            <div className="text-5xl md:text-6xl font-black text-instalei-orange-300 mb-4 drop-shadow-2xl group-hover:scale-110 transition-transform duration-300">15K+</div>
+            <div className="text-white/95 font-bold text-xl md:text-2xl drop-shadow-lg font-inter">Serviços Realizados</div>
           </div>
         </div>
       </div>

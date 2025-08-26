@@ -7,116 +7,121 @@
 
 @layer base {
   :root {
+    /* Sistema de cores moderno e harmonioso 2025 */
     --background: 0 0% 100%;
-    --foreground: 0 0% 20%; /* #333333 - cinza escuro/chumbo */
+    --foreground: 220 15% 15%; /* #1f1f23 - quase preto sofisticado */
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 20%;
+    --card-foreground: 220 15% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 20%;
+    --popover-foreground: 220 15% 15%;
 
-    --primary: 273 100% 40%; /* Roxo principal Instalei */
+    /* Roxo moderno - cor primária sofisticada */
+    --primary: 253 88% 60%; /* #6366f1 - roxo moderno */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 273 60% 85%; /* Roxo claro lavanda */
-    --secondary-foreground: 273 100% 25%;
+    /* Cinza neutro - cor secundária */
+    --secondary: 220 15% 95%; /* #f8fafc - cinza claríssimo */
+    --secondary-foreground: 220 15% 15%;
 
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 47%; /* cinza médio */
+    --muted: 220 15% 96%;
+    --muted-foreground: 220 15% 45%; /* cinza médio */
 
-    --accent: 27 100% 50%; /* Laranja vibrante #FF7A00 */
+    /* Laranja queimado - cor de destaque elegante */
+    --accent: 25 95% 53%; /* #f97316 - laranja queimado moderno */
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 87%;
-    --input: 0 0% 98%;
-    --ring: 27 100% 50%; /* laranja focus */
+    --border: 220 15% 92%;
+    --input: 220 15% 98%;
+    --ring: 253 88% 60%; /* roxo focus */
 
-    --radius: 12px; /* Border radius padrão Instalei */
+    --radius: 16px; /* Border radius moderno */
 
-    /* Paleta Instalei Completa */
-    --instalei-purple-50: 273 100% 97%;
-    --instalei-purple-100: 273 85% 93%;
-    --instalei-purple-200: 273 85% 85%;
-    --instalei-purple-300: 273 85% 75%;
-    --instalei-purple-400: 273 85% 60%;
-    --instalei-purple-500: 273 100% 40%; /* Roxo principal */
-    --instalei-purple-600: 273 100% 35%;
-    --instalei-purple-700: 273 100% 25%;
-    --instalei-purple-800: 273 100% 20%;
-    --instalei-purple-900: 273 100% 15%;
+    /* Paleta Instalei 2025 - Sistema de cores refinado */
+    --instalei-purple-50: 253 88% 98%;
+    --instalei-purple-100: 253 88% 95%;
+    --instalei-purple-200: 253 88% 88%;
+    --instalei-purple-300: 253 88% 78%;
+    --instalei-purple-400: 253 88% 68%;
+    --instalei-purple-500: 253 88% 60%; /* Roxo principal moderno */
+    --instalei-purple-600: 253 88% 50%;
+    --instalei-purple-700: 253 88% 40%;
+    --instalei-purple-800: 253 88% 30%;
+    --instalei-purple-900: 253 88% 20%;
 
-    --instalei-orange-50: 27 100% 97%;
-    --instalei-orange-100: 27 100% 93%;
-    --instalei-orange-200: 27 100% 85%;
-    --instalei-orange-300: 27 100% 75%;
-    --instalei-orange-400: 27 100% 65%;
-    --instalei-orange-500: 27 100% 50%; /* Laranja principal #FF7A00 */
-    --instalei-orange-600: 27 100% 45%;
-    --instalei-orange-700: 27 100% 40%;
+    --instalei-orange-50: 25 95% 98%;
+    --instalei-orange-100: 25 95% 95%;
+    --instalei-orange-200: 25 95% 88%;
+    --instalei-orange-300: 25 95% 78%;
+    --instalei-orange-400: 25 95% 68%;
+    --instalei-orange-500: 25 95% 53%; /* Laranja queimado principal */
+    --instalei-orange-600: 25 95% 48%;
+    --instalei-orange-700: 25 95% 43%;
 
-    /* Textos Instalei */
+    /* Textos modernos */
     --instalei-text-white: 0 0% 100%;
-    --instalei-text-light: 0 0% 87%; /* #DDDDDD */
-    --instalei-text-medium: 0 0% 27%; /* #444444 */
-    --instalei-text-dark: 0 0% 13%; /* #222222 */
+    --instalei-text-light: 220 15% 85%; /* #d1d5db */
+    --instalei-text-medium: 220 15% 35%; /* #4b5563 */
+    --instalei-text-dark: 220 15% 15%; /* #1f1f23 */
 
-    /* Gradientes */
-    --gradient-purple-primary: linear-gradient(135deg, hsl(273 100% 40%), hsl(273 85% 60%));
-    --gradient-purple-soft: linear-gradient(135deg, hsl(273 100% 25%), hsl(273 85% 75%));
-    --gradient-orange: linear-gradient(135deg, hsl(27 100% 50%), hsl(27 100% 65%));
+    /* Gradientes modernos e suaves */
+    --gradient-purple-primary: linear-gradient(135deg, hsl(253 88% 60%), hsl(253 88% 78%));
+    --gradient-purple-soft: linear-gradient(135deg, hsl(253 88% 40%), hsl(253 88% 88%));
+    --gradient-orange: linear-gradient(135deg, hsl(25 95% 53%), hsl(25 95% 68%));
+    --gradient-neutral: linear-gradient(135deg, hsl(220 15% 96%), hsl(220 15% 98%));
 
-    /* Sidebar específico */
-    --sidebar-background: 273 100% 25%;
+    /* Sidebar moderno */
+    --sidebar-background: 253 88% 40%;
     --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 273 100% 35%;
+    --sidebar-primary: 253 88% 50%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 27 100% 50%;
+    --sidebar-accent: 25 95% 53%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 273 100% 30%;
-    --sidebar-ring: 27 100% 50%;
+    --sidebar-border: 253 88% 35%;
+    --sidebar-ring: 25 95% 53%;
   }
 
   .dark {
-    --background: 273 100% 8%;
+    --background: 220 15% 8%;
     --foreground: 0 0% 98%;
 
-    --card: 273 100% 12%;
+    --card: 220 15% 12%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 273 100% 12%;
+    --popover: 220 15% 12%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 273 100% 60%;
-    --primary-foreground: 273 100% 8%;
+    --primary: 253 88% 65%;
+    --primary-foreground: 220 15% 8%;
 
-    --secondary: 273 60% 20%;
+    --secondary: 220 15% 20%;
     --secondary-foreground: 0 0% 98%;
 
-    --muted: 273 60% 15%;
+    --muted: 220 15% 15%;
     --muted-foreground: 0 0% 65%;
 
-    --accent: 27 100% 55%;
-    --accent-foreground: 273 100% 8%;
+    --accent: 25 95% 58%;
+    --accent-foreground: 220 15% 8%;
 
     --destructive: 0 62% 50%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 273 60% 20%;
-    --input: 273 60% 15%;
-    --ring: 27 100% 55%;
+    --border: 220 15% 20%;
+    --input: 220 15% 15%;
+    --ring: 253 88% 65%;
 
-    --sidebar-background: 273 100% 8%;
+    --sidebar-background: 220 15% 8%;
     --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 273 100% 60%;
-    --sidebar-primary-foreground: 273 100% 8%;
-    --sidebar-accent: 27 100% 55%;
-    --sidebar-accent-foreground: 273 100% 8%;
-    --sidebar-border: 273 60% 20%;
-    --sidebar-ring: 27 100% 55%;
+    --sidebar-primary: 253 88% 65%;
+    --sidebar-primary-foreground: 220 15% 8%;
+    --sidebar-accent: 25 95% 58%;
+    --sidebar-accent-foreground: 220 15% 8%;
+    --sidebar-border: 220 15% 20%;
+    --sidebar-ring: 25 95% 58%;
   }
 }
 
@@ -142,42 +147,46 @@
     font-family: 'Inter', sans-serif;
   }
 
-  /* Tipografia Instalei - Hierarquia e espaçamento padronizado */
+  /* Tipografia moderna e harmônica 2025 */
   h1, .text-4xl, .text-5xl, .text-6xl, .text-7xl {
     @apply font-bold;
     font-weight: 700;
-    letter-spacing: 1px;
-    color: hsl(var(--instalei-purple-500));
-    margin-bottom: 24px;
-    line-height: 1.2;
+    letter-spacing: -0.02em; /* Tracking moderno */
+    color: hsl(var(--instalei-text-dark));
+    margin-bottom: 32px;
+    line-height: 1.1;
+    font-family: 'Inter', sans-serif;
   }
 
   h2, h3, .text-2xl, .text-3xl {
     @apply font-semibold;
     font-weight: 600;
-    letter-spacing: 0.5px;
-    color: hsl(var(--instalei-purple-600));
-    margin-bottom: 16px;
-    line-height: 1.3;
+    letter-spacing: -0.01em;
+    color: hsl(var(--instalei-text-dark));
+    margin-bottom: 24px;
+    line-height: 1.2;
+    font-family: 'Inter', sans-serif;
   }
 
   h4, h5, h6, .text-lg, .text-xl {
     @apply font-medium;
     font-weight: 500;
-    letter-spacing: 0.25px;
-    color: hsl(var(--instalei-purple-700));
-    margin-bottom: 12px;
-    line-height: 1.4;
+    letter-spacing: 0em;
+    color: hsl(var(--instalei-text-dark));
+    margin-bottom: 16px;
+    line-height: 1.3;
+    font-family: 'Inter', sans-serif;
   }
 
   p, span, div {
     font-weight: 400;
     color: hsl(var(--instalei-text-medium));
-    line-height: 1.6;
-    margin-bottom: 16px;
+    line-height: 1.7; /* Melhor legibilidade */
+    margin-bottom: 20px;
+    font-family: 'Inter', sans-serif;
   }
 
-  /* Classes de texto semânticas */
+  /* Classes de texto semânticas modernas */
   .text-primary {
     color: hsl(var(--instalei-purple-500)) !important;
   }
@@ -202,83 +211,144 @@
     color: hsl(var(--instalei-text-dark)) !important;
   }
 
-  /* Sistema de Botões Instalei */
+  .text-muted {
+    color: hsl(var(--muted-foreground)) !important;
+  }
+
+  /* Sistema de Botões Moderno 2025 */
   .btn-primary {
-    @apply font-semibold transition-all duration-200 hover:shadow-lg hover:scale-105;
+    @apply font-semibold transition-all duration-300 ease-out;
     background: var(--gradient-purple-primary);
     color: hsl(var(--instalei-text-white));
     font-weight: 600;
-    padding: 12px 24px;
+    padding: 16px 32px;
     border-radius: var(--radius);
-    box-shadow: 0 4px 12px hsla(var(--instalei-purple-500), 0.25);
+    box-shadow: 0 8px 24px hsla(var(--instalei-purple-500), 0.15);
     border: none;
     cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
   }
 
   .btn-primary:hover {
     background: linear-gradient(135deg, hsl(var(--instalei-purple-600)), hsl(var(--instalei-purple-400)));
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px hsla(var(--instalei-purple-500), 0.35);
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px hsla(var(--instalei-purple-500), 0.25);
+  }
+
+  .btn-primary:hover::before {
+    left: 100%;
   }
 
   .btn-secondary {
-    @apply font-semibold transition-all duration-200 hover:shadow-lg hover:scale-105;
+    @apply font-semibold transition-all duration-300 ease-out;
     background: var(--gradient-orange);
     color: hsl(var(--instalei-text-white));
     font-weight: 600;
-    padding: 12px 24px;
+    padding: 16px 32px;
     border-radius: var(--radius);
-    box-shadow: 0 4px 12px hsla(var(--instalei-orange-500), 0.25);
+    box-shadow: 0 8px 24px hsla(var(--instalei-orange-500), 0.15);
     border: none;
     cursor: pointer;
+    font-family: 'Inter', sans-serif;
   }
 
   .btn-secondary:hover {
     background: linear-gradient(135deg, hsl(var(--instalei-orange-600)), hsl(var(--instalei-orange-400)));
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px hsla(var(--instalei-orange-500), 0.35);
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px hsla(var(--instalei-orange-500), 0.25);
   }
 
   .btn-outline {
-    @apply font-semibold transition-all duration-200 hover:shadow-lg hover:scale-105;
+    @apply font-semibold transition-all duration-300 ease-out;
     background-color: transparent;
     color: hsl(var(--instalei-purple-500));
     border: 2px solid hsl(var(--instalei-purple-500));
     font-weight: 600;
-    padding: 10px 22px;
+    padding: 14px 30px;
     border-radius: var(--radius);
     cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-outline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: hsl(var(--instalei-purple-500));
+    transition: width 0.3s ease;
+    z-index: -1;
   }
 
   .btn-outline:hover {
-    background-color: hsl(var(--instalei-purple-500));
     color: hsl(var(--instalei-text-white));
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px hsla(var(--instalei-purple-500), 0.25);
+    box-shadow: 0 8px 24px hsla(var(--instalei-purple-500), 0.2);
   }
 
-  /* Sistema de Cards Instalei */
+  .btn-outline:hover::before {
+    width: 100%;
+  }
+
+  /* Sistema de Cards Moderno 2025 */
   .card-instalei {
     background-color: hsl(var(--card));
-    border: 2px solid hsl(var(--border));
+    border: 1px solid hsl(var(--border));
     border-radius: var(--radius);
     color: hsl(var(--card-foreground));
-    padding: 24px;
-    margin-bottom: 16px;
-    box-shadow: 0 2px 8px hsla(var(--instalei-purple-500), 0.08);
-    transition: all 0.2s ease-in-out;
+    padding: 32px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 16px hsla(220, 15%, 15%, 0.04);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(8px);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-instalei::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--gradient-purple-primary);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
   }
 
   .card-instalei:hover {
-    border-color: hsl(var(--instalei-orange-500));
-    box-shadow: 0 8px 25px hsla(var(--instalei-purple-500), 0.15);
-    transform: translateY(-2px);
+    border-color: hsl(var(--instalei-purple-200));
+    box-shadow: 0 16px 48px hsla(220, 15%, 15%, 0.08);
+    transform: translateY(-8px);
+  }
+
+  .card-instalei:hover::before {
+    transform: scaleX(1);
   }
 
   .card-gradient {
     background: var(--gradient-purple-soft);
     color: hsl(var(--instalei-text-white));
     border: none;
+    backdrop-filter: blur(16px);
   }
 
   /* Sistema de Inputs Instalei - Sempre editáveis */

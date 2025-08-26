@@ -14,19 +14,19 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-white border-t border-gray-200">
+    <footer className="bg-gradient-to-r from-instalei-gray-50 to-white border-t border-instalei-gray-200">
       {/* Footer principal */}
-      <div className="py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div className="py-16">
+        <div className="container mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
             <div>
-              <h3 className="font-bold text-lg mb-4 text-primary font-inter">Principais Cidades</h3>
+              <h3 className="font-bold text-xl mb-6 text-instalei-purple-500 font-inter">Principais Cidades</h3>
               <div className="grid grid-cols-1 gap-1 text-sm">
                 {cities.map((city, index) => (
                   <Link
                     key={index}
                     to="/find-technician"
-                    className="text-gray-600 hover:text-primary transition-colors duration-200 font-inter"
+                    className="text-instalei-gray-600 hover:text-instalei-purple-500 transition-colors duration-300 font-inter font-medium"
                   >
                     {city}
                   </Link>
@@ -41,25 +41,25 @@ const Footer = () => {
             </div>
 
             <div>
-              <h3 className="font-medium text-lg mb-4 text-primary font-inter">Links Rápidos</h3>
-              <ul className="space-y-2 text-sm">
+              <h3 className="font-bold text-xl mb-6 text-instalei-purple-500 font-inter">Links Rápidos</h3>
+              <ul className="space-y-3 text-base">
                 <li>
-                  <Link to="/" className="text-gray-600 hover:text-primary transition-colors duration-200 font-inter">
+                  <Link to="/" className="text-instalei-gray-600 hover:text-instalei-purple-500 transition-colors duration-300 font-inter font-medium">
                     Início
                   </Link>
                 </li>
                 <li>
-                  <Link to="/store" className="text-gray-600 hover:text-primary transition-colors duration-200 font-inter">
+                  <Link to="/store" className="text-instalei-gray-600 hover:text-instalei-purple-500 transition-colors duration-300 font-inter font-medium">
                     Loja
                   </Link>
                 </li>
                 <li>
-                  <Link to="/about" className="text-gray-600 hover:text-primary transition-colors duration-200 font-inter">
+                  <Link to="/about" className="text-instalei-gray-600 hover:text-instalei-purple-500 transition-colors duration-300 font-inter font-medium">
                     Sobre Nós
                   </Link>
                 </li>
                 <li>
-                  <Link to="/contact" className="text-gray-600 hover:text-primary transition-colors duration-200 font-inter">
+                  <Link to="/contact" className="text-instalei-gray-600 hover:text-instalei-purple-500 transition-colors duration-300 font-inter font-medium">
                     Contato
                   </Link>
                 </li>
@@ -67,51 +67,46 @@ const Footer = () => {
             </div>
 
             <div>
-              <h3 className="font-medium text-lg mb-4 text-primary font-inter">Para Técnicos</h3>
-              <ul className="space-y-2 text-sm">
+              <h3 className="font-bold text-xl mb-6 text-instalei-purple-500 font-inter">Para Técnicos</h3>
+              <ul className="space-y-3 text-base">
                 <li>
-                  <Link to="/technician" className="text-gray-600 hover:text-primary transition-colors duration-200 font-inter">
+                  <Link to="/technician" className="text-instalei-gray-600 hover:text-instalei-purple-500 transition-colors duration-300 font-inter font-medium">
                     Seja um Técnico
                   </Link>
                 </li>
                 <li>
-                  <Link to="/tecnico/painel" className="text-gray-600 hover:text-primary transition-colors duration-200 font-inter">
+                  <Link to="/tecnico/painel" className="text-instalei-gray-600 hover:text-instalei-purple-500 transition-colors duration-300 font-inter font-medium">
                     Dashboard do Técnico
                   </Link>
                 </li>
                 <li>
-                  <Link to="/tecnico/servicos" className="text-gray-600 hover:text-primary transition-colors duration-200 font-inter">
+                  <Link to="/tecnico/servicos" className="text-instalei-gray-600 hover:text-instalei-purple-500 transition-colors duration-300 font-inter font-medium">
                     Serviços
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/tecnico/pecas" className="text-gray-600 hover:text-primary transition-colors duration-200 font-inter">
-                    Peças
                   </Link>
                 </li>
               </ul>
             </div>
 
             <div>
-              <h3 className="font-medium text-lg mb-4 text-primary font-inter">Suporte</h3>
-              <ul className="space-y-2 text-sm">
+              <h3 className="font-bold text-xl mb-6 text-instalei-purple-500 font-inter">Suporte</h3>
+              <ul className="space-y-3 text-base">
                 <li>
-                  <Link to="/faq" className="text-gray-600 hover:text-primary transition-colors duration-200 font-inter">
+                  <Link to="/faq" className="text-instalei-gray-600 hover:text-instalei-purple-500 transition-colors duration-300 font-inter font-medium">
                     FAQ
                   </Link>
                 </li>
                 <li>
-                  <Link to="/help-center" className="text-gray-600 hover:text-primary transition-colors duration-200 font-inter">
+                  <Link to="/help-center" className="text-instalei-gray-600 hover:text-instalei-purple-500 transition-colors duration-300 font-inter font-medium">
                     Central de Ajuda
                   </Link>
                 </li>
                 <li>
-                  <Link to="/terms" className="text-gray-600 hover:text-primary transition-colors duration-200 font-inter">
+                  <Link to="/terms" className="text-instalei-gray-600 hover:text-instalei-purple-500 transition-colors duration-300 font-inter font-medium">
                     Termos de Serviço
                   </Link>
                 </li>
                 <li>
-                  <Link to="/privacy" className="text-gray-600 hover:text-primary transition-colors duration-200 font-inter">
+                  <Link to="/privacy" className="text-instalei-gray-600 hover:text-instalei-purple-500 transition-colors duration-300 font-inter font-medium">
                     Política de Privacidade
                   </Link>
                 </li>
