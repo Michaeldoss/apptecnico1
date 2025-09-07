@@ -415,13 +415,6 @@ export type Database = {
             referencedRelation: "tecnicos"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "ordens_servico_tecnico_id_fkey"
-            columns: ["tecnico_id"]
-            isOneToOne: false
-            referencedRelation: "tecnicos_public"
-            referencedColumns: ["id"]
-          },
         ]
       }
       pecas: {
@@ -476,13 +469,6 @@ export type Database = {
             columns: ["tecnico_id"]
             isOneToOne: false
             referencedRelation: "tecnicos"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "pecas_tecnico_id_fkey"
-            columns: ["tecnico_id"]
-            isOneToOne: false
-            referencedRelation: "tecnicos_public"
             referencedColumns: ["id"]
           },
         ]
@@ -784,13 +770,6 @@ export type Database = {
             referencedRelation: "tecnicos"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "servicos_agendados_tecnico_id_fkey"
-            columns: ["tecnico_id"]
-            isOneToOne: false
-            referencedRelation: "tecnicos_public"
-            referencedColumns: ["id"]
-          },
         ]
       }
       tecnico_pagamento_config: {
@@ -993,54 +972,7 @@ export type Database = {
       }
     }
     Views: {
-      tecnicos_public: {
-        Row: {
-          ativo: boolean | null
-          cidade: string | null
-          created_at: string | null
-          especialidades: string[] | null
-          estado: string | null
-          experiencia_anos: number | null
-          foto_perfil_url: string | null
-          id: string | null
-          latitude: number | null
-          longitude: number | null
-          nome: string | null
-          nota_perfil: number | null
-          verificado: boolean | null
-        }
-        Insert: {
-          ativo?: boolean | null
-          cidade?: string | null
-          created_at?: string | null
-          especialidades?: string[] | null
-          estado?: string | null
-          experiencia_anos?: number | null
-          foto_perfil_url?: string | null
-          id?: string | null
-          latitude?: number | null
-          longitude?: number | null
-          nome?: string | null
-          nota_perfil?: number | null
-          verificado?: boolean | null
-        }
-        Update: {
-          ativo?: boolean | null
-          cidade?: string | null
-          created_at?: string | null
-          especialidades?: string[] | null
-          estado?: string | null
-          experiencia_anos?: number | null
-          foto_perfil_url?: string | null
-          id?: string | null
-          latitude?: number | null
-          longitude?: number | null
-          nome?: string | null
-          nota_perfil?: number | null
-          verificado?: boolean | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       debug_auth_state: {

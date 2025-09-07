@@ -1,8 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Technician } from '@/types/technician';
-
-// Array vazio - dados fake removidos
-const mockTechnicians: Technician[] = [];
+import { supabase } from '@/integrations/supabase/client';
 
 export const useTechnicianSearch = () => {
   const [technicians, setTechnicians] = useState<Technician[]>([]);
@@ -26,14 +24,70 @@ export const useTechnicianSearch = () => {
   });
 
   useEffect(() => {
-    // Simular carregamento
-    const timer = setTimeout(() => {
-      setTechnicians(mockTechnicians);
-      setFilteredTechnicians(mockTechnicians);
-      setLoading(false);
-    }, 1000);
+    const fetchTechnicians = async () => {
+      try {
+        setLoading(true);
+        
+        // Fetch only public-safe technician data
+        const { data, error } = await supabase
+          .from('tecnicos')
+          .select(`
+            id,
+            nome,
+            especialidades,
+            nota_perfil,
+            cidade,
+            estado,
+            foto_perfil_url,
+            experiencia_anos,
+            verificado,
+            latitude,
+            longitude,
+            created_at
+          `)
+          .eq('ativo', true)
+          .order('nota_perfil', { ascending: false });
 
-    return () => clearTimeout(timer);
+        if (error) {
+          console.error('Error fetching technicians:', error);
+          setTechnicians([]);
+          setFilteredTechnicians([]);
+          return;
+        }
+
+        // Transform database data to match Technician interface
+        const transformedTechnicians: Technician[] = (data || []).map(tech => ({
+          id: parseInt(tech.id) || 0,
+          name: tech.nome || '',
+          location: `${tech.cidade || ''}, ${tech.estado || ''}`.trim().replace(/^,\s*|,\s*$/g, '') || 'Localização não informada',
+          specialties: tech.especialidades || [],
+          rating: tech.nota_perfil || 0,
+          reviewCount: 0, // This would need to come from a reviews table
+          description: `Técnico especializado em ${(tech.especialidades || []).join(', ')} com ${tech.experiencia_anos || 0} anos de experiência.`,
+          coordinates: [tech.latitude || 0, tech.longitude || 0] as [number, number],
+          state: tech.estado || '',
+          city: tech.cidade || '',
+          availability: ['Segunda a Sexta'], // Default availability
+          equipmentTypes: tech.especialidades || [],
+          pricing: {
+            quotePrice: 0, // Always free
+            visitPrice: 50, // Default visit price 
+            laborPrice: 80, // Default labor price
+          },
+        }));
+
+        setTechnicians(transformedTechnicians);
+        setFilteredTechnicians(transformedTechnicians);
+      } catch (error) {
+        console.error('Error in fetchTechnicians:', error);
+        setTechnicians([]);
+        setFilteredTechnicians([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTechnicians();
   }, []);
 
   const applyFilters = useCallback(() => {
