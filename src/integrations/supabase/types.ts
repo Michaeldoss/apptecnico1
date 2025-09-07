@@ -7,7 +7,7 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "12.2.3 (519615d)"
@@ -954,15 +954,15 @@ export type Database = {
       debug_auth_state: {
         Args: Record<PropertyKey, never>
         Returns: {
+          auth_confirmed: boolean
           auth_user_email: string
           auth_user_id: string
-          auth_confirmed: boolean
-          usuarios_count: number
           user_in_usuarios: boolean
+          usuarios_count: number
         }[]
       }
       log_security_event: {
-        Args: { event_type: string; user_id?: string; details?: Json }
+        Args: { details?: Json; event_type: string; user_id?: string }
         Returns: undefined
       }
       validate_payment_amount: {
