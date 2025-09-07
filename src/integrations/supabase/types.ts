@@ -684,6 +684,30 @@ export type Database = {
         }
         Relationships: []
       }
+      security_logs: {
+        Row: {
+          created_at: string | null
+          details: Json | null
+          event_type: string
+          id: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          details?: Json | null
+          event_type: string
+          id?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          details?: Json | null
+          event_type?: string
+          id?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       servicos_agendados: {
         Row: {
           cliente_id: string | null
@@ -960,6 +984,10 @@ export type Database = {
           user_in_usuarios: boolean
           usuarios_count: number
         }[]
+      }
+      get_current_user_type: {
+        Args: Record<PropertyKey, never>
+        Returns: string
       }
       log_security_event: {
         Args: { details?: Json; event_type: string; user_id?: string }
