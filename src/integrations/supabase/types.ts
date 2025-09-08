@@ -661,6 +661,42 @@ export type Database = {
           },
         ]
       }
+      rate_limits: {
+        Row: {
+          action_type: string
+          attempt_count: number | null
+          blocked_until: string | null
+          created_at: string | null
+          first_attempt: string | null
+          id: string
+          identifier: string
+          last_attempt: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          action_type: string
+          attempt_count?: number | null
+          blocked_until?: string | null
+          created_at?: string | null
+          first_attempt?: string | null
+          id?: string
+          identifier: string
+          last_attempt?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          action_type?: string
+          attempt_count?: number | null
+          blocked_until?: string | null
+          created_at?: string | null
+          first_attempt?: string | null
+          id?: string
+          identifier?: string
+          last_attempt?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       security_audit_log: {
         Row: {
           created_at: string
@@ -1014,6 +1050,16 @@ export type Database = {
       }
     }
     Functions: {
+      check_rate_limit: {
+        Args: {
+          p_action_type: string
+          p_block_minutes?: number
+          p_identifier: string
+          p_max_attempts?: number
+          p_window_minutes?: number
+        }
+        Returns: boolean
+      }
       create_user_profile: {
         Args: { p_user_data: Json; p_user_type: string }
         Returns: Json
@@ -1039,6 +1085,19 @@ export type Database = {
       log_security_event: {
         Args: { details?: Json; event_type: string; user_id?: string }
         Returns: undefined
+      }
+      secure_user_registration: {
+        Args: {
+          p_email: string
+          p_password: string
+          p_user_data: Json
+          p_user_type: string
+        }
+        Returns: Json
+      }
+      validate_password_security: {
+        Args: { password: string }
+        Returns: boolean
       }
       validate_payment_amount: {
         Args: { amount: number }

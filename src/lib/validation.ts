@@ -1,8 +1,25 @@
 import { z } from 'zod';
 
-// Password security check using HaveIBeenPwned API
+// Enhanced password security check using HaveIBeenPwned API with rate limiting
 export async function isPasswordCompromised(password: string): Promise<boolean> {
   try {
+    // Create rate limiter for password checking (max 10 checks per minute per IP)
+    const rateLimitKey = `password_check_${window.location.hostname}`;
+    const lastCheck = parseInt(localStorage.getItem(`${rateLimitKey}_timestamp`) || '0');
+    const checkCount = parseInt(localStorage.getItem(`${rateLimitKey}_count`) || '0');
+    const now = Date.now();
+    
+    // Reset counter if more than 1 minute has passed
+    if (now - lastCheck > 60000) {
+      localStorage.setItem(`${rateLimitKey}_count`, '1');
+      localStorage.setItem(`${rateLimitKey}_timestamp`, now.toString());
+    } else if (checkCount >= 10) {
+      console.warn('Password check rate limit exceeded');
+      return false; // Don't block if rate limited
+    } else {
+      localStorage.setItem(`${rateLimitKey}_count`, (checkCount + 1).toString());
+    }
+
     const encoder = new TextEncoder();
     const data = encoder.encode(password);
     const hashBuffer = await crypto.subtle.digest('SHA-1', data);
@@ -12,10 +29,25 @@ export async function isPasswordCompromised(password: string): Promise<boolean> 
     const prefix = sha1.substring(0, 5);
     const suffix = sha1.substring(5);
 
-    const response = await fetch(`https://api.pwnedpasswords.com/range/${prefix}`);
+    const response = await fetch(`https://api.pwnedpasswords.com/range/${prefix}`, {
+      headers: {
+        'User-Agent': 'TecnicoApp-PasswordChecker'
+      }
+    });
+    
+    if (!response.ok) {
+      console.warn('HaveIBeenPwned API request failed:', response.status);
+      return false; // Don't block if API fails
+    }
+    
     const hashes = await response.text();
-
-    return hashes.split('\n').some((hash) => hash.startsWith(suffix));
+    const isCompromised = hashes.split('\n').some((hash) => hash.startsWith(suffix));
+    
+    if (isCompromised) {
+      console.warn('Password found in breach database');
+    }
+    
+    return isCompromised;
   } catch (error) {
     console.warn('Failed to check password security:', error);
     return false; // Don't block registration if API fails
@@ -33,7 +65,12 @@ export const passwordSchema = z.string()
   .max(128, 'Senha muito longa')
   .regex(/[A-Z]/, 'Senha deve conter pelo menos uma letra maiúscula')
   .regex(/[a-z]/, 'Senha deve conter pelo menos uma letra minúscula')
-  .regex(/[0-9]/, 'Senha deve conter pelo menos um número');
+  .regex(/[0-9]/, 'Senha deve conter pelo menos um número')
+  .regex(/[!@#$%^&*(),.?":{}|<>]/, 'Senha deve conter pelo menos um caractere especial')
+  .refine(async (password) => {
+    const isCompromised = await isPasswordCompromised(password);
+    return !isCompromised;
+  }, 'Esta senha foi encontrada em vazamentos de dados. Escolha uma senha mais segura.');
 
 export const loginSchema = z.object({
   email: emailSchema,

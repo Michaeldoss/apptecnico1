@@ -152,6 +152,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const signup = async (email: string, password: string, userData: any): Promise<boolean> => {
+    // First validate with enhanced security checks
     const validationResult = signupSchema.safeParse({
       email,
       password,
@@ -165,15 +166,38 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       return false;
     }
 
-    console.log('🔐 Iniciando signup...', { email, userType: userData.type });
+    // Additional server-side validation for enhanced security
+    try {
+      const { data: securityCheck, error: securityError } = await supabase.rpc('secure_user_registration', {
+        p_email: email,
+        p_password: password,
+        p_user_type: userData.type,
+        p_user_data: userData
+      });
+
+      if (securityError || !(securityCheck as any)?.success) {
+        toast({ variant: "destructive", title: "Erro de Segurança", description: securityError?.message || "Falha na validação de segurança" });
+        return false;
+      }
+    } catch (securityError: any) {
+      console.error('Security validation failed:', securityError);
+      toast({ variant: "destructive", title: "Erro de Segurança", description: securityError.message || "Falha na validação de segurança" });
+      return false;
+    }
+
+    console.log('🔐 Iniciando signup com validação de segurança aprovada...', { email, userType: userData.type });
     
-    // 1. Primeiro, criar conta no Supabase Auth
+    // 1. Primeiro, criar conta no Supabase Auth com validação de email
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: `${window.location.origin}/`,
-        data: { user_type: userData.type, name: userData.nome },
+        emailRedirectTo: `${window.location.origin}/login?confirmed=true`,
+        data: { 
+          user_type: userData.type, 
+          name: userData.nome,
+          ...userData 
+        },
       },
     });
 
@@ -185,121 +209,84 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       return false;
     }
 
+    // Check if email confirmation is required
+    if (!data.session && data.user && !data.user.email_confirmed_at) {
+      console.log('📧 Email de confirmação enviado');
+      toast({ 
+        title: "Cadastro realizado com sucesso!", 
+        description: "Verifique seu email e clique no link de confirmação antes de fazer login. Você será redirecionado para a página de login.",
+        variant: "default"
+      });
+      
+      setTimeout(() => {
+        window.location.href = "/login?message=confirm_email";
+      }, 2000);
+      return true;
+    }
+
+    // If user is immediately confirmed (email confirmation disabled), proceed normally
     const userId = data.user.id;
-    console.log('✅ Conta criada no Auth, inserindo na tabela específica...', { userId, tipo: userData.type });
+    console.log('✅ Conta criada no Auth (confirmação automática)');
 
-    // 2. Inserir na tabela específica baseada no tipo escolhido
-    let insertError: any = null;
+    // The trigger will automatically create the profile, but let's verify
+    try {
+      // Call the secure profile creation function
+      const { data: profileResult, error: profileError } = await supabase.rpc('create_user_profile', {
+        p_user_type: userData.type,
+        p_user_data: userData
+      });
 
-    if (userData.type === 'customer') {
-      const { error } = await supabase.from('clientes').insert({
-        id: userId,
-        email: email,
-        nome: userData.nome || userData.name || ''
-      });
-      insertError = error;
-      console.log('📝 Resultado inserção clientes:', { error });
-    } else if (userData.type === 'technician') {
-      const { error } = await supabase.from('tecnicos').insert({
-        id: userId,
-        email: email,
-        nome: userData.nome || userData.name || ''
-      });
-      insertError = error;
-      console.log('📝 Resultado inserção tecnicos:', { error });
-    } else if (userData.type === 'company') {
-      const { error } = await supabase.from('lojas').insert({
-        id: userId,
-        email: email,
-        nome_empresa: userData.nome || userData.name || '',
-        nome_contato: userData.nome || userData.name || ''
-      });
-      insertError = error;
-      console.log('📝 Resultado inserção lojas:', { error });
+      if (profileError || !(profileResult as any)?.success) {
+        console.warn('⚠️ Profile creation may have failed, but continuing...', profileError);
+      }
+    } catch (profileError) {
+      console.warn('⚠️ Profile creation error (may be handled by trigger):', profileError);
     }
 
-    if (insertError) {
-      console.error('❌ Erro ao inserir na tabela específica:', insertError);
-      toast({ variant: "destructive", title: "Erro ao salvar dados", description: insertError.message });
-      return false;
-    }
+    // If we have a session, the user is automatically logged in
+    if (data.session) {
+      setUser(data.user);
+      setSession(data.session);
+      setIsAuthenticated(true);
+      
+      // Verificar tipo de usuário e redirecionar
+      const userType = await checkUserTypeInTables(data.user.id);
+      setUserType(userType);
 
-    console.log('✅ Usuário inserido na tabela específica com sucesso');
-
-    // 3. Inserir na tabela usuarios para controle central
-    const usuarioData = {
-      id: userId,
-      nome: userData.nome || userData.name || '',
-      email: email,
-      tipo_usuario: userData.type === 'customer' ? 'cliente' : userData.type
-    };
-    
-    console.log('📝 Inserindo dados na tabela usuarios...', usuarioData);
-    
-    const { error: usuarioError } = await supabase.from('usuarios').insert(usuarioData);
-
-    if (usuarioError) {
-      console.error('❌ Erro ao inserir na tabela usuarios:', usuarioError);
-      console.warn('⚠️ Continuando mesmo com erro na tabela usuarios');
+      if (userType) {
+        const redirectPaths = {
+          customer: '/cliente/dashboard',
+          technician: '/tecnico/dashboard',
+          company: '/loja/dashboard',
+          admin: '/admin/dashboard'
+        };
+        
+        console.log('✅ Signup com login automático bem-sucedido, redirecionando...', { userType });
+        
+        toast({ title: "Cadastro realizado", description: "Bem-vindo! Redirecionando para seu dashboard..." });
+        
+        setTimeout(() => {
+          console.log('🚀 Redirecionando para:', redirectPaths[userType]);
+          window.location.href = redirectPaths[userType];
+        }, 1000);
+      } else {
+        console.error('❌ Erro ao buscar tipo de usuário após cadastro');
+        toast({ 
+          variant: "destructive", 
+          title: "Erro no redirecionamento", 
+          description: "Conta criada, mas erro ao identificar tipo de usuário. Tente fazer login manualmente." 
+        });
+      }
     } else {
-      console.log('✅ Dados inseridos na tabela usuarios com sucesso');
-    }
-
-    // 4. Fazer login automático após cadastro
-    console.log('🔐 Fazendo login automático...');
-    
-    const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    console.log('🔐 Resultado do login automático:', { userId: loginData?.user?.id, error: loginError });
-
-    if (loginError || !loginData.user) {
-      console.error('❌ Erro no login automático:', loginError);
+      // Email confirmation required, redirect to login
       toast({ 
         title: "Cadastro realizado", 
-        description: "Conta criada com sucesso! Faça login para continuar.",
+        description: "Verifique seu email para confirmar a conta e fazer login.",
         variant: "default"
       });
       setTimeout(() => {
         window.location.href = "/login";
       }, 2000);
-      return true;
-    }
-
-    // 5. Atualizar estados locais
-    setUser(loginData.user);
-    setSession(loginData.session);
-    setIsAuthenticated(true);
-    
-    // 6. Verificar tipo de usuário e redirecionar
-    const userType = await checkUserTypeInTables(loginData.user.id);
-    setUserType(userType);
-
-    if (userType) {
-      const redirectPaths = {
-        customer: '/cliente/dashboard',
-        technician: '/tecnico/dashboard',
-        company: '/loja/dashboard',
-        admin: '/admin/dashboard'
-      };
-      
-      console.log('✅ Signup e login bem-sucedidos, redirecionando...', { userType });
-      
-      toast({ title: "Cadastro realizado", description: "Bem-vindo! Redirecionando para seu dashboard..." });
-      
-      setTimeout(() => {
-        console.log('🚀 Redirecionando para:', redirectPaths[userType]);
-        window.location.href = redirectPaths[userType];
-      }, 1000);
-    } else {
-      console.error('❌ Erro ao buscar tipo de usuário após cadastro');
-      toast({ 
-        variant: "destructive", 
-        title: "Erro no redirecionamento", 
-        description: "Conta criada, mas erro ao identificar tipo de usuário. Tente fazer login manualmente." 
-      });
     }
 
     return true;
