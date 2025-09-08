@@ -652,6 +652,13 @@ export type Database = {
             referencedRelation: "lojas"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "produtos_loja_id_fkey"
+            columns: ["loja_id"]
+            isOneToOne: false
+            referencedRelation: "lojas_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       security_audit_log: {
@@ -972,9 +979,45 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      lojas_public: {
+        Row: {
+          ativo: boolean | null
+          cidade: string | null
+          created_at: string | null
+          estado: string | null
+          id: string | null
+          logo_url: string | null
+          nome_empresa: string | null
+          verificado: boolean | null
+        }
+        Insert: {
+          ativo?: boolean | null
+          cidade?: string | null
+          created_at?: string | null
+          estado?: string | null
+          id?: string | null
+          logo_url?: string | null
+          nome_empresa?: string | null
+          verificado?: boolean | null
+        }
+        Update: {
+          ativo?: boolean | null
+          cidade?: string | null
+          created_at?: string | null
+          estado?: string | null
+          id?: string | null
+          logo_url?: string | null
+          nome_empresa?: string | null
+          verificado?: boolean | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
+      create_user_profile: {
+        Args: { p_user_data: Json; p_user_type: string }
+        Returns: Json
+      }
       debug_auth_state: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -988,6 +1031,10 @@ export type Database = {
       get_current_user_type: {
         Args: Record<PropertyKey, never>
         Returns: string
+      }
+      is_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
       }
       log_security_event: {
         Args: { details?: Json; event_type: string; user_id?: string }
