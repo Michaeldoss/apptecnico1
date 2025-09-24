@@ -63,32 +63,58 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Paleta Instalei 2025 - Sistema de cores refinado e moderno
+				// Paleta Instalei 2025 - Sistema Ultra Dinâmico e Futurista
 				'instalei-purple': {
-					50: 'hsl(253, 88%, 98%)',
-					100: 'hsl(253, 88%, 95%)',
-					200: 'hsl(253, 88%, 88%)',
-					300: 'hsl(253, 88%, 78%)',
-					400: 'hsl(253, 88%, 68%)',
-					500: 'hsl(253, 88%, 60%)', // Roxo principal moderno
-					600: 'hsl(253, 88%, 50%)',
-					700: 'hsl(253, 88%, 40%)',
-					800: 'hsl(253, 88%, 30%)',
-					900: 'hsl(253, 88%, 20%)',
-					950: 'hsl(253, 88%, 10%)',
+					50: 'hsl(270, 100%, 98%)',
+					100: 'hsl(270, 100%, 95%)',
+					200: 'hsl(270, 100%, 88%)',
+					300: 'hsl(270, 100%, 78%)',
+					400: 'hsl(270, 100%, 70%)',
+					500: 'hsl(270, 100%, 65%)', // Roxo neon principal
+					600: 'hsl(270, 100%, 58%)',
+					700: 'hsl(270, 100%, 50%)',
+					800: 'hsl(270, 100%, 42%)',
+					900: 'hsl(270, 100%, 35%)',
+					950: 'hsl(270, 100%, 25%)',
 				},
-				'instalei-orange': {
-					50: 'hsl(25, 95%, 98%)',
-					100: 'hsl(25, 95%, 95%)',
-					200: 'hsl(25, 95%, 88%)',
-					300: 'hsl(25, 95%, 78%)',
-					400: 'hsl(25, 95%, 68%)',
-					500: 'hsl(25, 95%, 53%)', // Laranja queimado principal
-					600: 'hsl(25, 95%, 48%)',
-					700: 'hsl(25, 95%, 43%)',
-					800: 'hsl(25, 95%, 38%)',
-					900: 'hsl(25, 95%, 33%)',
-					950: 'hsl(25, 95%, 28%)',
+				'instalei-blue': {
+					50: 'hsl(200, 100%, 98%)',
+					100: 'hsl(200, 100%, 93%)',
+					200: 'hsl(200, 100%, 85%)',
+					300: 'hsl(200, 100%, 75%)',
+					400: 'hsl(200, 100%, 65%)',
+					500: 'hsl(200, 100%, 55%)', // Azul elétrico principal
+					600: 'hsl(200, 100%, 48%)',
+					700: 'hsl(200, 100%, 40%)',
+					800: 'hsl(200, 100%, 32%)',
+					900: 'hsl(200, 100%, 25%)',
+					950: 'hsl(200, 100%, 18%)',
+				},
+				'instalei-cyan': {
+					50: 'hsl(180, 100%, 97%)',
+					100: 'hsl(180, 100%, 90%)',
+					200: 'hsl(180, 100%, 80%)',
+					300: 'hsl(180, 100%, 70%)',
+					400: 'hsl(180, 100%, 60%)',
+					500: 'hsl(180, 100%, 50%)', // Ciano vibrante
+					600: 'hsl(180, 100%, 40%)',
+					700: 'hsl(180, 100%, 30%)',
+					800: 'hsl(180, 100%, 20%)',
+					900: 'hsl(180, 100%, 15%)',
+					950: 'hsl(180, 100%, 10%)',
+				},
+				'instalei-pink': {
+					50: 'hsl(320, 100%, 98%)',
+					100: 'hsl(320, 100%, 92%)',
+					200: 'hsl(320, 100%, 85%)',
+					300: 'hsl(320, 100%, 78%)',
+					400: 'hsl(320, 100%, 72%)',
+					500: 'hsl(320, 100%, 70%)', // Rosa neon
+					600: 'hsl(320, 100%, 60%)',
+					700: 'hsl(320, 100%, 50%)',
+					800: 'hsl(320, 100%, 40%)',
+					900: 'hsl(320, 100%, 30%)',
+					950: 'hsl(320, 100%, 20%)',
 				},
 				// Sistema de cinzas modernos
 				'instalei-gray': {
@@ -157,20 +183,43 @@ export default {
 					to: { height: '0' }
 				},
 				'fade-in': {
-					'0%': { opacity: '0', transform: 'translateY(10px)' },
+					'0%': { opacity: '0', transform: 'translateY(20px)' },
 					'100%': { opacity: '1', transform: 'translateY(0)' }
 				},
 				'fade-out': {
 					'0%': { opacity: '1', transform: 'translateY(0)' },
-					'100%': { opacity: '0', transform: 'translateY(10px)' }
+					'100%': { opacity: '0', transform: 'translateY(20px)' }
 				},
 				'scale-in': {
-					'0%': { transform: 'scale(0.95)', opacity: '0' },
+					'0%': { transform: 'scale(0.9)', opacity: '0' },
 					'100%': { transform: 'scale(1)', opacity: '1' }
 				},
 				'scale-out': {
 					from: { transform: 'scale(1)', opacity: '1' },
-					to: { transform: 'scale(0.95)', opacity: '0' }
+					to: { transform: 'scale(0.9)', opacity: '0' }
+				},
+				'glow-pulse': {
+					'0%, 100%': { 
+						boxShadow: '0 0 20px hsl(270 100% 65% / 0.3), 0 0 40px hsl(270 100% 65% / 0.1)' 
+					},
+					'50%': { 
+						boxShadow: '0 0 40px hsl(270 100% 65% / 0.5), 0 0 80px hsl(270 100% 65% / 0.2)' 
+					}
+				},
+				'float': {
+					'0%, 100%': { transform: 'translateY(0px)' },
+					'50%': { transform: 'translateY(-10px)' }
+				},
+				'shimmer': {
+					'0%': { transform: 'translateX(-100%)' },
+					'100%': { transform: 'translateX(100%)' }
+				},
+				'cyber-glitch': {
+					'0%, 100%': { transform: 'translate(0)' },
+					'20%': { transform: 'translate(-2px, 2px)' },
+					'40%': { transform: 'translate(-2px, -2px)' },
+					'60%': { transform: 'translate(2px, 2px)' },
+					'80%': { transform: 'translate(2px, -2px)' }
 				},
 				'slide-in-right': {
 					'0%': { transform: 'translateX(100%)' },
@@ -224,10 +273,10 @@ export default {
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
-				'fade-in': 'fade-in 0.3s ease-out',
-				'fade-out': 'fade-out 0.3s ease-out',
-				'scale-in': 'scale-in 0.2s ease-out',
-				'scale-out': 'scale-out 0.2s ease-out',
+				'fade-in': 'fade-in 0.5s ease-out',
+				'fade-out': 'fade-out 0.5s ease-out',
+				'scale-in': 'scale-in 0.4s ease-out',
+				'scale-out': 'scale-out 0.4s ease-out',
 				'slide-in-right': 'slide-in-right 0.3s ease-out',
 				'slide-out-right': 'slide-out-right 0.3s ease-out',
 				'slide-in-left': 'slide-in-left 0.3s ease-out',
@@ -238,8 +287,12 @@ export default {
 				'slide-out-down': 'slide-out-down 0.3s ease-out',
 				'pulse': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
 				'rotate': 'rotate 1s linear infinite',
-				'enter': 'fade-in 0.3s ease-out, scale-in 0.2s ease-out',
-				'exit': 'fade-out 0.3s ease-out, scale-out 0.2s ease-out',
+				'glow-pulse': 'glow-pulse 2s ease-in-out infinite',
+				'float': 'float 3s ease-in-out infinite',
+				'shimmer': 'shimmer 2s linear infinite',
+				'cyber-glitch': 'cyber-glitch 0.3s linear infinite',
+				'enter': 'fade-in 0.5s ease-out, scale-in 0.4s ease-out',
+				'exit': 'fade-out 0.5s ease-out, scale-out 0.4s ease-out',
 				'secure-glow': 'secure-glow 2s ease-in-out infinite'
 			}
 		}
