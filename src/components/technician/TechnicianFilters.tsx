@@ -45,85 +45,115 @@ const TechnicianFilters: React.FC<TechnicianFiltersProps> = ({
   };
 
   return (
-    <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 mb-8">
+    <div className="bg-white rounded-xl p-6 mb-8 shadow-sm border border-gray-200">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
         {/* Search Query */}
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/70 h-4 w-4" />
-          <Input
-            placeholder="Buscar técnico ou especialidade"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 bg-white/20 border-white/30 text-white placeholder:text-white/70"
-          />
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-[#374151]">
+            Buscar
+          </label>
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <Input
+              placeholder="Técnico ou especialidade"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 bg-white border-gray-300"
+            />
+          </div>
         </div>
 
         {/* Location */}
-        <div className="relative">
-          <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/70 h-4 w-4" />
-          <Input
-            placeholder="Localização"
-            value={searchLocation}
-            onChange={(e) => setSearchLocation(e.target.value)}
-            className="pl-10 bg-white/20 border-white/30 text-white placeholder:text-white/70"
-          />
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-[#374151]">
+            Localização
+          </label>
+          <div className="relative">
+            <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <Input
+              placeholder="Digite a localização"
+              value={searchLocation}
+              onChange={(e) => setSearchLocation(e.target.value)}
+              className="pl-10 bg-white border-gray-300"
+            />
+          </div>
         </div>
 
         {/* Service Filter */}
-        <Select value={filterByService} onValueChange={setFilterByService}>
-          <SelectTrigger className="bg-white/20 border-white/30 text-white">
-            <SelectValue placeholder="Tipo de serviço" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Todos os serviços</SelectItem>
-            {Object.entries(serviceTypeLabels).map(([key, label]) => (
-              <SelectItem key={key} value={key}>{label}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-[#374151]">
+            Tipo de Serviço
+          </label>
+          <Select value={filterByService} onValueChange={setFilterByService}>
+            <SelectTrigger className="bg-white border-gray-300">
+              <SelectValue placeholder="Selecione o serviço" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Todos os serviços</SelectItem>
+              {Object.entries(serviceTypeLabels).map(([key, label]) => (
+                <SelectItem key={key} value={key}>{label}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
         {/* State Filter */}
-        <Select value={selectedState} onValueChange={setSelectedState}>
-          <SelectTrigger className="bg-white/20 border-white/30 text-white">
-            <SelectValue placeholder="Estado" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Todos os estados</SelectItem>
-            {brazilianStates.map((state) => (
-              <SelectItem key={state.value} value={state.value}>
-                {state.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-[#374151]">
+            Estado
+          </label>
+          <Select value={selectedState} onValueChange={setSelectedState}>
+            <SelectTrigger className="bg-white border-gray-300">
+              <SelectValue placeholder="Selecione o estado" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Todos os estados</SelectItem>
+              {brazilianStates.map((state) => (
+                <SelectItem key={state.value} value={state.value}>
+                  {state.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
         {/* City Filter */}
-        <Input
-          placeholder="Cidade"
-          value={selectedCity}
-          onChange={(e) => setSelectedCity(e.target.value)}
-          className="bg-white/20 border-white/30 text-white placeholder:text-white/70"
-        />
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-[#374151]">
+            Cidade
+          </label>
+          <Input
+            placeholder="Digite a cidade"
+            value={selectedCity}
+            onChange={(e) => setSelectedCity(e.target.value)}
+            className="bg-white border-gray-300"
+          />
+        </div>
 
         {/* Equipment Type Filter */}
-        <Select value={selectedEquipmentType} onValueChange={(value) => setSelectedEquipmentType(value as EquipmentType | 'all' | '')}>
-          <SelectTrigger className="bg-white/20 border-white/30 text-white">
-            <SelectValue placeholder="Tipo de equipamento" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Todos os equipamentos</SelectItem>
-            {Object.entries(equipmentTypeLabels).map(([key, label]) => (
-              <SelectItem key={key} value={key}>{label}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-[#374151]">
+            Tipo de Equipamento
+          </label>
+          <Select value={selectedEquipmentType} onValueChange={(value) => setSelectedEquipmentType(value as EquipmentType | 'all' | '')}>
+            <SelectTrigger className="bg-white border-gray-300">
+              <SelectValue placeholder="Selecione o equipamento" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Todos os equipamentos</SelectItem>
+              {Object.entries(equipmentTypeLabels).map(([key, label]) => (
+                <SelectItem key={key} value={key}>{label}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
       
       {/* Search Button */}
       <div className="flex justify-center">
         <Button 
           onClick={handleSearch}
-          className="bg-white text-blue-600 hover:bg-white/90 font-semibold px-8 py-2"
+          className="bg-[#2563eb] text-white hover:bg-[#1e40af] font-semibold px-8 py-2"
         >
           <Search className="h-4 w-4 mr-2" />
           Pesquisar Técnicos

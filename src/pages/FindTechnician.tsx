@@ -108,14 +108,14 @@ const FindTechnician = () => {
     : technicians;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-white">
       <Navbar />
 
       {/* Header */}
-      <header className="bg-gradient-to-br from-instalei-purple-500 via-instalei-purple-600 to-instalei-purple-700 text-white section-padding pt-24">
+      <header className="bg-gradient-to-br from-[#2563eb] to-[#1e40af] text-white section-padding pt-24">
         <div className="container-instalei">
           <h1 className="text-4xl md:text-5xl font-bold mb-instalei-sm text-white">Encontre Técnicos Especializados na Instalei</h1>
-          <p className="text-xl mb-instalei-lg text-instalei-gray-200 opacity-90">Localize profissionais qualificados para seus equipamentos</p>
+          <p className="text-xl mb-instalei-lg text-white/90">Localize profissionais qualificados para seus equipamentos</p>
           
           {/* Search Filters */}
           <TechnicianFilters 
