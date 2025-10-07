@@ -7,49 +7,49 @@
 
 @layer base {
   :root {
-    /* Workana-Inspired Design System */
-    --background: 210 100% 98%;
-    --foreground: 215 30% 15%;
+    /* Sistema de Cores Padronizado - Azul #2563eb */
+    --background: 0 0% 100%; /* Branco #ffffff */
+    --foreground: 215 25% 27%; /* Cinza escuro #1f2937 */
 
     --card: 0 0% 100%;
-    --card-foreground: 215 30% 15%;
+    --card-foreground: 215 25% 27%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 215 30% 15%;
+    --popover-foreground: 215 25% 27%;
 
-    /* Cores principais Workana-style */
-    --primary: 211 100% 50%;
+    /* Cores principais - Azul #2563eb */
+    --primary: 217 91% 60%; /* #2563eb */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 211 100% 96%;
-    --secondary-foreground: 211 100% 30%;
+    --secondary: 0 0% 100%; /* Branco com borda azul */
+    --secondary-foreground: 217 91% 60%; /* #2563eb */
 
     --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%;
+    --muted-foreground: 215 20% 65%;
 
-    --accent: 211 100% 50%;
+    --accent: 217 91% 60%; /* #2563eb */
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
     --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 211 100% 50%;
+    --input: 0 0% 100%; /* Inputs brancos */
+    --ring: 217 91% 60%; /* #2563eb */
 
     --radius: 12px;
 
-    /* Paleta Workana Blue */
-    --workana-blue-50: 211 100% 98%;
-    --workana-blue-100: 211 100% 96%;
-    --workana-blue-200: 211 100% 90%;
-    --workana-blue-300: 211 100% 80%;
-    --workana-blue-400: 211 100% 60%;
-    --workana-blue-500: 211 100% 50%;
-    --workana-blue-600: 211 100% 40%;
-    --workana-blue-700: 211 100% 30%;
-    --workana-blue-800: 211 80% 20%;
-    --workana-blue-900: 211 70% 12%;
+    /* Paleta Azul Padronizado #2563eb */
+    --workana-blue-50: 217 91% 98%;
+    --workana-blue-100: 217 91% 95%;
+    --workana-blue-200: 217 91% 85%;
+    --workana-blue-300: 217 91% 75%;
+    --workana-blue-400: 217 91% 65%;
+    --workana-blue-500: 217 91% 60%; /* #2563eb */
+    --workana-blue-600: 217 91% 50%; /* #1e40af */
+    --workana-blue-700: 217 91% 40%;
+    --workana-blue-800: 217 91% 30%;
+    --workana-blue-900: 217 91% 20%;
 
     --workana-navy-50: 215 30% 95%;
     --workana-navy-100: 215 30% 85%;
@@ -62,65 +62,65 @@
     --workana-navy-800: 215 30% 10%;
     --workana-navy-900: 215 30% 8%;
 
-    /* Cores de texto Workana */
-    --workana-text-primary: 215 30% 15%;
-    --workana-text-secondary: 215 16% 47%;
+    /* Cores de texto padronizadas */
+    --workana-text-primary: 215 25% 27%; /* #1f2937 */
+    --workana-text-secondary: 215 20% 65%;
     --workana-text-light: 215 20% 65%;
     --workana-text-white: 0 0% 100%;
 
-    /* Gradientes Workana Clean */
-    --gradient-primary: linear-gradient(135deg, hsl(211 100% 50%) 0%, hsl(211 100% 60%) 100%);
-    --gradient-hero: linear-gradient(180deg, hsl(211 100% 98%) 0%, hsl(0 0% 100%) 100%);
-    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(211 100% 99%) 100%);
+    /* Gradientes Azul #2563eb */
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(217 91% 50%) 100%);
+    --gradient-hero: linear-gradient(180deg, hsl(217 91% 60%) 0%, hsl(217 91% 50%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(217 91% 98%) 100%);
 
-    /* Sidebar Workana */
+    /* Sidebar Azul #2563eb */
     --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 215 30% 15%;
-    --sidebar-primary: 211 100% 50%;
+    --sidebar-foreground: 215 25% 27%;
+    --sidebar-primary: 217 91% 60%; /* #2563eb */
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 211 100% 50%;
+    --sidebar-accent: 217 91% 60%; /* #2563eb */
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 214 32% 91%;
-    --sidebar-ring: 211 100% 50%;
+    --sidebar-ring: 217 91% 60%;
   }
 
   .dark {
-    --background: 211 60% 8%;
+    --background: 215 25% 10%;
     --foreground: 210 40% 98%;
 
-    --card: 211 50% 12%;
+    --card: 215 25% 15%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 211 50% 12%;
+    --popover: 215 25% 15%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 211 100% 50%;
+    --primary: 217 91% 60%; /* #2563eb */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 211 50% 20%;
+    --secondary: 215 25% 20%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 215 30% 18%;
+    --muted: 215 25% 18%;
     --muted-foreground: 215 20% 65%;
 
-    --accent: 211 100% 50%;
+    --accent: 217 91% 60%; /* #2563eb */
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 215 30% 20%;
-    --input: 215 30% 15%;
-    --ring: 211 100% 50%;
+    --border: 215 25% 20%;
+    --input: 215 25% 15%;
+    --ring: 217 91% 60%;
 
-    --sidebar-background: 211 50% 12%;
+    --sidebar-background: 215 25% 15%;
     --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 211 100% 50%;
+    --sidebar-primary: 217 91% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 211 100% 50%;
+    --sidebar-accent: 217 91% 60%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 215 30% 20%;
-    --sidebar-ring: 211 100% 50%;
+    --sidebar-border: 215 25% 20%;
+    --sidebar-ring: 217 91% 60%;
   }
 }
 
@@ -277,9 +277,9 @@
     border: 1px solid hsl(var(--border));
   }
 
-  /* Sistema de Inputs Workana - Clean */
+  /* Sistema de Inputs - Background Branco */
   input, textarea, select {
-    background-color: hsl(var(--input));
+    background-color: hsl(0 0% 100%); /* Branco */
     border: 1px solid hsl(var(--border));
     border-radius: var(--radius);
     color: hsl(var(--foreground));
@@ -295,13 +295,13 @@
   }
 
   input:focus, textarea:focus, select:focus {
-    border-color: hsl(var(--primary));
-    box-shadow: 0 0 0 3px hsla(var(--primary), 0.1);
+    border-color: hsl(217 91% 60%); /* #2563eb */
+    box-shadow: 0 0 0 3px hsla(217 91% 60%, 0.1);
     outline: none;
   }
 
   input:hover, textarea:hover, select:hover {
-    border-color: hsl(var(--workana-blue-300));
+    border-color: hsl(217 91% 75%);
   }
 
   input::placeholder, textarea::placeholder {
