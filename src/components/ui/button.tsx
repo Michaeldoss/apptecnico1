@@ -11,15 +11,15 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-gradient-to-r from-instalei-purple-500 to-instalei-purple-600 text-white hover:from-instalei-purple-600 hover:to-instalei-purple-700 hover:shadow-xl hover:shadow-instalei-purple-500/25 hover:-translate-y-1 active:translate-y-0 active:scale-95",
+        default: "bg-[#2563eb] text-white hover:bg-[#1e40af] hover:shadow-xl hover:shadow-blue-500/25 hover:-translate-y-1 active:translate-y-0 active:scale-95",
         destructive:
           "bg-gradient-to-r from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700 hover:shadow-xl hover:shadow-red-500/25 hover:-translate-y-1 active:translate-y-0 active:scale-95",
         outline:
-          "border-2 border-instalei-purple-500 bg-transparent text-instalei-purple-500 hover:bg-instalei-purple-500 hover:text-white hover:shadow-xl hover:shadow-instalei-purple-500/25 hover:-translate-y-1 active:translate-y-0 active:scale-95 before:absolute before:inset-0 before:bg-instalei-purple-500 before:scale-x-0 before:transition-transform before:duration-300 hover:before:scale-x-100 before:-z-10",
+          "border-2 border-[#2563eb] bg-transparent text-[#2563eb] hover:bg-[#2563eb] hover:text-white hover:shadow-xl hover:shadow-blue-500/25 hover:-translate-y-1 active:translate-y-0 active:scale-95 before:absolute before:inset-0 before:bg-[#2563eb] before:scale-x-0 before:transition-transform before:duration-300 hover:before:scale-x-100 before:-z-10",
         secondary:
           "bg-gradient-to-r from-instalei-orange-500 to-instalei-orange-600 text-white hover:from-instalei-orange-600 hover:to-instalei-orange-700 hover:shadow-xl hover:shadow-instalei-orange-500/25 hover:-translate-y-1 active:translate-y-0 active:scale-95",
         ghost: "bg-transparent text-instalei-gray-600 hover:bg-instalei-gray-100 hover:text-instalei-gray-800 hover:-translate-y-0.5",
-        link: "text-instalei-purple-500 underline-offset-4 hover:underline hover:text-instalei-orange-500 transition-colors",
+        link: "text-[#2563eb] underline-offset-4 hover:underline hover:text-[#1e40af] transition-colors",
         secure: "bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 hover:shadow-xl hover:shadow-green-500/25 hover:-translate-y-1 active:translate-y-0 active:scale-95",
       },
       size: {
