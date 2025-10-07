@@ -327,59 +327,41 @@ const Register = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       
-      {/* Header azul com gradiente - igual à home */}
-      <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-16 px-4 relative overflow-hidden">
-        {/* Elementos decorativos de fundo */}
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-transparent to-purple-600/20"></div>
-        <div className="absolute top-10 left-10 w-32 h-32 bg-white/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-10 right-10 w-40 h-40 bg-yellow-300/10 rounded-full blur-3xl"></div>
-        
-        <div className="max-w-4xl mx-auto text-center relative z-10">
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-black mb-4 leading-tight text-white drop-shadow-2xl">
+      {/* Header clean - estilo Workana */}
+      <section className="bg-background border-b border-border py-12 px-4">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">
             Criar Conta
           </h1>
-          <p className="text-lg md:text-xl mb-8 text-gray-100 max-w-3xl mx-auto font-semibold leading-relaxed drop-shadow-lg">
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Preencha seus dados para começar a usar nossa plataforma
           </p>
-
-          {/* Badges de Benefícios */}
-          <div className="flex flex-wrap justify-center gap-4">
-            <div className="bg-white/20 backdrop-blur-xl px-4 py-2 rounded-xl border border-white/30 flex items-center gap-2 hover:bg-white/30 transition-all duration-300 shadow-xl">
-              <span className="text-white font-bold text-sm drop-shadow-lg">📱 Acesso Imediato</span>
-            </div>
-            <div className="bg-white/20 backdrop-blur-xl px-4 py-2 rounded-xl border border-white/30 flex items-center gap-2 hover:bg-white/30 transition-all duration-300 shadow-xl">
-              <span className="text-white font-bold text-sm drop-shadow-lg">🔒 Dados Seguros</span>
-            </div>
-            <div className="bg-white/20 backdrop-blur-xl px-4 py-2 rounded-xl border border-white/30 flex items-center gap-2 hover:bg-white/30 transition-all duration-300 shadow-xl">
-              <span className="text-white font-bold text-sm drop-shadow-lg">⚡ Setup Rápido</span>
-            </div>
-          </div>
         </div>
       </section>
       
-      <main className="flex-grow flex items-center justify-center px-6 py-12 bg-gradient-to-br from-background via-background/95 to-muted/30">
-        <div className="w-full max-w-4xl relative z-10">
+      <main className="flex-grow flex items-center justify-center px-6 py-12 bg-background">
+        <div className="w-full max-w-4xl">
           
-          <BlurContainer className="p-8 bg-card/95 backdrop-blur-xl border border-border shadow-2xl rounded-3xl">
+          <div className="p-8 bg-card border border-border shadow-sm rounded-lg">
             <Tabs defaultValue="client" className="mb-8" onValueChange={setAccountType}>
-              <TabsList className="grid w-full grid-cols-3 bg-muted/50 border border-border rounded-xl p-1">
+              <TabsList className="grid w-full grid-cols-3 bg-muted p-1 rounded-lg">
                 <TabsTrigger 
                   value="client" 
-                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-blue-700 data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all duration-300 font-medium flex items-center gap-2"
+                  className="data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm rounded-md transition-all duration-200 font-medium flex items-center gap-2"
                 >
                   <User className="h-4 w-4" />
                   Cliente
                 </TabsTrigger>
                 <TabsTrigger 
                   value="technician" 
-                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-500 data-[state=active]:to-yellow-600 data-[state=active]:text-gray-900 data-[state=active]:shadow-md rounded-lg transition-all duration-300 font-medium flex items-center gap-2"
+                  className="data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm rounded-md transition-all duration-200 font-medium flex items-center gap-2"
                 >
                   <Wrench className="h-4 w-4" />
                   Técnico
                 </TabsTrigger>
                 <TabsTrigger 
                   value="store" 
-                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-purple-700 data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all duration-300 font-medium flex items-center gap-2"
+                  className="data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm rounded-md transition-all duration-200 font-medium flex items-center gap-2"
                 >
                   <Store className="h-4 w-4" />
                   Lojista
@@ -388,46 +370,46 @@ const Register = () => {
               
               <TabsContent value="client" className="mt-8">
                 <div className="space-y-6">
-                  <div className="p-6 bg-gradient-to-r from-blue-50 to-blue-100 backdrop-blur-sm rounded-2xl border border-blue-200 shadow-lg">
+                  <div className="p-6 bg-secondary/50 rounded-lg border border-border">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
-                          <User className="h-5 w-5 text-white" />
+                        <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+                          <User className="h-5 w-5 text-primary-foreground" />
                         </div>
-                        <h3 className="text-lg font-bold text-blue-900">Conta de Cliente</h3>
+                        <h3 className="text-lg font-semibold text-foreground">Conta de Cliente</h3>
                       </div>
-                      <Link to="/login" className="text-sm text-blue-600 hover:text-blue-800 font-medium">
+                      <Link to="/login" className="text-sm text-primary hover:underline font-medium">
                         Já tenho conta
                       </Link>
                     </div>
-                    <p className="text-blue-800 font-medium mb-4">
+                    <p className="text-muted-foreground">
                       Encontre técnicos especializados para manutenção e reparo dos seus equipamentos industriais.
                     </p>
                   </div>
 
                   {/* Google Login Section */}
-                  <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-4 text-center">Cadastro Rápido</h4>
+                  <div className="bg-muted/30 p-6 rounded-lg border border-border">
+                    <h4 className="text-lg font-semibold text-foreground mb-4 text-center">Cadastro Rápido</h4>
                     <GoogleAuthProvider>
                       <GoogleLoginButton />
                     </GoogleAuthProvider>
                     <div className="relative my-6">
                       <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-gray-300"></div>
+                        <div className="w-full border-t border-border"></div>
                       </div>
                       <div className="relative flex justify-center text-sm">
-                        <span className="px-2 bg-gray-50 text-gray-500">ou cadastre-se com email</span>
+                        <span className="px-2 bg-muted/30 text-muted-foreground">ou cadastre-se com email</span>
                       </div>
                     </div>
                   </div>
 
                   {/* Personal Data Section */}
                   <div className="space-y-4">
-                    <div className="flex items-center gap-4 pb-3 border-b border-gray-200">
-                      <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center">
-                        <User className="h-5 w-5 text-white" />
+                    <div className="flex items-center gap-3 pb-3 border-b border-border">
+                      <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                        <User className="h-4 w-4 text-primary" />
                       </div>
-                      <h4 className="text-lg font-semibold text-gray-800">Dados Pessoais</h4>
+                      <h4 className="text-base font-semibold text-foreground">Dados Pessoais</h4>
                     </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1621,11 +1603,11 @@ const Register = () => {
                 <GoogleLoginButton />
               </GoogleAuthProvider>
             </form>
-          </BlurContainer>
+          </div>
           
-          <p className="text-center text-sm mt-8 text-white drop-shadow-lg">
+          <p className="text-center text-sm mt-6 text-muted-foreground">
             Já tem uma conta?{' '}
-            <Link to="/login" className="text-yellow-300 font-bold hover:text-yellow-400 hover:underline transition-colors duration-300">
+            <Link to="/login" className="text-primary font-medium hover:underline">
               Entre aqui
             </Link>
           </p>
