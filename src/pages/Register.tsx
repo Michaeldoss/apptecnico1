@@ -327,43 +327,43 @@ const Register = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       
-      {/* Header clean - estilo Workana */}
-      <section className="bg-background border-b border-border py-12 px-4">
+      {/* Header clean - fundo branco */}
+      <section className="bg-white border-b border-gray-200 py-12 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-[#1f2937]">
             Criar Conta
           </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Preencha seus dados para começar a usar nossa plataforma
           </p>
         </div>
       </section>
       
-      <main className="flex-grow flex items-center justify-center px-6 py-12 bg-background">
+      <main className="flex-grow flex items-center justify-center px-6 py-12 bg-white">
         <div className="w-full max-w-4xl">
           
-          <div className="p-8 bg-card border border-border shadow-sm rounded-lg">
+          <div className="p-8 bg-white border border-gray-200 shadow-sm rounded-lg">
             <Tabs defaultValue="client" className="mb-8" onValueChange={setAccountType}>
-              <TabsList className="grid w-full grid-cols-3 bg-muted p-1 rounded-lg">
+              <TabsList className="grid w-full grid-cols-3 bg-gray-100 p-1 rounded-lg gap-2">
                 <TabsTrigger 
                   value="client" 
-                  className="data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm rounded-md transition-all duration-200 font-medium flex items-center gap-2"
+                  className="data-[state=active]:bg-[#2563eb] data-[state=active]:text-white data-[state=inactive]:text-gray-700 rounded-md transition-all duration-200 font-semibold flex items-center justify-center gap-2 py-3"
                 >
-                  <User className="h-4 w-4" />
+                  <User className="h-5 w-5" />
                   Cliente
                 </TabsTrigger>
                 <TabsTrigger 
                   value="technician" 
-                  className="data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm rounded-md transition-all duration-200 font-medium flex items-center gap-2"
+                  className="data-[state=active]:bg-[#2563eb] data-[state=active]:text-white data-[state=inactive]:text-gray-700 rounded-md transition-all duration-200 font-semibold flex items-center justify-center gap-2 py-3"
                 >
-                  <Wrench className="h-4 w-4" />
+                  <Wrench className="h-5 w-5" />
                   Técnico
                 </TabsTrigger>
                 <TabsTrigger 
                   value="store" 
-                  className="data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm rounded-md transition-all duration-200 font-medium flex items-center gap-2"
+                  className="data-[state=active]:bg-[#2563eb] data-[state=active]:text-white data-[state=inactive]:text-gray-700 rounded-md transition-all duration-200 font-semibold flex items-center justify-center gap-2 py-3"
                 >
-                  <Store className="h-4 w-4" />
+                  <Store className="h-5 w-5" />
                   Lojista
                 </TabsTrigger>
               </TabsList>
