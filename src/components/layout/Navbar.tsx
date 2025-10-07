@@ -14,9 +14,7 @@ const Navbar = () => {
     logout
   } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
   const isMobile = useIsMobile();
-  const isHomePage = location.pathname === "/";
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
