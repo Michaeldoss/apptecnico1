@@ -147,18 +147,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         return 'company';
       }
 
-      // Verificar se é admin na tabela usuarios
-      console.log('🔎 Verificando na tabela usuarios...');
-      const { data: usuarioData, error: usuarioError } = await supabase
-        .from('usuarios')
-        .select('tipo_usuario')
-        .eq('id', userId)
+      // Verificar se é admin na nova tabela user_roles (sistema seguro)
+      console.log('🔎 Verificando na tabela user_roles...');
+      const { data: roleData, error: roleError } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', userId)
+        .eq('role', 'admin')
         .maybeSingle();
 
-      console.log('📋 Resultado usuarios:', { usuarioData, usuarioError });
+      console.log('📋 Resultado user_roles:', { roleData, roleError });
 
-      if (usuarioData?.tipo_usuario === 'admin') {
-        console.log('✅ Usuário encontrado como admin');
+      if (roleData) {
+        console.log('✅ Usuário encontrado como admin no sistema de roles');
         return 'admin';
       }
 
