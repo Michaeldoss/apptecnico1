@@ -38,7 +38,7 @@ const Navbar = () => {
     if (userType === "company") return "/loja/dashboard";
     return "/";
   };
-  const menuItems = [{
+  const menuItemsLeft = [{
     label: "Técnicos",
     path: "/find-technician"
   }, {
@@ -50,7 +50,9 @@ const Navbar = () => {
   }, {
     label: "Serviços",
     path: "/services"
-  }, {
+  }];
+
+  const menuItemsRight = [{
     label: "Quem Somos",
     path: "/about"
   }, {
@@ -59,100 +61,140 @@ const Navbar = () => {
   }];
 
   // Classes para o navbar com cores específicas
-  const navbarClasses = "bg-[#2563eb] w-full top-0 z-50 shadow-md";
-  const textClasses = "text-white";
-  const logoClasses = "text-white font-bold";
-  const hoverClasses = "hover:text-white/80";
-  const baseClasses = "text-white hover:text-white/80 transition-colors duration-200";
+  const navbarClasses = "bg-[#2563eb] w-full top-0 z-50 shadow-lg";
+  const linkClasses = "text-white hover:opacity-80 transition-opacity duration-200 font-medium text-base px-4 py-2";
   return <nav className={navbarClasses}>
-      <div className="container flex items-center justify-between h-16 px-4 md:px-6 mx-auto max-w-7xl">
-        {/* Logo */}
-        <Link to="/" className="flex items-center">
-          <span className={`text-2xl ${logoClasses} tracking-tight`}>
-            Instalei
-          </span>
-        </Link>
+      <div className="mx-auto max-w-[1200px] px-6">
+        <div className="flex items-center justify-between py-4">
+          {/* Left Section: Logo + Menu Items */}
+          <div className="flex items-center gap-8">
+            {/* Logo */}
+            <Link to="/" className="flex items-center">
+              <span className="text-2xl font-semibold text-white tracking-tight">
+                Instalei
+              </span>
+            </Link>
 
-        {/* Desktop Navigation Links */}
-        <div className="hidden md:flex md:items-center md:gap-1">
-          {menuItems.map(item => <Link key={item.path} to={item.path} className={`text-sm font-semibold px-4 py-2 rounded-md ${baseClasses}`}>
-              {item.label}
-            </Link>)}
-        </div>
+            {/* Desktop Navigation Links - Left */}
+            <div className="hidden lg:flex items-center gap-2">
+              {menuItemsLeft.map(item => (
+                <Link key={item.path} to={item.path} className={linkClasses}>
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          </div>
 
-        {/* Desktop Auth Buttons */}
-        <div className="hidden md:flex md:items-center md:gap-2">
-          {isAuthenticated ? <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="flex items-center gap-1 text-white hover:text-white/80">
-                  <User className="h-4 w-4" />
-                  <span>Minha Conta</span>
-                  <ChevronDown className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" side="bottom" className="mr-4">
-                <DropdownMenuItem asChild>
-                  <Link to={userType === "customer" ? "/cliente/perfil" : userType === "technician" ? "/tecnico/perfil" : "/store/profile"} className="flex items-center gap-2">
+          {/* Right Section: Menu Items + Auth Buttons */}
+          <div className="hidden lg:flex items-center gap-2">
+            {/* Desktop Navigation Links - Right */}
+            {menuItemsRight.map(item => (
+              <Link key={item.path} to={item.path} className={linkClasses}>
+                {item.label}
+              </Link>
+            ))}
+
+            {/* Desktop Auth Buttons */}
+            {isAuthenticated ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="flex items-center gap-1 text-white hover:opacity-80 font-medium">
                     <User className="h-4 w-4" />
-                    Perfil
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout} className="text-destructive flex items-center gap-2">
-                  <LogOut className="h-4 w-4" />
-                  Sair
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu> : <>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={handleLoginClick} 
-                className="bg-white text-[#2563eb] hover:bg-white/90 font-semibold"
-              >
-                Entrar
-              </Button>
-              
-              <Button 
-                size="sm" 
-                onClick={() => navigate('/register')}
-                className="bg-[#1e40af] text-white hover:bg-[#1e3a8a] font-semibold"
-              >
-                Cadastre-se
-              </Button>
-            </>}
-        </div>
+                    <span>Minha Conta</span>
+                    <ChevronDown className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" side="bottom" className="mr-4 bg-white z-[100]">
+                  <DropdownMenuItem asChild>
+                    <Link to={userType === "customer" ? "/cliente/perfil" : userType === "technician" ? "/tecnico/perfil" : "/store/profile"} className="flex items-center gap-2">
+                      <User className="h-4 w-4" />
+                      Perfil
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleLogout} className="text-destructive flex items-center gap-2">
+                    <LogOut className="h-4 w-4" />
+                    Sair
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={handleLoginClick} 
+                  className="bg-white text-[#2563eb] hover:bg-white/90 font-semibold text-base px-6 py-2 h-auto"
+                >
+                  Entrar
+                </Button>
+                
+                <Button 
+                  size="sm" 
+                  onClick={() => navigate('/register')}
+                  className="bg-[#1e40af] text-white hover:bg-[#1e3a8a] font-semibold text-base px-6 py-2 h-auto"
+                >
+                  Cadastre-se
+                </Button>
+              </>
+            )}
+          </div>
 
-        {/* Mobile Menu Toggle */}
-        <div className="md:hidden">
-          <Button variant="ghost" size="icon" onClick={toggleMenu} aria-label="Toggle Menu" className="text-white hover:text-white/80">
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </Button>
+          {/* Mobile Menu Toggle */}
+          <div className="lg:hidden">
+            <Button variant="ghost" size="icon" onClick={toggleMenu} aria-label="Toggle Menu" className="text-white hover:opacity-80">
+              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </Button>
+          </div>
         </div>
 
         {/* Mobile Menu */}
-        {isMenuOpen && <div className="absolute top-16 left-0 w-full bg-[#2563eb] border-b border-white/10 shadow-lg z-50 md:hidden">
-            <div className="flex flex-col space-y-1 px-4 py-4">
-              {menuItems.map(item => <Link key={item.path} to={item.path} className="text-sm font-medium p-3 rounded-lg text-white hover:bg-white/10 transition-colors duration-200" onClick={() => setIsMenuOpen(false)}>
+        {isMenuOpen && (
+          <div className="absolute top-full left-0 w-full bg-[#2563eb] border-t border-white/10 shadow-lg z-50 lg:hidden">
+            <div className="flex flex-col px-6 py-4 max-w-[1200px] mx-auto">
+              {/* All menu items for mobile */}
+              {[...menuItemsLeft, ...menuItemsRight].map(item => (
+                <Link 
+                  key={item.path} 
+                  to={item.path} 
+                  className="text-white hover:bg-white/10 transition-colors duration-200 font-medium text-base p-3 rounded-lg" 
+                  onClick={() => setIsMenuOpen(false)}
+                >
                   {item.label}
-                </Link>)}
+                </Link>
+              ))}
               
               <div className="border-t border-white/10 pt-3 mt-3">
-                {isAuthenticated ? <>
-                    <Link to={userType === "customer" ? "/cliente/perfil" : userType === "technician" ? "/tecnico/perfil" : "/store/profile"} className="flex items-center p-3 rounded-lg hover:bg-white/10 w-full mb-2 transition-colors duration-200 text-white" onClick={() => setIsMenuOpen(false)}>
+                {isAuthenticated ? (
+                  <>
+                    <Link 
+                      to={userType === "customer" ? "/cliente/perfil" : userType === "technician" ? "/tecnico/perfil" : "/store/profile"} 
+                      className="flex items-center p-3 rounded-lg hover:bg-white/10 w-full mb-2 transition-colors duration-200 text-white" 
+                      onClick={() => setIsMenuOpen(false)}
+                    >
                       <User className="h-5 w-5 mr-3" />
                       <span className="font-medium">Meu Perfil</span>
                     </Link>
-                    <Button variant="outline" size="sm" className="w-full text-destructive hover:bg-destructive hover:text-destructive-foreground" onClick={handleLogout}>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full text-red-500 border-red-500 hover:bg-red-500 hover:text-white" 
+                      onClick={handleLogout}
+                    >
                       Sair
                     </Button>
-                  </> : <div className="flex flex-col space-y-2">
-                    <Button className="w-full justify-center bg-white text-[#2563eb] hover:bg-white/90 font-semibold" onClick={handleLoginClick}>
+                  </>
+                ) : (
+                  <div className="flex flex-col gap-2">
+                    <Button 
+                      className="w-full justify-center bg-white text-[#2563eb] hover:bg-white/90 font-semibold text-base py-3" 
+                      onClick={handleLoginClick}
+                    >
                       Entrar
                     </Button>
                     
                     <Button 
-                      className="w-full justify-center bg-[#1e40af] text-white hover:bg-[#1e3a8a] font-semibold" 
+                      className="w-full justify-center bg-[#1e40af] text-white hover:bg-[#1e3a8a] font-semibold text-base py-3" 
                       onClick={() => {
                         navigate('/register');
                         setIsMenuOpen(false);
@@ -160,10 +202,12 @@ const Navbar = () => {
                     >
                       Cadastre-se
                     </Button>
-                  </div>}
+                  </div>
+                )}
               </div>
             </div>
-          </div>}
+          </div>
+        )}
       </div>
     </nav>;
 };
