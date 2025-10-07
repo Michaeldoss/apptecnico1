@@ -187,8 +187,15 @@ serve(async (req) => {
 
     if (!mpResponse.ok) {
       console.error('Erro no Mercado Pago:', mpData);
+      await supabaseClient.rpc('log_security_event', {
+        event_type: 'mercadopago_api_error',
+        details: { error_code: 'MP_001', status: mpResponse.status }
+      });
       return new Response(
-        JSON.stringify({ error: 'Erro ao criar pagamento', details: mpData }),
+        JSON.stringify({ 
+          error: 'Não foi possível processar o pagamento. Contate o suporte.',
+          error_code: 'PAYMENT_001'
+        }),
         { 
           status: 400, 
           headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
@@ -215,8 +222,15 @@ serve(async (req) => {
 
     if (dbError) {
       console.error('Erro ao salvar transação:', dbError);
+      await supabaseClient.rpc('log_security_event', {
+        event_type: 'transaction_creation_failed',
+        details: { error_code: 'DB_001' }
+      });
       return new Response(
-        JSON.stringify({ error: 'Erro ao criar transação' }),
+        JSON.stringify({ 
+          error: 'Erro ao processar a transação. Tente novamente.',
+          error_code: 'PAYMENT_002'
+        }),
         { 
           status: 500, 
           headers: { ...corsHeaders, 'Content-Type': 'application/json' } 

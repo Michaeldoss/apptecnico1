@@ -1,24 +1,11 @@
 import { z } from 'zod';
 
-// Enhanced password security check using HaveIBeenPwned API with rate limiting
+// Enhanced password security check using HaveIBeenPwned API
+// NOTA: Rate limiting agora é server-side, este é apenas um check adicional
 export async function isPasswordCompromised(password: string): Promise<boolean> {
   try {
-    // Create rate limiter for password checking (max 10 checks per minute per IP)
-    const rateLimitKey = `password_check_${window.location.hostname}`;
-    const lastCheck = parseInt(localStorage.getItem(`${rateLimitKey}_timestamp`) || '0');
-    const checkCount = parseInt(localStorage.getItem(`${rateLimitKey}_count`) || '0');
-    const now = Date.now();
-    
-    // Reset counter if more than 1 minute has passed
-    if (now - lastCheck > 60000) {
-      localStorage.setItem(`${rateLimitKey}_count`, '1');
-      localStorage.setItem(`${rateLimitKey}_timestamp`, now.toString());
-    } else if (checkCount >= 10) {
-      console.warn('Password check rate limit exceeded');
-      return false; // Don't block if rate limited
-    } else {
-      localStorage.setItem(`${rateLimitKey}_count`, (checkCount + 1).toString());
-    }
+    // Nota: Em produção, implemente rate limiting server-side
+    // Este check é apenas informativo e não deve ser a única validação
 
     const encoder = new TextEncoder();
     const data = encoder.encode(password);

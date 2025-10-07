@@ -69,10 +69,16 @@ serve(async (req) => {
       });
 
       const paymentData = await paymentResponse.json();
-      console.log('Dados do pagamento:', JSON.stringify(paymentData, null, 2));
+      
+      // Log sanitizado - sem dados sensíveis
+      console.log('Webhook recebido - Payment ID:', paymentId, 'Status:', paymentData.status);
 
       if (!paymentResponse.ok) {
-        console.error('Erro ao buscar pagamento:', paymentData);
+        console.error('Erro ao buscar pagamento - Status:', paymentResponse.status);
+        await supabaseClient.rpc('log_security_event', {
+          event_type: 'webhook_mercadopago_error',
+          details: { payment_id: paymentId, status: paymentResponse.status }
+        });
         return new Response('OK', { status: 200, headers: corsHeaders });
       }
 
@@ -86,7 +92,11 @@ serve(async (req) => {
         .single();
 
       if (findError || !transacao) {
-        console.error('Transação não encontrada:', findError);
+        console.error('Transação não encontrada - Serviço ID:', servicoId);
+        await supabaseClient.rpc('log_security_event', {
+          event_type: 'webhook_transaction_not_found',
+          details: { servico_id: servicoId }
+        });
         return new Response('OK', { status: 200, headers: corsHeaders });
       }
 
@@ -127,9 +137,21 @@ serve(async (req) => {
         .eq('id', transacao.id);
 
       if (updateError) {
-        console.error('Erro ao atualizar transação:', updateError);
+        console.error('Erro ao atualizar transação - ID:', transacao.id);
+        await supabaseClient.rpc('log_security_event', {
+          event_type: 'webhook_update_failed',
+          details: { transaction_id: transacao.id }
+        });
       } else {
-        console.log('Transação atualizada com sucesso');
+        console.log('Transação atualizada - ID:', transacao.id, 'Novo status:', novoStatus);
+        await supabaseClient.rpc('log_security_event', {
+          event_type: 'payment_status_updated',
+          details: { 
+            transaction_id: transacao.id, 
+            status: novoStatus,
+            payment_id: paymentId 
+          }
+        });
       }
 
       // Se foi aprovado, enviar notificação para o técnico

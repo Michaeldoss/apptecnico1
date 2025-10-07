@@ -133,46 +133,33 @@ export const useSecureAuth = () => {
     }
   };
 
-  // Monitor for suspicious activity
-  const detectSuspiciousActivity = () => {
-    // Check for multiple rapid login attempts
-    const recentAttempts = parseInt(localStorage.getItem('recent_login_attempts') || '0');
-    if (recentAttempts > 10) {
-      logSecurityEvent('suspicious_activity_detected', {
-        type: 'rapid_login_attempts',
-        count: recentAttempts
-      });
-      
-      toast({
-        variant: "destructive",
-        title: "Atividade Suspeita Detectada",
-        description: "Múltiplas tentativas de login detectadas. Aguarde alguns minutos."
-      });
-      
-      return true;
-    }
-
-    // Check for unusual time patterns (optional)
+  // Monitor for suspicious activity - SERVER-SIDE ONLY
+  const detectSuspiciousActivity = async () => {
+    // Nota: Rate limiting agora é feito server-side via check_rate_limit()
+    // Esta função apenas detecta padrões incomuns no lado do cliente
+    
     const now = new Date();
     const hour = now.getHours();
+    
+    // Log apenas para análise, não para bloqueio
     if (hour < 5 || hour > 23) {
-      logSecurityEvent('unusual_activity_time', {
+      await logSecurityEvent('unusual_activity_time', {
         hour: hour,
-        timestamp: now.toISOString()
+        timestamp: now.toISOString(),
+        note: 'Informational only - not blocking'
       });
     }
 
-    return false;
+    return false; // Nunca bloqueia no client-side
   };
 
-  // Clear sensitive data from local storage on logout
+  // Clear non-sensitive data from local storage on logout
   const secureClearStorage = () => {
-    // Remove all potentially sensitive data
+    // Remove apenas dados de UI/preferências, não dados de segurança
     const keysToRemove = [
-      'recent_login_attempts',
-      'password_check_timestamp',
-      'password_check_count',
-      'user_preferences'
+      'user_preferences',
+      'theme_preference',
+      'ui_settings'
     ];
 
     keysToRemove.forEach(key => {
@@ -189,15 +176,12 @@ export const useSecureAuth = () => {
   useEffect(() => {
     if (isAuthenticated) {
       logSecurityEvent('session_established');
-      
-      // Clear any failed attempt counters on successful login
-      localStorage.removeItem('recent_login_attempts');
     }
 
-    // Set up periodic security checks
+    // Periodic security checks apenas para logging, não bloqueio
     const securityInterval = setInterval(() => {
       detectSuspiciousActivity();
-    }, 30000); // Check every 30 seconds
+    }, 60000); // Check every 60 seconds (reduced frequency)
 
     return () => {
       clearInterval(securityInterval);
