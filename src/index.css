@@ -7,61 +7,61 @@
 
 @layer base {
   :root {
-    /* Design System Premium 2025 */
-    --background: 222 47% 11%;
+    /* Design System Premium Dark 2025 */
+    --background: 215 28% 7%;
     --foreground: 210 40% 98%;
 
-    --card: 217 33% 17%;
+    --card: 217 32% 11%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 217 33% 17%;
+    --popover: 217 32% 11%;
     --popover-foreground: 210 40% 98%;
 
-    /* Cores principais modernas */
-    --primary: 262 83% 58%;
+    /* Cores principais cyber */
+    --primary: 195 100% 50%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 192 91% 36%;
+    --secondary: 195 91% 45%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 217 19% 27%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 217 19% 20%;
+    --muted-foreground: 215 16% 58%;
 
-    --accent: 330 81% 60%;
+    --accent: 195 100% 50%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217 19% 27%;
-    --input: 217 19% 27%;
-    --ring: 262 83% 58%;
+    --border: 217 19% 15%;
+    --input: 217 32% 8%;
+    --ring: 195 100% 50%;
 
     --radius: 16px;
 
-    /* Paleta Brand */
-    --instalei-purple-50: 262 83% 98%;
-    --instalei-purple-100: 262 83% 95%;
-    --instalei-purple-200: 262 83% 88%;
-    --instalei-purple-300: 262 83% 78%;
-    --instalei-purple-400: 262 83% 68%;
-    --instalei-purple-500: 262 83% 58%;
-    --instalei-purple-600: 262 83% 48%;
-    --instalei-purple-700: 262 83% 38%;
-    --instalei-purple-800: 262 83% 28%;
-    --instalei-purple-900: 262 83% 18%;
+    /* Paleta Brand Cyber */
+    --instalei-purple-50: 215 28% 98%;
+    --instalei-purple-100: 215 28% 95%;
+    --instalei-purple-200: 215 28% 88%;
+    --instalei-purple-300: 215 28% 78%;
+    --instalei-purple-400: 215 28% 40%;
+    --instalei-purple-500: 215 28% 17%;
+    --instalei-purple-600: 215 28% 12%;
+    --instalei-purple-700: 215 28% 9%;
+    --instalei-purple-800: 215 28% 6%;
+    --instalei-purple-900: 215 28% 4%;
 
-    --instalei-blue-50: 192 91% 98%;
-    --instalei-blue-100: 192 91% 93%;
-    --instalei-blue-200: 192 91% 83%;
-    --instalei-blue-300: 192 91% 73%;
-    --instalei-blue-400: 192 91% 56%;
-    --instalei-blue-500: 192 91% 36%;
-    --instalei-blue-600: 192 91% 26%;
-    --instalei-blue-700: 192 91% 16%;
+    --instalei-blue-50: 195 100% 98%;
+    --instalei-blue-100: 195 100% 93%;
+    --instalei-blue-200: 195 100% 83%;
+    --instalei-blue-300: 195 100% 73%;
+    --instalei-blue-400: 195 100% 60%;
+    --instalei-blue-500: 195 100% 50%;
+    --instalei-blue-600: 195 91% 40%;
+    --instalei-blue-700: 195 91% 30%;
 
     --instalei-cyan-500: 180 100% 50%;
-    --instalei-pink-500: 330 81% 60%;
+    --instalei-pink-500: 195 100% 65%;
 
     /* Cores de texto */
     --instalei-text-white: 0 0% 100%;
@@ -69,65 +69,65 @@
     --instalei-text-medium: 215 20% 45%;
     --instalei-text-dark: 217 33% 17%;
 
-    /* Gradientes Premium */
-    --gradient-purple-neon: linear-gradient(135deg, hsl(262 83% 58%) 0%, hsl(330 81% 60%) 100%);
-    --gradient-cyber: linear-gradient(135deg, hsl(262 83% 58%) 0%, hsl(192 91% 36%) 50%, hsl(330 81% 60%) 100%);
-    --gradient-electric: linear-gradient(135deg, hsl(192 91% 36%) 0%, hsl(180 100% 50%) 100%);
-    --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.03));
-    --gradient-sunset: linear-gradient(135deg, hsl(330 81% 60%) 0%, hsl(35 100% 60%) 100%);
-    --gradient-ocean: linear-gradient(135deg, hsl(192 91% 36%) 0%, hsl(262 83% 58%) 100%);
-    --gradient-mesh: radial-gradient(at 40% 20%, hsla(262, 83%, 58%, 0.2) 0px, transparent 50%),
-                     radial-gradient(at 80% 0%, hsla(192, 91%, 36%, 0.15) 0px, transparent 50%),
-                     radial-gradient(at 0% 50%, hsla(330, 81%, 60%, 0.15) 0px, transparent 50%);
+    /* Gradientes Cyber Premium */
+    --gradient-purple-neon: linear-gradient(135deg, hsl(195 100% 50%) 0%, hsl(180 100% 50%) 100%);
+    --gradient-cyber: linear-gradient(135deg, hsl(215 28% 12%) 0%, hsl(195 100% 50%) 50%, hsl(180 100% 50%) 100%);
+    --gradient-electric: linear-gradient(135deg, hsl(195 100% 50%) 0%, hsl(180 100% 50%) 100%);
+    --gradient-glass: linear-gradient(135deg, rgba(31, 182, 255, 0.04), rgba(31, 182, 255, 0.01));
+    --gradient-sunset: linear-gradient(135deg, hsl(195 100% 50%) 0%, hsl(180 100% 60%) 100%);
+    --gradient-ocean: linear-gradient(135deg, hsl(195 100% 50%) 0%, hsl(215 28% 17%) 100%);
+    --gradient-mesh: radial-gradient(at 40% 20%, hsla(195, 100%, 50%, 0.15) 0px, transparent 50%),
+                     radial-gradient(at 80% 0%, hsla(180, 100%, 50%, 0.1) 0px, transparent 50%),
+                     radial-gradient(at 0% 50%, hsla(195, 100%, 65%, 0.1) 0px, transparent 50%);
 
-    /* Sidebar */
-    --sidebar-background: 217 33% 17%;
+    /* Sidebar Cyber */
+    --sidebar-background: 217 32% 11%;
     --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 262 83% 58%;
+    --sidebar-primary: 195 100% 50%;
     --sidebar-primary-foreground: 210 40% 98%;
-    --sidebar-accent: 192 91% 36%;
+    --sidebar-accent: 195 100% 50%;
     --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 217 19% 27%;
-    --sidebar-ring: 262 83% 58%;
+    --sidebar-border: 217 19% 15%;
+    --sidebar-ring: 195 100% 50%;
   }
 
   .dark {
-    --background: 222 47% 11%;
+    --background: 215 28% 7%;
     --foreground: 210 40% 98%;
 
-    --card: 217 33% 17%;
+    --card: 217 32% 11%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 217 33% 17%;
+    --popover: 217 32% 11%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 262 83% 58%;
+    --primary: 195 100% 50%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 192 91% 36%;
+    --secondary: 195 91% 45%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 217 19% 27%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 217 19% 20%;
+    --muted-foreground: 215 16% 58%;
 
-    --accent: 330 81% 60%;
+    --accent: 195 100% 50%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217 19% 27%;
-    --input: 217 19% 27%;
-    --ring: 262 83% 58%;
+    --border: 217 19% 15%;
+    --input: 217 32% 8%;
+    --ring: 195 100% 50%;
 
-    --sidebar-background: 217 33% 17%;
+    --sidebar-background: 217 32% 11%;
     --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 262 83% 58%;
+    --sidebar-primary: 195 100% 50%;
     --sidebar-primary-foreground: 210 40% 98%;
-    --sidebar-accent: 192 91% 36%;
+    --sidebar-accent: 195 100% 50%;
     --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 217 19% 27%;
-    --sidebar-ring: 262 83% 58%;
+    --sidebar-border: 217 19% 15%;
+    --sidebar-ring: 195 100% 50%;
   }
 }
 
@@ -140,12 +140,12 @@
     @apply antialiased;
     font-family: 'Inter', sans-serif;
     font-weight: 400;
-    background-color: hsl(var(--background));
+    background: linear-gradient(180deg, hsl(215 28% 4%) 0%, hsl(215 28% 7%) 100%);
     color: hsl(var(--foreground));
   }
 
   body {
-    background-color: hsl(var(--background));
+    background: linear-gradient(180deg, hsl(215 28% 4%) 0%, hsl(215 28% 7%) 100%);
     color: hsl(var(--foreground));
   }
 
@@ -349,17 +349,17 @@
     width: 100%;
   }
 
-  /* Sistema de Cards Ultra Moderno 2025 */
+  /* Sistema de Cards Ultra Moderno Cyber 2025 */
   .card-instalei {
     background: var(--gradient-glass);
     backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid hsla(var(--instalei-purple-500), 0.2);
+    border: 1px solid hsla(var(--instalei-blue-500), 0.15);
     border-radius: var(--radius);
     color: hsl(var(--card-foreground));
     padding: 36px;
     margin-bottom: 28px;
-    box-shadow: 0 8px 32px hsla(270, 100%, 65%, 0.08),
-                0 4px 16px hsla(0, 0%, 0%, 0.04);
+    box-shadow: 0 8px 32px hsla(195, 100%, 50%, 0.1),
+                0 4px 16px hsla(0, 0%, 0%, 0.3);
     transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
@@ -372,7 +372,7 @@
     left: 0;
     right: 0;
     height: 3px;
-    background: var(--gradient-cyber);
+    background: var(--gradient-electric);
     transform: scaleX(0);
     transition: transform 0.4s ease;
   }
@@ -381,15 +381,15 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at 50% 50%, hsla(var(--instalei-purple-500), 0.03), transparent 70%);
+    background: radial-gradient(circle at 50% 50%, hsla(var(--instalei-blue-500), 0.05), transparent 70%);
     opacity: 0;
     transition: opacity 0.4s ease;
   }
 
   .card-instalei:hover {
-    border-color: hsla(var(--instalei-purple-500), 0.4);
-    box-shadow: 0 20px 60px hsla(270, 100%, 65%, 0.15),
-                0 8px 32px hsla(0, 0%, 0%, 0.08);
+    border-color: hsla(var(--instalei-blue-500), 0.4);
+    box-shadow: 0 20px 60px hsla(195, 100%, 50%, 0.2),
+                0 8px 32px hsla(0, 0%, 0%, 0.15);
     transform: translateY(-12px) scale(1.01);
   }
 
