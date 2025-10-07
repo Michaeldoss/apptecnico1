@@ -7,127 +7,127 @@
 
 @layer base {
   :root {
-    /* Sistema Ultra Moderno 2025 - Cores Vibrantes e Dinâmicas */
-    --background: 252 100% 98%; /* Fundo púrpura muito sutil */
-    --foreground: 225 20% 8%; /* Texto quase preto sofisticado */
+    /* Design System Premium 2025 */
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 225 20% 8%;
+    --card: 217 33% 17%;
+    --card-foreground: 210 40% 98%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 225 20% 8%;
+    --popover: 217 33% 17%;
+    --popover-foreground: 210 40% 98%;
 
-    /* Neon Purple - cor primária ultra moderna */
-    --primary: 270 100% 65%; /* #a855f7 - roxo neon vibrante */
-    --primary-foreground: 0 0% 100%;
+    /* Cores principais modernas */
+    --primary: 262 83% 58%;
+    --primary-foreground: 210 40% 98%;
 
-    /* Cinza futurista - cor secundária */
-    --secondary: 225 10% 96%; /* #f9fafb - cinza neutro clean */
-    --secondary-foreground: 225 20% 8%;
+    --secondary: 192 91% 36%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 225 10% 94%;
-    --muted-foreground: 225 15% 40%; /* cinza médio balanceado */
+    --muted: 217 19% 27%;
+    --muted-foreground: 215 20% 65%;
 
-    /* Electric Blue - cor de destaque vibrante */
-    --accent: 200 100% 55%; /* #00bfff - azul elétrico */
-    --accent-foreground: 0 0% 100%;
+    --accent: 330 81% 60%;
+    --accent-foreground: 210 40% 98%;
 
-    --destructive: 350 90% 65%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
 
-    --border: 225 10% 88%;
-    --input: 225 10% 97%;
-    --ring: 270 100% 65%; /* roxo neon focus */
+    --border: 217 19% 27%;
+    --input: 217 19% 27%;
+    --ring: 262 83% 58%;
 
-    --radius: 20px; /* Border radius ultra moderno */
+    --radius: 16px;
 
-    /* Paleta Instalei 2025 - Sistema Ultra Dinâmico */
-    --instalei-purple-50: 270 100% 98%;
-    --instalei-purple-100: 270 100% 95%;
-    --instalei-purple-200: 270 100% 88%;
-    --instalei-purple-300: 270 100% 78%;
-    --instalei-purple-400: 270 100% 70%;
-    --instalei-purple-500: 270 100% 65%; /* Roxo neon principal */
-    --instalei-purple-600: 270 100% 58%;
-    --instalei-purple-700: 270 100% 50%;
-    --instalei-purple-800: 270 100% 42%;
-    --instalei-purple-900: 270 100% 35%;
+    /* Paleta Brand */
+    --instalei-purple-50: 262 83% 98%;
+    --instalei-purple-100: 262 83% 95%;
+    --instalei-purple-200: 262 83% 88%;
+    --instalei-purple-300: 262 83% 78%;
+    --instalei-purple-400: 262 83% 68%;
+    --instalei-purple-500: 262 83% 58%;
+    --instalei-purple-600: 262 83% 48%;
+    --instalei-purple-700: 262 83% 38%;
+    --instalei-purple-800: 262 83% 28%;
+    --instalei-purple-900: 262 83% 18%;
 
-    --instalei-blue-50: 200 100% 98%;
-    --instalei-blue-100: 200 100% 93%;
-    --instalei-blue-200: 200 100% 85%;
-    --instalei-blue-300: 200 100% 75%;
-    --instalei-blue-400: 200 100% 65%;
-    --instalei-blue-500: 200 100% 55%; /* Azul elétrico principal */
-    --instalei-blue-600: 200 100% 48%;
-    --instalei-blue-700: 200 100% 40%;
+    --instalei-blue-50: 192 91% 98%;
+    --instalei-blue-100: 192 91% 93%;
+    --instalei-blue-200: 192 91% 83%;
+    --instalei-blue-300: 192 91% 73%;
+    --instalei-blue-400: 192 91% 56%;
+    --instalei-blue-500: 192 91% 36%;
+    --instalei-blue-600: 192 91% 26%;
+    --instalei-blue-700: 192 91% 16%;
 
-    /* Gradiente cibernético adicional */
-    --instalei-cyan-500: 180 100% 50%; /* Ciano vibrante */
-    --instalei-pink-500: 320 100% 70%; /* Rosa neon */
+    --instalei-cyan-500: 180 100% 50%;
+    --instalei-pink-500: 330 81% 60%;
 
-    /* Textos ultra modernos */
+    /* Cores de texto */
     --instalei-text-white: 0 0% 100%;
-    --instalei-text-light: 225 15% 75%; /* #a8a29e */
-    --instalei-text-medium: 225 20% 25%; /* #3c3c43 */
-    --instalei-text-dark: 225 20% 8%; /* #1a1a1e */
+    --instalei-text-light: 215 20% 75%;
+    --instalei-text-medium: 215 20% 45%;
+    --instalei-text-dark: 217 33% 17%;
 
-    /* Gradientes Ultra Dinâmicos */
-    --gradient-purple-neon: linear-gradient(135deg, hsl(270 100% 65%), hsl(320 100% 70%));
-    --gradient-cyber: linear-gradient(135deg, hsl(270 100% 65%), hsl(200 100% 55%), hsl(180 100% 50%));
-    --gradient-electric: linear-gradient(135deg, hsl(200 100% 55%), hsl(180 100% 50%));
-    --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-    --gradient-sunset: linear-gradient(135deg, hsl(320 100% 70%), hsl(35 100% 60%));
-    --gradient-ocean: linear-gradient(135deg, hsl(200 100% 55%), hsl(270 100% 65%));
+    /* Gradientes Premium */
+    --gradient-purple-neon: linear-gradient(135deg, hsl(262 83% 58%) 0%, hsl(330 81% 60%) 100%);
+    --gradient-cyber: linear-gradient(135deg, hsl(262 83% 58%) 0%, hsl(192 91% 36%) 50%, hsl(330 81% 60%) 100%);
+    --gradient-electric: linear-gradient(135deg, hsl(192 91% 36%) 0%, hsl(180 100% 50%) 100%);
+    --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.03));
+    --gradient-sunset: linear-gradient(135deg, hsl(330 81% 60%) 0%, hsl(35 100% 60%) 100%);
+    --gradient-ocean: linear-gradient(135deg, hsl(192 91% 36%) 0%, hsl(262 83% 58%) 100%);
+    --gradient-mesh: radial-gradient(at 40% 20%, hsla(262, 83%, 58%, 0.2) 0px, transparent 50%),
+                     radial-gradient(at 80% 0%, hsla(192, 91%, 36%, 0.15) 0px, transparent 50%),
+                     radial-gradient(at 0% 50%, hsla(330, 81%, 60%, 0.15) 0px, transparent 50%);
 
-    /* Sidebar moderno */
-    --sidebar-background: 253 88% 40%;
-    --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 253 88% 50%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 25 95% 53%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 253 88% 35%;
-    --sidebar-ring: 25 95% 53%;
+    /* Sidebar */
+    --sidebar-background: 217 33% 17%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 262 83% 58%;
+    --sidebar-primary-foreground: 210 40% 98%;
+    --sidebar-accent: 192 91% 36%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 217 19% 27%;
+    --sidebar-ring: 262 83% 58%;
   }
 
   .dark {
-    --background: 225 30% 6%; /* Fundo escuro futurista */
-    --foreground: 0 0% 98%;
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
 
-    --card: 225 25% 10%; /* Cards escuros com tom azulado */
-    --card-foreground: 0 0% 98%;
+    --card: 217 33% 17%;
+    --card-foreground: 210 40% 98%;
 
-    --popover: 225 25% 10%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 217 33% 17%;
+    --popover-foreground: 210 40% 98%;
 
-    --primary: 270 100% 70%; /* Roxo neon ainda mais vibrante no escuro */
-    --primary-foreground: 225 30% 6%;
+    --primary: 262 83% 58%;
+    --primary-foreground: 210 40% 98%;
 
-    --secondary: 225 20% 18%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 192 91% 36%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 225 20% 12%;
-    --muted-foreground: 0 0% 70%;
+    --muted: 217 19% 27%;
+    --muted-foreground: 215 20% 65%;
 
-    --accent: 200 100% 60%; /* Azul elétrico mais intenso no escuro */
-    --accent-foreground: 225 30% 6%;
+    --accent: 330 81% 60%;
+    --accent-foreground: 210 40% 98%;
 
-    --destructive: 350 90% 70%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
 
-    --border: 225 20% 18%;
-    --input: 225 20% 12%;
-    --ring: 270 100% 70%;
+    --border: 217 19% 27%;
+    --input: 217 19% 27%;
+    --ring: 262 83% 58%;
 
-    --sidebar-background: 220 15% 8%;
-    --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 253 88% 65%;
-    --sidebar-primary-foreground: 220 15% 8%;
-    --sidebar-accent: 25 95% 58%;
-    --sidebar-accent-foreground: 220 15% 8%;
-    --sidebar-border: 220 15% 20%;
-    --sidebar-ring: 25 95% 58%;
+    --sidebar-background: 217 33% 17%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 262 83% 58%;
+    --sidebar-primary-foreground: 210 40% 98%;
+    --sidebar-accent: 192 91% 36%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 217 19% 27%;
+    --sidebar-ring: 262 83% 58%;
   }
 }
 
