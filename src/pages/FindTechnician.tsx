@@ -44,7 +44,8 @@ const FindTechnician = () => {
     selectedCity,
     setSelectedCity,
     selectedEquipmentType,
-    setSelectedEquipmentType
+    setSelectedEquipmentType,
+    updateFilters
   } = useTechnicianSearch();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [quoteDialogOpen, setQuoteDialogOpen] = useState(false);
@@ -58,14 +59,20 @@ const FindTechnician = () => {
   });
 
   const handleSearch = () => {
-    // A pesquisa já é executada automaticamente através dos useEffect no hook
-    // Este botão pode ser usado para feedback visual
-    toast({
-      title: "Pesquisa executada",
-      description: `Encontrados ${technicians.length} técnicos`,
+    // Atualiza os filtros com os valores dos campos
+    updateFilters({
+      query: searchQuery,
+      city: selectedCity,
+      state: selectedState !== 'all' ? selectedState : '',
+      equipmentType: selectedEquipmentType !== 'all' ? selectedEquipmentType : '',
+      specialty: filterByService !== 'all' ? filterByService : ''
     });
     
-    // Reset do técnico selecionado para refletir os novos resultados
+    toast({
+      title: "Pesquisa executada",
+      description: `Filtros aplicados com sucesso`,
+    });
+    
     setSelectedTechnician(null);
   };
 
