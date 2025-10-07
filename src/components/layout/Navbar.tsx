@@ -60,16 +60,12 @@ const Navbar = () => {
     path: "/contact"
   }];
 
-  // Classes dinâmicas baseadas na página - Estilo Workana
-  const navbarClasses = isHomePage 
-    ? "bg-transparent absolute w-full top-0 z-50" 
-    : "bg-card border-b border-border sticky top-0 z-50 backdrop-blur-sm";
-  const textClasses = isHomePage ? "text-white" : "text-foreground";
-  const logoClasses = isHomePage ? "text-white font-bold" : "text-primary font-bold";
-  const hoverClasses = isHomePage ? "hover:text-white/80" : "hover:text-primary";
-  const baseClasses = isHomePage 
-    ? "text-white/90 hover:text-white transition-colors duration-200" 
-    : "text-muted-foreground hover:text-foreground transition-colors duration-200";
+  // Classes para o navbar com cores específicas
+  const navbarClasses = "bg-[#2563eb] w-full top-0 z-50 shadow-md";
+  const textClasses = "text-white";
+  const logoClasses = "text-white font-bold";
+  const hoverClasses = "hover:text-white/80";
+  const baseClasses = "text-white hover:text-white/80 transition-colors duration-200";
   return <nav className={navbarClasses}>
       <div className="container flex items-center justify-between h-16 px-4 md:px-6 mx-auto max-w-7xl">
         {/* Logo */}
@@ -90,7 +86,7 @@ const Navbar = () => {
         <div className="hidden md:flex md:items-center md:gap-2">
           {isAuthenticated ? <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className={`flex items-center gap-1 ${baseClasses}`}>
+                <Button variant="ghost" className="flex items-center gap-1 text-white hover:text-white/80">
                   <User className="h-4 w-4" />
                   <span>Minha Conta</span>
                   <ChevronDown className="h-4 w-4" />
@@ -110,13 +106,19 @@ const Navbar = () => {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu> : <>
-              <Button variant="ghost" size="sm" onClick={handleLoginClick} className={baseClasses}>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={handleLoginClick} 
+                className="bg-white text-[#2563eb] hover:bg-white/90 font-semibold"
+              >
                 Entrar
               </Button>
               
               <Button 
                 size="sm" 
                 onClick={() => navigate('/register')}
+                className="bg-[#1e40af] text-white hover:bg-[#1e3a8a] font-semibold"
               >
                 Cadastre-se
               </Button>
@@ -125,21 +127,21 @@ const Navbar = () => {
 
         {/* Mobile Menu Toggle */}
         <div className="md:hidden">
-          <Button variant="ghost" size="icon" onClick={toggleMenu} aria-label="Toggle Menu" className={baseClasses}>
+          <Button variant="ghost" size="icon" onClick={toggleMenu} aria-label="Toggle Menu" className="text-white hover:text-white/80">
             {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </Button>
         </div>
 
         {/* Mobile Menu */}
-        {isMenuOpen && <div className="absolute top-16 left-0 w-full bg-card border-b border-border shadow-lg z-50 md:hidden">
+        {isMenuOpen && <div className="absolute top-16 left-0 w-full bg-[#2563eb] border-b border-white/10 shadow-lg z-50 md:hidden">
             <div className="flex flex-col space-y-1 px-4 py-4">
-              {menuItems.map(item => <Link key={item.path} to={item.path} className="text-sm font-medium p-3 rounded-lg hover:bg-accent/10 transition-colors duration-200" onClick={() => setIsMenuOpen(false)}>
+              {menuItems.map(item => <Link key={item.path} to={item.path} className="text-sm font-medium p-3 rounded-lg text-white hover:bg-white/10 transition-colors duration-200" onClick={() => setIsMenuOpen(false)}>
                   {item.label}
                 </Link>)}
               
-              <div className="border-t border-border pt-3 mt-3">
+              <div className="border-t border-white/10 pt-3 mt-3">
                 {isAuthenticated ? <>
-                    <Link to={userType === "customer" ? "/cliente/perfil" : userType === "technician" ? "/tecnico/perfil" : "/store/profile"} className="flex items-center p-3 rounded-lg hover:bg-accent/10 w-full mb-2 transition-colors duration-200" onClick={() => setIsMenuOpen(false)}>
+                    <Link to={userType === "customer" ? "/cliente/perfil" : userType === "technician" ? "/tecnico/perfil" : "/store/profile"} className="flex items-center p-3 rounded-lg hover:bg-white/10 w-full mb-2 transition-colors duration-200 text-white" onClick={() => setIsMenuOpen(false)}>
                       <User className="h-5 w-5 mr-3" />
                       <span className="font-medium">Meu Perfil</span>
                     </Link>
@@ -147,12 +149,12 @@ const Navbar = () => {
                       Sair
                     </Button>
                   </> : <div className="flex flex-col space-y-2">
-                    <Button variant="ghost" className="w-full justify-center" onClick={handleLoginClick}>
+                    <Button className="w-full justify-center bg-white text-[#2563eb] hover:bg-white/90 font-semibold" onClick={handleLoginClick}>
                       Entrar
                     </Button>
                     
                     <Button 
-                      className="w-full justify-center" 
+                      className="w-full justify-center bg-[#1e40af] text-white hover:bg-[#1e3a8a] font-semibold" 
                       onClick={() => {
                         navigate('/register');
                         setIsMenuOpen(false);
