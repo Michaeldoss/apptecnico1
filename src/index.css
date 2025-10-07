@@ -7,127 +7,120 @@
 
 @layer base {
   :root {
-    /* Design System Premium Dark 2025 */
-    --background: 215 28% 7%;
-    --foreground: 210 40% 98%;
+    /* Workana-Inspired Design System */
+    --background: 210 100% 98%;
+    --foreground: 215 30% 15%;
 
-    --card: 217 32% 11%;
-    --card-foreground: 210 40% 98%;
+    --card: 0 0% 100%;
+    --card-foreground: 215 30% 15%;
 
-    --popover: 217 32% 11%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 30% 15%;
 
-    /* Cores principais cyber */
-    --primary: 195 100% 50%;
-    --primary-foreground: 210 40% 98%;
+    /* Cores principais Workana-style */
+    --primary: 211 100% 50%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 195 91% 45%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 211 100% 96%;
+    --secondary-foreground: 211 100% 30%;
 
-    --muted: 217 19% 20%;
-    --muted-foreground: 215 16% 58%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
 
-    --accent: 195 100% 50%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 211 100% 50%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 217 19% 15%;
-    --input: 217 32% 8%;
-    --ring: 195 100% 50%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 211 100% 50%;
 
-    --radius: 16px;
+    --radius: 12px;
 
-    /* Paleta Brand Cyber */
-    --instalei-purple-50: 215 28% 98%;
-    --instalei-purple-100: 215 28% 95%;
-    --instalei-purple-200: 215 28% 88%;
-    --instalei-purple-300: 215 28% 78%;
-    --instalei-purple-400: 215 28% 40%;
-    --instalei-purple-500: 215 28% 17%;
-    --instalei-purple-600: 215 28% 12%;
-    --instalei-purple-700: 215 28% 9%;
-    --instalei-purple-800: 215 28% 6%;
-    --instalei-purple-900: 215 28% 4%;
+    /* Paleta Workana Blue */
+    --workana-blue-50: 211 100% 98%;
+    --workana-blue-100: 211 100% 96%;
+    --workana-blue-200: 211 100% 90%;
+    --workana-blue-300: 211 100% 80%;
+    --workana-blue-400: 211 100% 60%;
+    --workana-blue-500: 211 100% 50%;
+    --workana-blue-600: 211 100% 40%;
+    --workana-blue-700: 211 100% 30%;
+    --workana-blue-800: 211 80% 20%;
+    --workana-blue-900: 211 70% 12%;
 
-    --instalei-blue-50: 195 100% 98%;
-    --instalei-blue-100: 195 100% 93%;
-    --instalei-blue-200: 195 100% 83%;
-    --instalei-blue-300: 195 100% 73%;
-    --instalei-blue-400: 195 100% 60%;
-    --instalei-blue-500: 195 100% 50%;
-    --instalei-blue-600: 195 91% 40%;
-    --instalei-blue-700: 195 91% 30%;
+    --workana-navy-50: 215 30% 95%;
+    --workana-navy-100: 215 30% 85%;
+    --workana-navy-200: 215 30% 70%;
+    --workana-navy-300: 215 30% 50%;
+    --workana-navy-400: 215 30% 35%;
+    --workana-navy-500: 215 30% 25%;
+    --workana-navy-600: 215 30% 20%;
+    --workana-navy-700: 215 30% 15%;
+    --workana-navy-800: 215 30% 10%;
+    --workana-navy-900: 215 30% 8%;
 
-    --instalei-cyan-500: 180 100% 50%;
-    --instalei-pink-500: 195 100% 65%;
+    /* Cores de texto Workana */
+    --workana-text-primary: 215 30% 15%;
+    --workana-text-secondary: 215 16% 47%;
+    --workana-text-light: 215 20% 65%;
+    --workana-text-white: 0 0% 100%;
 
-    /* Cores de texto */
-    --instalei-text-white: 0 0% 100%;
-    --instalei-text-light: 215 20% 75%;
-    --instalei-text-medium: 215 20% 45%;
-    --instalei-text-dark: 217 33% 17%;
+    /* Gradientes Workana Clean */
+    --gradient-primary: linear-gradient(135deg, hsl(211 100% 50%) 0%, hsl(211 100% 60%) 100%);
+    --gradient-hero: linear-gradient(180deg, hsl(211 100% 98%) 0%, hsl(0 0% 100%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(211 100% 99%) 100%);
 
-    /* Gradientes Cyber Premium */
-    --gradient-purple-neon: linear-gradient(135deg, hsl(195 100% 50%) 0%, hsl(180 100% 50%) 100%);
-    --gradient-cyber: linear-gradient(135deg, hsl(215 28% 12%) 0%, hsl(195 100% 50%) 50%, hsl(180 100% 50%) 100%);
-    --gradient-electric: linear-gradient(135deg, hsl(195 100% 50%) 0%, hsl(180 100% 50%) 100%);
-    --gradient-glass: linear-gradient(135deg, rgba(31, 182, 255, 0.04), rgba(31, 182, 255, 0.01));
-    --gradient-sunset: linear-gradient(135deg, hsl(195 100% 50%) 0%, hsl(180 100% 60%) 100%);
-    --gradient-ocean: linear-gradient(135deg, hsl(195 100% 50%) 0%, hsl(215 28% 17%) 100%);
-    --gradient-mesh: radial-gradient(at 40% 20%, hsla(195, 100%, 50%, 0.15) 0px, transparent 50%),
-                     radial-gradient(at 80% 0%, hsla(180, 100%, 50%, 0.1) 0px, transparent 50%),
-                     radial-gradient(at 0% 50%, hsla(195, 100%, 65%, 0.1) 0px, transparent 50%);
-
-    /* Sidebar Cyber */
-    --sidebar-background: 217 32% 11%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 195 100% 50%;
-    --sidebar-primary-foreground: 210 40% 98%;
-    --sidebar-accent: 195 100% 50%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 217 19% 15%;
-    --sidebar-ring: 195 100% 50%;
+    /* Sidebar Workana */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 215 30% 15%;
+    --sidebar-primary: 211 100% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 211 100% 50%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 214 32% 91%;
+    --sidebar-ring: 211 100% 50%;
   }
 
   .dark {
-    --background: 215 28% 7%;
+    --background: 211 60% 8%;
     --foreground: 210 40% 98%;
 
-    --card: 217 32% 11%;
+    --card: 211 50% 12%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 217 32% 11%;
+    --popover: 211 50% 12%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 195 100% 50%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 211 100% 50%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 195 91% 45%;
+    --secondary: 211 50% 20%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 217 19% 20%;
-    --muted-foreground: 215 16% 58%;
+    --muted: 215 30% 18%;
+    --muted-foreground: 215 20% 65%;
 
-    --accent: 195 100% 50%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 211 100% 50%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 217 19% 15%;
-    --input: 217 32% 8%;
-    --ring: 195 100% 50%;
+    --border: 215 30% 20%;
+    --input: 215 30% 15%;
+    --ring: 211 100% 50%;
 
-    --sidebar-background: 217 32% 11%;
+    --sidebar-background: 211 50% 12%;
     --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 195 100% 50%;
-    --sidebar-primary-foreground: 210 40% 98%;
-    --sidebar-accent: 195 100% 50%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 217 19% 15%;
-    --sidebar-ring: 195 100% 50%;
+    --sidebar-primary: 211 100% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 211 100% 50%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 215 30% 20%;
+    --sidebar-ring: 211 100% 50%;
   }
 }
 
@@ -140,12 +133,12 @@
     @apply antialiased;
     font-family: 'Inter', sans-serif;
     font-weight: 400;
-    background: linear-gradient(180deg, hsl(215 28% 4%) 0%, hsl(215 28% 7%) 100%);
+    background: hsl(var(--background));
     color: hsl(var(--foreground));
   }
 
   body {
-    background: linear-gradient(180deg, hsl(215 28% 4%) 0%, hsl(215 28% 7%) 100%);
+    background: hsl(var(--background));
     color: hsl(var(--foreground));
   }
 
@@ -153,13 +146,13 @@
     font-family: 'Inter', sans-serif;
   }
 
-  /* Tipografia moderna e harmônica 2025 */
+  /* Tipografia Workana - Clean e Bold */
   h1, .text-4xl, .text-5xl, .text-6xl, .text-7xl {
     @apply font-bold;
     font-weight: 700;
-    letter-spacing: -0.02em; /* Tracking moderno */
-    color: hsl(var(--instalei-text-dark));
-    margin-bottom: 32px;
+    letter-spacing: -0.03em;
+    color: hsl(var(--foreground));
+    margin-bottom: 24px;
     line-height: 1.1;
     font-family: 'Inter', sans-serif;
   }
@@ -167,9 +160,9 @@
   h2, h3, .text-2xl, .text-3xl {
     @apply font-semibold;
     font-weight: 600;
-    letter-spacing: -0.01em;
-    color: hsl(var(--instalei-text-dark));
-    margin-bottom: 24px;
+    letter-spacing: -0.02em;
+    color: hsl(var(--foreground));
+    margin-bottom: 20px;
     line-height: 1.2;
     font-family: 'Inter', sans-serif;
   }
@@ -177,8 +170,8 @@
   h4, h5, h6, .text-lg, .text-xl {
     @apply font-medium;
     font-weight: 500;
-    letter-spacing: 0em;
-    color: hsl(var(--instalei-text-dark));
+    letter-spacing: -0.01em;
+    color: hsl(var(--foreground));
     margin-bottom: 16px;
     line-height: 1.3;
     font-family: 'Inter', sans-serif;
@@ -186,257 +179,129 @@
 
   p, span, div {
     font-weight: 400;
-    color: hsl(var(--instalei-text-medium));
-    line-height: 1.7; /* Melhor legibilidade */
-    margin-bottom: 20px;
+    color: hsl(var(--muted-foreground));
+    line-height: 1.6;
+    margin-bottom: 16px;
     font-family: 'Inter', sans-serif;
   }
 
-  /* Classes de texto semânticas modernas */
+  /* Classes de texto semânticas Workana */
   .text-primary {
-    color: hsl(var(--instalei-purple-500)) !important;
+    color: hsl(var(--primary)) !important;
   }
 
   .text-secondary {
-    color: hsl(var(--instalei-text-medium)) !important;
-  }
-
-  .text-accent {
-    color: hsl(var(--instalei-orange-500)) !important;
-  }
-
-  .text-white {
-    color: hsl(var(--instalei-text-white)) !important;
-  }
-
-  .text-light {
-    color: hsl(var(--instalei-text-light)) !important;
-  }
-
-  .text-dark {
-    color: hsl(var(--instalei-text-dark)) !important;
+    color: hsl(var(--muted-foreground)) !important;
   }
 
   .text-muted {
     color: hsl(var(--muted-foreground)) !important;
   }
 
-  /* Sistema de Botões Ultra Moderno 2025 */
+  /* Sistema de Botões Workana - Clean e Direto */
   .btn-primary {
-    @apply font-semibold transition-all duration-500 ease-out;
-    background: var(--gradient-purple-neon);
-    color: hsl(var(--instalei-text-white));
-    font-weight: 700;
-    padding: 18px 36px;
+    @apply font-semibold transition-all duration-200;
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    font-weight: 600;
+    padding: 14px 32px;
     border-radius: var(--radius);
-    box-shadow: 0 12px 32px hsla(var(--instalei-purple-500), 0.3), 
-                0 0 40px hsla(var(--instalei-purple-500), 0.1);
     border: none;
     cursor: pointer;
-    position: relative;
-    overflow: hidden;
     font-family: 'Inter', sans-serif;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    font-size: 14px;
-  }
-
-  .btn-primary::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-    transition: left 0.6s ease-out;
-  }
-
-  .btn-primary::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: var(--gradient-cyber);
-    opacity: 0;
-    transition: opacity 0.3s ease;
+    font-size: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   }
 
   .btn-primary:hover {
-    transform: translateY(-6px) scale(1.02);
-    box-shadow: 0 20px 60px hsla(var(--instalei-purple-500), 0.4),
-                0 0 80px hsla(var(--instalei-purple-500), 0.2);
-  }
-
-  .btn-primary:hover::before {
-    left: 100%;
-  }
-
-  .btn-primary:hover::after {
-    opacity: 1;
+    background: hsl(var(--workana-blue-600));
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.2);
+    transform: translateY(-1px);
   }
 
   .btn-secondary {
-    @apply font-semibold transition-all duration-500 ease-out;
-    background: var(--gradient-electric);
-    color: hsl(var(--instalei-text-white));
-    font-weight: 700;
-    padding: 18px 36px;
+    @apply font-semibold transition-all duration-200;
+    background: hsl(var(--secondary));
+    color: hsl(var(--secondary-foreground));
+    font-weight: 600;
+    padding: 14px 32px;
     border-radius: var(--radius);
-    box-shadow: 0 12px 32px hsla(var(--instalei-blue-500), 0.3),
-                0 0 40px hsla(var(--instalei-blue-500), 0.1);
     border: none;
     cursor: pointer;
     font-family: 'Inter', sans-serif;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    font-size: 14px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .btn-secondary::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: var(--gradient-sunset);
-    opacity: 0;
-    transition: opacity 0.3s ease;
+    font-size: 16px;
   }
 
   .btn-secondary:hover {
-    transform: translateY(-6px) scale(1.02);
-    box-shadow: 0 20px 60px hsla(var(--instalei-blue-500), 0.4),
-                0 0 80px hsla(var(--instalei-blue-500), 0.2);
-  }
-
-  .btn-secondary:hover::after {
-    opacity: 1;
+    background: hsl(var(--workana-blue-100));
   }
 
   .btn-outline {
-    @apply font-semibold transition-all duration-300 ease-out;
+    @apply font-semibold transition-all duration-200;
     background-color: transparent;
-    color: hsl(var(--instalei-purple-500));
-    border: 2px solid hsl(var(--instalei-purple-500));
+    color: hsl(var(--primary));
+    border: 2px solid hsl(var(--primary));
     font-weight: 600;
-    padding: 14px 30px;
+    padding: 12px 30px;
     border-radius: var(--radius);
     cursor: pointer;
     font-family: 'Inter', sans-serif;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .btn-outline::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 0;
-    height: 100%;
-    background: hsl(var(--instalei-purple-500));
-    transition: width 0.3s ease;
-    z-index: -1;
+    font-size: 16px;
   }
 
   .btn-outline:hover {
-    color: hsl(var(--instalei-text-white));
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px hsla(var(--instalei-purple-500), 0.2);
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    transform: translateY(-1px);
   }
 
-  .btn-outline:hover::before {
-    width: 100%;
-  }
-
-  /* Sistema de Cards Ultra Moderno Cyber 2025 */
+  /* Sistema de Cards Workana - Clean e Minimalista */
   .card-instalei {
-    background: var(--gradient-glass);
-    backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid hsla(var(--instalei-blue-500), 0.15);
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
     border-radius: var(--radius);
     color: hsl(var(--card-foreground));
-    padding: 36px;
-    margin-bottom: 28px;
-    box-shadow: 0 8px 32px hsla(195, 100%, 50%, 0.1),
-                0 4px 16px hsla(0, 0%, 0%, 0.3);
-    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .card-instalei::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: var(--gradient-electric);
-    transform: scaleX(0);
-    transition: transform 0.4s ease;
-  }
-
-  .card-instalei::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 50% 50%, hsla(var(--instalei-blue-500), 0.05), transparent 70%);
-    opacity: 0;
-    transition: opacity 0.4s ease;
+    padding: 32px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
   }
 
   .card-instalei:hover {
-    border-color: hsla(var(--instalei-blue-500), 0.4);
-    box-shadow: 0 20px 60px hsla(195, 100%, 50%, 0.2),
-                0 8px 32px hsla(0, 0%, 0%, 0.15);
-    transform: translateY(-12px) scale(1.01);
-  }
-
-  .card-instalei:hover::before {
-    transform: scaleX(1);
-  }
-
-  .card-instalei:hover::after {
-    opacity: 1;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
   }
 
   .card-gradient {
-    background: var(--gradient-cyber);
-    color: hsl(var(--instalei-text-white));
-    border: 1px solid hsla(var(--instalei-cyan-500), 0.3);
-    backdrop-filter: blur(24px);
-    box-shadow: 0 16px 48px hsla(270, 100%, 65%, 0.2),
-                0 0 80px hsla(var(--instalei-cyan-500), 0.1);
+    background: var(--gradient-card);
+    border: 1px solid hsl(var(--border));
   }
 
-  /* Sistema de Inputs Instalei - Sempre editáveis */
+  /* Sistema de Inputs Workana - Clean */
   input, textarea, select {
     background-color: hsl(var(--input));
-    border: 2px solid hsl(var(--border));
+    border: 1px solid hsl(var(--border));
     border-radius: var(--radius);
     color: hsl(var(--foreground));
     padding: 12px 16px;
     margin-bottom: 16px;
-    font-size: 14px;
+    font-size: 15px;
     line-height: 1.5;
-    transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease;
     width: 100%;
     font-family: 'Inter', sans-serif;
-    /* Sempre habilitado para edição */
     pointer-events: auto;
     user-select: text;
   }
 
   input:focus, textarea:focus, select:focus {
-    border-color: hsl(var(--instalei-orange-500));
-    box-shadow: 0 0 0 3px hsla(var(--instalei-orange-500), 0.1);
+    border-color: hsl(var(--primary));
+    box-shadow: 0 0 0 3px hsla(var(--primary), 0.1);
     outline: none;
-    background-color: hsl(var(--background));
   }
 
   input:hover, textarea:hover, select:hover {
-    border-color: hsl(var(--instalei-purple-400));
+    border-color: hsl(var(--workana-blue-300));
   }
 
   input::placeholder, textarea::placeholder {
@@ -449,10 +314,9 @@
   label {
     display: block;
     font-weight: 600;
-    color: hsl(var(--instalei-purple-600));
+    color: hsl(var(--foreground));
     margin-bottom: 8px;
     font-size: 14px;
-    letter-spacing: 0.25px;
   }
 
   /* Remover readonly styles - todos os campos são editáveis */
@@ -486,11 +350,11 @@
 
   /* Sistema de Badges */
   .badge-primary {
-    background-color: hsl(var(--instalei-purple-500));
-    color: hsl(var(--instalei-text-white));
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-size: 12px;
+    background-color: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 13px;
     font-weight: 600;
     display: inline-flex;
     align-items: center;
@@ -498,11 +362,11 @@
   }
 
   .badge-secondary {
-    background-color: hsl(var(--instalei-orange-500));
-    color: hsl(var(--instalei-text-white));
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-size: 12px;
+    background-color: hsl(var(--secondary));
+    color: hsl(var(--secondary-foreground));
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 13px;
     font-weight: 600;
     display: inline-flex;
     align-items: center;
@@ -511,12 +375,12 @@
 
   .badge-outline {
     background-color: transparent;
-    color: hsl(var(--instalei-purple-500));
-    border: 2px solid hsl(var(--instalei-purple-500));
-    padding: 4px 10px;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 600;
+    color: hsl(var(--primary));
+    border: 1px solid hsl(var(--border));
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
     display: inline-flex;
     align-items: center;
     gap: 4px;
@@ -524,11 +388,11 @@
 
   /* Ícones padrão */
   .icon-accent {
-    color: hsl(var(--instalei-orange-500));
+    color: hsl(var(--primary));
   }
 
   .icon-primary {
-    color: hsl(var(--instalei-purple-500));
+    color: hsl(var(--primary));
   }
 }
 
@@ -570,12 +434,12 @@
 }
 
 .scroll-container::-webkit-scrollbar-thumb {
-  background-color: hsla(273, 96%, 18%, 0.3); /* roxo Make */
+  background-color: hsla(var(--primary), 0.2);
   border-radius: 4px;
 }
 
 .scroll-container::-webkit-scrollbar-thumb:hover {
-  background-color: hsla(273, 96%, 18%, 0.5); /* roxo Make */
+  background-color: hsla(var(--primary), 0.4);
 }
 
 /* Sistema de Layout Instalei */
