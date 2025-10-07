@@ -60,45 +60,40 @@ const Navbar = () => {
     path: "/contact"
   }];
 
-  // Classes para o navbar com cores específicas
-  const navbarClasses = "bg-[#2563eb] w-full top-0 z-50 shadow-lg";
-  const linkClasses = "text-white hover:opacity-80 transition-opacity duration-200 font-medium text-base px-4 py-2";
-  return <nav className={navbarClasses}>
-      <div className="mx-auto max-w-[1200px] px-6">
-        <div className="flex items-center justify-between py-4">
-          {/* Left Section: Logo + Menu Items */}
-          <div className="flex items-center gap-8">
-            {/* Logo */}
-            <Link to="/" className="flex items-center">
-              <span className="text-2xl font-semibold text-white tracking-tight">
-                Instalei
-              </span>
-            </Link>
+  // Estilos profissionais para o navbar
+  const navbarClasses = "bg-[#2563eb] w-full sticky top-0 z-50 shadow-sm";
+  const linkClasses = "text-white hover:opacity-80 transition-opacity duration-200 font-medium text-base px-3 py-2";
+  return <nav className={navbarClasses} style={{ fontFamily: 'system-ui, -apple-system, Inter, sans-serif' }}>
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="flex items-center justify-between h-16">
+          {/* Logo à esquerda */}
+          <Link to="/" className="flex items-center">
+            <span className="text-xl font-semibold text-white tracking-tight">
+              Instalei
+            </span>
+          </Link>
 
-            {/* Desktop Navigation Links - Left */}
-            <div className="hidden lg:flex items-center gap-2">
-              {menuItemsLeft.map(item => (
-                <Link key={item.path} to={item.path} className={linkClasses}>
-                  {item.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* Right Section: Menu Items + Auth Buttons */}
-          <div className="hidden lg:flex items-center gap-2">
-            {/* Desktop Navigation Links - Right */}
+          {/* Links centrais - Desktop */}
+          <div className="hidden lg:flex items-center gap-1">
+            {menuItemsLeft.map(item => (
+              <Link key={item.path} to={item.path} className={linkClasses} style={{ fontWeight: 500, lineHeight: 1.5 }}>
+                {item.label}
+              </Link>
+            ))}
             {menuItemsRight.map(item => (
-              <Link key={item.path} to={item.path} className={linkClasses}>
+              <Link key={item.path} to={item.path} className={linkClasses} style={{ fontWeight: 500, lineHeight: 1.5 }}>
                 {item.label}
               </Link>
             ))}
 
-            {/* Desktop Auth Buttons */}
+          </div>
+
+          {/* Botões de autenticação à direita - Desktop */}
+          <div className="hidden lg:flex items-center gap-3">
             {isAuthenticated ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="flex items-center gap-1 text-white hover:opacity-80 font-medium">
+                  <Button variant="ghost" className="flex items-center gap-2 text-white hover:opacity-80 font-medium" style={{ fontWeight: 500 }}>
                     <User className="h-4 w-4" />
                     <span>Minha Conta</span>
                     <ChevronDown className="h-4 w-4" />
@@ -124,7 +119,8 @@ const Navbar = () => {
                   variant="ghost" 
                   size="sm" 
                   onClick={handleLoginClick} 
-                  className="bg-white text-[#2563eb] hover:bg-white/90 font-semibold text-base px-6 py-2 h-auto"
+                  className="bg-white text-[#2563eb] hover:bg-white/90 font-semibold rounded-lg px-5 py-2 h-auto text-base"
+                  style={{ fontWeight: 600, lineHeight: 1.5 }}
                 >
                   Entrar
                 </Button>
@@ -132,7 +128,8 @@ const Navbar = () => {
                 <Button 
                   size="sm" 
                   onClick={() => navigate('/register')}
-                  className="bg-[#1e40af] text-white hover:bg-[#1e3a8a] font-semibold text-base px-6 py-2 h-auto"
+                  className="bg-[#1e40af] text-white hover:bg-[#1e3a8a] font-semibold rounded-lg px-5 py-2 h-auto text-base"
+                  style={{ fontWeight: 600, lineHeight: 1.5 }}
                 >
                   Cadastre-se
                 </Button>
@@ -140,7 +137,7 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Mobile Menu Toggle */}
+          {/* Menu hamburguer para mobile */}
           <div className="lg:hidden">
             <Button variant="ghost" size="icon" onClick={toggleMenu} aria-label="Toggle Menu" className="text-white hover:opacity-80">
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
