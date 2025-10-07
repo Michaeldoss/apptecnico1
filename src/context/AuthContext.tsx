@@ -35,25 +35,41 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = async (email: string, password: string): Promise<boolean> => {
     const validationResult = loginSchema.safeParse({ email, password });
     if (!validationResult.success) {
-      toast({ variant: "destructive", title: "Erro", description: validationResult.error.errors[0].message });
+      toast({ variant: "destructive", title: "Erro de validação", description: validationResult.error.errors[0].message });
       return false;
     }
 
+    console.log('🔐 Tentando login para:', email);
+    
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
-      toast({ variant: "destructive", title: "Falha no login", description: error.message });
+      console.error('❌ Erro no login:', error);
+      
+      // Mensagens de erro mais específicas
+      let errorMessage = 'Erro ao fazer login. Tente novamente.';
+      if (error.message.includes('Invalid login credentials')) {
+        errorMessage = 'Email ou senha incorretos. Verifique suas credenciais.';
+      } else if (error.message.includes('Email not confirmed')) {
+        errorMessage = 'Email não confirmado. Verifique sua caixa de entrada.';
+      }
+      
+      toast({ variant: "destructive", title: "Falha no login", description: errorMessage });
       return false;
     }
 
-    if (data?.user) {
+    if (data?.user && data?.session) {
+      console.log('✅ Login bem-sucedido:', data.user.id);
+      
+      // Atualizar estados imediatamente
       setUser(data.user);
-      setIsAuthenticated(true);
       setSession(data.session);
+      setIsAuthenticated(true);
 
-      // Verificar tipo de usuário de forma sequencial
+      // Verificar tipo de usuário
       const userType = await checkUserTypeInTables(data.user.id);
       setUserType(userType);
+      console.log('👤 Tipo de usuário:', userType);
 
       if (userType) {
         const redirectPaths = {
@@ -63,16 +79,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           admin: '/admin/dashboard'
         };
         
-        toast({ title: "Login realizado", description: "Bem-vindo de volta!" });
+        console.log('🚀 Redirecionando para:', redirectPaths[userType]);
         
-        setTimeout(() => {
-          window.location.href = redirectPaths[userType];
-        }, 500);
-      } else {
-        toast({ variant: "destructive", title: "Erro", description: "Tipo de usuário não identificado" });
-      }
+        toast({ 
+          title: "Login realizado com sucesso!", 
+          description: `Bem-vindo de volta! Redirecionando para seu painel...` 
+        });
 
-      return true;
+        return true;
+      } else {
+        toast({ variant: "destructive", title: "Erro", description: "Perfil de usuário não encontrado. Entre em contato com o suporte." });
+        await supabase.auth.signOut();
+        return false;
+      }
     }
 
     return false;

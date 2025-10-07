@@ -94,9 +94,9 @@ const Login = () => {
   }, [isAuthenticated, userType, authLoading, navigate]);
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('🚀 Login Page - Tentativa de login para:', email);
+    console.log('🚀 Login - Iniciando tentativa de login');
+    
     if (!email || !password) {
-      console.log('❌ Login Page - Email ou senha vazios');
       toast({
         variant: "destructive",
         title: "Campos obrigatórios",
@@ -104,31 +104,36 @@ const Login = () => {
       });
       return;
     }
-    console.log('⏳ Login Page - Iniciando loading...');
+    
     setIsLoading(true);
+    
     try {
-      console.log('🔄 Login Page - Chamando AuthContext.login...');
       const success = await login(email, password);
-      console.log('📊 Login Page - Resultado do login:', success);
+      
       if (success) {
-        console.log('✅ Login Page - Login bem-sucedido, mostrando toast...');
-        toast({
-          title: "🎉 Login realizado!",
-          description: "Bem-vindo! Redirecionando para seu dashboard..."
-        });
-        // O redirecionamento será feito pelo useEffect após o estado ser atualizado
-      } else {
-        console.log('❌ Login Page - Login falhou (erro já tratado no AuthContext)');
+        console.log('✅ Login realizado com sucesso');
+        // Aguardar o userType ser definido e redirecionar
+        setTimeout(() => {
+          const redirectPaths = {
+            customer: '/cliente/dashboard',
+            technician: '/tecnico/dashboard',
+            company: '/loja/dashboard',
+            admin: '/admin/dashboard'
+          };
+          
+          if (userType && redirectPaths[userType]) {
+            navigate(redirectPaths[userType], { replace: true });
+          }
+        }, 1000);
       }
     } catch (error) {
-      console.error('💥 Login Page - Erro capturado no catch:', error);
+      console.error('💥 Erro no login:', error);
       toast({
         variant: "destructive",
         title: "Erro de conexão",
         description: "Não foi possível conectar. Verifique sua internet e tente novamente."
       });
     } finally {
-      console.log('🏁 Login Page - Finalizando loading...');
       setIsLoading(false);
     }
   };
@@ -142,31 +147,19 @@ const Login = () => {
         </div>
       </div>;
   }
-  return <div className="min-h-screen flex flex-col bg-gradient-to-br from-instalei-purple-500 via-instalei-purple-600 to-instalei-purple-700">
+  return <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
       
-      {/* Elementos decorativos de fundo */}
-      <div className="absolute inset-0 bg-gradient-to-r from-instalei-purple-500/20 via-transparent to-instalei-orange-500/20"></div>
-      <div className="absolute top-20 left-20 w-72 h-72 bg-white/5 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-20 right-20 w-96 h-96 bg-instalei-orange-500/10 rounded-full blur-3xl"></div>
-      
-      <main className="flex-grow flex items-center justify-center px-6 relative z-10" style={{
-      paddingTop: '8rem',
-      paddingBottom: '8rem'
-    }}>
+      <main className="flex-grow flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-md">
-          <AnimatedContainer animation="scale" className="text-center mb-instalei-lg">
-            <h1 className="text-3xl font-bold text-white drop-shadow-lg">Bem-vindo de Volta à Instalei</h1>
-            <p className="text-instalei-gray-200 mt-2 drop-shadow-md">Entre na sua conta</p>
-          </AnimatedContainer>
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-foreground mb-2">Bem-vindo de Volta</h1>
+            <p className="text-muted-foreground">Entre na sua conta para continuar</p>
+          </div>
           
-          <div className="bg-white/95 backdrop-blur-xl rounded-instalei-lg p-instalei-lg shadow-2xl border-2 border-white/30">
-            <form onSubmit={handleLogin} style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '1.5rem'
-          }}>
-              {/* Login com Google primeiro */}
+          <div className="bg-card rounded-lg p-8 shadow-sm border border-border">
+            <form onSubmit={handleLogin} className="space-y-6">
+              {/* Login com Google */}
               <div className="space-y-4">
                 <GoogleAuthProvider>
                   <GoogleLoginButton />
@@ -177,54 +170,74 @@ const Login = () => {
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-border"></div>
                 </div>
-                <div className="relative px-4 bg-white text-sm text-foreground font-medium">Ou continue com email</div>
+                <div className="relative px-4 bg-card text-sm text-muted-foreground">Ou continue com email</div>
               </div>
 
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-primary font-semibold">Email</Label>
-                  <Input id="email" type="email" placeholder="nome@exemplo.com" required className="w-full rounded-instalei border-2 border-border focus:border-accent text-foreground bg-background" value={email} onChange={e => setEmail(e.target.value)} disabled={isLoading} />
+                  <Label htmlFor="email" className="text-sm font-medium">Email</Label>
+                  <Input 
+                    id="email" 
+                    type="email" 
+                    placeholder="seu@email.com" 
+                    required 
+                    className="w-full" 
+                    value={email} 
+                    onChange={e => setEmail(e.target.value)} 
+                    disabled={isLoading} 
+                  />
                 </div>
                 
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <Label htmlFor="password" className="text-primary font-semibold">Senha</Label>
-                    <Link to="/forgot-password" className="text-sm text-accent hover:underline font-medium">
+                    <Label htmlFor="password" className="text-sm font-medium">Senha</Label>
+                    <Link to="/forgot-password" className="text-sm text-primary hover:underline">
                       Esqueceu a senha?
                     </Link>
                   </div>
-                  <Input id="password" type="password" placeholder="••••••••" required className="w-full rounded-instalei border-2 border-border focus:border-accent text-foreground bg-background" value={password} onChange={e => setPassword(e.target.value)} disabled={isLoading} />
+                  <Input 
+                    id="password" 
+                    type="password" 
+                    placeholder="••••••••" 
+                    required 
+                    className="w-full" 
+                    value={password} 
+                    onChange={e => setPassword(e.target.value)} 
+                    disabled={isLoading} 
+                  />
                 </div>
                 
                 <div className="flex items-center space-x-2">
                   <Checkbox id="remember" />
-                  <Label htmlFor="remember" className="text-sm text-foreground">Lembrar de mim</Label>
+                  <Label htmlFor="remember" className="text-sm">Lembrar de mim</Label>
                 </div>
               </div>
               
-              <Button type="submit" className="btn-secondary w-full rounded-instalei h-12 text-lg shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl border-0" disabled={isLoading || !email || !password}>
-                {isLoading ? <span className="flex items-center">
-                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4" style={{
-                  color: '#FFFFFF'
-                }} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <Button 
+                type="submit" 
+                className="w-full h-12 text-base font-semibold bg-[#2563eb] hover:bg-[#1d4ed8] text-white rounded-lg shadow-md transition-all duration-200" 
+                disabled={isLoading || !email || !password}
+              >
+                {isLoading ? (
+                  <span className="flex items-center justify-center">
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    Entrando na Instalei...
-                  </span> : 'Entrar na Instalei'}
+                    Entrando...
+                  </span>
+                ) : 'Entrar'}
               </Button>
             </form>
           </div>
           
-          <div className="text-center mt-instalei-md space-y-2">
-            <p className="text-sm text-white drop-shadow-md">
+          <div className="text-center mt-6">
+            <p className="text-sm text-muted-foreground">
               Não tem uma conta?{' '}
-              <Link to="/register" className="text-instalei-orange-300 font-medium hover:underline hover:text-instalei-orange-200 transition-colors">
-                Cadastre-se na Instalei
+              <Link to="/register" className="text-primary font-medium hover:underline">
+                Cadastre-se
               </Link>
             </p>
-            
-            
           </div>
         </div>
       </main>
