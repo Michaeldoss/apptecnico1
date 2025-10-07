@@ -81,7 +81,7 @@ const Navbar = () => {
 
         {/* Desktop Navigation Links */}
         <div className="hidden md:flex md:items-center md:gap-1">
-          {menuItems.map(item => <Link key={item.path} to={item.path} className={`text-sm font-medium px-3 py-2 rounded-lg ${baseClasses}`}>
+          {menuItems.map(item => <Link key={item.path} to={item.path} className={`text-sm font-semibold px-4 py-2 rounded-md ${baseClasses}`}>
               {item.label}
             </Link>)}
         </div>
