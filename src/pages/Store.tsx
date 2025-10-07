@@ -426,7 +426,7 @@ const Store = () => {
                     isMobile ? "text-xl" : "text-2xl"
                   )}>Empresas em Destaque</h2>
                   <Link to="/store/companies">
-                    <Button variant="ghost" className="text-primary hover:text-primary-dark font-inter" size={isMobile ? "sm" : "default"}>
+                    <Button variant="ghost" className="text-[#2563eb] hover:text-[#1e40af] font-inter" size={isMobile ? "sm" : "default"}>
                       Ver todas <ArrowRight className="ml-1 h-4 w-4" />
                     </Button>
                   </Link>
@@ -449,7 +449,7 @@ const Store = () => {
                           isMobile ? "p-4" : ""
                         )}>
                           <div className="flex items-center gap-3">
-                            <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden">
+                            <div className="h-12 w-12 rounded-full bg-[#2563eb]/10 flex items-center justify-center overflow-hidden">
                               <img 
                                 src={company.image}
                                 alt={company.name}
@@ -461,7 +461,7 @@ const Store = () => {
                                 "text-gray-900 font-inter",
                                 isMobile ? "text-base" : "text-base"
                               )}>{company.name}</CardTitle>
-                              <div className="flex items-center text-sm text-accent">
+                              <div className="flex items-center text-sm text-[#2563eb]">
                                 <Star className="h-3 w-3 fill-current mr-1" />
                                 <span className="font-inter">{company.rating}</span>
                               </div>
@@ -480,7 +480,7 @@ const Store = () => {
                         <CardFooter className={cn(
                           isMobile ? "p-4 pt-0" : ""
                         )}>
-                          <Button variant="outline" className="w-full text-primary border-primary hover:bg-primary hover:text-white font-inter" size={isMobile ? "sm" : "default"}>
+                          <Button variant="outline" className="w-full text-[#2563eb] border-[#2563eb] hover:bg-[#2563eb] hover:text-white font-inter" size={isMobile ? "sm" : "default"}>
                             Visitar Loja
                           </Button>
                         </CardFooter>
@@ -519,7 +519,7 @@ const Store = () => {
                     Acesse nosso diretório completo de lojas especializadas em equipamentos e peças para impressão
                   </p>
                   <Link to="/store/companies">
-                    <Button size={isMobile ? "default" : "lg"} className="gap-2 bg-primary hover:bg-primary-dark text-white font-inter">
+                    <Button size={isMobile ? "default" : "lg"} className="gap-2 bg-[#2563eb] hover:bg-[#1e40af] text-white font-inter">
                       Ver Todas as Lojas <StoreIcon className="h-4 w-4" />
                     </Button>
                   </Link>
