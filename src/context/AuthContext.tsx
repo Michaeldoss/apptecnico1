@@ -436,22 +436,39 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
               console.log('🔐 Google login detectado, criando perfil para tipo:', pendingUserType);
               sessionStorage.removeItem('pending_google_user_type');
               
-              // Create profile in the appropriate table
-              const tableName = pendingUserType === 'customer' ? 'clientes' :
-                               pendingUserType === 'technician' ? 'tecnicos' : 'lojas';
-              
+              // Create profile in the appropriate table with correct columns
+              const selectedType = pendingUserType as 'customer' | 'technician' | 'company';
+              const fullName = session.user.user_metadata?.name || session.user.email?.split('@')[0] || 'Usuário';
+              let tableName = 'clientes';
+              let insertPayload: any = { id: session.user.id, email: session.user.email };
+
+              if (selectedType === 'customer') {
+                tableName = 'clientes';
+                insertPayload = { ...insertPayload, nome: fullName };
+              } else if (selectedType === 'technician') {
+                tableName = 'tecnicos';
+                insertPayload = { ...insertPayload, nome: fullName };
+              } else {
+                tableName = 'lojas';
+                const contato = fullName;
+                const empresa = fullName;
+                insertPayload = {
+                  ...insertPayload,
+                  nome_contato: contato,
+                  nome_empresa: empresa
+                };
+              }
+
               const { error: insertError } = await supabase
-                .from(tableName)
-                .insert({
-                  id: session.user.id,
-                  email: session.user.email,
-                  nome: session.user.user_metadata?.name || session.user.email?.split('@')[0]
-                });
+                .from(tableName as any)
+                .insert(insertPayload);
               
               if (insertError) {
                 console.error('❌ Erro ao criar perfil:', insertError);
               } else {
                 console.log('✅ Perfil criado com sucesso');
+                // Garantir que o app sabe o tipo imediatamente
+                setUserType(selectedType);
               }
             }
             
