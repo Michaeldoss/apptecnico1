@@ -42,13 +42,26 @@ const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({ onSuccess }) => {
     try {
       setShowUserTypeSelector(false);
       
-      // Use Supabase's built-in Google OAuth instead of temporary passwords
+      // Determine the correct redirect path based on user type
+      const redirectPaths = {
+        customer: '/cliente/dashboard',
+        technician: '/tecnico/dashboard',
+        company: '/loja/dashboard'
+      };
+      
+      const redirectTo = `${window.location.origin}${redirectPaths[userType]}`;
+      
+      // Store the selected user type temporarily
+      sessionStorage.setItem('pending_google_user_type', userType);
+      
+      // Use Supabase's built-in Google OAuth
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/dashboard`,
+          redirectTo: redirectTo,
           queryParams: {
-            userType: userType
+            access_type: 'offline',
+            prompt: 'consent',
           }
         }
       });
@@ -57,7 +70,6 @@ const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({ onSuccess }) => {
         throw error;
       }
 
-      // The OAuth flow will handle the redirect automatically
       toast({
         title: "Redirecionando...",
         description: "Configurando sua conta Google.",

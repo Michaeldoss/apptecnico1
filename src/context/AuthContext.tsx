@@ -429,12 +429,42 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setTimeout(async () => {
           try {
             console.log('🔍 Buscando tipo de usuário para:', session.user.id);
+            
+            // Check if this is a new Google login with pending user type
+            const pendingUserType = sessionStorage.getItem('pending_google_user_type');
+            if (pendingUserType && event === 'SIGNED_IN') {
+              console.log('🔐 Google login detectado, criando perfil para tipo:', pendingUserType);
+              sessionStorage.removeItem('pending_google_user_type');
+              
+              // Create profile in the appropriate table
+              const tableName = pendingUserType === 'customer' ? 'clientes' :
+                               pendingUserType === 'technician' ? 'tecnicos' : 'lojas';
+              
+              const { error: insertError } = await supabase
+                .from(tableName)
+                .insert({
+                  id: session.user.id,
+                  email: session.user.email,
+                  nome: session.user.user_metadata?.name || session.user.email?.split('@')[0]
+                });
+              
+              if (insertError) {
+                console.error('❌ Erro ao criar perfil:', insertError);
+              } else {
+                console.log('✅ Perfil criado com sucesso');
+              }
+            }
+            
             const userType = await checkUserTypeInTables(session.user.id);
             setUserType(userType);
             
             if (!userType) {
               console.error('❌ Tipo de usuário não encontrado');
-              // Forçar logout se não encontrar tipo de usuário
+              toast({
+                variant: "destructive",
+                title: "Erro de Configuração",
+                description: "Perfil não encontrado. Por favor, complete seu cadastro.",
+              });
               await supabase.auth.signOut();
             } else {
               console.log('✅ Tipo de usuário identificado:', userType);
@@ -442,7 +472,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           } catch (error) {
             console.error('💥 Erro crítico ao buscar dados do usuário:', error);
             setUserType(null);
-            // Em caso de erro crítico, também fazer logout
             await supabase.auth.signOut();
           }
         }, 0);
