@@ -97,80 +97,80 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return false;
   };
 
-  // Função para verificar tipo de usuário nas tabelas específicas
+  // Função para verificar tipo de usuário usando RPC e fallback seguro
   const checkUserTypeInTables = async (userId: string): Promise<UserType> => {
-    console.log('🔍 Verificando tipo de usuário nas tabelas específicas para:', userId);
+    console.log('🔍 Verificando tipo de usuário (RPC) para:', userId);
 
     try {
-      // Verificar se é cliente
-      console.log('🔎 Verificando na tabela clientes...');
-      const { data: clienteData, error: clienteError } = await supabase
-        .from('clientes')
-        .select('id')
+      // 1) Tenta via função segura (não sofre com RLS recursiva)
+      const { data: rpcType, error: rpcError } = await supabase.rpc('get_current_user_type');
+      if (!rpcError && rpcType) {
+        const mapped = (rpcType as string).toLowerCase();
+        if (mapped === 'cliente') return 'customer';
+        if (mapped === 'tecnico') return 'technician';
+        if (mapped === 'loja' || mapped === 'empresa' || mapped === 'company') return 'company';
+        if (mapped === 'admin') return 'admin';
+      }
+
+      // 2) Fallback: lê diretamente da tabela usuarios (sem recursão)
+      const { data: usuarioRow, error: usuarioError } = await supabase
+        .from('usuarios')
+        .select('tipo_usuario')
         .eq('id', userId)
         .maybeSingle();
 
-      console.log('📋 Resultado clientes:', { clienteData, clienteError });
+      if (!usuarioError && usuarioRow?.tipo_usuario) {
+        const mapped = (usuarioRow.tipo_usuario as string).toLowerCase();
+        if (mapped === 'cliente') return 'customer';
+        if (mapped === 'tecnico') return 'technician';
+        if (mapped === 'loja' || mapped === 'empresa' || mapped === 'company') return 'company';
+        if (mapped === 'admin') return 'admin';
+      }
 
-      if (clienteData) {
-        console.log('✅ Usuário encontrado na tabela clientes');
+      // 3) Fallback final: checa presença nas tabelas específicas (podem falhar com RLS; por isso tentamos por último)
+      console.log('🔎 Verificando presença nas tabelas específicas (fallback)...');
+
+      const [{ data: clienteData }, { data: tecnicoData }, { data: lojaData }, { data: roleData }] = await Promise.all([
+        supabase.from('clientes').select('id').eq('id', userId).maybeSingle(),
+        supabase.from('tecnicos').select('id').eq('id', userId).maybeSingle(),
+        supabase.from('lojas').select('id').eq('id', userId).maybeSingle(),
+        supabase.from('user_roles').select('role').eq('user_id', userId).eq('role', 'admin').maybeSingle(),
+      ]);
+
+      if (clienteData) return 'customer';
+      if (tecnicoData) return 'technician';
+      if (lojaData) return 'company';
+      if (roleData) return 'admin';
+
+      // 4) Auto-recuperação mínima: criar registro básico do usuário como cliente
+      try {
+        console.log('🧩 Criando perfil mínimo em usuarios/clientes (auto-fix)...');
+        const email = session?.user?.email || '';
+        const nomeBase = email ? email.split('@')[0] : 'Usuário';
+        const { error: usuarioInsertError } = await supabase
+          .from('usuarios')
+          .insert({ id: userId, email, nome: nomeBase, tipo_usuario: 'cliente' as any });
+        if (usuarioInsertError) {
+          console.warn('⚠️ Falha ao inserir em usuarios (ignorado):', usuarioInsertError.message);
+        }
+        const { error: clienteInsertError } = await supabase
+          .from('clientes')
+          .insert({ id: userId, email, nome: nomeBase, ativo: true, perfil_completo: false } as any);
+        if (clienteInsertError) {
+          console.warn('⚠️ Falha ao inserir em clientes (ignorado):', clienteInsertError.message);
+        }
         return 'customer';
+      } catch (e) {
+        console.warn('⚠️ Auto-fix não foi possível:', e);
       }
 
-      // Verificar se é técnico
-      console.log('🔎 Verificando na tabela tecnicos...');
-      const { data: tecnicoData, error: tecnicoError } = await supabase
-        .from('tecnicos')
-        .select('id')
-        .eq('id', userId)
-        .maybeSingle();
-
-      console.log('📋 Resultado tecnicos:', { tecnicoData, tecnicoError });
-
-      if (tecnicoData) {
-        console.log('✅ Usuário encontrado na tabela tecnicos');
-        return 'technician';
-      }
-
-      // Verificar se é loja
-      console.log('🔎 Verificando na tabela lojas...');
-      const { data: lojaData, error: lojaError } = await supabase
-        .from('lojas')
-        .select('id')
-        .eq('id', userId)
-        .maybeSingle();
-
-      console.log('📋 Resultado lojas:', { lojaData, lojaError });
-
-      if (lojaData) {
-        console.log('✅ Usuário encontrado na tabela lojas');
-        return 'company';
-      }
-
-      // Verificar se é admin na nova tabela user_roles (sistema seguro)
-      console.log('🔎 Verificando na tabela user_roles...');
-      const { data: roleData, error: roleError } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', userId)
-        .eq('role', 'admin')
-        .maybeSingle();
-
-      console.log('📋 Resultado user_roles:', { roleData, roleError });
-
-      if (roleData) {
-        console.log('✅ Usuário encontrado como admin no sistema de roles');
-        return 'admin';
-      }
-
-      console.log('❌ Usuário não encontrado em nenhuma tabela específica');
+      console.log('❌ Usuário não encontrado em nenhum mapeamento');
       return null;
     } catch (error) {
-      console.error('💥 Erro crítico ao verificar tipo de usuário:', error);
+      console.error('💥 Erro ao identificar tipo de usuário:', error);
       return null;
     }
   };
-
   const signup = async (email: string, password: string, userData: any): Promise<boolean> => {
     // First validate with enhanced security checks
     const validationResult = signupSchema.safeParse({
