@@ -1104,6 +1104,14 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: string
       }
+      get_technician_customers: {
+        Args: { tech_id: string }
+        Returns: string[]
+      }
+      get_technician_service_orders: {
+        Args: { tech_id: string }
+        Returns: string[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -1113,6 +1121,18 @@ export type Database = {
       }
       is_admin: {
         Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
+      is_company: {
+        Args: { user_id: string }
+        Returns: boolean
+      }
+      is_customer: {
+        Args: { user_id: string }
+        Returns: boolean
+      }
+      is_technician: {
+        Args: { user_id: string }
         Returns: boolean
       }
       log_security_event: {
