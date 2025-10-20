@@ -46,9 +46,9 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isMenuOpen, toggleMenu, c
       {isMobile && (
         <button 
           onClick={toggleMenu}
-          className="fixed top-20 left-4 z-50 bg-gradient-to-r from-sidebar-accent to-sidebar-accent/80 hover:from-sidebar-accent/90 hover:to-sidebar-accent text-sidebar-accent-foreground p-2.5 rounded-full shadow-xl md:hidden transition-all duration-200 hover:scale-105 border border-white/20 backdrop-blur-sm"
+          className="fixed top-20 left-4 z-50 bg-primary hover:bg-primary/90 text-primary-foreground p-3 rounded-xl shadow-xl md:hidden transition-all duration-300 hover:scale-105 border border-primary/20 backdrop-blur-sm"
         >
-          {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
       )}
 
@@ -64,14 +64,14 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isMenuOpen, toggleMenu, c
       <aside 
         className={cn(
           "shrink-0 transition-all duration-300",
-          isMobile ? "fixed left-0 top-16 bottom-0 w-64 bg-gradient-to-br from-sidebar via-sidebar-primary/90 to-sidebar-primary z-40 h-[calc(100vh-4rem)] px-3 pt-16 pb-6 shadow-2xl overflow-y-auto border-r border-sidebar-border/20" : "w-72 bg-gradient-to-br from-sidebar via-sidebar-primary/90 to-sidebar-primary rounded-xl p-4 shadow-xl border border-sidebar-border/20 sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto",
+          isMobile ? "fixed left-0 top-16 bottom-0 w-72 bg-card/95 backdrop-blur-xl z-40 h-[calc(100vh-4rem)] px-4 pt-16 pb-6 shadow-2xl overflow-y-auto border-r border-border" : "w-80 bg-card/50 backdrop-blur-sm rounded-2xl p-5 shadow-xl border border-border sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto",
           isMobile && !isMenuOpen ? "-translate-x-full" : isMobile && isMenuOpen ? "translate-x-0" : ""
         )}
       >
-        <div className="space-y-2 py-4">
-          <div className="mb-6 pb-4 border-b border-white/20">
-            <h2 className="text-lg font-bold text-gray-100">Menu Principal</h2>
-            <p className="text-gray-300 text-xs">Acesse suas funcionalidades</p>
+        <div className="space-y-1.5 py-4">
+          <div className="mb-8 pb-5 border-b border-border">
+            <h2 className="text-xl font-bold text-foreground bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">Menu Principal</h2>
+            <p className="text-muted-foreground text-sm mt-1">Acesse suas funcionalidades</p>
           </div>
           
           <SidebarItem 
@@ -159,15 +159,15 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isMenuOpen, toggleMenu, c
           
         </div>
         
-        <div className="pt-4 mt-6 border-t border-white/20">
+        <div className="pt-4 mt-6 border-t border-border">
           <button 
             onClick={() => {
               handleLogout();
               closeMenu();
             }}
-            className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-200 hover:bg-red-600/90 hover:shadow-lg text-gray-100 hover:text-white w-full text-left font-inter font-medium bg-red-500/80 shadow-md"
+            className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm transition-all duration-300 hover:bg-destructive hover:shadow-lg hover:shadow-destructive/20 text-destructive-foreground hover:text-destructive-foreground w-full text-left font-semibold bg-destructive/90 shadow-md hover:scale-[1.02]"
           >
-            <LogOut className="h-4 w-4 flex-shrink-0" />
+            <LogOut className="h-5 w-5 flex-shrink-0" />
             <span>Sair</span>
           </button>
         </div>

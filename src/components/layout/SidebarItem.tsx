@@ -16,18 +16,21 @@ const SidebarItem = ({ to, icon: Icon, children, active, onClick }: SidebarItemP
     <Link
       to={to}
       className={cn(
-        "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-200 font-inter font-medium group",
+        "flex items-center gap-3 rounded-lg px-4 py-3 text-sm transition-all duration-300 font-medium group relative overflow-hidden",
         active 
-          ? "bg-white/95 text-gray-900 shadow-md border border-white/30 backdrop-blur-sm" 
-          : "text-gray-200 hover:text-white hover:bg-white/10 hover:shadow-sm"
+          ? "bg-gradient-to-r from-primary to-primary/90 text-primary-foreground shadow-lg shadow-primary/20 scale-[1.02]" 
+          : "text-muted-foreground hover:text-foreground hover:bg-accent/10 hover:shadow-md"
       )}
       onClick={onClick}
     >
+      {active && (
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent opacity-50" />
+      )}
       <Icon className={cn(
-        "h-4 w-4 flex-shrink-0 transition-colors", 
-        active ? "text-gray-900" : "text-gray-300 group-hover:text-white"
+        "h-5 w-5 flex-shrink-0 transition-all duration-300 relative z-10", 
+        active ? "text-primary-foreground drop-shadow-sm" : "text-muted-foreground group-hover:text-primary group-hover:scale-110"
       )} />
-      <span className="truncate">{children}</span>
+      <span className="truncate relative z-10 font-semibold">{children}</span>
     </Link>
   );
 };
