@@ -164,6 +164,23 @@ const CompanyProfile = () => {
                           />
                         </div>
                         <div>
+                          <Label htmlFor="inscricaoEstadual">Inscrição Estadual</Label>
+                          <Input 
+                            id="inscricaoEstadual" 
+                            placeholder="000.000.000.000"
+                          />
+                        </div>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="inscricaoMunicipal">Inscrição Municipal</Label>
+                          <Input 
+                            id="inscricaoMunicipal" 
+                            placeholder="00000000-0"
+                          />
+                        </div>
+                        <div>
                           <Label htmlFor="foundedYear">Ano de Fundação</Label>
                           <Input 
                             id="foundedYear" 
@@ -719,13 +736,22 @@ const CompanyProfile = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <div className="flex items-center space-x-2">
-                    <Switch 
-                      id="technical-services" 
-                      checked={offersTechnicalService}
-                      onCheckedChange={setOffersTechnicalService}
-                    />
-                    <Label htmlFor="technical-services">Oferecer serviços de assistência técnica</Label>
+                  <div className="flex items-center justify-between p-4 border rounded-lg">
+                    <div className="flex items-center space-x-3">
+                      <Switch 
+                        id="technical-services" 
+                        checked={offersTechnicalService}
+                        onCheckedChange={setOffersTechnicalService}
+                      />
+                      <div>
+                        <Label htmlFor="technical-services" className="cursor-pointer">
+                          Oferecer serviços de assistência técnica
+                        </Label>
+                        <p className="text-sm text-muted-foreground">
+                          Ative esta opção para cadastrar e oferecer serviços técnicos aos clientes
+                        </p>
+                      </div>
+                    </div>
                   </div>
                   
                   {offersTechnicalService && (
@@ -739,24 +765,31 @@ const CompanyProfile = () => {
                         />
                       </div>
                       
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <Label htmlFor="service-area">Área de atendimento (km)</Label>
-                          <Input 
-                            id="service-area" 
-                            type="number"
-                            placeholder="10"
-                          />
-                        </div>
-                        
-                        <div>
-                          <Label htmlFor="hourly-rate">Valor hora técnica (R$)</Label>
-                          <Input 
-                            id="hourly-rate" 
-                            type="number"
-                            placeholder="100"
-                          />
-                        </div>
+                      <div>
+                        <Label htmlFor="service-area">Área de atendimento (km)</Label>
+                        <Input 
+                          id="service-area" 
+                          type="number"
+                          placeholder="Ex: 50"
+                        />
+                      </div>
+                      
+                      <div>
+                        <Label htmlFor="responseTime">Tempo médio de resposta (horas)</Label>
+                        <Input 
+                          id="responseTime" 
+                          type="number"
+                          placeholder="Ex: 24"
+                        />
+                      </div>
+                      
+                      <div>
+                        <Label htmlFor="techniciansCount">Número de técnicos disponíveis</Label>
+                        <Input 
+                          id="techniciansCount" 
+                          type="number"
+                          placeholder="Ex: 5"
+                        />
                       </div>
                       
                       <div>
@@ -855,34 +888,20 @@ const CompanyProfile = () => {
                   <div className="space-y-4">
                     <div className="flex items-center justify-between p-4 border rounded-md">
                       <div>
-                        <p className="font-medium">Contrato de Fornecedor</p>
-                        <p className="text-sm text-muted-foreground">Última atualização: 25/03/2025</p>
+                        <p className="font-medium">Contrato Social</p>
+                        <p className="text-sm text-muted-foreground">Documento de constituição da empresa</p>
                       </div>
-                      <div className="flex items-center">
-                        <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                        <span className="text-sm text-green-600 mr-4">Aprovado</span>
+                      <div className="flex items-center gap-2">
                         <Button variant="outline" size="sm">Visualizar</Button>
+                        <Button variant="outline" size="sm">Enviar</Button>
                       </div>
                     </div>
                     
-                    <div className="flex items-center justify-between p-4 border rounded-md">
-                      <div>
-                        <p className="font-medium">Certidão Negativa</p>
-                        <p className="text-sm text-muted-foreground">Última atualização: 10/02/2025</p>
-                      </div>
-                      <div className="flex items-center">
-                        <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                        <span className="text-sm text-green-600 mr-4">Aprovado</span>
-                        <Button variant="outline" size="sm">Visualizar</Button>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center justify-between p-4 border rounded-md">
-                      <div>
-                        <p className="font-medium">Adicionar novo documento</p>
-                        <p className="text-sm text-muted-foreground">Anexe documentos necessários para sua operação</p>
-                      </div>
-                      <Button variant="outline" size="sm">Enviar</Button>
+                    <div className="p-4 bg-muted rounded-md">
+                      <p className="text-sm text-muted-foreground">
+                        <strong>Importante:</strong> O Contrato Social é o documento oficial de constituição da sua empresa. 
+                        Mantenha-o atualizado para garantir a conformidade com a plataforma.
+                      </p>
                     </div>
                   </div>
                 </CardContent>
