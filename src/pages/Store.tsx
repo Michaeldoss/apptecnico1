@@ -291,7 +291,7 @@ const Store = () => {
                         "pl-2 md:pl-4",
                         isMobile ? "basis-full" : "md:basis-1/2 lg:basis-1/3"
                       )}>
-                        <Link to={promo.link}>
+                         <Link to={promo.link} className="block">
                           <div className="overflow-hidden rounded-xl group">
                             <div className={cn(
                               "relative overflow-hidden",
@@ -360,57 +360,59 @@ const Store = () => {
                       transition={{ duration: 0.3 }}
                       viewport={{ once: true }}
                     >
-                      <Card className="h-full hover:shadow-md transition-all group overflow-hidden bg-white border-gray-200">
-                        <CardHeader className={cn(
-                          "pb-2",
-                          isMobile ? "p-3" : ""
-                        )}>
-                          <CardTitle className={cn(
-                            "font-medium text-gray-900 font-inter leading-tight",
-                            isMobile ? "text-sm" : "text-base"
-                          )} title={product.nome}>
-                            {product.nome}
-                          </CardTitle>
-                          <p className={cn(
-                            "text-gray-600 font-inter",
-                            isMobile ? "text-xs" : "text-xs"
-                          )}>Código: {product.codigo}</p>
-                        </CardHeader>
-                        <CardContent className={cn(
-                          "pb-2",
-                          isMobile ? "p-3 pt-0" : ""
-                        )}>
-                          <div className={cn(
-                            "relative w-full bg-white rounded-md overflow-hidden mb-4",
-                            isMobile ? "h-20" : "h-32"
+                      <Link to={`/store/product/${product.codigo}`}>
+                        <Card className="h-full hover:shadow-md transition-all group overflow-hidden bg-white border-gray-200">
+                          <CardHeader className={cn(
+                            "pb-2",
+                            isMobile ? "p-3" : ""
                           )}>
-                            <img 
-                              src="/placeholder.svg" 
-                              alt={product.nome}
-                              className="w-full h-full object-contain p-2 transition-transform duration-300 group-hover:scale-105"
-                            />
-                          </div>
-                          <div className="flex justify-between items-center">
-                            <Badge variant="outline" className={cn(
-                              "border-[#2563eb] text-[#2563eb] font-inter",
-                              isMobile ? "text-xs" : ""
-                            )}>{product.categoria}</Badge>
+                            <CardTitle className={cn(
+                              "font-medium text-gray-900 font-inter leading-tight",
+                              isMobile ? "text-sm" : "text-base"
+                            )} title={product.nome}>
+                              {product.nome}
+                            </CardTitle>
                             <p className={cn(
-                              "font-semibold text-right text-[#2563eb] font-inter",
-                              isMobile ? "text-sm" : ""
+                              "text-gray-600 font-inter",
+                              isMobile ? "text-xs" : "text-xs"
+                            )}>Código: {product.codigo}</p>
+                          </CardHeader>
+                          <CardContent className={cn(
+                            "pb-2",
+                            isMobile ? "p-3 pt-0" : ""
+                          )}>
+                            <div className={cn(
+                              "relative w-full bg-white rounded-md overflow-hidden mb-4",
+                              isMobile ? "h-20" : "h-32"
                             )}>
-                              {formatCurrency(product.preco)}
-                            </p>
-                          </div>
-                        </CardContent>
-                        <CardFooter className={cn(
-                          isMobile ? "p-3 pt-0" : ""
-                        )}>
-                          <Button variant="secondary" className="w-full bg-[#2563eb] text-white hover:bg-[#1e40af] font-inter" size={isMobile ? "sm" : "default"}>
-                            Ver Detalhes
-                          </Button>
-                        </CardFooter>
-                      </Card>
+                              <img 
+                                src="/placeholder.svg" 
+                                alt={product.nome}
+                                className="w-full h-full object-contain p-2 transition-transform duration-300 group-hover:scale-105"
+                              />
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <Badge variant="outline" className={cn(
+                                "border-[#2563eb] text-[#2563eb] font-inter",
+                                isMobile ? "text-xs" : ""
+                              )}>{product.categoria}</Badge>
+                              <p className={cn(
+                                "font-semibold text-right text-[#2563eb] font-inter",
+                                isMobile ? "text-sm" : ""
+                              )}>
+                                {formatCurrency(product.preco)}
+                              </p>
+                            </div>
+                          </CardContent>
+                          <CardFooter className={cn(
+                            isMobile ? "p-3 pt-0" : ""
+                          )}>
+                            <Button variant="secondary" className="w-full bg-[#2563eb] text-white hover:bg-[#1e40af] font-inter" size={isMobile ? "sm" : "default"}>
+                              Ver Detalhes
+                            </Button>
+                          </CardFooter>
+                        </Card>
+                      </Link>
                     </motion.div>
                   ))}
                 </div>
@@ -444,47 +446,49 @@ const Store = () => {
                       transition={{ duration: 0.3 }}
                       viewport={{ once: true }}
                     >
-                      <Card className="h-full hover:shadow-md transition-all bg-white border-gray-200">
-                        <CardHeader className={cn(
-                          isMobile ? "p-4" : ""
-                        )}>
-                          <div className="flex items-center gap-3">
-                            <div className="h-12 w-12 rounded-full bg-[#2563eb]/10 flex items-center justify-center overflow-hidden">
-                              <img 
-                                src={company.image}
-                                alt={company.name}
-                                className="h-full w-full object-cover"
-                              />
-                            </div>
-                            <div>
-                              <CardTitle className={cn(
-                                "text-gray-900 font-inter",
-                                isMobile ? "text-base" : "text-base"
-                              )}>{company.name}</CardTitle>
-                              <div className="flex items-center text-sm text-[#2563eb]">
-                                <Star className="h-3 w-3 fill-current mr-1" />
-                                <span className="font-inter">{company.rating}</span>
+                      <Link to={`/store/company/${company.id}`}>
+                        <Card className="h-full hover:shadow-md transition-all bg-white border-gray-200">
+                          <CardHeader className={cn(
+                            isMobile ? "p-4" : ""
+                          )}>
+                            <div className="flex items-center gap-3">
+                              <div className="h-12 w-12 rounded-full bg-[#2563eb]/10 flex items-center justify-center overflow-hidden">
+                                <img 
+                                  src={company.image}
+                                  alt={company.name}
+                                  className="h-full w-full object-cover"
+                                />
+                              </div>
+                              <div>
+                                <CardTitle className={cn(
+                                  "text-gray-900 font-inter",
+                                  isMobile ? "text-base" : "text-base"
+                                )}>{company.name}</CardTitle>
+                                <div className="flex items-center text-sm text-[#2563eb]">
+                                  <Star className="h-3 w-3 fill-current mr-1" />
+                                  <span className="font-inter">{company.rating}</span>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </CardHeader>
-                        <CardContent className={cn(
-                          isMobile ? "p-4 pt-0" : ""
-                        )}>
-                          <p className={cn(
-                            "text-gray-600 mb-2 font-inter",
-                            isMobile ? "text-sm" : "text-sm"
-                          )}>{company.description}</p>
-                          <p className="text-xs text-gray-600 font-inter">{company.products} produtos disponíveis</p>
-                        </CardContent>
-                        <CardFooter className={cn(
-                          isMobile ? "p-4 pt-0" : ""
-                        )}>
-                          <Button variant="outline" className="w-full text-[#2563eb] border-[#2563eb] hover:bg-[#2563eb] hover:text-white font-inter" size={isMobile ? "sm" : "default"}>
-                            Visitar Loja
-                          </Button>
-                        </CardFooter>
-                      </Card>
+                          </CardHeader>
+                          <CardContent className={cn(
+                            isMobile ? "p-4 pt-0" : ""
+                          )}>
+                            <p className={cn(
+                              "text-gray-600 mb-2 font-inter",
+                              isMobile ? "text-sm" : "text-sm"
+                            )}>{company.description}</p>
+                            <p className="text-xs text-gray-600 font-inter">{company.products} produtos disponíveis</p>
+                          </CardContent>
+                          <CardFooter className={cn(
+                            isMobile ? "p-4 pt-0" : ""
+                          )}>
+                            <Button variant="outline" className="w-full text-[#2563eb] border-[#2563eb] hover:bg-[#2563eb] hover:text-white font-inter" size={isMobile ? "sm" : "default"}>
+                              Visitar Loja
+                            </Button>
+                          </CardFooter>
+                        </Card>
+                      </Link>
                     </motion.div>
                   ))}
                 </div>
