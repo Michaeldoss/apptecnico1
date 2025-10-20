@@ -3,9 +3,14 @@ import { Link } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import DashboardChart from '@/components/store/DashboardChart';
+import { useToast } from '@/hooks/use-toast';
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import { 
   BarChart3, 
   ArrowLeft,
@@ -19,7 +24,9 @@ import {
   Lock,
   CheckCircle,
   Clock,
-  AlertTriangle
+  AlertTriangle,
+  FileSpreadsheet,
+  FileText
 } from 'lucide-react';
 
 const revenueData = [
@@ -80,6 +87,7 @@ const transactionHistory = [
 
 const CompanyFinancial = () => {
   const [selectedPeriod, setSelectedPeriod] = useState('6months');
+  const { toast } = useToast();
 
   const totalRevenue = revenueData.reduce((sum, item) => sum + item.receita, 0);
   const totalExpenses = revenueData.reduce((sum, item) => sum + item.despesas, 0);
@@ -93,6 +101,342 @@ const CompanyFinancial = () => {
   const availableBalance = transactionHistory
     .filter(t => t.status === 'completed')
     .reduce((sum, t) => sum + (t.type === 'credit' ? t.amount : t.amount), 0);
+
+  // Export functions
+  const exportTransactionsToExcel = () => {
+    const wsData = [
+      ['ID', 'Data', 'Descrição', 'Valor', 'Tipo', 'Status', 'Método'],
+      ...transactionHistory.map(t => [
+        t.id,
+        new Date(t.date).toLocaleDateString('pt-BR'),
+        t.description,
+        t.amount,
+        t.type === 'credit' ? 'Crédito' : 'Débito',
+        t.status === 'completed' ? 'Concluído' : 'Processando',
+        t.method
+      ])
+    ];
+
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.aoa_to_sheet(wsData);
+    
+    ws['!cols'] = [
+      { wch: 12 },
+      { wch: 12 },
+      { wch: 35 },
+      { wch: 12 },
+      { wch: 10 },
+      { wch: 12 },
+      { wch: 18 }
+    ];
+
+    XLSX.utils.book_append_sheet(wb, ws, 'Transações');
+    XLSX.writeFile(wb, `transacoes_${new Date().toISOString().split('T')[0]}.xlsx`);
+    
+    toast({
+      title: "Exportado com sucesso",
+      description: "Transações exportadas para Excel"
+    });
+  };
+
+  const exportTransactionsToPDF = () => {
+    const doc = new jsPDF();
+    
+    doc.setFontSize(18);
+    doc.text('Histórico de Transações', 14, 22);
+    doc.setFontSize(11);
+    doc.text(`Gerado em: ${new Date().toLocaleDateString('pt-BR')}`, 14, 30);
+
+    autoTable(doc, {
+      startY: 35,
+      head: [['ID', 'Data', 'Descrição', 'Valor', 'Tipo', 'Status']],
+      body: transactionHistory.map(t => [
+        t.id,
+        new Date(t.date).toLocaleDateString('pt-BR'),
+        t.description,
+        `R$ ${Math.abs(t.amount).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`,
+        t.type === 'credit' ? 'Crédito' : 'Débito',
+        t.status === 'completed' ? 'Concluído' : 'Processando'
+      ]),
+      headStyles: { fillColor: [37, 99, 235] },
+      alternateRowStyles: { fillColor: [245, 247, 250] }
+    });
+
+    doc.save(`transacoes_${new Date().toISOString().split('T')[0]}.pdf`);
+    
+    toast({
+      title: "Exportado com sucesso",
+      description: "Transações exportadas para PDF"
+    });
+  };
+
+  const exportRevenueToExcel = () => {
+    const wsData = [
+      ['Mês', 'Receita', 'Despesas', 'Lucro'],
+      ...revenueData.map(r => [
+        r.name,
+        r.receita,
+        r.despesas,
+        r.lucro
+      ]),
+      [],
+      ['Total', totalRevenue, totalExpenses, totalProfit],
+      ['Margem de Lucro', '', '', `${profitMargin}%`]
+    ];
+
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.aoa_to_sheet(wsData);
+    
+    ws['!cols'] = [
+      { wch: 10 },
+      { wch: 15 },
+      { wch: 15 },
+      { wch: 15 }
+    ];
+
+    XLSX.utils.book_append_sheet(wb, ws, 'Receitas vs Despesas');
+    XLSX.writeFile(wb, `receitas_despesas_${new Date().toISOString().split('T')[0]}.xlsx`);
+    
+    toast({
+      title: "Exportado com sucesso",
+      description: "Relatório de receitas exportado para Excel"
+    });
+  };
+
+  const exportRevenueToPDF = () => {
+    const doc = new jsPDF();
+    
+    doc.setFontSize(18);
+    doc.text('Receitas vs Despesas', 14, 22);
+    doc.setFontSize(11);
+    doc.text(`Período: Últimos 6 meses | Gerado em: ${new Date().toLocaleDateString('pt-BR')}`, 14, 30);
+
+    autoTable(doc, {
+      startY: 35,
+      head: [['Mês', 'Receita', 'Despesas', 'Lucro']],
+      body: revenueData.map(r => [
+        r.name,
+        `R$ ${r.receita.toLocaleString('pt-BR')}`,
+        `R$ ${r.despesas.toLocaleString('pt-BR')}`,
+        `R$ ${r.lucro.toLocaleString('pt-BR')}`
+      ]),
+      headStyles: { fillColor: [37, 99, 235] },
+      alternateRowStyles: { fillColor: [245, 247, 250] },
+      foot: [
+        ['Total', `R$ ${totalRevenue.toLocaleString('pt-BR')}`, `R$ ${totalExpenses.toLocaleString('pt-BR')}`, `R$ ${totalProfit.toLocaleString('pt-BR')}`],
+        ['Margem de Lucro', '', '', `${profitMargin}%`]
+      ],
+      footStyles: { fillColor: [229, 231, 235], textColor: [0, 0, 0], fontStyle: 'bold' }
+    });
+
+    doc.save(`receitas_despesas_${new Date().toISOString().split('T')[0]}.pdf`);
+    
+    toast({
+      title: "Exportado com sucesso",
+      description: "Relatório de receitas exportado para PDF"
+    });
+  };
+
+  const exportCategoriesToExcel = () => {
+    const wsData = [
+      ['Categoria', 'Valor', 'Percentual'],
+      ...categoryData.map(c => [
+        c.name,
+        c.valor,
+        `${c.percentual}%`
+      ]),
+      [],
+      ['Total', categoryData.reduce((sum, c) => sum + c.valor, 0), '100%']
+    ];
+
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.aoa_to_sheet(wsData);
+    
+    ws['!cols'] = [
+      { wch: 20 },
+      { wch: 15 },
+      { wch: 12 }
+    ];
+
+    XLSX.utils.book_append_sheet(wb, ws, 'Vendas por Categoria');
+    XLSX.writeFile(wb, `vendas_categoria_${new Date().toISOString().split('T')[0]}.xlsx`);
+    
+    toast({
+      title: "Exportado com sucesso",
+      description: "Vendas por categoria exportadas para Excel"
+    });
+  };
+
+  const exportCategoriesToPDF = () => {
+    const doc = new jsPDF();
+    
+    doc.setFontSize(18);
+    doc.text('Vendas por Categoria', 14, 22);
+    doc.setFontSize(11);
+    doc.text(`Gerado em: ${new Date().toLocaleDateString('pt-BR')}`, 14, 30);
+
+    autoTable(doc, {
+      startY: 35,
+      head: [['Categoria', 'Valor', 'Percentual']],
+      body: categoryData.map(c => [
+        c.name,
+        `R$ ${c.valor.toLocaleString('pt-BR')}`,
+        `${c.percentual}%`
+      ]),
+      headStyles: { fillColor: [37, 99, 235] },
+      alternateRowStyles: { fillColor: [245, 247, 250] },
+      foot: [
+        ['Total', `R$ ${categoryData.reduce((sum, c) => sum + c.valor, 0).toLocaleString('pt-BR')}`, '100%']
+      ],
+      footStyles: { fillColor: [229, 231, 235], textColor: [0, 0, 0], fontStyle: 'bold' }
+    });
+
+    doc.save(`vendas_categoria_${new Date().toISOString().split('T')[0]}.pdf`);
+    
+    toast({
+      title: "Exportado com sucesso",
+      description: "Vendas por categoria exportadas para PDF"
+    });
+  };
+
+  const exportCompleteReportToExcel = () => {
+    const wb = XLSX.utils.book_new();
+
+    // Resumo Executivo
+    const resumoData = [
+      ['Relatório Financeiro Completo'],
+      [`Gerado em: ${new Date().toLocaleDateString('pt-BR')}`],
+      [],
+      ['Métrica', 'Valor'],
+      ['Receita Total', totalRevenue],
+      ['Despesas Totais', totalExpenses],
+      ['Lucro Líquido', totalProfit],
+      ['Margem de Lucro', `${profitMargin}%`],
+      ['Saldo Disponível', availableBalance],
+      ['Pagamentos Pendentes', pendingAmount]
+    ];
+    const wsResumo = XLSX.utils.aoa_to_sheet(resumoData);
+    wsResumo['!cols'] = [{ wch: 25 }, { wch: 20 }];
+    XLSX.utils.book_append_sheet(wb, wsResumo, 'Resumo');
+
+    // Receitas vs Despesas
+    const receitasData = [
+      ['Mês', 'Receita', 'Despesas', 'Lucro'],
+      ...revenueData.map(r => [r.name, r.receita, r.despesas, r.lucro])
+    ];
+    const wsReceitas = XLSX.utils.aoa_to_sheet(receitasData);
+    XLSX.utils.book_append_sheet(wb, wsReceitas, 'Receitas e Despesas');
+
+    // Categorias
+    const categoriasData = [
+      ['Categoria', 'Valor', 'Percentual'],
+      ...categoryData.map(c => [c.name, c.valor, `${c.percentual}%`])
+    ];
+    const wsCategorias = XLSX.utils.aoa_to_sheet(categoriasData);
+    XLSX.utils.book_append_sheet(wb, wsCategorias, 'Categorias');
+
+    // Transações
+    const transacoesData = [
+      ['ID', 'Data', 'Descrição', 'Valor', 'Tipo', 'Status', 'Método'],
+      ...transactionHistory.map(t => [
+        t.id,
+        new Date(t.date).toLocaleDateString('pt-BR'),
+        t.description,
+        t.amount,
+        t.type === 'credit' ? 'Crédito' : 'Débito',
+        t.status === 'completed' ? 'Concluído' : 'Processando',
+        t.method
+      ])
+    ];
+    const wsTransacoes = XLSX.utils.aoa_to_sheet(transacoesData);
+    XLSX.utils.book_append_sheet(wb, wsTransacoes, 'Transações');
+
+    XLSX.writeFile(wb, `relatorio_completo_${new Date().toISOString().split('T')[0]}.xlsx`);
+    
+    toast({
+      title: "Exportado com sucesso",
+      description: "Relatório completo exportado para Excel"
+    });
+  };
+
+  const exportCompleteReportToPDF = () => {
+    const doc = new jsPDF();
+    let yPos = 20;
+
+    // Título
+    doc.setFontSize(20);
+    doc.text('Relatório Financeiro Completo', 14, yPos);
+    yPos += 10;
+    doc.setFontSize(11);
+    doc.text(`Gerado em: ${new Date().toLocaleDateString('pt-BR')}`, 14, yPos);
+    yPos += 10;
+
+    // Resumo Executivo
+    doc.setFontSize(14);
+    doc.text('Resumo Executivo', 14, yPos);
+    yPos += 5;
+
+    autoTable(doc, {
+      startY: yPos,
+      head: [['Métrica', 'Valor']],
+      body: [
+        ['Receita Total', `R$ ${totalRevenue.toLocaleString('pt-BR')}`],
+        ['Despesas Totais', `R$ ${totalExpenses.toLocaleString('pt-BR')}`],
+        ['Lucro Líquido', `R$ ${totalProfit.toLocaleString('pt-BR')}`],
+        ['Margem de Lucro', `${profitMargin}%`],
+        ['Saldo Disponível', `R$ ${availableBalance.toLocaleString('pt-BR')}`],
+        ['Pagamentos Pendentes', `R$ ${pendingAmount.toLocaleString('pt-BR')}`]
+      ],
+      headStyles: { fillColor: [37, 99, 235] },
+      alternateRowStyles: { fillColor: [245, 247, 250] }
+    });
+
+    // Nova página - Receitas vs Despesas
+    doc.addPage();
+    yPos = 20;
+    doc.setFontSize(14);
+    doc.text('Receitas vs Despesas', 14, yPos);
+    yPos += 5;
+
+    autoTable(doc, {
+      startY: yPos,
+      head: [['Mês', 'Receita', 'Despesas', 'Lucro']],
+      body: revenueData.map(r => [
+        r.name,
+        `R$ ${r.receita.toLocaleString('pt-BR')}`,
+        `R$ ${r.despesas.toLocaleString('pt-BR')}`,
+        `R$ ${r.lucro.toLocaleString('pt-BR')}`
+      ]),
+      headStyles: { fillColor: [37, 99, 235] },
+      alternateRowStyles: { fillColor: [245, 247, 250] }
+    });
+
+    // Nova página - Vendas por Categoria
+    doc.addPage();
+    yPos = 20;
+    doc.setFontSize(14);
+    doc.text('Vendas por Categoria', 14, yPos);
+    yPos += 5;
+
+    autoTable(doc, {
+      startY: yPos,
+      head: [['Categoria', 'Valor', 'Percentual']],
+      body: categoryData.map(c => [
+        c.name,
+        `R$ ${c.valor.toLocaleString('pt-BR')}`,
+        `${c.percentual}%`
+      ]),
+      headStyles: { fillColor: [37, 99, 235] },
+      alternateRowStyles: { fillColor: [245, 247, 250] }
+    });
+
+    doc.save(`relatorio_completo_${new Date().toISOString().split('T')[0]}.pdf`);
+    
+    toast({
+      title: "Exportado com sucesso",
+      description: "Relatório completo exportado para PDF"
+    });
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -180,14 +524,34 @@ const CompanyFinancial = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Gráfico de Receita vs Despesas */}
               <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <BarChart3 className="h-5 w-5" />
-                    Receitas vs Despesas
-                  </CardTitle>
-                  <CardDescription>
-                    Comparativo dos últimos 6 meses
-                  </CardDescription>
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <div>
+                    <CardTitle className="flex items-center gap-2">
+                      <BarChart3 className="h-5 w-5" />
+                      Receitas vs Despesas
+                    </CardTitle>
+                    <CardDescription>
+                      Comparativo dos últimos 6 meses
+                    </CardDescription>
+                  </div>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" size="sm">
+                        <Download className="mr-2 h-4 w-4" />
+                        Exportar
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={exportRevenueToExcel}>
+                        <FileSpreadsheet className="mr-2 h-4 w-4" />
+                        Exportar para Excel (.xlsx)
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={exportRevenueToPDF}>
+                        <FileText className="mr-2 h-4 w-4" />
+                        Exportar para PDF
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </CardHeader>
                 <CardContent>
                   <DashboardChart 
@@ -201,11 +565,31 @@ const CompanyFinancial = () => {
 
               {/* Vendas por Categoria */}
               <Card>
-                <CardHeader>
-                  <CardTitle>Vendas por Categoria</CardTitle>
-                  <CardDescription>
-                    Distribuição de receita por categoria de produto
-                  </CardDescription>
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <div>
+                    <CardTitle>Vendas por Categoria</CardTitle>
+                    <CardDescription>
+                      Distribuição de receita por categoria de produto
+                    </CardDescription>
+                  </div>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" size="sm">
+                        <Download className="mr-2 h-4 w-4" />
+                        Exportar
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={exportCategoriesToExcel}>
+                        <FileSpreadsheet className="mr-2 h-4 w-4" />
+                        Exportar para Excel (.xlsx)
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={exportCategoriesToPDF}>
+                        <FileText className="mr-2 h-4 w-4" />
+                        Exportar para PDF
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
@@ -300,10 +684,24 @@ const CompanyFinancial = () => {
                     Últimas movimentações financeiras
                   </CardDescription>
                 </div>
-                <Button variant="outline" size="sm">
-                  <Download className="mr-2 h-4 w-4" />
-                  Exportar
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm">
+                      <Download className="mr-2 h-4 w-4" />
+                      Exportar
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={exportTransactionsToExcel}>
+                      <FileSpreadsheet className="mr-2 h-4 w-4" />
+                      Exportar para Excel (.xlsx)
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={exportTransactionsToPDF}>
+                      <FileText className="mr-2 h-4 w-4" />
+                      Exportar para PDF
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -358,22 +756,81 @@ const CompanyFinancial = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <Button variant="outline" className="w-full justify-start">
-                    <Download className="mr-2 h-4 w-4" />
-                    Relatório de Vendas Mensal
-                  </Button>
-                  <Button variant="outline" className="w-full justify-start">
-                    <Download className="mr-2 h-4 w-4" />
-                    Extrato de Movimentações
-                  </Button>
-                  <Button variant="outline" className="w-full justify-start">
-                    <Download className="mr-2 h-4 w-4" />
-                    Análise de Categorias
-                  </Button>
-                  <Button variant="outline" className="w-full justify-start">
-                    <Download className="mr-2 h-4 w-4" />
-                    Resumo Fiscal
-                  </Button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" className="w-full justify-start">
+                        <Download className="mr-2 h-4 w-4" />
+                        Relatório Completo
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start" className="w-64">
+                      <DropdownMenuItem onClick={exportCompleteReportToExcel}>
+                        <FileSpreadsheet className="mr-2 h-4 w-4" />
+                        Exportar para Excel (.xlsx)
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={exportCompleteReportToPDF}>
+                        <FileText className="mr-2 h-4 w-4" />
+                        Exportar para PDF
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" className="w-full justify-start">
+                        <Download className="mr-2 h-4 w-4" />
+                        Receitas e Despesas
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start" className="w-64">
+                      <DropdownMenuItem onClick={exportRevenueToExcel}>
+                        <FileSpreadsheet className="mr-2 h-4 w-4" />
+                        Exportar para Excel (.xlsx)
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={exportRevenueToPDF}>
+                        <FileText className="mr-2 h-4 w-4" />
+                        Exportar para PDF
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" className="w-full justify-start">
+                        <Download className="mr-2 h-4 w-4" />
+                        Extrato de Transações
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start" className="w-64">
+                      <DropdownMenuItem onClick={exportTransactionsToExcel}>
+                        <FileSpreadsheet className="mr-2 h-4 w-4" />
+                        Exportar para Excel (.xlsx)
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={exportTransactionsToPDF}>
+                        <FileText className="mr-2 h-4 w-4" />
+                        Exportar para PDF
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" className="w-full justify-start">
+                        <Download className="mr-2 h-4 w-4" />
+                        Análise de Categorias
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start" className="w-64">
+                      <DropdownMenuItem onClick={exportCategoriesToExcel}>
+                        <FileSpreadsheet className="mr-2 h-4 w-4" />
+                        Exportar para Excel (.xlsx)
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={exportCategoriesToPDF}>
+                        <FileText className="mr-2 h-4 w-4" />
+                        Exportar para PDF
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </CardContent>
               </Card>
 
