@@ -97,77 +97,51 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return false;
   };
 
-  // Função para verificar tipo de usuário usando RPC e fallback seguro
+  // Função para verificar tipo de usuário com prioridade nas tabelas específicas
   const checkUserTypeInTables = async (userId: string): Promise<UserType> => {
-    console.log('🔍 Verificando tipo de usuário (RPC) para:', userId);
-
+    console.log('🔍 Identificando tipo de usuário para:', userId);
     try {
-      // 1) Tenta via função segura (não sofre com RLS recursiva)
-      const { data: rpcType, error: rpcError } = await supabase.rpc('get_current_user_type');
-      if (!rpcError && rpcType) {
-        const mapped = (rpcType as string).toLowerCase();
-        if (mapped === 'cliente') return 'customer';
-        if (mapped === 'tecnico') return 'technician';
-        if (mapped === 'loja' || mapped === 'empresa' || mapped === 'company') return 'company';
-        if (mapped === 'admin') return 'admin';
+      // 1) Priorizar fontes inequívocas (evita classificações incorretas)
+      const [{ data: adminRole }, { data: tech }, { data: store }, { data: customer }] = await Promise.all([
+        supabase.from('user_roles').select('role').eq('user_id', userId).eq('role', 'admin').maybeSingle(),
+        supabase.from('tecnicos').select('id').eq('id', userId).maybeSingle(),
+        supabase.from('lojas').select('id').eq('id', userId).maybeSingle(),
+        supabase.from('clientes').select('id').eq('id', userId).maybeSingle(),
+      ]);
+
+      if (adminRole) return 'admin';
+      if (tech) return 'technician';
+      if (store) return 'company';
+      if (customer) return 'customer';
+
+      // 2) Tentar via RPC (reflete usuarios.tipo_usuario)
+      const { data: rpcType } = await supabase.rpc('get_current_user_type');
+      if (rpcType) {
+        const t = (rpcType as string).toLowerCase();
+        if (t === 'cliente') return 'customer';
+        if (t === 'tecnico') return 'technician';
+        if (t === 'loja' || t === 'empresa' || t === 'company') return 'company';
+        if (t === 'admin') return 'admin';
       }
 
-      // 2) Fallback: lê diretamente da tabela usuarios (sem recursão)
-      const { data: usuarioRow, error: usuarioError } = await supabase
+      // 3) Fallback: ler diretamente de usuarios
+      const { data: usuario } = await supabase
         .from('usuarios')
         .select('tipo_usuario')
         .eq('id', userId)
         .maybeSingle();
-
-      if (!usuarioError && usuarioRow?.tipo_usuario) {
-        const mapped = (usuarioRow.tipo_usuario as string).toLowerCase();
-        if (mapped === 'cliente') return 'customer';
-        if (mapped === 'tecnico') return 'technician';
-        if (mapped === 'loja' || mapped === 'empresa' || mapped === 'company') return 'company';
-        if (mapped === 'admin') return 'admin';
+      if (usuario?.tipo_usuario) {
+        const t = (usuario.tipo_usuario as string).toLowerCase();
+        if (t === 'cliente') return 'customer';
+        if (t === 'tecnico') return 'technician';
+        if (t === 'loja' || t === 'empresa' || t === 'company') return 'company';
+        if (t === 'admin') return 'admin';
       }
 
-      // 3) Fallback final: checa presença nas tabelas específicas (podem falhar com RLS; por isso tentamos por último)
-      console.log('🔎 Verificando presença nas tabelas específicas (fallback)...');
-
-      const [{ data: clienteData }, { data: tecnicoData }, { data: lojaData }, { data: roleData }] = await Promise.all([
-        supabase.from('clientes').select('id').eq('id', userId).maybeSingle(),
-        supabase.from('tecnicos').select('id').eq('id', userId).maybeSingle(),
-        supabase.from('lojas').select('id').eq('id', userId).maybeSingle(),
-        supabase.from('user_roles').select('role').eq('user_id', userId).eq('role', 'admin').maybeSingle(),
-      ]);
-
-      if (clienteData) return 'customer';
-      if (tecnicoData) return 'technician';
-      if (lojaData) return 'company';
-      if (roleData) return 'admin';
-
-      // 4) Auto-recuperação mínima: criar registro básico do usuário como cliente
-      try {
-        console.log('🧩 Criando perfil mínimo em usuarios/clientes (auto-fix)...');
-        const email = session?.user?.email || '';
-        const nomeBase = email ? email.split('@')[0] : 'Usuário';
-        const { error: usuarioInsertError } = await supabase
-          .from('usuarios')
-          .insert({ id: userId, email, nome: nomeBase, tipo_usuario: 'cliente' as any });
-        if (usuarioInsertError) {
-          console.warn('⚠️ Falha ao inserir em usuarios (ignorado):', usuarioInsertError.message);
-        }
-        const { error: clienteInsertError } = await supabase
-          .from('clientes')
-          .insert({ id: userId, email, nome: nomeBase, ativo: true, perfil_completo: false } as any);
-        if (clienteInsertError) {
-          console.warn('⚠️ Falha ao inserir em clientes (ignorado):', clienteInsertError.message);
-        }
-        return 'customer';
-      } catch (e) {
-        console.warn('⚠️ Auto-fix não foi possível:', e);
-      }
-
-      console.log('❌ Usuário não encontrado em nenhum mapeamento');
+      console.log('❌ Tipo não identificado');
       return null;
-    } catch (error) {
-      console.error('💥 Erro ao identificar tipo de usuário:', error);
+    } catch (e) {
+      console.error('💥 Erro ao identificar tipo de usuário:', e);
       return null;
     }
   };
