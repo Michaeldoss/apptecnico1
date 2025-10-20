@@ -16,6 +16,7 @@ import Login from '@/pages/Login';
 import NewRegister from '@/pages/NewRegister';
 import UnifiedLogin from '@/pages/UnifiedLogin';
 import UnifiedRegister from '@/pages/UnifiedRegister';
+import ProductDetails from '@/pages/ProductDetails';
 
 import CustomerAffiliates from '@/pages/customer/Affiliates';
 import TechnicianAffiliates from '@/pages/technician/Affiliates';
@@ -111,6 +112,7 @@ function App() {
               <Route path="/loja/register" element={<StoreRegister />} />
               <Route path="/find-technician" element={<FindTechnician />} />
               <Route path="/store" element={<Store />} />
+              <Route path="/store/product/:codigo" element={<ProductDetails />} />
               <Route path="/marketplace" element={<Marketplace />} />
               <Route path="/store/category/:categorySlug" element={<CategoryPage />} />
               <Route path="/sell-equipment" element={<SellEquipment />} />
