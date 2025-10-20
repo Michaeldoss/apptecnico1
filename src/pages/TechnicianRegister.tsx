@@ -68,16 +68,16 @@ const TechnicianRegister = () => {
   const { fetchAddress, isLoading: cepLoading, error: cepError } = useViaCep();
 
   const specialtiesOptions = [
-    'Ar Condicionado',
-    'Refrigeração',
-    'Elétrica Residencial',
-    'Elétrica Industrial',
-    'Hidráulica',
-    'Encanamento',
-    'Eletrônicos',
-    'Eletrodomésticos',
-    'Sistemas de Aquecimento',
-    'Automação',
+    'Impressoras UV',
+    'Impressoras DTF',
+    'Plotters de Recorte',
+    'Router CNC',
+    'Laser CO²',
+    'Impressoras Sublimáticas',
+    'Impressoras Eco-Solvente',
+    'Prensas Térmicas',
+    'Máquinas de Bordado',
+    'Impressoras Off-Set',
     'Outros'
   ];
 

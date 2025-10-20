@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 const ServiceCategories = () => {
-  const categories = ["Assistência Técnica", "Consultoria", "Design e Tecnologia", "Manutenção Industrial", "Automação", "Calibração", "Soldagem", "Eletrônica", "Refrigeração", "Informática"];
+  const categories = ["Assistência Técnica", "Impressoras UV", "Impressoras DTF", "Plotters", "Router CNC", "Laser CO²", "Sublimação", "Prensas Térmicas", "Bordado", "Off-Set"];
   const institutional = ["Quem Somos", "Trabalhe Conosco", "Blog", "Segurança", "Mapa do Site", "Ajuda"];
   return (
     <section className="section-padding bg-muted/50">

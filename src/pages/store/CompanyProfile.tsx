@@ -555,8 +555,8 @@ const CompanyProfile = () => {
                           rows={4}
                           placeholder="Liste as certificações da empresa (ISO, qualidade, etc.)"
                           defaultValue="• ISO 9001:2015 - Sistema de Gestão da Qualidade
-• Distribuidor Autorizado HP, Canon, Epson
-• Certificação Inmetro para componentes eletrônicos
+• Distribuidor Autorizado Epson, Mimaki, Roland
+• Certificação de Qualidade em Peças UV e DTF
 • Certificação de Responsabilidade Ambiental"
                         />
                       </div>
@@ -796,24 +796,28 @@ const CompanyProfile = () => {
                         <h4 className="text-sm font-medium mb-3">Especialidades</h4>
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                           <div className="flex items-center space-x-2">
-                            <Checkbox id="computers" />
-                            <Label htmlFor="computers">Computadores</Label>
+                            <Checkbox id="uv-printers" />
+                            <Label htmlFor="uv-printers">Impressoras UV</Label>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <Checkbox id="printers" />
-                            <Label htmlFor="printers">Impressoras</Label>
+                            <Checkbox id="dtf-printers" />
+                            <Label htmlFor="dtf-printers">Impressoras DTF</Label>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <Checkbox id="networks" />
-                            <Label htmlFor="networks">Redes</Label>
+                            <Checkbox id="plotters" />
+                            <Label htmlFor="plotters">Plotters</Label>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <Checkbox id="electronics" />
-                            <Label htmlFor="electronics">Eletrônicos</Label>
+                            <Checkbox id="router-cnc" />
+                            <Label htmlFor="router-cnc">Router CNC</Label>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <Checkbox id="appliances" />
-                            <Label htmlFor="appliances">Eletrodomésticos</Label>
+                            <Checkbox id="laser" />
+                            <Label htmlFor="laser">Laser CO²</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox id="sublimation" />
+                            <Label htmlFor="sublimation">Sublimação</Label>
                           </div>
                           <div className="flex items-center space-x-2">
                             <Checkbox id="other" />

@@ -76,7 +76,7 @@ const ServiceRequestForm: React.FC<ServiceRequestFormProps> = ({ onSuccess }) =>
             <FormItem>
               <FormLabel>Tipo de Serviço</FormLabel>
               <FormControl>
-                <Input placeholder="Ex: Reparo de Computador" {...field} />
+                <Input placeholder="Ex: Manutenção em Impressora UV" {...field} />
               </FormControl>
               <FormDescription>
                 Descreva o tipo de serviço que você precisa.

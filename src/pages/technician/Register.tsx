@@ -387,7 +387,7 @@ const TechnicianRegister = () => {
                             <FormLabel>Especialidades</FormLabel>
                             <FormControl>
                               <Textarea 
-                                placeholder="Descreva suas especialidades técnicas (ex: ar condicionado, refrigeração, elétrica, hidráulica...)" 
+                                placeholder="Descreva suas especialidades técnicas (ex: impressoras UV, DTF, plotters, router CNC, laser CO²...)" 
                                 className="min-h-[100px]"
                                 {...field} 
                               />

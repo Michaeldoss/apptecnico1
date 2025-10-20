@@ -60,7 +60,7 @@ const companies = [
   {
     id: 6,
     name: "DigiPrint Componentes",
-    description: "Componentes eletrônicos e mecânicos para sistemas de impressão digital industrial.",
+    description: "Componentes e peças para impressoras UV, DTF e sistemas de impressão digital industrial.",
     rating: 4.4,
     image: "/placeholder.svg",
     products: 112,
