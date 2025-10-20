@@ -37,17 +37,17 @@ const SidebarItem = ({ href, icon: Icon, children, active, badge, onClick }: Sid
     <Link
       to={href}
       className={cn(
-        "flex items-center gap-3 rounded-lg px-4 py-3 text-base transition-all duration-200 hover:bg-gray-light font-inter font-medium relative w-full",
-        active ? "bg-tech-primary text-white shadow-sm" : "text-white/80 hover:text-white"
+        "flex items-center gap-3 rounded-lg px-4 py-3 text-base transition-all duration-200 hover:bg-muted font-inter font-medium relative w-full",
+        active ? "bg-primary text-primary-foreground shadow-sm" : "text-foreground/80 hover:text-foreground"
       )}
       onClick={onClick}
     >
-      <Icon className={cn("h-5 w-5 flex-shrink-0", active ? "text-white" : "text-accent")} />
+      <Icon className={cn("h-5 w-5 flex-shrink-0", active ? "text-primary-foreground" : "text-primary")} />
       <span className="flex-1 min-w-0 text-left w-full">{children}</span>
       
       {badge && badge > 0 && (
         <Badge 
-          className="absolute right-2 bg-tech-accent text-white border-0 shadow-sm flex-shrink-0" 
+          className="absolute right-2 bg-primary text-primary-foreground border-0 shadow-sm flex-shrink-0" 
           variant="outline"
         >
           {badge}
@@ -87,17 +87,15 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-primary via-primary-dark to-sidebar-background relative">
-      {/* Background pattern overlay */}
-      <div className="absolute inset-0 bg-[url('/placeholder.svg')] opacity-5 bg-cover bg-center"></div>
-      
+    <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
       
-      <div className="flex-1 flex container-standard px-4 py-6 gap-6 relative z-10 mt-16">
+      {/* Adicionado pt-24 para compensar a navbar absoluta */}
+      <div className="flex-1 flex container mx-auto px-4 gap-6 max-w-7xl pt-24">
         {isMobile && (
           <button 
             onClick={toggleMenu}
-            className="fixed top-20 left-4 z-40 bg-white/20 backdrop-blur-sm text-white p-3 rounded-full shadow-lg md:hidden hover:bg-white/30 transition-colors duration-200"
+            className="fixed top-20 left-4 z-40 bg-primary text-white p-3 rounded-full shadow-lg md:hidden hover:bg-primary/90 transition-colors duration-200"
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -111,8 +109,8 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
         )}
         
         <aside className={cn(
-          "w-64 shrink-0 transition-all duration-300",
-          isMobile ? "fixed left-0 top-16 bottom-0 bg-white/95 backdrop-blur-sm z-30 h-[calc(100vh-4rem)] px-4 pt-16 pb-6 shadow-xl overflow-y-auto" : "hidden md:block bg-white/10 backdrop-blur-sm rounded-lg p-6"
+          "w-64 shrink-0 transition-all duration-300 bg-card border border-border rounded-lg",
+          isMobile ? "fixed left-0 top-16 bottom-0 z-30 h-[calc(100vh-4rem)] px-4 pt-16 pb-6 shadow-xl overflow-y-auto" : "hidden md:block p-6 h-fit sticky top-24"
         )}>
           <div className="space-y-2 py-4">
             <SidebarItem 
@@ -190,37 +188,27 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
             </SidebarItem>
           </div>
           
-          <div className="pt-6 mt-6 border-t border-white/20">
+          <div className="pt-6 mt-6 border-t border-border">
             <button 
               onClick={() => {
                 handleLogout();
                 closeMenu();
               }}
-              className="flex items-center gap-3 rounded-lg px-4 py-3 text-base transition-all duration-200 hover:bg-white/10 text-white hover:text-white w-full text-left font-inter font-medium"
+              className="flex items-center gap-3 rounded-lg px-4 py-3 text-base transition-all duration-200 hover:bg-muted text-foreground w-full text-left font-inter font-medium"
             >
-              <LogOut className="h-5 w-5 text-white" />
+              <LogOut className="h-5 w-5 text-destructive" />
               <span>Sair</span>
             </button>
           </div>
         </aside>
         
         <main className={cn(
-          "flex-1 min-h-0",
+          "flex-1 min-w-0 relative",
           isMobile ? "pl-0" : ""
         )}>
           <div className={cn(
-            "flex items-center justify-between mb-6",
-            isMobile ? "flex-col gap-4 items-start" : ""
-          )}>
-            <h1 className={cn(
-              "text-3xl font-bold text-white font-inter drop-shadow-lg",
-              isMobile ? "text-2xl pl-12" : ""
-            )}>{title}</h1>
-          </div>
-          
-          <div className={cn(
-            "w-full h-full grid-standard bg-white/95 backdrop-blur-sm rounded-lg p-6 shadow-xl",
-            isMobile ? "mx-2" : ""
+            "w-full",
+            isMobile ? "px-1" : ""
           )}>
             {children}
           </div>
