@@ -75,6 +75,7 @@ import CompanyReviews from '@/pages/store/CompanyReviews';
 import CompanyInventory from '@/pages/store/CompanyInventory';
 import CompanyProfile from '@/pages/store/CompanyProfile';
 import CompanySettings from '@/pages/store/CompanySettings';
+import ProductCreate from '@/pages/store/ProductCreate';
 
 // Admin pages
 import AdminDashboard from '@/pages/admin/Dashboard';
@@ -129,6 +130,11 @@ function App() {
                <Route path="/loja/products" element={
                  <ProtectedRoute userType="company">
                    <CompanyProducts />
+                 </ProtectedRoute>
+               } />
+               <Route path="/loja/products/create" element={
+                 <ProtectedRoute userType="company">
+                   <ProductCreate />
                  </ProtectedRoute>
                } />
                <Route path="/loja/orders" element={
