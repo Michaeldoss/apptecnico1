@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from '@/components/ui/sonner';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import SecurityHeaderProvider from '@/components/security/SecurityHeaderProvider';
+import { ScrollToTop } from '@/components/ScrollToTop';
 
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import { CartProvider } from '@/hooks/useCart';
@@ -94,6 +95,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <CartProvider>
           <Router>
+            <ScrollToTop />
             <div className="App">
             <Routes>
               {/* Public routes */}
