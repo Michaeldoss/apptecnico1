@@ -147,6 +147,11 @@ function App() {
                    <CompanyFinancial />
                  </ProtectedRoute>
                } />
+               <Route path="/loja/financial" element={
+                 <ProtectedRoute userType="company">
+                   <CompanyFinancial />
+                 </ProtectedRoute>
+               } />
                <Route path="/loja/avaliacoes" element={
                  <ProtectedRoute userType="company">
                    <CompanyReviews />
