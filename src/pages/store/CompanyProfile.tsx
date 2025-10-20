@@ -793,35 +793,128 @@ const CompanyProfile = () => {
                       </div>
                       
                       <div>
-                        <h4 className="text-sm font-medium mb-3">Especialidades</h4>
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                        <h4 className="text-sm font-medium mb-3">Modelos de Equipamentos Atendidos</h4>
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                          {/* Impressoras DTF */}
                           <div className="flex items-center space-x-2">
-                            <Checkbox id="uv-printers" />
-                            <Label htmlFor="uv-printers">Impressoras UV</Label>
+                            <Checkbox id="dtf-textil" />
+                            <Label htmlFor="dtf-textil" className="text-sm">DTF Têxtil</Label>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <Checkbox id="dtf-printers" />
-                            <Label htmlFor="dtf-printers">Impressoras DTF</Label>
+                            <Checkbox id="dtf-uv" />
+                            <Label htmlFor="dtf-uv" className="text-sm">DTF UV</Label>
+                          </div>
+                          
+                          {/* Impressoras UV */}
+                          <div className="flex items-center space-x-2">
+                            <Checkbox id="uv-flatbed" />
+                            <Label htmlFor="uv-flatbed" className="text-sm">UV Flatbed</Label>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <Checkbox id="plotters" />
-                            <Label htmlFor="plotters">Plotters</Label>
+                            <Checkbox id="uv-flexivel" />
+                            <Label htmlFor="uv-flexivel" className="text-sm">UV Flexível</Label>
                           </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox id="uv-hibrida" />
+                            <Label htmlFor="uv-hibrida" className="text-sm">UV Híbrida</Label>
+                          </div>
+                          
+                          {/* Impressoras por Tipo de Tinta */}
+                          <div className="flex items-center space-x-2">
+                            <Checkbox id="eco-solvente" />
+                            <Label htmlFor="eco-solvente" className="text-sm">Eco Solvente</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox id="solvente" />
+                            <Label htmlFor="solvente" className="text-sm">Solvente</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox id="sublimatica" />
+                            <Label htmlFor="sublimatica" className="text-sm">Sublimática</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox id="pigmento" />
+                            <Label htmlFor="pigmento" className="text-sm">Pigmento</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox id="reativo" />
+                            <Label htmlFor="reativo" className="text-sm">Reativo</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox id="corante" />
+                            <Label htmlFor="corante" className="text-sm">Corante</Label>
+                          </div>
+                          
+                          {/* Plotters */}
+                          <div className="flex items-center space-x-2">
+                            <Checkbox id="plotter-recorte" />
+                            <Label htmlFor="plotter-recorte" className="text-sm">Plotter de Recorte</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox id="plotter-impressao" />
+                            <Label htmlFor="plotter-impressao" className="text-sm">Plotter de Impressão</Label>
+                          </div>
+                          
+                          {/* Máquinas CNC e Roteadoras */}
                           <div className="flex items-center space-x-2">
                             <Checkbox id="router-cnc" />
-                            <Label htmlFor="router-cnc">Router CNC</Label>
+                            <Label htmlFor="router-cnc" className="text-sm">Router CNC</Label>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <Checkbox id="laser" />
-                            <Label htmlFor="laser">Laser CO²</Label>
+                            <Checkbox id="laser-co2" />
+                            <Label htmlFor="laser-co2" className="text-sm">Laser CO²</Label>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <Checkbox id="sublimation" />
-                            <Label htmlFor="sublimation">Sublimação</Label>
+                            <Checkbox id="gravadora-laser" />
+                            <Label htmlFor="gravadora-laser" className="text-sm">Gravadora Laser</Label>
+                          </div>
+                          
+                          {/* Prensas e Transferência */}
+                          <div className="flex items-center space-x-2">
+                            <Checkbox id="prensa-termica" />
+                            <Label htmlFor="prensa-termica" className="text-sm">Prensa Térmica</Label>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <Checkbox id="other" />
-                            <Label htmlFor="other">Outros</Label>
+                            <Checkbox id="prensa-plana" />
+                            <Label htmlFor="prensa-plana" className="text-sm">Prensa Plana</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox id="prensa-canecas" />
+                            <Label htmlFor="prensa-canecas" className="text-sm">Prensa de Canecas</Label>
+                          </div>
+                          
+                          {/* Máquinas Têxteis */}
+                          <div className="flex items-center space-x-2">
+                            <Checkbox id="bordado" />
+                            <Label htmlFor="bordado" className="text-sm">Bordado</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox id="costura-industrial" />
+                            <Label htmlFor="costura-industrial" className="text-sm">Costura Industrial</Label>
+                          </div>
+                          
+                          {/* Impressoras Offset */}
+                          <div className="flex items-center space-x-2">
+                            <Checkbox id="offset" />
+                            <Label htmlFor="offset" className="text-sm">Off-Set</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox id="offset-digital" />
+                            <Label htmlFor="offset-digital" className="text-sm">Off-Set Digital</Label>
+                          </div>
+                          
+                          {/* Outros */}
+                          <div className="flex items-center space-x-2">
+                            <Checkbox id="laminadora" />
+                            <Label htmlFor="laminadora" className="text-sm">Laminadora</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox id="guilhotina" />
+                            <Label htmlFor="guilhotina" className="text-sm">Guilhotina</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox id="outros" />
+                            <Label htmlFor="outros" className="text-sm">Outros</Label>
                           </div>
                         </div>
                       </div>
