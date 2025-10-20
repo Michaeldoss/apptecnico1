@@ -6,6 +6,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -27,12 +34,15 @@ import {
   XCircle,
   DollarSign,
   FileSpreadsheet,
-  FileText
+  FileText,
+  MapPin,
+  CreditCard,
+  Calendar
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { toast } from 'sonner';
+import { toast } from '@/hooks/use-toast';
 
 const mockOrders = [
   {
@@ -108,6 +118,8 @@ const mockOrders = [
 const CompanyOrders = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('all');
+  const [selectedOrder, setSelectedOrder] = useState<typeof mockOrders[0] | null>(null);
+  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
 
   const exportToExcel = () => {
     try {
@@ -127,24 +139,16 @@ const CompanyOrders = () => {
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, 'Pedidos');
       
-      // Ajustar largura das colunas
       const colWidths = [
-        { wch: 15 }, // ID
-        { wch: 20 }, // Cliente
-        { wch: 25 }, // Email
-        { wch: 12 }, // Data
-        { wch: 12 }, // Status
-        { wch: 15 }, // Total
-        { wch: 18 }, // Pagamento
-        { wch: 35 }, // Endereço
-        { wch: 50 }  // Itens
+        { wch: 15 }, { wch: 20 }, { wch: 25 }, { wch: 12 }, { wch: 12 },
+        { wch: 15 }, { wch: 18 }, { wch: 35 }, { wch: 50 }
       ];
       ws['!cols'] = colWidths;
       
       XLSX.writeFile(wb, `pedidos_${new Date().toISOString().split('T')[0]}.xlsx`);
-      toast.success('Arquivo Excel exportado com sucesso!');
+      toast({ title: 'Sucesso', description: 'Arquivo Excel exportado com sucesso!' });
     } catch (error) {
-      toast.error('Erro ao exportar arquivo Excel');
+      toast({ title: 'Erro', description: 'Erro ao exportar arquivo Excel', variant: 'destructive' });
       console.error(error);
     }
   };
@@ -153,15 +157,12 @@ const CompanyOrders = () => {
     try {
       const doc = new jsPDF();
       
-      // Título
       doc.setFontSize(18);
       doc.text('Relatório de Pedidos', 14, 22);
       
-      // Data do relatório
       doc.setFontSize(10);
       doc.text(`Data: ${new Date().toLocaleDateString('pt-BR')}`, 14, 30);
       
-      // Resumo
       doc.setFontSize(12);
       doc.text('Resumo:', 14, 40);
       doc.setFontSize(10);
@@ -169,7 +170,6 @@ const CompanyOrders = () => {
       doc.text(`Pedidos Concluídos: ${filteredOrders.filter(o => o.status === 'completed').length}`, 14, 53);
       doc.text(`Receita Total: R$ ${filteredOrders.filter(o => o.status === 'completed').reduce((sum, o) => sum + o.total, 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`, 14, 59);
       
-      // Tabela de pedidos
       const tableData = filteredOrders.map(order => [
         order.id,
         order.customer,
@@ -184,32 +184,111 @@ const CompanyOrders = () => {
         head: [['ID', 'Cliente', 'Data', 'Status', 'Total', 'Pagamento']],
         body: tableData,
         theme: 'grid',
-        headStyles: {
-          fillColor: [37, 99, 235],
-          textColor: 255,
-          fontSize: 10,
-          fontStyle: 'bold'
-        },
-        styles: {
-          fontSize: 9,
-          cellPadding: 3
-        },
+        headStyles: { fillColor: [37, 99, 235], textColor: 255, fontSize: 10, fontStyle: 'bold' },
+        styles: { fontSize: 9, cellPadding: 3 },
         columnStyles: {
-          0: { cellWidth: 30 },
-          1: { cellWidth: 40 },
-          2: { cellWidth: 25 },
-          3: { cellWidth: 25 },
-          4: { cellWidth: 30 },
-          5: { cellWidth: 30 }
+          0: { cellWidth: 30 }, 1: { cellWidth: 40 }, 2: { cellWidth: 25 },
+          3: { cellWidth: 25 }, 4: { cellWidth: 30 }, 5: { cellWidth: 30 }
         }
       });
       
       doc.save(`pedidos_${new Date().toISOString().split('T')[0]}.pdf`);
-      toast.success('Arquivo PDF exportado com sucesso!');
+      toast({ title: 'Sucesso', description: 'Arquivo PDF exportado com sucesso!' });
     } catch (error) {
-      toast.error('Erro ao exportar arquivo PDF');
+      toast({ title: 'Erro', description: 'Erro ao exportar arquivo PDF', variant: 'destructive' });
       console.error(error);
     }
+  };
+
+  const exportOrderToExcel = (order: typeof mockOrders[0]) => {
+    try {
+      const dataToExport = [
+        { Campo: 'ID do Pedido', Valor: order.id },
+        { Campo: 'Cliente', Valor: order.customer },
+        { Campo: 'Email', Valor: order.customerEmail },
+        { Campo: 'Data', Valor: new Date(order.date).toLocaleDateString('pt-BR') },
+        { Campo: 'Status', Valor: getStatusText(order.status) },
+        { Campo: 'Total', Valor: `R$ ${order.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` },
+        { Campo: 'Forma de Pagamento', Valor: order.paymentMethod },
+        { Campo: 'Endereço de Entrega', Valor: order.shippingAddress },
+      ];
+
+      const itemsData = order.items.map(item => ({
+        'Produto': item.name,
+        'Quantidade': item.quantity,
+        'Preço Unitário': `R$ ${item.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`,
+        'Subtotal': `R$ ${(item.price * item.quantity).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`
+      }));
+
+      const wb = XLSX.utils.book_new();
+      const ws1 = XLSX.utils.json_to_sheet(dataToExport);
+      const ws2 = XLSX.utils.json_to_sheet(itemsData);
+      
+      XLSX.utils.book_append_sheet(wb, ws1, 'Informações');
+      XLSX.utils.book_append_sheet(wb, ws2, 'Itens');
+      
+      XLSX.writeFile(wb, `pedido_${order.id}.xlsx`);
+      toast({ title: 'Sucesso', description: `Pedido ${order.id} exportado para Excel!` });
+    } catch (error) {
+      toast({ title: 'Erro', description: 'Erro ao exportar pedido', variant: 'destructive' });
+      console.error(error);
+    }
+  };
+
+  const exportOrderToPDF = (order: typeof mockOrders[0]) => {
+    try {
+      const doc = new jsPDF();
+      
+      doc.setFontSize(20);
+      doc.text('Detalhes do Pedido', 14, 22);
+      
+      doc.setFontSize(12);
+      doc.text(`Pedido: ${order.id}`, 14, 35);
+      doc.text(`Data: ${new Date(order.date).toLocaleDateString('pt-BR')}`, 14, 42);
+      doc.text(`Status: ${getStatusText(order.status)}`, 14, 49);
+      
+      doc.setFontSize(14);
+      doc.text('Informações do Cliente', 14, 60);
+      doc.setFontSize(10);
+      doc.text(`Nome: ${order.customer}`, 14, 68);
+      doc.text(`Email: ${order.customerEmail}`, 14, 74);
+      doc.text(`Endereço: ${order.shippingAddress}`, 14, 80);
+      
+      doc.setFontSize(14);
+      doc.text('Itens do Pedido', 14, 92);
+      
+      const itemsData = order.items.map(item => [
+        item.name,
+        item.quantity.toString(),
+        `R$ ${item.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`,
+        `R$ ${(item.price * item.quantity).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`
+      ]);
+
+      autoTable(doc, {
+        startY: 98,
+        head: [['Produto', 'Qtd', 'Preço Unit.', 'Subtotal']],
+        body: itemsData,
+        theme: 'grid',
+        headStyles: { fillColor: [37, 99, 235] },
+      });
+      
+      const finalY = (doc as any).lastAutoTable.finalY + 10;
+      doc.setFontSize(12);
+      doc.text(`Forma de Pagamento: ${order.paymentMethod}`, 14, finalY);
+      doc.setFontSize(14);
+      doc.text(`Total: R$ ${order.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`, 14, finalY + 10);
+      
+      doc.save(`pedido_${order.id}.pdf`);
+      toast({ title: 'Sucesso', description: `Pedido ${order.id} exportado para PDF!` });
+    } catch (error) {
+      toast({ title: 'Erro', description: 'Erro ao exportar pedido', variant: 'destructive' });
+      console.error(error);
+    }
+  };
+
+  const handleViewOrder = (order: typeof mockOrders[0]) => {
+    setSelectedOrder(order);
+    setIsViewDialogOpen(true);
   };
 
   const getStatusText = (status: string) => {
@@ -428,12 +507,36 @@ const CompanyOrders = () => {
                     <TableCell>{order.paymentMethod}</TableCell>
                     <TableCell>
                       <div className="flex gap-2">
-                        <Button variant="outline" size="sm">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => handleViewOrder(order)}
+                        >
                           <Eye className="h-4 w-4" />
                         </Button>
-                        <Button variant="outline" size="sm">
-                          <Download className="h-4 w-4" />
-                        </Button>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="outline" size="sm">
+                              <Download className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem 
+                              onClick={() => exportOrderToExcel(order)}
+                              className="flex items-center gap-2"
+                            >
+                              <FileSpreadsheet className="h-4 w-4 text-green-600" />
+                              Excel (.xlsx)
+                            </DropdownMenuItem>
+                            <DropdownMenuItem 
+                              onClick={() => exportOrderToPDF(order)}
+                              className="flex items-center gap-2"
+                            >
+                              <FileText className="h-4 w-4 text-red-600" />
+                              PDF
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </div>
                     </TableCell>
                   </TableRow>
@@ -450,6 +553,115 @@ const CompanyOrders = () => {
             )}
           </CardContent>
         </Card>
+
+        {/* Modal de Visualização do Pedido */}
+        <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
+          <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="text-2xl">Detalhes do Pedido</DialogTitle>
+              <DialogDescription>
+                Informações completas sobre o pedido {selectedOrder?.id}
+              </DialogDescription>
+            </DialogHeader>
+            
+            {selectedOrder && (
+              <div className="space-y-6">
+                {/* Status e Data */}
+                <div className="flex items-center justify-between pb-4 border-b">
+                  <div className="flex items-center gap-3">
+                    {getStatusIcon(selectedOrder.status)}
+                    {getStatusBadge(selectedOrder.status)}
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <Calendar className="h-4 w-4" />
+                    {new Date(selectedOrder.date).toLocaleDateString('pt-BR')}
+                  </div>
+                </div>
+
+                {/* Informações do Cliente */}
+                <div>
+                  <h3 className="font-semibold text-lg mb-3">Informações do Cliente</h3>
+                  <div className="bg-gray-50 rounded-lg p-4 space-y-2">
+                    <p className="text-sm"><span className="font-medium">Nome:</span> {selectedOrder.customer}</p>
+                    <p className="text-sm"><span className="font-medium">Email:</span> {selectedOrder.customerEmail}</p>
+                    <div className="flex items-start gap-2">
+                      <MapPin className="h-4 w-4 text-gray-500 mt-0.5" />
+                      <p className="text-sm flex-1"><span className="font-medium">Endereço:</span> {selectedOrder.shippingAddress}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Itens do Pedido */}
+                <div>
+                  <h3 className="font-semibold text-lg mb-3">Itens do Pedido</h3>
+                  <div className="border rounded-lg overflow-hidden">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Produto</TableHead>
+                          <TableHead className="text-center">Qtd</TableHead>
+                          <TableHead className="text-right">Preço Unit.</TableHead>
+                          <TableHead className="text-right">Subtotal</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {selectedOrder.items.map((item, index) => (
+                          <TableRow key={index}>
+                            <TableCell className="font-medium">{item.name}</TableCell>
+                            <TableCell className="text-center">{item.quantity}</TableCell>
+                            <TableCell className="text-right">
+                              R$ {item.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                            </TableCell>
+                            <TableCell className="text-right font-semibold">
+                              R$ {(item.price * item.quantity).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </div>
+
+                {/* Resumo do Pagamento */}
+                <div className="border-t pt-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <CreditCard className="h-4 w-4 text-gray-500" />
+                      <span className="text-sm font-medium">Forma de Pagamento:</span>
+                    </div>
+                    <span className="text-sm">{selectedOrder.paymentMethod}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-lg font-bold mt-4 pt-4 border-t">
+                    <span>Total do Pedido:</span>
+                    <span className="text-blue-600">
+                      R$ {selectedOrder.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Ações */}
+                <div className="flex gap-3 pt-4 border-t">
+                  <Button 
+                    variant="outline" 
+                    className="flex-1"
+                    onClick={() => exportOrderToExcel(selectedOrder)}
+                  >
+                    <FileSpreadsheet className="h-4 w-4 mr-2 text-green-600" />
+                    Exportar Excel
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="flex-1"
+                    onClick={() => exportOrderToPDF(selectedOrder)}
+                  >
+                    <FileText className="h-4 w-4 mr-2 text-red-600" />
+                    Exportar PDF
+                  </Button>
+                </div>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
       </main>
       
       <Footer />
