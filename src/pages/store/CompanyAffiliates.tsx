@@ -35,8 +35,19 @@ const CompanyAffiliates = () => {
     );
   }
 
-  // Se não é afiliado, mostrar tela de setup
-  if (!profile) {
+  // Se não é afiliado, aguardar criação automática
+  if (!profile && isLoading) {
+    return (
+      <StoreLayout title="Afiliados" subtitle="Carregando seu programa de afiliados...">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <Loader2 className="h-8 w-8 animate-spin text-white" />
+        </div>
+      </StoreLayout>
+    );
+  }
+
+  // Se mesmo após carregar não tem perfil, mostrar tela de setup
+  if (!profile && !isLoading) {
     return (
       <StoreLayout title="Configurar Afiliados" subtitle="Configure seu programa de afiliados">
         <div className="bg-white/10 backdrop-blur-xl rounded-lg border border-white/20 p-6">
@@ -95,8 +106,15 @@ const CompanyAffiliates = () => {
 
           <TabsContent value="overview" className="bg-white/10 backdrop-blur-xl rounded-lg border border-white/20 p-6">
             <AffiliateOverview 
-              stats={stats!} 
-              affiliateSlug={profile.affiliate_slug}
+              stats={stats || {
+                totalSales: 0,
+                totalCommission: 0,
+                pendingCommission: 0,
+                paidCommission: 0,
+                salesCount: 0,
+                conversionRate: 0
+              }} 
+              affiliateSlug={profile?.affiliate_slug || ''}
             />
           </TabsContent>
 
@@ -108,7 +126,7 @@ const CompanyAffiliates = () => {
 
               <TabsContent value="links" className="bg-white/10 backdrop-blur-xl rounded-lg border border-white/20 p-6">
                 <AffiliateLinks 
-                  affiliateSlug={profile.affiliate_slug}
+                  affiliateSlug={profile?.affiliate_slug || ''}
                   getAffiliateLink={getAffiliateLink}
                 />
               </TabsContent>
@@ -116,7 +134,14 @@ const CompanyAffiliates = () => {
               <TabsContent value="withdrawals" className="bg-white/10 backdrop-blur-xl rounded-lg border border-white/20 p-6">
                 <AffiliateWithdrawals 
                   withdrawals={withdrawals}
-                  stats={stats!}
+                  stats={stats || {
+                    totalSales: 0,
+                    totalCommission: 0,
+                    pendingCommission: 0,
+                    paidCommission: 0,
+                    salesCount: 0,
+                    conversionRate: 0
+                  }}
                   onRequestWithdrawal={requestWithdrawal}
                 />
               </TabsContent>
@@ -125,7 +150,7 @@ const CompanyAffiliates = () => {
             <>
               <TabsContent value="links" className="bg-white/10 backdrop-blur-xl rounded-lg border border-white/20 p-6">
                 <AffiliateLinks 
-                  affiliateSlug={profile.affiliate_slug}
+                  affiliateSlug={profile?.affiliate_slug || ''}
                   getAffiliateLink={getAffiliateLink}
                 />
               </TabsContent>
@@ -154,7 +179,14 @@ const CompanyAffiliates = () => {
                   <TabsContent value="withdrawals">
                     <AffiliateWithdrawals 
                       withdrawals={withdrawals}
-                      stats={stats!}
+                      stats={stats || {
+                        totalSales: 0,
+                        totalCommission: 0,
+                        pendingCommission: 0,
+                        paidCommission: 0,
+                        salesCount: 0,
+                        conversionRate: 0
+                      }}
                       onRequestWithdrawal={requestWithdrawal}
                     />
                   </TabsContent>

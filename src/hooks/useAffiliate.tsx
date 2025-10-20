@@ -29,6 +29,19 @@ export const useAffiliate = () => {
     if (!user?.id) return;
 
     try {
+      setIsLoading(true);
+      
+      // Primeiro, buscar dados da loja
+      const { data: lojaData, error: lojaError } = await supabase
+        .from('lojas')
+        .select('nome_empresa, nome_contato')
+        .eq('id', user.id)
+        .single();
+
+      if (lojaError) {
+        console.error('Erro ao buscar dados da loja:', lojaError);
+      }
+
       const { data, error } = await supabase
         .from('affiliate_profiles')
         .select('*')
@@ -37,12 +50,38 @@ export const useAffiliate = () => {
 
       if (error && error.code !== 'PGRST116') {
         console.error('Erro ao buscar perfil de afiliado:', error);
+        setIsLoading(false);
         return;
       }
 
-      setProfile(data);
+      if (data) {
+        setProfile(data);
+      } else if (lojaData) {
+        // Se não tem perfil mas tem loja, criar automaticamente
+        const slug = generateSlug(lojaData.nome_empresa || lojaData.nome_contato || 'loja');
+        
+        const { data: newProfile, error: createError } = await supabase
+          .from('affiliate_profiles')
+          .insert({
+            user_id: user.id,
+            affiliate_slug: `${slug}-${Date.now()}`,
+            is_active: true
+          })
+          .select()
+          .single();
+
+        if (!createError && newProfile) {
+          setProfile(newProfile);
+          toast({
+            title: "Perfil de afiliado criado!",
+            description: "Seu programa de afiliados está pronto."
+          });
+        }
+      }
     } catch (error) {
       console.error('Erro ao buscar perfil de afiliado:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
