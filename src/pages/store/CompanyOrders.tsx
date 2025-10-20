@@ -5,6 +5,12 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { 
@@ -19,8 +25,14 @@ import {
   Clock,
   CheckCircle,
   XCircle,
-  DollarSign
+  DollarSign,
+  FileSpreadsheet,
+  FileText
 } from 'lucide-react';
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import { toast } from 'sonner';
 
 const mockOrders = [
   {
@@ -96,6 +108,120 @@ const mockOrders = [
 const CompanyOrders = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('all');
+
+  const exportToExcel = () => {
+    try {
+      const dataToExport = filteredOrders.map(order => ({
+        'ID do Pedido': order.id,
+        'Cliente': order.customer,
+        'Email': order.customerEmail,
+        'Data': new Date(order.date).toLocaleDateString('pt-BR'),
+        'Status': getStatusText(order.status),
+        'Total': `R$ ${order.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`,
+        'Pagamento': order.paymentMethod,
+        'Endereço': order.shippingAddress,
+        'Itens': order.items.map(item => `${item.name} (${item.quantity}x)`).join(', ')
+      }));
+
+      const ws = XLSX.utils.json_to_sheet(dataToExport);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Pedidos');
+      
+      // Ajustar largura das colunas
+      const colWidths = [
+        { wch: 15 }, // ID
+        { wch: 20 }, // Cliente
+        { wch: 25 }, // Email
+        { wch: 12 }, // Data
+        { wch: 12 }, // Status
+        { wch: 15 }, // Total
+        { wch: 18 }, // Pagamento
+        { wch: 35 }, // Endereço
+        { wch: 50 }  // Itens
+      ];
+      ws['!cols'] = colWidths;
+      
+      XLSX.writeFile(wb, `pedidos_${new Date().toISOString().split('T')[0]}.xlsx`);
+      toast.success('Arquivo Excel exportado com sucesso!');
+    } catch (error) {
+      toast.error('Erro ao exportar arquivo Excel');
+      console.error(error);
+    }
+  };
+
+  const exportToPDF = () => {
+    try {
+      const doc = new jsPDF();
+      
+      // Título
+      doc.setFontSize(18);
+      doc.text('Relatório de Pedidos', 14, 22);
+      
+      // Data do relatório
+      doc.setFontSize(10);
+      doc.text(`Data: ${new Date().toLocaleDateString('pt-BR')}`, 14, 30);
+      
+      // Resumo
+      doc.setFontSize(12);
+      doc.text('Resumo:', 14, 40);
+      doc.setFontSize(10);
+      doc.text(`Total de Pedidos: ${filteredOrders.length}`, 14, 47);
+      doc.text(`Pedidos Concluídos: ${filteredOrders.filter(o => o.status === 'completed').length}`, 14, 53);
+      doc.text(`Receita Total: R$ ${filteredOrders.filter(o => o.status === 'completed').reduce((sum, o) => sum + o.total, 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`, 14, 59);
+      
+      // Tabela de pedidos
+      const tableData = filteredOrders.map(order => [
+        order.id,
+        order.customer,
+        new Date(order.date).toLocaleDateString('pt-BR'),
+        getStatusText(order.status),
+        `R$ ${order.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`,
+        order.paymentMethod
+      ]);
+
+      autoTable(doc, {
+        startY: 70,
+        head: [['ID', 'Cliente', 'Data', 'Status', 'Total', 'Pagamento']],
+        body: tableData,
+        theme: 'grid',
+        headStyles: {
+          fillColor: [37, 99, 235],
+          textColor: 255,
+          fontSize: 10,
+          fontStyle: 'bold'
+        },
+        styles: {
+          fontSize: 9,
+          cellPadding: 3
+        },
+        columnStyles: {
+          0: { cellWidth: 30 },
+          1: { cellWidth: 40 },
+          2: { cellWidth: 25 },
+          3: { cellWidth: 25 },
+          4: { cellWidth: 30 },
+          5: { cellWidth: 30 }
+        }
+      });
+      
+      doc.save(`pedidos_${new Date().toISOString().split('T')[0]}.pdf`);
+      toast.success('Arquivo PDF exportado com sucesso!');
+    } catch (error) {
+      toast.error('Erro ao exportar arquivo PDF');
+      console.error(error);
+    }
+  };
+
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case 'completed': return 'Concluído';
+      case 'processing': return 'Processando';
+      case 'shipped': return 'Enviado';
+      case 'pending': return 'Pendente';
+      case 'cancelled': return 'Cancelado';
+      default: return 'Desconhecido';
+    }
+  };
 
   const statusOptions = [
     { value: 'all', label: 'Todos os Status' },
@@ -235,10 +361,24 @@ const CompanyOrders = () => {
             ))}
           </select>
 
-          <Button variant="outline" className="flex items-center gap-2">
-            <Download className="h-4 w-4" />
-            Exportar
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="flex items-center gap-2">
+                <Download className="h-4 w-4" />
+                Exportar
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={exportToExcel} className="flex items-center gap-2">
+                <FileSpreadsheet className="h-4 w-4 text-green-600" />
+                Exportar para Excel (.xlsx)
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={exportToPDF} className="flex items-center gap-2">
+                <FileText className="h-4 w-4 text-red-600" />
+                Exportar para PDF
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         {/* Tabela de pedidos */}
