@@ -100,13 +100,17 @@ export const useTechnicianSearch = () => {
         tech.name.toLowerCase().includes(query) ||
         tech.specialties.some(spec => spec.toLowerCase().includes(query)) ||
         tech.location.toLowerCase().includes(query) ||
-        tech.description.toLowerCase().includes(query)
+        tech.description.toLowerCase().includes(query) ||
+        tech.city.toLowerCase().includes(query) ||
+        tech.state.toLowerCase().includes(query)
       );
     }
 
     // Filtro por cidade
     if (filters.city) {
-      filtered = filtered.filter(tech => tech.city === filters.city);
+      filtered = filtered.filter(tech => 
+        tech.city.toLowerCase().includes(filters.city.toLowerCase())
+      );
     }
 
     // Filtro por estado
@@ -117,7 +121,9 @@ export const useTechnicianSearch = () => {
     // Filtro por tipo de equipamento
     if (filters.equipmentType) {
       filtered = filtered.filter(tech => 
-        tech.equipmentTypes.includes(filters.equipmentType)
+        tech.equipmentTypes.some(type => 
+          type.toLowerCase().includes(filters.equipmentType.toLowerCase())
+        )
       );
     }
 

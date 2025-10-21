@@ -31,38 +31,39 @@ const SimpleLeafletMap: React.FC<SimpleLeafletMapProps> = ({
   useEffect(() => {
     if (!mapRef.current) return;
 
-    // Initialize map
-    mapInstance.current = L.map(mapRef.current).setView([-23.5505, -46.6333], 10);
+    // Initialize map with default center (will be updated when user location is obtained)
+    mapInstance.current = L.map(mapRef.current).setView([-23.5505, -46.6333], 5);
 
     // Add tile layer
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(mapInstance.current);
 
-    // Get user location
+    // Get user location and center map
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const userLocation: L.LatLngExpression = [position.coords.latitude, position.coords.longitude];
           
-          // Add user marker
+          // Add user marker with custom blue icon
           const userIcon = L.divIcon({
-            html: '<div style="background: #3b82f6; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></div>',
-            iconSize: [20, 20],
-            iconAnchor: [10, 10]
+            html: '<div style="background: #2563eb; width: 24px; height: 24px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 6px rgba(37, 99, 235, 0.5);"></div>',
+            iconSize: [24, 24],
+            iconAnchor: [12, 12],
+            className: 'user-location-marker'
           });
           
           L.marker(userLocation, { icon: userIcon })
             .addTo(mapInstance.current!)
-            .bindPopup('<strong>Sua localização</strong>');
+            .bindPopup('<strong>Você está aqui</strong>')
+            .openPopup();
             
-          // Center map on user location if no technicians
-          if (technicians.length === 0) {
-            mapInstance.current?.setView(userLocation, 12);
-          }
+          // Always center map on user location with good zoom
+          mapInstance.current?.setView(userLocation, 12);
         },
         (error) => {
           console.warn('Erro ao obter localização:', error);
+          // Stay with default Brazil center if location fails
         }
       );
     }
@@ -144,9 +145,12 @@ const SimpleLeafletMap: React.FC<SimpleLeafletMapProps> = ({
       markersRef.current.push(marker);
     });
 
-    // Fit map to bounds if we have technicians
+    // Fit map to bounds if we have technicians, but don't zoom out too much
     if (bounds.isValid()) {
-      mapInstance.current.fitBounds(bounds, { padding: [20, 20] });
+      mapInstance.current.fitBounds(bounds, { 
+        padding: [50, 50],
+        maxZoom: 13 
+      });
     }
   }, [technicians, setSelectedTechnician]);
 
