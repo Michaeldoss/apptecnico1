@@ -24,6 +24,7 @@ import BlurContainer from '@/components/ui/BlurContainer';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import GoogleLoginButton from '@/components/auth/GoogleLoginButton';
+import GoogleAuthProvider from '@/components/auth/GoogleAuthProvider';
 import { Wrench, MapPin, User, Settings, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 
 const technicianFormSchema = z.object({
@@ -210,7 +211,9 @@ const TechnicianRegister = () => {
           <BlurContainer className="p-6">
             {/* Login com Google */}
             <div className="mb-6">
-              <GoogleLoginButton />
+              <GoogleAuthProvider>
+                <GoogleLoginButton />
+              </GoogleAuthProvider>
               <div className="relative my-4">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-border"></div>

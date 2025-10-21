@@ -17,6 +17,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { toast } from '@/hooks/use-toast';
 import { useAuth } from '@/context/AuthContext';
 import GoogleLoginButton from '@/components/auth/GoogleLoginButton';
+import GoogleAuthProvider from '@/components/auth/GoogleAuthProvider';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { Eye, EyeOff, Mail, Lock, Loader2, LogIn } from 'lucide-react';
@@ -145,7 +146,9 @@ const UnifiedLogin = () => {
             <CardContent className="space-y-6">
               {/* Google Login */}
               <div className="space-y-4">
-                <GoogleLoginButton />
+                <GoogleAuthProvider>
+                  <GoogleLoginButton />
+                </GoogleAuthProvider>
                 
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">

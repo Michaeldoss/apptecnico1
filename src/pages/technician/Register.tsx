@@ -22,6 +22,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useNavigate } from 'react-router-dom';
 import { Wrench, User2, MapPin, Mail, Phone, FileText, Settings } from 'lucide-react';
 import GoogleLoginButton from '@/components/auth/GoogleLoginButton';
+import GoogleAuthProvider from '@/components/auth/GoogleAuthProvider';
 
 const technicianFormSchema = z.object({
   name: z.string().min(3, {
@@ -443,7 +444,9 @@ const TechnicianRegister = () => {
                   
                   {/* Login com Google */}
                   <div className="mb-4">
-                    <GoogleLoginButton />
+                    <GoogleAuthProvider>
+                      <GoogleLoginButton />
+                    </GoogleAuthProvider>
                   </div>
                   
                   <div className="relative flex items-center justify-center">

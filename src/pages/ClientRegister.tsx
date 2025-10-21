@@ -22,6 +22,7 @@ import BlurContainer from '@/components/ui/BlurContainer';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import GoogleLoginButton from '@/components/auth/GoogleLoginButton';
+import GoogleAuthProvider from '@/components/auth/GoogleAuthProvider';
 import { User, MapPin, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
@@ -287,7 +288,9 @@ const ClientRegister = () => {
                   {/* Google Login Section */}
                   <div className="bg-primary/5 p-6 rounded-xl border border-primary/20 mb-6">
                     <h4 className="text-lg font-semibold mb-4 text-center">Comece agora com o Google</h4>
-                    <GoogleLoginButton />
+                    <GoogleAuthProvider>
+                      <GoogleLoginButton />
+                    </GoogleAuthProvider>
                     <div className="relative my-6">
                       <div className="absolute inset-0 flex items-center">
                         <div className="w-full border-t border-border"></div>
@@ -654,7 +657,9 @@ const ClientRegister = () => {
                     </div>
                   </div>
                   
-                  <GoogleLoginButton />
+                  <GoogleAuthProvider>
+                    <GoogleLoginButton />
+                  </GoogleAuthProvider>
                 </div>
               </TabsContent>
             </Tabs>
