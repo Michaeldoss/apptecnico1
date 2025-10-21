@@ -7,7 +7,7 @@ import { Lock } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-3 whitespace-nowrap rounded-2xl text-sm font-semibold font-inter ring-offset-background transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 relative overflow-hidden",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-2xl text-sm font-semibold font-inter ring-offset-background transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:flex-shrink-0 relative overflow-hidden",
   {
     variants: {
       variant: {
@@ -23,10 +23,10 @@ const buttonVariants = cva(
         secure: "bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 hover:shadow-xl hover:shadow-green-500/25 hover:-translate-y-1 active:translate-y-0 active:scale-95",
       },
       size: {
-        default: "h-12 px-6 py-3 text-sm",
-        sm: "h-9 px-4 py-2 text-xs rounded-xl",
-        lg: "h-14 px-8 py-4 text-base rounded-2xl",
-        icon: "h-12 w-12 rounded-2xl",
+        default: "h-11 px-5 py-2.5 text-sm [&_svg]:size-4",
+        sm: "h-9 px-3 py-2 text-xs rounded-xl [&_svg]:size-3.5",
+        lg: "h-12 px-6 py-3 text-base rounded-2xl [&_svg]:size-5",
+        icon: "h-11 w-11 rounded-2xl [&_svg]:size-4",
       },
     },
     defaultVariants: {

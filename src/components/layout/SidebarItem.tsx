@@ -16,7 +16,7 @@ const SidebarItem = ({ to, icon: Icon, children, active, onClick }: SidebarItemP
     <Link
       to={to}
       className={cn(
-        "flex items-center gap-3 rounded-lg px-4 py-3 text-sm transition-all duration-300 font-medium group relative overflow-hidden",
+        "flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm transition-all duration-300 font-medium group relative overflow-hidden",
         active 
           ? "bg-gradient-to-r from-primary to-primary/90 text-primary-foreground shadow-lg shadow-primary/20 scale-[1.02]" 
           : "text-muted-foreground hover:text-foreground hover:bg-accent/10 hover:shadow-md"
@@ -27,7 +27,7 @@ const SidebarItem = ({ to, icon: Icon, children, active, onClick }: SidebarItemP
         <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent opacity-50" />
       )}
       <Icon className={cn(
-        "h-5 w-5 flex-shrink-0 transition-all duration-300 relative z-10", 
+        "h-4 w-4 flex-shrink-0 transition-all duration-300 relative z-10", 
         active ? "text-primary-foreground drop-shadow-sm" : "text-muted-foreground group-hover:text-primary group-hover:scale-110"
       )} />
       <span className="truncate relative z-10 font-semibold">{children}</span>
