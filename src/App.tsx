@@ -16,6 +16,7 @@ import Login from '@/pages/Login';
 import NewRegister from '@/pages/NewRegister';
 import UnifiedLogin from '@/pages/UnifiedLogin';
 import UnifiedRegister from '@/pages/UnifiedRegister';
+import GoogleAuthCallback from '@/components/auth/GoogleAuthCallback';
 import ProductDetails from '@/pages/ProductDetails';
 
 import CustomerAffiliates from '@/pages/customer/Affiliates';
@@ -102,6 +103,7 @@ function App() {
               {/* Public routes */}
               <Route path="/" element={<Index />} />
               <Route path="/login" element={<UnifiedLogin />} />
+              <Route path="/auth/callback" element={<GoogleAuthCallback />} />
               <Route path="/register" element={<UnifiedRegister />} />
               {/* Legacy routes - redirecting to new unified system */}
               <Route path="/old-login" element={<Login />} />
