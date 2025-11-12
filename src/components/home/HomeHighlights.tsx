@@ -1,113 +1,177 @@
 import React from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Building2, Headset, ShieldCheck, Bolt } from "lucide-react";
+import {
+  ArrowRight,
+  BarChart3,
+  Bolt,
+  Building2,
+  Headset,
+  ShieldCheck,
+  Sparkles,
+  Users
+} from "lucide-react";
 
-const quickActions = [
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+const personas = [
   {
     title: "Sou uma indústria",
-    description: "Centralize a gestão de manutenção e acompanhe múltiplas plantas em um único painel.",
-    icon: Building2,
+    description:
+      "Centralize a gestão de manutenção, compare plantas em tempo real e integre ERPs com poucos cliques.",
     cta: "Abrir conta empresarial",
-    href: "/store/register"
-  },
-  {
-    title: "Preciso de suporte imediato",
-    description: "Acesse nossa central 24/7 e receba acompanhamento prioritário em chamados críticos.",
-    icon: Headset,
-    cta: "Chamar suporte",
-    href: "/support"
-  },
-  {
-    title: "Quero cadastrar minha equipe",
-    description: "Integre técnicos internos ou parceiros e mantenha todos certificados e auditados.",
-    icon: ShieldCheck,
-    cta: "Cadastrar técnicos",
-    href: "/technician/register"
-  }
-];
-
-const highlightItems = [
-  {
-    title: "Resposta mais rápida do mercado",
-    description: "Técnico confirmado em até 3 dias corridos, com SLA contratado e penalidades claras.",
-    icon: Bolt
-  },
-  {
-    title: "Escalabilidade nacional",
-    description: "Rede de especialistas em mais de 250 cidades, com avaliação contínua de performance.",
+    href: "/store/register",
     icon: Building2
   },
   {
-    title: "Suporte humano sempre disponível",
-    description: "Time de sucesso do cliente acompanha cada chamado com indicadores compartilhados.",
+    title: "Preciso de suporte imediato",
+    description:
+      "Atendimento prioritário 24/7 com especialistas preparados para incidentes críticos e plantões.",
+    cta: "Chamar suporte",
+    href: "/support",
     icon: Headset
+  },
+  {
+    title: "Quero cadastrar minha equipe",
+    description:
+      "Inclua técnicos internos ou parceiros, acompanhe certificações e valide SLA de cada atendimento.",
+    cta: "Cadastrar técnicos",
+    href: "/technician/register",
+    icon: ShieldCheck
+  }
+];
+
+const differentiators = [
+  {
+    title: "Resposta em horas",
+    description:
+      "Match automático com técnicos homologados e confirmação média em 72h, com visibilidade do SLA.",
+    icon: Bolt
+  },
+  {
+    title: "Cobertura nacional",
+    description:
+      "Especialistas auditados em mais de 250 cidades com pontuação pública e avaliações contínuas.",
+    icon: Users
+  },
+  {
+    title: "Governança de dados",
+    description:
+      "Indicadores de MTTR, OEE e backlog consolidados automaticamente para seus relatórios.",
+    icon: BarChart3
+  }
+];
+
+const playbook = [
+  {
+    step: "1",
+    title: "Abertura guiada",
+    description: "Checklist inteligente coleta informações essenciais e sugere priorização do chamado."
+  },
+  {
+    step: "2",
+    title: "Matching especialista",
+    description: "Time Instalei analisa certificações, distância e performance para sugerir o técnico ideal."
+  },
+  {
+    step: "3",
+    title: "Execução transparente",
+    description: "Timeline com fotos, aprovação de orçamento, checklists e assinatura digital do cliente."
   }
 ];
 
 const HomeHighlights = () => {
   return (
-    <section className="relative overflow-hidden bg-slate-900 py-20 text-white">
+    <section className="relative overflow-hidden bg-slate-900 py-24 text-white">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.08),_transparent_65%)]" />
-      <div className="absolute -top-20 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-primary/20 blur-3xl" />
+      <div className="absolute -top-24 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-primary/25 blur-3xl" />
+      <div className="absolute bottom-0 left-0 h-48 w-48 -translate-x-1/2 bg-accent/20 blur-3xl" />
 
       <div className="container-instalei relative">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="text-sm font-semibold uppercase tracking-[0.35em] text-white/60">para quem vive a operação</span>
-          <h2 className="mt-6 text-3xl font-black md:text-5xl">A Instalei está pronta para qualquer cenário</h2>
+          <Badge className="bg-white/10 text-white" variant="secondary">
+            <Sparkles className="mr-2 h-3.5 w-3.5" /> Operação sem interrupções
+          </Badge>
+          <h2 className="mt-6 text-3xl font-black md:text-5xl">Escolha o caminho ideal para sua operação</h2>
           <p className="mt-4 text-base text-white/70 md:text-lg">
-            Escolha o caminho que melhor representa sua necessidade e veja como podemos manter seus equipamentos operando com máxima disponibilidade.
+            Personalizamos fluxos, SLAs e governança conforme o porte e o segmento da sua empresa. Descubra como cada squad pode
+            aproveitar a Instalei.
           </p>
         </div>
 
-        <div className="mt-12 grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
+        <div className="mt-16 grid gap-10 xl:grid-cols-[1.1fr_0.9fr]">
           <div className="grid gap-6 md:grid-cols-2">
-            {quickActions.map(action => (
-              <Card key={action.title} className="border-white/5 bg-white/5 p-px backdrop-blur">
+            {personas.map(persona => (
+              <Card key={persona.title} className="border-white/5 bg-white/5 p-px backdrop-blur">
                 <CardContent className="flex h-full flex-col justify-between gap-6 rounded-2xl bg-slate-950/60 p-8">
                   <div className="space-y-4">
                     <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/30 text-white">
-                      <action.icon className="h-6 w-6" />
+                      <persona.icon className="h-6 w-6" />
                     </div>
-                    <div>
-                      <h3 className="text-2xl font-semibold">{action.title}</h3>
-                      <p className="mt-2 text-sm text-white/70 md:text-base">{action.description}</p>
+                    <div className="space-y-2">
+                      <h3 className="text-2xl font-semibold">{persona.title}</h3>
+                      <p className="text-sm text-white/70 md:text-base">{persona.description}</p>
                     </div>
                   </div>
-                  <Link to={action.href} className="inline-flex">
-                    <Button variant="secondary" className="w-full rounded-xl bg-white text-slate-900 hover:bg-slate-100">
-                      {action.cta}
-                    </Button>
-                  </Link>
+                  <Button asChild variant="secondary" className="w-full rounded-xl bg-white text-slate-900 hover:bg-slate-100">
+                    <Link to={persona.href}>
+                      {persona.cta}
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
                 </CardContent>
               </Card>
             ))}
           </div>
 
-          <Card className="border-white/5 bg-gradient-to-br from-white/10 via-white/5 to-transparent">
-            <CardContent className="h-full rounded-2xl bg-slate-950/50 p-10">
-              <div className="space-y-8">
-                {highlightItems.map(item => (
-                  <div key={item.title} className="flex gap-5">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/30 text-white">
-                      <item.icon className="h-6 w-6" />
+          <div className="space-y-6">
+            <Card className="border-white/5 bg-gradient-to-br from-white/10 via-white/5 to-transparent">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-2xl font-semibold md:text-3xl">Playbook Instalei</CardTitle>
+                <p className="text-sm text-white/70 md:text-base">
+                  Nossa equipe acompanha cada etapa com indicadores compartilhados e checkpoints validados com o cliente.
+                </p>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {playbook.map(item => (
+                  <div key={item.step} className="flex gap-5 rounded-2xl bg-white/10 p-5">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/30 text-xl font-bold">
+                      {item.step}
                     </div>
                     <div>
-                      <h3 className="text-xl font-semibold md:text-2xl">{item.title}</h3>
-                      <p className="mt-2 text-sm text-white/70 md:text-base">{item.description}</p>
+                      <h4 className="text-lg font-semibold md:text-xl">{item.title}</h4>
+                      <p className="mt-2 text-sm text-white/75 md:text-base">{item.description}</p>
                     </div>
                   </div>
                 ))}
-                <div className="rounded-2xl bg-white/10 p-6 text-white/80">
-                  <h4 className="text-lg font-semibold text-white">Relatórios completos em poucos cliques</h4>
-                  <p className="mt-2 text-sm md:text-base">
-                    Gere históricos de manutenção, anexos e notas fiscais automaticamente para auditorias e contratos de SLA.
-                  </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-white/5 bg-white/5 p-px">
+              <CardContent className="rounded-2xl bg-slate-950/60 p-8">
+                <div className="space-y-6">
+                  {differentiators.map(item => (
+                    <div key={item.title} className="flex gap-5">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/25 text-white">
+                        <item.icon className="h-6 w-6" />
+                      </div>
+                      <div>
+                        <h4 className="text-lg font-semibold md:text-xl">{item.title}</h4>
+                        <p className="mt-2 text-sm text-white/70 md:text-base">{item.description}</p>
+                      </div>
+                    </div>
+                  ))}
+                  <div className="rounded-2xl border border-white/20 bg-white/10 p-6 text-white/80">
+                    <h4 className="text-lg font-semibold text-white">Certificação contínua</h4>
+                    <p className="mt-2 text-sm md:text-base">
+                      Auditorias técnicas, cursos obrigatórios e pesquisas de satisfação garantem o alto padrão Instalei.
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </section>
