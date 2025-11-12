@@ -29,10 +29,17 @@ const planIcons = {
 };
 
 const planColors = {
-  free: 'bg-yellow-500',
-  basic: 'bg-blue-500',
-  professional: 'bg-purple-500',
-  premium: 'bg-gold-500'
+  free: 'bg-gradient-to-br from-yellow-400 to-yellow-600',
+  basic: 'bg-gradient-to-br from-blue-500 to-blue-700',
+  professional: 'bg-gradient-to-br from-purple-500 to-purple-700',
+  premium: 'bg-gradient-to-br from-accent to-orange-600'
+};
+
+const planBorderColors = {
+  free: 'border-yellow-200',
+  basic: 'border-blue-200',
+  professional: 'border-purple-200',
+  premium: 'border-accent/30'
 };
 
 const CurrentPlanStatus: React.FC<CurrentPlanStatusProps> = ({
@@ -45,29 +52,37 @@ const CurrentPlanStatus: React.FC<CurrentPlanStatusProps> = ({
 }) => {
   const Icon = planIcons[planType];
   const colorClass = planColors[planType];
+  const borderClass = planBorderColors[planType];
   
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('pt-BR');
   };
 
   return (
-    <Card className="border-2 border-gray-border shadow-sm">
+    <Card className={`border-2 ${borderClass} shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden`}>
+      {/* Decorative gradient top bar */}
+      <div className={`h-1.5 ${colorClass}`}></div>
+      
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-        <div className="flex items-center space-x-3">
-          <div className={`p-2 rounded-full ${colorClass}`}>
-            <Icon className="h-5 w-5 text-white" />
+        <div className="flex items-center space-x-4">
+          <div className={`p-3 rounded-xl ${colorClass} shadow-lg`}>
+            <Icon className="h-6 w-6 text-white" />
           </div>
           <div>
-            <CardTitle className="text-lg">Plano Atual</CardTitle>
-            <Badge variant="outline" className="mt-1">
+            <CardTitle className="text-xl font-bold">Plano Atual</CardTitle>
+            <Badge variant="outline" className="mt-1.5 font-semibold">
               {planName}
             </Badge>
           </div>
         </div>
         
         {planType !== 'premium' && (
-          <Button onClick={onUpgrade} size="sm" className="bg-tech-primary hover:bg-tech-primary-hover">
-            Fazer Upgrade
+          <Button 
+            onClick={onUpgrade} 
+            size="sm" 
+            className="bg-gradient-to-r from-accent to-orange-600 hover:from-accent/90 hover:to-orange-700 text-white font-semibold shadow-md hover:shadow-lg transition-all"
+          >
+            ⚡ Fazer Upgrade
           </Button>
         )}
       </CardHeader>
@@ -75,18 +90,20 @@ const CurrentPlanStatus: React.FC<CurrentPlanStatusProps> = ({
       <CardContent className="space-y-6">
         {/* Informações de expiração */}
         {expiresAt && daysRemaining !== undefined && (
-          <div className="space-y-2">
+          <div className="p-4 rounded-lg bg-muted/50 border border-border space-y-3">
             <div className="flex items-center gap-2">
-              <Calendar className="h-4 w-4 text-gray-500" />
-              <span className="text-sm font-medium">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <Calendar className="h-4 w-4 text-primary" />
+              </div>
+              <span className="text-sm font-semibold text-foreground">
                 {planType === 'free' ? 'Teste expira em:' : 'Próxima renovação:'}
               </span>
             </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">
+            <div className="flex items-center justify-between pl-2">
+              <span className="text-sm font-medium text-muted-foreground">
                 {formatDate(expiresAt)}
               </span>
-              <Badge variant={daysRemaining <= 3 ? 'destructive' : 'outline'}>
+              <Badge variant={daysRemaining <= 3 ? 'destructive' : 'outline'} className="font-semibold">
                 {daysRemaining} {daysRemaining === 1 ? 'dia' : 'dias'}
               </Badge>
             </div>
@@ -94,66 +111,75 @@ const CurrentPlanStatus: React.FC<CurrentPlanStatusProps> = ({
         )}
 
         {/* Separador */}
-        <div className="border-t border-gray-200"></div>
+        <div className="border-t border-border"></div>
 
         {/* Limites de uso */}
         {limits && (
-          <div className="space-y-4">
-            <h4 className="text-sm font-medium text-gray-700">Detalhes do uso</h4>
+          <div className="space-y-5">
+            <h4 className="text-sm font-bold text-foreground flex items-center gap-2">
+              <div className="h-1 w-1 rounded-full bg-primary"></div>
+              Detalhes do uso
+            </h4>
             
             {/* Clientes */}
-            <div className="space-y-2">
+            <div className="p-4 rounded-lg bg-gradient-to-br from-blue-50/50 to-transparent border border-blue-100 space-y-3 hover:shadow-md transition-shadow">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Users className="h-4 w-4 text-gray-500 flex-shrink-0" />
-                  <span className="text-sm">Clientes</span>
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-blue-100">
+                    <Users className="h-4 w-4 text-blue-600 flex-shrink-0" />
+                  </div>
+                  <span className="text-sm font-semibold text-foreground">Clientes</span>
                 </div>
-                <span className="text-sm font-medium">
+                <span className="text-sm font-bold text-foreground">
                   {limits.clients.current}/{limits.clients.max === -1 ? '∞' : limits.clients.max}
                 </span>
               </div>
               {limits.clients.max !== -1 && (
                 <Progress 
                   value={(limits.clients.current / limits.clients.max) * 100} 
-                  className="h-2"
+                  className="h-2.5"
                 />
               )}
             </div>
 
             {/* Chamados */}
-            <div className="space-y-2">
+            <div className="p-4 rounded-lg bg-gradient-to-br from-purple-50/50 to-transparent border border-purple-100 space-y-3 hover:shadow-md transition-shadow">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <FileText className="h-4 w-4 text-gray-500 flex-shrink-0" />
-                  <span className="text-sm">Chamados</span>
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-purple-100">
+                    <FileText className="h-4 w-4 text-purple-600 flex-shrink-0" />
+                  </div>
+                  <span className="text-sm font-semibold text-foreground">Chamados</span>
                 </div>
-                <span className="text-sm font-medium">
+                <span className="text-sm font-bold text-foreground">
                   {limits.serviceCalls.current}/{limits.serviceCalls.max === -1 ? '∞' : limits.serviceCalls.max}
                 </span>
               </div>
               {limits.serviceCalls.max !== -1 && (
                 <Progress 
                   value={(limits.serviceCalls.current / limits.serviceCalls.max) * 100} 
-                  className="h-2"
+                  className="h-2.5"
                 />
               )}
             </div>
 
             {/* Equipamentos */}
-            <div className="space-y-2">
+            <div className="p-4 rounded-lg bg-gradient-to-br from-green-50/50 to-transparent border border-green-100 space-y-3 hover:shadow-md transition-shadow">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Wrench className="h-4 w-4 text-gray-500 flex-shrink-0" />
-                  <span className="text-sm">Equipamentos</span>
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-green-100">
+                    <Wrench className="h-4 w-4 text-green-600 flex-shrink-0" />
+                  </div>
+                  <span className="text-sm font-semibold text-foreground">Equipamentos</span>
                 </div>
-                <span className="text-sm font-medium">
+                <span className="text-sm font-bold text-foreground">
                   {limits.equipment.current}/{limits.equipment.max === -1 ? '∞' : limits.equipment.max}
                 </span>
               </div>
               {limits.equipment.max !== -1 && (
                 <Progress 
                   value={(limits.equipment.current / limits.equipment.max) * 100} 
-                  className="h-2"
+                  className="h-2.5"
                 />
               )}
             </div>
@@ -162,16 +188,20 @@ const CurrentPlanStatus: React.FC<CurrentPlanStatusProps> = ({
 
         {/* Alerta para plano gratuito */}
         {planType === 'free' && daysRemaining && daysRemaining <= 3 && (
-          <div className="p-3 bg-yellow-100 border border-yellow-300 rounded-lg">
-            <div className="flex items-center gap-2">
-              <AlertTriangle className="h-4 w-4 text-yellow-700" />
-              <span className="text-sm font-medium text-black">
-                ⚠️ Seu plano gratuito expira em {daysRemaining} {daysRemaining === 1 ? 'dia' : 'dias'}
-              </span>
+          <div className="p-4 bg-gradient-to-r from-warning/20 via-warning/10 to-transparent border-l-4 border-warning rounded-xl animate-pulse">
+            <div className="flex items-start gap-3">
+              <div className="p-2 rounded-lg bg-warning/20">
+                <AlertTriangle className="h-5 w-5 text-warning" />
+              </div>
+              <div>
+                <span className="text-sm font-bold text-foreground block mb-1">
+                  ⚠️ Seu plano gratuito expira em {daysRemaining} {daysRemaining === 1 ? 'dia' : 'dias'}
+                </span>
+                <p className="text-xs text-muted-foreground">
+                  Após esse prazo, seus recursos serão limitados. Faça upgrade para continuar.
+                </p>
+              </div>
             </div>
-            <p className="text-xs text-black mt-1">
-              Após esse prazo, seus recursos serão limitados. Faça upgrade para continuar.
-            </p>
           </div>
         )}
       </CardContent>
