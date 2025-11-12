@@ -1214,6 +1214,87 @@ export type Database = {
         }
         Relationships: []
       }
+      whatsapp_config: {
+        Row: {
+          access_token: string
+          business_account_id: string | null
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          phone_number: string | null
+          phone_number_id: string
+          updated_at: string | null
+          user_id: string
+          verify_token: string
+        }
+        Insert: {
+          access_token: string
+          business_account_id?: string | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          phone_number?: string | null
+          phone_number_id: string
+          updated_at?: string | null
+          user_id: string
+          verify_token: string
+        }
+        Update: {
+          access_token?: string
+          business_account_id?: string | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          phone_number?: string | null
+          phone_number_id?: string
+          updated_at?: string | null
+          user_id?: string
+          verify_token?: string
+        }
+        Relationships: []
+      }
+      whatsapp_messages: {
+        Row: {
+          created_at: string | null
+          customer_name: string | null
+          customer_phone: string
+          direction: string
+          id: string
+          message_content: string
+          message_type: string
+          metadata: Json | null
+          status: string | null
+          user_id: string
+          whatsapp_message_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          customer_name?: string | null
+          customer_phone: string
+          direction: string
+          id?: string
+          message_content: string
+          message_type: string
+          metadata?: Json | null
+          status?: string | null
+          user_id: string
+          whatsapp_message_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          customer_name?: string | null
+          customer_phone?: string
+          direction?: string
+          id?: string
+          message_content?: string
+          message_type?: string
+          metadata?: Json | null
+          status?: string | null
+          user_id?: string
+          whatsapp_message_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       lojas_public: {
