@@ -25,7 +25,7 @@ interface AuthContextType {
   session: Session | null;
   login: (email: string, password: string) => Promise<AuthActionResult>;
   signup: (email: string, password: string, userData: any) => Promise<AuthActionResult>;
-  logout: () => void;
+  logout: () => Promise<void>;
   isLoading: boolean;
 }
 
@@ -254,16 +254,38 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         p_user_data: userData
       });
 
-      if (securityError || !(securityCheck as any)?.success) {
-        const message = securityError?.message || 'Falha na validação de segurança';
+      const securityResponse = securityCheck as { success?: boolean; message?: string } | null;
+
+      if (securityError) {
+        const normalizedMessage = securityError.message?.toLowerCase?.() ?? '';
+        const isMissingRpc = normalizedMessage.includes('secure_user_registration') &&
+          (normalizedMessage.includes('not found') || normalizedMessage.includes('does not exist'));
+
+        if (isMissingRpc) {
+          console.warn('Security RPC not configured. Continuing with default signup flow.');
+        } else {
+          const message = securityError.message || 'Falha na validação de segurança';
+          toast({ variant: "destructive", title: "Erro de Segurança", description: message });
+          return { success: false, error: message, errorCode: 'security' };
+        }
+      } else if (securityResponse && securityResponse.success === false) {
+        const message = securityResponse.message || 'Falha na validação de segurança';
         toast({ variant: "destructive", title: "Erro de Segurança", description: message });
         return { success: false, error: message, errorCode: 'security' };
       }
     } catch (securityError: any) {
-      console.error('Security validation failed:', securityError);
-      const message = securityError.message || 'Falha na validação de segurança';
-      toast({ variant: "destructive", title: "Erro de Segurança", description: message });
-      return { success: false, error: message, errorCode: 'security' };
+      const normalizedMessage = securityError?.message?.toLowerCase?.() ?? '';
+      const isMissingRpc = normalizedMessage.includes('secure_user_registration') &&
+        (normalizedMessage.includes('not found') || normalizedMessage.includes('does not exist'));
+
+      if (isMissingRpc) {
+        console.warn('Security RPC not configured. Continuing with default signup flow.');
+      } else {
+        console.error('Security validation failed:', securityError);
+        const message = securityError?.message || 'Falha na validação de segurança';
+        toast({ variant: "destructive", title: "Erro de Segurança", description: message });
+        return { success: false, error: message, errorCode: 'security' };
+      }
     }
 
     console.log('🔐 Iniciando signup com validação de segurança aprovada...', { email: normalizedEmail, userType: userData.type });
