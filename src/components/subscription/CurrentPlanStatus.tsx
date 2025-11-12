@@ -3,7 +3,6 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
 import { Calendar, Users, FileText, Wrench, AlertTriangle, Crown } from 'lucide-react';
 
 interface PlanLimits {
@@ -135,10 +134,12 @@ const CurrentPlanStatus: React.FC<CurrentPlanStatusProps> = ({
                 </span>
               </div>
               {limits.clients.max !== -1 && (
-                <Progress 
-                  value={(limits.clients.current / limits.clients.max) * 100} 
-                  className="h-2.5"
-                />
+                <div className="relative h-2.5 w-full overflow-hidden rounded-full bg-blue-100">
+                  <div 
+                    className="h-full bg-gradient-to-r from-blue-500 to-blue-600 transition-all duration-500 rounded-full"
+                    style={{ width: `${(limits.clients.current / limits.clients.max) * 100}%` }}
+                  />
+                </div>
               )}
             </div>
 
@@ -156,10 +157,12 @@ const CurrentPlanStatus: React.FC<CurrentPlanStatusProps> = ({
                 </span>
               </div>
               {limits.serviceCalls.max !== -1 && (
-                <Progress 
-                  value={(limits.serviceCalls.current / limits.serviceCalls.max) * 100} 
-                  className="h-2.5"
-                />
+                <div className="relative h-2.5 w-full overflow-hidden rounded-full bg-purple-100">
+                  <div 
+                    className="h-full bg-gradient-to-r from-purple-500 to-purple-600 transition-all duration-500 rounded-full"
+                    style={{ width: `${(limits.serviceCalls.current / limits.serviceCalls.max) * 100}%` }}
+                  />
+                </div>
               )}
             </div>
 
@@ -177,10 +180,12 @@ const CurrentPlanStatus: React.FC<CurrentPlanStatusProps> = ({
                 </span>
               </div>
               {limits.equipment.max !== -1 && (
-                <Progress 
-                  value={(limits.equipment.current / limits.equipment.max) * 100} 
-                  className="h-2.5"
-                />
+                <div className="relative h-2.5 w-full overflow-hidden rounded-full bg-green-100">
+                  <div 
+                    className="h-full bg-gradient-to-r from-green-500 to-green-600 transition-all duration-500 rounded-full"
+                    style={{ width: `${(limits.equipment.current / limits.equipment.max) * 100}%` }}
+                  />
+                </div>
               )}
             </div>
           </div>
