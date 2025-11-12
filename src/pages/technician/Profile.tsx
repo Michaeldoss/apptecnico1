@@ -17,6 +17,7 @@ import TechnicianPricing from '@/components/technician/TechnicianPricing';
 import ImageUpload from '@/components/ui/image-upload';
 import FileUploadSection from '@/components/technician/FileUploadSection';
 import AppSettings from '@/components/technician/AppSettings';
+import ProfilePhotoUpload from '@/components/technician/ProfilePhotoUpload';
 import { useViaCep } from '@/hooks/useViaCep';
 import { brazilianStates } from '@/types/technician';
 
@@ -351,39 +352,55 @@ const TechnicianProfile = () => {
   return (
     <TechnicianLayout title="Meu Perfil">
       <div className="space-y-6 font-inter">
-        {/* Header do Perfil */}
-        <Card className="bg-white border-2 border-gray-border shadow-sm hover:shadow-md transition-all duration-200">
-          <CardHeader className="flex flex-row items-start justify-between bg-gradient-to-r from-tech-primary to-blue-500 text-white rounded-t-lg">
-            <div className="flex items-center space-x-6">
-              <Avatar className="h-24 w-24 border-4 border-white shadow-lg">
-                <AvatarImage 
-                  src={profileImage || ""} 
-                  alt={profileData.name} 
-                />
-                <AvatarFallback className="text-xl bg-white text-tech-primary font-bold">
-                  {profileData.name.split(' ').map(n => n[0]).join('')}
-                </AvatarFallback>
-              </Avatar>
-              <div>
-                <CardTitle className="text-2xl font-bold text-white">{profileData.name}</CardTitle>
-                <CardDescription className="text-blue-100">
-                  <div className="flex items-center mt-2">
-                    <span className="flex items-center bg-white/20 px-3 py-1 rounded-full">
-                      <Star className="h-4 w-4 text-tech-accent mr-1 fill-current" />
-                      <span className="font-semibold text-white">{profile.rating}</span>
-                    </span>
-                    <span className="mx-3 text-blue-200">•</span>
-                    <span className="text-blue-100">{profile.reviewCount} avaliações</span>
+        {/* Header do Perfil - Versão melhorada com textos visíveis */}
+        <Card className="bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-blue-950 border-2 border-primary/20 shadow-xl hover:shadow-2xl transition-all duration-300">
+          <CardHeader className="p-8">
+            <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
+              {/* Avatar grande e visível */}
+              <div className="relative group">
+                <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                <Avatar className="relative h-32 w-32 border-4 border-white dark:border-slate-800 shadow-2xl ring-4 ring-primary/20">
+                  <AvatarImage 
+                    src={profileImage || ""} 
+                    alt={profileData.name}
+                    className="object-cover"
+                  />
+                  <AvatarFallback className="text-3xl bg-gradient-to-br from-blue-500 to-cyan-600 text-white font-bold">
+                    {profileData.name.split(' ').map(n => n[0]).join('')}
+                  </AvatarFallback>
+                </Avatar>
+              </div>
+
+              {/* Informações do perfil com contraste alto */}
+              <div className="flex-1 text-center md:text-left">
+                <CardTitle className="text-3xl md:text-4xl font-bold mb-3">
+                  <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent drop-shadow-sm">
+                    {profileData.name}
+                  </span>
+                </CardTitle>
+                
+                <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-4">
+                  <div className="flex items-center bg-white dark:bg-slate-800 px-4 py-2 rounded-full shadow-md border border-primary/20">
+                    <Star className="h-5 w-5 text-amber-500 mr-2 fill-amber-500 drop-shadow-sm" />
+                    <span className="font-bold text-xl text-foreground">{profile.rating}</span>
                   </div>
-                </CardDescription>
+                  <span className="text-2xl text-muted-foreground">•</span>
+                  <span className="text-lg font-semibold text-foreground bg-white dark:bg-slate-800 px-4 py-2 rounded-full shadow-md border border-primary/20">
+                    {profile.reviewCount} avaliações
+                  </span>
+                </div>
+
+                <p className="text-base md:text-lg text-foreground/90 leading-relaxed max-w-2xl font-medium">
+                  {profileData.description}
+                </p>
               </div>
             </div>
           </CardHeader>
-          <CardContent className="pt-6">
-            <p className="text-gray-secondary text-base leading-relaxed">{profileData.description}</p>
-            <div className="flex items-center mt-4 bg-green-50 p-3 rounded-lg border border-green-200">
-              <CheckCircle className="h-5 w-5 text-success mr-3" />
-              <span className="text-success font-medium">Perfil verificado</span>
+          
+          <CardContent className="pb-8 px-8">
+            <div className="flex items-center bg-emerald-50 dark:bg-emerald-950/30 p-4 rounded-xl border-2 border-emerald-200 dark:border-emerald-800 shadow-sm">
+              <CheckCircle className="h-6 w-6 text-emerald-600 dark:text-emerald-400 mr-3 flex-shrink-0" />
+              <span className="text-emerald-700 dark:text-emerald-300 font-bold text-lg">Perfil verificado</span>
             </div>
           </CardContent>
         </Card>
@@ -1116,23 +1133,11 @@ const TechnicianProfile = () => {
           </TabsContent>
 
           <TabsContent value="photo" className="mt-6">
-            <Card className="bg-white border-2 border-gray-border shadow-sm">
-              <CardHeader className="bg-gray-light border-b border-gray-border">
-                <CardTitle className="text-xl font-bold text-tech-primary">Foto do Perfil</CardTitle>
-                <CardDescription className="text-gray-secondary">
-                  Atualize sua foto de perfil profissional
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="py-8">
-                <div className="flex justify-center">
-                  <ImageUpload
-                    currentImage={profileImage || undefined}
-                    onImageChange={handleImageChange}
-                    size="lg"
-                  />
-                </div>
-              </CardContent>
-            </Card>
+            <ProfilePhotoUpload
+              currentPhoto={profileImage}
+              userName={profileData.name}
+              onPhotoChange={handleImageChange}
+            />
           </TabsContent>
         </Tabs>
       </div>
