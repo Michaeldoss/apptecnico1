@@ -8,6 +8,8 @@ import StockControl from '@/components/dashboard/StockControl';
 import KPIMetricsComponent from '@/components/dashboard/KPIMetrics';
 import AlertsPanel from '@/components/dashboard/AlertsPanel';
 import QuickActions from '@/components/dashboard/QuickActions';
+import MonthlyRevenueChart from '@/components/dashboard/MonthlyRevenueChart';
+import PerformanceAnalysisChart from '@/components/dashboard/PerformanceAnalysisChart';
 import { useDashboard } from '@/hooks/useDashboard';
 
 const TechnicianDashboard = () => {
@@ -20,7 +22,8 @@ const TechnicianDashboard = () => {
     kpiMetrics,
     alerts,
     urgentAlerts,
-    weeklyEarnings
+    weeklyEarnings,
+    isNewUser
   } = useDashboard();
 
   const totalConflicts = weeklySchedule.reduce((sum, day) => sum + day.conflicts, 0);
@@ -62,16 +65,26 @@ const TechnicianDashboard = () => {
           </div>
         </div>
 
-        {/* Quarta linha - Alertas */}
-        <div className="animate-fade-in" style={{ animationDelay: '0.5s' }}>
+        {/* Quarta linha - Gráficos Interativos */}
+        <div className="grid lg:grid-cols-2 gap-4">
+          <div className="animate-fade-in" style={{ animationDelay: '0.5s' }}>
+            <MonthlyRevenueChart isNewUser={isNewUser} />
+          </div>
+          <div className="animate-fade-in" style={{ animationDelay: '0.6s' }}>
+            <PerformanceAnalysisChart isNewUser={isNewUser} />
+          </div>
+        </div>
+
+        {/* Quinta linha - Alertas */}
+        <div className="animate-fade-in" style={{ animationDelay: '0.7s' }}>
           <AlertsPanel 
             alerts={alerts}
             urgentAlerts={urgentAlerts}
           />
         </div>
 
-        {/* Quinta linha - Acessos Rápidos */}
-        <div className="animate-fade-in" style={{ animationDelay: '0.6s' }}>
+        {/* Sexta linha - Acessos Rápidos */}
+        <div className="animate-fade-in" style={{ animationDelay: '0.8s' }}>
           <QuickActions />
         </div>
       </div>

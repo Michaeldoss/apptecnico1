@@ -13,14 +13,16 @@ interface StockControlProps {
 
 const StockControl: React.FC<StockControlProps> = ({ stockItems, urgentItems }) => {
   return (
-    <Card className="h-full">
+    <Card className="h-full bg-card/50 backdrop-blur-sm border-border/50 hover:shadow-xl transition-all duration-300">
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-3 text-lg font-semibold">
-            <div className="w-8 h-8 rounded-lg bg-orange-100 flex items-center justify-center">
-              <Package className="h-4 w-4 text-orange-600" />
+          <CardTitle className="flex items-center gap-3 text-lg font-bold">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center shadow-lg">
+              <Package className="h-5 w-5 text-white" />
             </div>
-            Controle de Estoque
+            <span className="bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
+              Controle de Estoque
+            </span>
           </CardTitle>
           {urgentItems.length > 0 && (
             <Badge variant="destructive" className="flex items-center gap-1">
