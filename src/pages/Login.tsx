@@ -158,7 +158,7 @@ const Login = () => {
           
           <div className="bg-card rounded-lg p-8 shadow-sm border border-border">
             <form onSubmit={handleLogin} className="space-y-6">
-              {/* Login com Google */}
+              {/* Login com Google - Temporariamente desabilitado 
               <div className="space-y-4">
                 <GoogleAuthProvider>
                   <GoogleLoginButton />
@@ -171,6 +171,7 @@ const Login = () => {
                 </div>
                 <div className="relative px-4 bg-card text-sm text-muted-foreground">Ou continue com email</div>
               </div>
+              */}
 
               <div className="space-y-4">
                 <div className="space-y-2">
