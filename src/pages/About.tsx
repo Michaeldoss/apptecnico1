@@ -10,18 +10,18 @@ const About = () => {
   const values = [
     {
       icon: Target,
-      title: "Missão",
-      description: "Conectar clientes e técnicos especializados em instalação e manutenção de forma eficiente e segura"
+      title: "🎯 Missão",
+      description: "Conectar clientes e técnicos especializados em instalação e manutenção de forma eficiente, segura e inteligente, elevando o padrão de confiança e profissionalismo no setor técnico brasileiro."
     },
     {
       icon: Heart,
-      title: "Valores",
-      description: "Confiança, qualidade e transparência em cada instalação e serviço prestado"
+      title: "💙 Valores",
+      description: "Confiança, qualidade e transparência em cada serviço. Valorizamos o trabalho técnico, a ética nas relações e a inovação que simplifica a vida das pessoas. Nosso compromisso é fazer cada conexão gerar resultado, reconhecimento e evolução."
     },
     {
       icon: Award,
-      title: "Visão",
-      description: "Ser a plataforma líder em serviços de instalação e manutenção técnica no Brasil"
+      title: "🏆 Visão",
+      description: "Ser a plataforma líder e referência nacional em serviços técnicos, revolucionando a forma como clientes e profissionais se conectam, e tornando o atendimento mais humano, rápido e confiável em todo o Brasil."
     }
   ];
 
