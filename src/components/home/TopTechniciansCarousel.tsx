@@ -52,8 +52,8 @@ const TopTechniciansCarousel = () => {
           {topTechnicians.length > 0 ? (
             <Carousel plugins={[Autoplay({
               delay: 4000,
-              stopOnInteraction: true
-            })]} opts={{
+              stopOnInteraction: true,
+            }) as any]} opts={{
               align: "center",
               loop: true,
               slidesToScroll: 1

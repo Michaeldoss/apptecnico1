@@ -10,29 +10,37 @@ interface GoogleLoginButtonProps {
 const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({ onSuccess }) => {
   const handleGoogleLogin = async () => {
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
+      const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
           redirectTo: `${window.location.origin}/auth/callback`,
+          skipBrowserRedirect: true,
           queryParams: {
             access_type: 'offline',
             prompt: 'consent',
-          }
-        }
+          },
+        },
       });
 
       if (error) throw error;
 
+      // Ensure top-level navigation when app runs inside an iframe (preview)
+      if (data?.url) {
+        const target = window.top ?? window;
+        target.location.href = data.url;
+        return;
+      }
+
       toast({
-        title: "Redirecionando...",
-        description: "Conectando com Google.",
+        title: 'Redirecionando...',
+        description: 'Conectando com Google.',
       });
-      
-    } catch (error) {
+    } catch (error: any) {
+      console.error('Google OAuth error:', error);
       toast({
-        variant: "destructive",
-        title: "Erro",
-        description: "Erro ao conectar com Google. Tente novamente.",
+        variant: 'destructive',
+        title: 'Erro ao conectar',
+        description: error?.message || 'Tente novamente em instantes.',
       });
     }
   };
