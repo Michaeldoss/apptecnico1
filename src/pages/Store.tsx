@@ -25,66 +25,9 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { useIsMobile } from '@/hooks/use-mobile';
 import ProductList from '@/components/store/ProductList';
 
-// Sample promotions data - in a real app, this would come from an API or database
-const promotions = [
-  {
-    id: 1,
-    title: "50% OFF em Cabeças de Impressão",
-    description: "Desconto especial em cabeças de impressão selecionadas. Válido até o fim do mês!",
-    image: "/placeholder.svg",
-    link: "/store/category/cabecas-de-impressao"
-  },
-  {
-    id: 2,
-    title: "Componentes de Impressão em Oferta",
-    description: "Compre 3 e leve 4 em componentes selecionados. Aproveite enquanto durar o estoque!",
-    image: "/placeholder.svg",
-    link: "/store/category/componentes-de-impressao"
-  },
-  {
-    id: 3,
-    title: "Novos Equipamentos Disponíveis",
-    description: "Confira os últimos lançamentos de equipamentos para impressão digital!",
-    image: "/placeholder.svg",
-    link: "/store/category/equipamentos"
-  }
-];
-
-// Sample featured companies - in a real app, this would come from an API or database
-const featuredCompanies = [
-  {
-    id: 1,
-    name: "TechPrint Solutions",
-    description: "Especialista em equipamentos de impressão digital",
-    rating: 4.9,
-    image: "/placeholder.svg",
-    products: 124
-  },
-  {
-    id: 2,
-    name: "Doss Group",
-    description: "Peças originais para impressoras industriais",
-    rating: 4.8,
-    image: "/placeholder.svg",
-    products: 87
-  },
-  {
-    id: 3,
-    name: "PrintMax",
-    description: "Soluções completas para o mercado gráfico",
-    rating: 4.7,
-    image: "/placeholder.svg",
-    products: 156
-  },
-  {
-    id: 4,
-    name: "InkTech Brasil",
-    description: "Tintas e suprimentos para impressão em grande formato",
-    rating: 4.6,
-    image: "/placeholder.svg",
-    products: 93
-  }
-];
+// Promotions and featured companies - will come from database
+const promotions: any[] = [];
+const featuredCompanies: any[] = [];
 
 const Store = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -263,75 +206,77 @@ const Store = () => {
         {/* Show other sections only when not showing search results */}
         {!showSearchResults && (
           <>
-            {/* Promotions Carousel - fundo branco */}
-            <section className="py-8 md:py-12 bg-white overflow-hidden">
-              <div className="container mx-auto px-4">
-                <div className="flex items-center justify-between mb-6 md:mb-8">
-                  <h2 className={cn(
-                    "font-bold text-gray-900 font-inter",
-                    isMobile ? "text-xl" : "text-2xl"
-                  )}>Ofertas e Promoções</h2>
-                  <Link to="/store/promotions">
-                    <Button variant="ghost" className="text-[#13294b] hover:text-[#ff6b2c] font-inter" size={isMobile ? "sm" : "default"}>
-                      Ver todas <ArrowRight className="ml-1 h-4 w-4" />
-                    </Button>
-                  </Link>
-                </div>
-                
-                <Carousel
-                  opts={{
-                    align: "start",
-                    loop: true,
-                  }}
-                  className="w-full"
-                >
-                  <CarouselContent className="-ml-2 md:-ml-4">
-                    {promotions.map((promo) => (
-                      <CarouselItem key={promo.id} className={cn(
-                        "pl-2 md:pl-4",
-                        isMobile ? "basis-full" : "md:basis-1/2 lg:basis-1/3"
-                      )}>
-                         <Link to={promo.link} className="block">
-                          <div className="overflow-hidden rounded-xl group">
-                            <div className={cn(
-                              "relative overflow-hidden",
-                              isMobile ? "h-[200px]" : "h-[300px]"
-                            )}>
-                              <img 
-                                src={promo.image} 
-                                alt={promo.title}
-                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                              />
+            {/* Promotions Carousel - only show if there are promotions */}
+            {promotions.length > 0 && (
+              <section className="py-8 md:py-12 bg-white overflow-hidden">
+                <div className="container mx-auto px-4">
+                  <div className="flex items-center justify-between mb-6 md:mb-8">
+                    <h2 className={cn(
+                      "font-bold text-gray-900 font-inter",
+                      isMobile ? "text-xl" : "text-2xl"
+                    )}>Ofertas e Promoções</h2>
+                    <Link to="/store/promotions">
+                      <Button variant="ghost" className="text-[#13294b] hover:text-[#ff6b2c] font-inter" size={isMobile ? "sm" : "default"}>
+                        Ver todas <ArrowRight className="ml-1 h-4 w-4" />
+                      </Button>
+                    </Link>
+                  </div>
+                  
+                  <Carousel
+                    opts={{
+                      align: "start",
+                      loop: true,
+                    }}
+                    className="w-full"
+                  >
+                    <CarouselContent className="-ml-2 md:-ml-4">
+                      {promotions.map((promo) => (
+                        <CarouselItem key={promo.id} className={cn(
+                          "pl-2 md:pl-4",
+                          isMobile ? "basis-full" : "md:basis-1/2 lg:basis-1/3"
+                        )}>
+                           <Link to={promo.link} className="block">
+                            <div className="overflow-hidden rounded-xl group">
                               <div className={cn(
-                                "absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end",
-                                isMobile ? "p-4" : "p-6"
+                                "relative overflow-hidden",
+                                isMobile ? "h-[200px]" : "h-[300px]"
                               )}>
-                                <Badge variant="secondary" className="w-fit mb-2 bg-[#13294b] text-white font-inter">Promoção</Badge>
-                                <h3 className={cn(
-                                  "font-bold text-white font-inter drop-shadow-lg",
-                                  isMobile ? "text-lg" : "text-xl"
-                                )}>{promo.title}</h3>
-                                <p className={cn(
-                                  "text-white/80 mt-2 font-inter drop-shadow-md",
-                                  isMobile ? "text-xs" : "text-sm"
-                                )}>{promo.description}</p>
-                                <Button variant="secondary" className="w-fit mt-4 bg-white text-[#13294b] hover:text-[#ff6b2c] hover:bg-white/90 font-inter" size={isMobile ? "sm" : "default"}>
-                                  Ver Detalhes <ArrowRight className="ml-1 h-4 w-4" />
-                                </Button>
+                                <img 
+                                  src={promo.image} 
+                                  alt={promo.title}
+                                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                />
+                                <div className={cn(
+                                  "absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end",
+                                  isMobile ? "p-4" : "p-6"
+                                )}>
+                                  <Badge variant="secondary" className="w-fit mb-2 bg-[#13294b] text-white font-inter">Promoção</Badge>
+                                  <h3 className={cn(
+                                    "font-bold text-white font-inter drop-shadow-lg",
+                                    isMobile ? "text-lg" : "text-xl"
+                                  )}>{promo.title}</h3>
+                                  <p className={cn(
+                                    "text-white/80 mt-2 font-inter drop-shadow-md",
+                                    isMobile ? "text-xs" : "text-sm"
+                                  )}>{promo.description}</p>
+                                  <Button variant="secondary" className="w-fit mt-4 bg-white text-[#13294b] hover:text-[#ff6b2c] hover:bg-white/90 font-inter" size={isMobile ? "sm" : "default"}>
+                                    Ver Detalhes <ArrowRight className="ml-1 h-4 w-4" />
+                                  </Button>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </Link>
-                      </CarouselItem>
-                    ))}
-                  </CarouselContent>
-                  <div className="flex justify-center mt-4 gap-2">
-                    <CarouselPrevious className="static transform-none mx-0 bg-white/80 backdrop-blur-sm border-[#13294b]" />
-                    <CarouselNext className="static transform-none mx-0 bg-white/80 backdrop-blur-sm border-[#13294b]" />
-                  </div>
-                </Carousel>
-              </div>
-            </section>
+                          </Link>
+                        </CarouselItem>
+                      ))}
+                    </CarouselContent>
+                    <div className="flex justify-center mt-4 gap-2">
+                      <CarouselPrevious className="static transform-none mx-0 bg-white/80 backdrop-blur-sm border-[#13294b]" />
+                      <CarouselNext className="static transform-none mx-0 bg-white/80 backdrop-blur-sm border-[#13294b]" />
+                    </div>
+                  </Carousel>
+                </div>
+              </section>
+            )}
             
             {/* Featured Products - fundo cinza claro */}
             <section className="py-8 md:py-12 bg-gray-50">
@@ -419,81 +364,83 @@ const Store = () => {
               </div>
             </section>
             
-            {/* Featured Companies - fundo branco */}
-            <section className="py-8 md:py-12 bg-white">
-              <div className="container mx-auto px-4">
-                <div className="flex items-center justify-between mb-6 md:mb-8">
-                  <h2 className={cn(
-                    "font-bold text-gray-900 font-inter",
-                    isMobile ? "text-xl" : "text-2xl"
-                  )}>Empresas em Destaque</h2>
-                  <Link to="/store/companies">
-                    <Button variant="ghost" className="text-[#13294b] hover:text-[#ff6b2c] font-inter" size={isMobile ? "sm" : "default"}>
-                      Ver todas <ArrowRight className="ml-1 h-4 w-4" />
-                    </Button>
-                  </Link>
-                </div>
-                
-                <div className={cn(
-                  "grid gap-4 md:gap-6",
-                  isMobile ? "grid-cols-1" : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
-                )}>
-                  {featuredCompanies.map((company) => (
-                    <motion.div
-                      key={company.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3 }}
-                      viewport={{ once: true }}
-                    >
-                      <Link to={`/store/company/${company.id}`}>
-                        <Card className="h-full hover:shadow-md transition-all bg-white border-gray-200">
-                          <CardHeader className={cn(
-                            isMobile ? "p-4" : ""
-                          )}>
-                            <div className="flex items-center gap-3">
-                              <div className="h-12 w-12 rounded-full bg-[#13294b]/10 flex items-center justify-center overflow-hidden">
-                                <img 
-                                  src={company.image}
-                                  alt={company.name}
-                                  className="h-full w-full object-cover"
-                                />
-                              </div>
-                              <div>
-                                <CardTitle className={cn(
-                                  "text-gray-900 font-inter",
-                                  isMobile ? "text-base" : "text-base"
-                                )}>{company.name}</CardTitle>
-                                <div className="flex items-center text-sm text-[#13294b]">
-                                  <Star className="h-3 w-3 fill-current mr-1" />
-                                  <span className="font-inter">{company.rating}</span>
+            {/* Featured Companies - only show if there are companies */}
+            {featuredCompanies.length > 0 && (
+              <section className="py-8 md:py-12 bg-white">
+                <div className="container mx-auto px-4">
+                  <div className="flex items-center justify-between mb-6 md:mb-8">
+                    <h2 className={cn(
+                      "font-bold text-gray-900 font-inter",
+                      isMobile ? "text-xl" : "text-2xl"
+                    )}>Empresas em Destaque</h2>
+                    <Link to="/store/companies">
+                      <Button variant="ghost" className="text-[#13294b] hover:text-[#ff6b2c] font-inter" size={isMobile ? "sm" : "default"}>
+                        Ver todas <ArrowRight className="ml-1 h-4 w-4" />
+                      </Button>
+                    </Link>
+                  </div>
+                  
+                  <div className={cn(
+                    "grid gap-4 md:gap-6",
+                    isMobile ? "grid-cols-1" : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+                  )}>
+                    {featuredCompanies.map((company) => (
+                      <motion.div
+                        key={company.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3 }}
+                        viewport={{ once: true }}
+                      >
+                        <Link to={`/store/company/${company.id}`}>
+                          <Card className="h-full hover:shadow-md transition-all bg-white border-gray-200">
+                            <CardHeader className={cn(
+                              isMobile ? "p-4" : ""
+                            )}>
+                              <div className="flex items-center gap-3">
+                                <div className="h-12 w-12 rounded-full bg-[#13294b]/10 flex items-center justify-center overflow-hidden">
+                                  <img 
+                                    src={company.image}
+                                    alt={company.name}
+                                    className="h-full w-full object-cover"
+                                  />
+                                </div>
+                                <div>
+                                  <CardTitle className={cn(
+                                    "text-gray-900 font-inter",
+                                    isMobile ? "text-base" : "text-base"
+                                  )}>{company.name}</CardTitle>
+                                  <div className="flex items-center text-sm text-[#13294b]">
+                                    <Star className="h-3 w-3 fill-current mr-1" />
+                                    <span className="font-inter">{company.rating}</span>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          </CardHeader>
-                          <CardContent className={cn(
-                            isMobile ? "p-4 pt-0" : ""
-                          )}>
-                            <p className={cn(
-                              "text-gray-600 mb-2 font-inter",
-                              isMobile ? "text-sm" : "text-sm"
-                            )}>{company.description}</p>
-                            <p className="text-xs text-gray-600 font-inter">{company.products} produtos disponíveis</p>
-                          </CardContent>
-                          <CardFooter className={cn(
-                            isMobile ? "p-4 pt-0" : ""
-                          )}>
-                            <Button variant="outline" className="w-full text-[#13294b] border-[#13294b] hover:bg-[#13294b] hover:text-white font-inter" size={isMobile ? "sm" : "default"}>
-                              Visitar Loja
-                            </Button>
-                          </CardFooter>
-                        </Card>
-                      </Link>
-                    </motion.div>
-                  ))}
+                            </CardHeader>
+                            <CardContent className={cn(
+                              isMobile ? "p-4 pt-0" : ""
+                            )}>
+                              <p className={cn(
+                                "text-gray-600 mb-2 font-inter",
+                                isMobile ? "text-sm" : "text-sm"
+                              )}>{company.description}</p>
+                              <p className="text-xs text-gray-600 font-inter">{company.products} produtos disponíveis</p>
+                            </CardContent>
+                            <CardFooter className={cn(
+                              isMobile ? "p-4 pt-0" : ""
+                            )}>
+                              <Button variant="outline" className="w-full text-[#13294b] border-[#13294b] hover:bg-[#13294b] hover:text-white font-inter" size={isMobile ? "sm" : "default"}>
+                                Visitar Loja
+                              </Button>
+                            </CardFooter>
+                          </Card>
+                        </Link>
+                      </motion.div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </section>
+              </section>
+            )}
 
             {/* Categories Section - fundo cinza claro */}
             <section className="py-8 md:py-12 bg-gray-50">
