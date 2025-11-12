@@ -103,8 +103,7 @@ const HomeHighlights = () => {
         <div className="mt-16 grid gap-10 xl:grid-cols-[1.1fr_0.9fr]">
           <div className="grid gap-6 md:grid-cols-2">
             {personas.map(persona => (
-              <Card key={persona.title} className="border-white/5 bg-white/5 p-px text-white backdrop-blur">
-                <CardContent className="flex h-full flex-col justify-between gap-6 rounded-2xl bg-instalei-navy-950/60 p-8 text-white">
+
                   <div className="space-y-4">
                     <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/30 text-white">
                       <persona.icon className="h-6 w-6" />
@@ -126,14 +125,7 @@ const HomeHighlights = () => {
           </div>
 
           <div className="space-y-6">
-            <Card className="border-white/5 bg-gradient-to-br from-white/10 via-white/5 to-transparent text-white">
-              <CardHeader className="pb-2 text-white">
-                <CardTitle className="text-2xl font-semibold text-white md:text-3xl">Playbook Instalei</CardTitle>
-                <p className="text-sm text-white/80 md:text-base">
-                  Nossa equipe acompanha cada etapa com indicadores compartilhados e checkpoints validados com o cliente.
-                </p>
-              </CardHeader>
-              <CardContent className="space-y-6 text-white">
+
                 {playbook.map(item => (
                   <div key={item.step} className="flex gap-5 rounded-2xl bg-white/10 p-5">
                     <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/30 text-xl font-bold">
@@ -148,8 +140,7 @@ const HomeHighlights = () => {
               </CardContent>
             </Card>
 
-            <Card className="border-white/5 bg-white/5 p-px text-white">
-              <CardContent className="rounded-2xl bg-instalei-navy-950/60 p-8 text-white">
+
                 <div className="space-y-6">
                   {differentiators.map(item => (
                     <div key={item.title} className="flex gap-5">
@@ -157,8 +148,7 @@ const HomeHighlights = () => {
                         <item.icon className="h-6 w-6" />
                       </div>
                       <div>
-                        <h4 className="text-lg font-semibold text-white md:text-xl">{item.title}</h4>
-                        <p className="mt-2 text-sm text-white/80 md:text-base">{item.description}</p>
+
                       </div>
                     </div>
                   ))}
