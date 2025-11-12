@@ -345,21 +345,21 @@ const Register = () => {
               <TabsList className="grid w-full grid-cols-3 bg-gray-100 p-1 rounded-lg gap-2">
                 <TabsTrigger 
                   value="client" 
-                  className="data-[state=active]:bg-[#2563eb] data-[state=active]:text-white data-[state=inactive]:text-gray-700 rounded-md transition-all duration-200 font-semibold flex items-center justify-center gap-2 py-3"
+                  className="data-[state=active]:bg-[#13294b] data-[state=active]:text-white data-[state=inactive]:text-gray-700 rounded-md transition-all duration-200 font-semibold flex items-center justify-center gap-2 py-3"
                 >
                   <User className="h-5 w-5" />
                   Cliente
                 </TabsTrigger>
                 <TabsTrigger 
                   value="technician" 
-                  className="data-[state=active]:bg-[#2563eb] data-[state=active]:text-white data-[state=inactive]:text-gray-700 rounded-md transition-all duration-200 font-semibold flex items-center justify-center gap-2 py-3"
+                  className="data-[state=active]:bg-[#13294b] data-[state=active]:text-white data-[state=inactive]:text-gray-700 rounded-md transition-all duration-200 font-semibold flex items-center justify-center gap-2 py-3"
                 >
                   <Wrench className="h-5 w-5" />
                   Técnico
                 </TabsTrigger>
                 <TabsTrigger 
                   value="store" 
-                  className="data-[state=active]:bg-[#2563eb] data-[state=active]:text-white data-[state=inactive]:text-gray-700 rounded-md transition-all duration-200 font-semibold flex items-center justify-center gap-2 py-3"
+                  className="data-[state=active]:bg-[#13294b] data-[state=active]:text-white data-[state=inactive]:text-gray-700 rounded-md transition-all duration-200 font-semibold flex items-center justify-center gap-2 py-3"
                 >
                   <Store className="h-5 w-5" />
                   Lojista

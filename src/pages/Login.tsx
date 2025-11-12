@@ -214,7 +214,7 @@ const Login = () => {
               
               <Button 
                 type="submit" 
-                className="w-full h-12 text-base font-semibold bg-[#2563eb] hover:bg-[#1d4ed8] text-white rounded-lg shadow-md transition-all duration-200" 
+                className="w-full h-12 text-base font-semibold bg-[#ff6b2c] hover:bg-[#f2551a] text-white rounded-lg shadow-md transition-all duration-200"
                 disabled={isLoading || !email || !password}
               >
                 {isLoading ? (

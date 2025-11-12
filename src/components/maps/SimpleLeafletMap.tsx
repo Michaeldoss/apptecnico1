@@ -47,7 +47,7 @@ const SimpleLeafletMap: React.FC<SimpleLeafletMapProps> = ({
           
           // Add user marker with custom blue icon
           const userIcon = L.divIcon({
-            html: '<div style="background: #2563eb; width: 24px; height: 24px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 6px rgba(37, 99, 235, 0.5);"></div>',
+            html: '<div style="background: #ff6b2c; width: 24px; height: 24px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 6px rgba(255, 107, 44, 0.35);"></div>',
             iconSize: [24, 24],
             iconAnchor: [12, 12],
             className: 'user-location-marker'

@@ -61,7 +61,7 @@ const Navbar = () => {
   }];
 
   // Estilos profissionais para o navbar
-  const navbarClasses = "bg-[#2563eb] w-full sticky top-0 z-50 shadow-sm";
+  const navbarClasses = "bg-[#13294b] w-full sticky top-0 z-50 shadow-sm";
   const linkClasses = "text-white hover:opacity-80 transition-opacity duration-200 font-medium text-base px-3 py-2";
   return <nav className={navbarClasses} style={{ fontFamily: 'system-ui, -apple-system, Inter, sans-serif' }}>
       <div className="mx-auto max-w-7xl px-6">
@@ -119,16 +119,16 @@ const Navbar = () => {
                   variant="ghost" 
                   size="sm" 
                   onClick={handleLoginClick} 
-                  className="bg-white text-[#2563eb] hover:bg-white/90 font-semibold rounded-lg px-5 py-2 h-auto text-base"
+                  className="bg-white text-[#13294b] hover:bg-white/90 font-semibold rounded-lg px-5 py-2 h-auto text-base"
                   style={{ fontWeight: 600, lineHeight: 1.5 }}
                 >
                   Entrar
                 </Button>
                 
-                <Button 
-                  size="sm" 
+                <Button
+                  size="sm"
                   onClick={() => navigate('/register')}
-                  className="bg-[#1e40af] text-white hover:bg-[#1e3a8a] font-semibold rounded-lg px-5 py-2 h-auto text-base"
+                  className="bg-[#ff6b2c] text-white hover:bg-[#f2551a] font-semibold rounded-lg px-5 py-2 h-auto text-base"
                   style={{ fontWeight: 600, lineHeight: 1.5 }}
                 >
                   Cadastre-se
@@ -147,7 +147,7 @@ const Navbar = () => {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="absolute top-full left-0 w-full bg-[#2563eb] border-t border-white/10 shadow-lg z-50 lg:hidden">
+          <div className="absolute top-full left-0 w-full bg-[#13294b] border-t border-white/10 shadow-lg z-50 lg:hidden">
             <div className="flex flex-col px-6 py-4 max-w-[1200px] mx-auto">
               {/* All menu items for mobile */}
               {[...menuItemsLeft, ...menuItemsRight].map(item => (
@@ -183,15 +183,15 @@ const Navbar = () => {
                   </>
                 ) : (
                   <div className="flex flex-col gap-2">
-                    <Button 
-                      className="w-full justify-center bg-white text-[#2563eb] hover:bg-white/90 font-semibold text-base py-3" 
+                    <Button
+                      className="w-full justify-center bg-white text-[#13294b] hover:bg-white/90 font-semibold text-base py-3"
                       onClick={handleLoginClick}
                     >
                       Entrar
                     </Button>
-                    
-                    <Button 
-                      className="w-full justify-center bg-[#1e40af] text-white hover:bg-[#1e3a8a] font-semibold text-base py-3" 
+
+                    <Button
+                      className="w-full justify-center bg-[#ff6b2c] text-white hover:bg-[#f2551a] font-semibold text-base py-3"
                       onClick={() => {
                         navigate('/register');
                         setIsMenuOpen(false);

@@ -7,120 +7,121 @@
 
 @layer base {
   :root {
-    /* Sistema de Cores Padronizado - Azul #2563eb */
-    --background: 0 0% 100%; /* Branco #ffffff */
-    --foreground: 215 25% 27%; /* Cinza escuro #1f2937 */
+    /* Paleta Principal - Azul profundo e Laranja vibrante */
+    --background: 216 36% 97%; /* Fundo claro azulado */
+    --foreground: 219 48% 15%; /* Azul petróleo para textos principais */
 
     --card: 0 0% 100%;
-    --card-foreground: 215 25% 27%;
+    --card-foreground: 219 48% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 215 25% 27%;
+    --popover-foreground: 219 48% 15%;
 
-    /* Cores principais - Azul #2563eb */
-    --primary: 217 91% 60%; /* #2563eb */
+    --primary: 219 62% 18%; /* Azul noturno Instalei */
+    --primary-dark: 222 66% 14%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 100%; /* Branco com borda azul */
-    --secondary-foreground: 217 91% 60%; /* #2563eb */
+    --secondary: 22 100% 93%; /* Base clara com nuance laranja */
+    --secondary-foreground: 219 62% 18%;
 
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 216 33% 92%;
+    --muted-foreground: 220 16% 45%;
 
-    --accent: 217 91% 60%; /* #2563eb */
+    --accent: 18 100% 58%; /* Laranja assinatura Instalei */
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 214 32% 91%;
-    --input: 0 0% 100%; /* Inputs brancos */
-    --ring: 217 91% 60%; /* #2563eb */
+    --border: 217 34% 84%;
+    --input: 0 0% 100%;
+    --ring: 18 100% 58%;
 
     --radius: 12px;
 
-    /* Paleta Azul Padronizado #2563eb */
-    --workana-blue-50: 217 91% 98%;
-    --workana-blue-100: 217 91% 95%;
-    --workana-blue-200: 217 91% 85%;
-    --workana-blue-300: 217 91% 75%;
-    --workana-blue-400: 217 91% 65%;
-    --workana-blue-500: 217 91% 60%; /* #2563eb */
-    --workana-blue-600: 217 91% 50%; /* #1e40af */
-    --workana-blue-700: 217 91% 40%;
-    --workana-blue-800: 217 91% 30%;
-    --workana-blue-900: 217 91% 20%;
+    /* Paleta Azul Noturno */
+    --workana-blue-50: 215 40% 97%;
+    --workana-blue-100: 216 38% 92%;
+    --workana-blue-200: 217 35% 84%;
+    --workana-blue-300: 219 33% 72%;
+    --workana-blue-400: 221 41% 52%;
+    --workana-blue-500: 223 55% 32%;
+    --workana-blue-600: 223 62% 24%;
+    --workana-blue-700: 223 66% 20%;
+    --workana-blue-800: 222 68% 16%;
+    --workana-blue-900: 222 70% 12%;
 
-    --workana-navy-50: 215 30% 95%;
-    --workana-navy-100: 215 30% 85%;
-    --workana-navy-200: 215 30% 70%;
-    --workana-navy-300: 215 30% 50%;
-    --workana-navy-400: 215 30% 35%;
-    --workana-navy-500: 215 30% 25%;
-    --workana-navy-600: 215 30% 20%;
-    --workana-navy-700: 215 30% 15%;
-    --workana-navy-800: 215 30% 10%;
-    --workana-navy-900: 215 30% 8%;
+    --workana-navy-50: 215 45% 96%;
+    --workana-navy-100: 217 40% 88%;
+    --workana-navy-200: 219 38% 74%;
+    --workana-navy-300: 220 40% 58%;
+    --workana-navy-400: 221 54% 42%;
+    --workana-navy-500: 222 62% 28%;
+    --workana-navy-600: 223 68% 22%;
+    --workana-navy-700: 224 70% 17%;
+    --workana-navy-800: 224 72% 13%;
+    --workana-navy-900: 225 74% 10%;
 
     /* Cores de texto padronizadas */
-    --workana-text-primary: 215 25% 27%; /* #1f2937 */
-    --workana-text-secondary: 215 20% 65%;
-    --workana-text-light: 215 20% 65%;
+    --workana-text-primary: 219 48% 15%;
+    --workana-text-secondary: 220 16% 45%;
+    --workana-text-light: 216 33% 65%;
     --workana-text-white: 0 0% 100%;
 
-    /* Gradientes Azul #2563eb */
-    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(217 91% 50%) 100%);
-    --gradient-hero: linear-gradient(180deg, hsl(217 91% 60%) 0%, hsl(217 91% 50%) 100%);
-    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(217 91% 98%) 100%);
+    /* Gradientes institucionais */
+    --gradient-primary: linear-gradient(135deg, hsl(222 66% 20%) 0%, hsl(221 54% 42%) 100%);
+    --gradient-hero: linear-gradient(180deg, hsl(222 62% 24%) 0%, hsl(221 54% 42%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(216 36% 97%) 100%);
 
-    /* Sidebar Azul #2563eb */
+    /* Sidebar - Azul e Laranja */
     --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 215 25% 27%;
-    --sidebar-primary: 217 91% 60%; /* #2563eb */
+    --sidebar-foreground: 219 48% 15%;
+    --sidebar-primary: 222 66% 20%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 217 91% 60%; /* #2563eb */
+    --sidebar-accent: 18 100% 58%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 214 32% 91%;
-    --sidebar-ring: 217 91% 60%;
+    --sidebar-border: 217 34% 84%;
+    --sidebar-ring: 18 100% 58%;
   }
 
   .dark {
-    --background: 215 25% 10%;
-    --foreground: 210 40% 98%;
+    --background: 222 60% 10%;
+    --foreground: 216 33% 96%;
 
-    --card: 215 25% 15%;
-    --card-foreground: 210 40% 98%;
+    --card: 222 58% 14%;
+    --card-foreground: 216 33% 96%;
 
-    --popover: 215 25% 15%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 222 58% 14%;
+    --popover-foreground: 216 33% 96%;
 
-    --primary: 217 91% 60%; /* #2563eb */
-    --primary-foreground: 0 0% 100%;
+    --primary: 216 33% 96%;
+    --primary-dark: 222 70% 18%;
+    --primary-foreground: 222 70% 12%;
 
-    --secondary: 215 25% 20%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 223 58% 18%;
+    --secondary-foreground: 216 33% 96%;
 
-    --muted: 215 25% 18%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 223 52% 16%;
+    --muted-foreground: 216 22% 74%;
 
-    --accent: 217 91% 60%; /* #2563eb */
+    --accent: 18 100% 58%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 215 25% 20%;
-    --input: 215 25% 15%;
-    --ring: 217 91% 60%;
+    --border: 223 52% 18%;
+    --input: 223 52% 16%;
+    --ring: 18 100% 58%;
 
-    --sidebar-background: 215 25% 15%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 217 91% 60%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 217 91% 60%;
+    --sidebar-background: 223 58% 18%;
+    --sidebar-foreground: 216 33% 96%;
+    --sidebar-primary: 216 33% 96%;
+    --sidebar-primary-foreground: 222 70% 12%;
+    --sidebar-accent: 18 100% 58%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 215 25% 20%;
-    --sidebar-ring: 217 91% 60%;
+    --sidebar-border: 223 52% 18%;
+    --sidebar-ring: 18 100% 58%;
   }
 }
 
@@ -295,13 +296,13 @@
   }
 
   input:focus, textarea:focus, select:focus {
-    border-color: hsl(217 91% 60%); /* #2563eb */
-    box-shadow: 0 0 0 3px hsla(217 91% 60%, 0.1);
+    border-color: hsl(var(--accent));
+    box-shadow: 0 0 0 3px hsla(18, 100%, 58%, 0.15);
     outline: none;
   }
 
   input:hover, textarea:hover, select:hover {
-    border-color: hsl(217 91% 75%);
+    border-color: hsl(var(--primary));
   }
 
   input::placeholder, textarea::placeholder {
@@ -333,18 +334,18 @@
   textarea:focus-visible,
   select:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 3px hsla(var(--instalei-orange-500), 0.2);
+    box-shadow: 0 0 0 3px hsla(18, 100%, 58%, 0.2);
   }
 
   /* Sistema de Links */
   a {
     transition: all 0.2s ease-in-out;
-    color: hsl(var(--instalei-purple-500));
+    color: hsl(var(--primary));
     text-decoration: none;
   }
 
   a:hover {
-    color: hsl(var(--instalei-orange-500));
+    color: hsl(var(--accent));
     text-decoration: underline;
   }
 

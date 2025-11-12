@@ -83,7 +83,7 @@ const playbook = [
 
 const HomeHighlights = () => {
   return (
-    <section className="relative overflow-hidden bg-slate-900 py-24 text-white">
+    <section className="relative overflow-hidden bg-instalei-navy-900 py-24 text-white">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.08),_transparent_65%)]" />
       <div className="absolute -top-24 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-primary/25 blur-3xl" />
       <div className="absolute bottom-0 left-0 h-48 w-48 -translate-x-1/2 bg-accent/20 blur-3xl" />
@@ -104,7 +104,7 @@ const HomeHighlights = () => {
           <div className="grid gap-6 md:grid-cols-2">
             {personas.map(persona => (
               <Card key={persona.title} className="border-white/5 bg-white/5 p-px backdrop-blur">
-                <CardContent className="flex h-full flex-col justify-between gap-6 rounded-2xl bg-slate-950/60 p-8">
+                <CardContent className="flex h-full flex-col justify-between gap-6 rounded-2xl bg-instalei-navy-950/60 p-8">
                   <div className="space-y-4">
                     <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/30 text-white">
                       <persona.icon className="h-6 w-6" />
@@ -114,7 +114,7 @@ const HomeHighlights = () => {
                       <p className="text-sm text-white/70 md:text-base">{persona.description}</p>
                     </div>
                   </div>
-                  <Button asChild variant="secondary" className="w-full rounded-xl bg-white text-slate-900 hover:bg-slate-100">
+                  <Button asChild variant="secondary" className="w-full rounded-xl bg-white text-[#13294b] hover:text-[#ff6b2c] hover:bg-slate-100">
                     <Link to={persona.href}>
                       {persona.cta}
                       <ArrowRight className="ml-2 h-4 w-4" />
@@ -149,7 +149,7 @@ const HomeHighlights = () => {
             </Card>
 
             <Card className="border-white/5 bg-white/5 p-px">
-              <CardContent className="rounded-2xl bg-slate-950/60 p-8">
+              <CardContent className="rounded-2xl bg-instalei-navy-950/60 p-8">
                 <div className="space-y-6">
                   {differentiators.map(item => (
                     <div key={item.title} className="flex gap-5">

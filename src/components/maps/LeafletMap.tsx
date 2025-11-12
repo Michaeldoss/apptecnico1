@@ -66,7 +66,7 @@ const createPopupContent = (technician: Technician) => {
         ${visitPrice ? `<div>Visita: <span class="font-medium">${visitPrice}</span></div>` : ''}
         ${laborPrice ? `<div>Mão de obra: <span class="font-medium">${laborPrice}/h</span></div>` : ''}
       </div>
-      <a class="inline-flex items-center justify-center gap-2 w-full text-sm font-medium text-[#2563eb] border border-[#2563eb] rounded px-3 py-2 hover:bg-[#2563eb] hover:text-white transition" href="${mapUrl}" target="_blank" rel="noopener noreferrer">
+      <a class="inline-flex items-center justify-center gap-2 w-full text-sm font-medium text-[#ff6b2c] border border-[#ff6b2c] rounded px-3 py-2 hover:bg-[#ff6b2c] hover:text-white transition" href="${mapUrl}" target="_blank" rel="noopener noreferrer">
         <span>Ver no Google Maps</span>
         <span>↗</span>
       </a>
