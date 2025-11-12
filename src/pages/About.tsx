@@ -80,16 +80,44 @@ const About = () => {
               <h2 className="text-4xl md:text-5xl font-bold mb-8 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
                 Nossa História
               </h2>
-              <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-                A Instalei foi fundada em 2022 por uma equipe de empreendedores brasileiros que identificaram 
-                um grande problema no mercado: a dificuldade de encontrar técnicos qualificados e confiáveis 
-                para serviços de instalação e manutenção residencial e comercial.
-              </p>
-              <p className="text-xl text-muted-foreground leading-relaxed">
-                Nossa plataforma nasceu com o objetivo de democratizar o acesso a serviços técnicos de qualidade, 
-                conectando pessoas que precisam de instalações e reparos com profissionais certificados e 
-                avaliados pela nossa comunidade. Hoje, somos a principal ponte entre clientes e técnicos especializados no Brasil.
-              </p>
+              <div className="text-lg text-muted-foreground space-y-6 leading-relaxed text-left max-w-4xl mx-auto">
+                <p>
+                  Tudo começou dentro da <strong>Doss Group</strong>, uma empresa que nasceu com o propósito de trazer mais cores para o mundo desde a primeira impressão.
+                </p>
+                <p>
+                  Durante anos, vivemos de perto o dia a dia dos técnicos, revendas e clientes de todo o Brasil — e, com isso, vimos algo se repetir o tempo todo: a dificuldade de conectar quem precisa de manutenção com quem realmente sabe fazer o serviço.
+                </p>
+                <p>
+                  Havia técnicos incríveis, cheios de experiência, mas sem visibilidade.<br />
+                  E havia clientes desesperados, com a produção parada, sem saber em quem confiar.<br />
+                  Foi aí que percebemos: <strong>o mercado de impressão digital precisava de algo novo.</strong>
+                </p>
+                <p>
+                  Enquanto cuidávamos de máquinas, tintas e equipamentos em todas as regiões do país, a ideia começou a nascer dentro da Doss Group. Não era só sobre resolver um problema técnico — era sobre unir pessoas, facilitar a vida e profissionalizar um setor inteiro.
+                </p>
+                <p className="font-semibold text-primary text-xl">
+                  Assim nasceu a Instalei:
+                </p>
+                <p>
+                  Um aplicativo criado para conectar clientes, técnicos e lojas de forma simples, rápida e segura. Um espaço onde o cliente solicita um serviço e recebe atendimento qualificado, com rastreamento em tempo real, pagamento integrado e avaliações transparentes. Onde o técnico pode mostrar seu trabalho, vender peças, receber pelo que faz e conquistar sua independência. E onde as empresas podem contar com uma rede confiável de profissionais certificados.
+                </p>
+                <p className="font-semibold">
+                  A Instalei é mais do que um app.<br />
+                  É um movimento pela confiança e pela eficiência no setor de impressão.
+                </p>
+                <p>
+                  Um projeto que nasceu da prática — de quem vive o chão de fábrica, entende o barulho da máquina e sabe o que é ter um cliente esperando uma entrega que depende de um simples detalhe técnico.
+                </p>
+                <p>
+                  Criamos a Instalei porque acreditamos que quando a tecnologia se une à experiência, todos ganham. Porque o futuro do nosso setor não está apenas nas máquinas, mas nas pessoas que fazem tudo funcionar.
+                </p>
+                <p>
+                  E foi essa visão — de unir o técnico, o cliente e o mercado — que transformou um sonho da Doss Group em realidade.
+                </p>
+                <p className="text-xl font-bold text-primary text-center mt-8">
+                  Instalei. Conectando quem faz acontecer.
+                </p>
+              </div>
             </div>
           </div>
         </div>
