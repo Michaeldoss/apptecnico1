@@ -87,23 +87,51 @@ export const paymentSchema = z.object({
 });
 
 // Rate limiting helper
+export interface RateLimitResult {
+  allowed: boolean;
+  attempts: number;
+  remaining: number;
+  retryAfter: number;
+}
+
 export const createRateLimiter = (maxAttempts: number, windowMs: number) => {
   const attempts = new Map<string, { count: number; resetTime: number }>();
-  
-  return (identifier: string): boolean => {
+
+  const attempt = (identifier: string): RateLimitResult => {
     const now = Date.now();
     const userAttempts = attempts.get(identifier);
-    
+
     if (!userAttempts || now > userAttempts.resetTime) {
       attempts.set(identifier, { count: 1, resetTime: now + windowMs });
-      return true;
+      return {
+        allowed: true,
+        attempts: 1,
+        remaining: Math.max(0, maxAttempts - 1),
+        retryAfter: 0,
+      };
     }
-    
+
     if (userAttempts.count >= maxAttempts) {
-      return false;
+      return {
+        allowed: false,
+        attempts: userAttempts.count,
+        remaining: 0,
+        retryAfter: Math.max(0, userAttempts.resetTime - now),
+      };
     }
-    
+
     userAttempts.count++;
-    return true;
+
+    return {
+      allowed: true,
+      attempts: userAttempts.count,
+      remaining: Math.max(0, maxAttempts - userAttempts.count),
+      retryAfter: 0,
+    };
   };
+  const reset = (identifier: string) => {
+    attempts.delete(identifier);
+  };
+
+  return { attempt, reset };
 };

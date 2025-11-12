@@ -75,14 +75,16 @@ const UserRegistrationForm: React.FC<UserRegistrationFormProps> = ({
         type: userType === 'client' ? 'customer' : userType === 'store' ? 'company' : userType,
       };
 
-      const success = await signup(data.email, data.password, userData);
-      
-      if (success) {
+      const result = await signup(data.email, data.password, userData);
+
+      if (result.success) {
         toast({
           title: "Conta criada com sucesso!",
-          description: "Redirecionando para seu dashboard...",
+          description: result.requiresConfirmation
+            ? "Verifique seu email para confirmar a conta."
+            : "Redirecionando para seu dashboard...",
         });
-        
+
         // O AuthContext irá redirecionar automaticamente após o signup
         console.log('📝 Cadastro concluído, aguardando redirecionamento automático...');
       }

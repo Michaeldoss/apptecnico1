@@ -124,10 +124,14 @@ const CompanyRegister = () => {
       });
       
       // Tentar fazer login com as credenciais recém-criadas
-      const loginSuccess = await login(data.email, data.password);
-      
-      if (loginSuccess) {
-        navigate('/loja/dashboard');
+      const loginResult = await login(data.email, data.password);
+
+      if (loginResult.success) {
+        if (loginResult.redirectPath) {
+          navigate(loginResult.redirectPath, { replace: true });
+        } else {
+          navigate('/loja/dashboard');
+        }
       }
       
       form.reset();
@@ -146,14 +150,18 @@ const CompanyRegister = () => {
   const onLogin = async (data: LoginFormValues) => {
     setIsSubmitting(true);
     try {
-      const success = await login(data.email, data.password);
-      
-      if (success) {
+      const result = await login(data.email, data.password);
+
+      if (result.success) {
         toast({
           title: "Login realizado com sucesso!",
           description: "Bem-vindo de volta. Você será redirecionado para o painel.",
         });
-        navigate('/loja/dashboard');
+        if (result.redirectPath) {
+          navigate(result.redirectPath, { replace: true });
+        } else {
+          navigate('/loja/dashboard');
+        }
       }
     } catch (error) {
       console.error('Erro ao fazer login:', error);

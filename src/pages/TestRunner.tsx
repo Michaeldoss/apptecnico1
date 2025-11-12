@@ -134,8 +134,8 @@ const TestRunner = () => {
     addLog(`Iniciando cadastro para ${testUser.email} (${testUser.type})`);
     
     const result = await signup(testUser.email, testUser.password, testUser);
-    
-    if (!result) {
+
+    if (!result.success) {
       throw new Error('Cadastro falhou');
     }
 
@@ -171,8 +171,8 @@ const TestRunner = () => {
     await sleep(1000);
 
     const result = await login(testUser.email, testUser.password);
-    
-    if (!result) {
+
+    if (!result.success) {
       throw new Error('Login falhou');
     }
 

@@ -150,22 +150,20 @@ const Register = () => {
 
       console.log('Tentando cadastrar:', userData);
       
-      const success = await signup(email, password, userData);
-      
-      if (success) {
-        // Enviar email de confirmação
-        await sendConfirmationEmail(email, fullName, accountType);
-        
-        // Guardar email para exibir no dialog
+      const result = await signup(email, password, userData);
+
+      if (result.success) {
+        if (result.requiresConfirmation) {
+          await sendConfirmationEmail(email, fullName, accountType);
+        }
+
         setUserEmail(email);
-        
-        // Mostrar dialog de sucesso
         setShowSuccessDialog(true);
       } else {
-        toast({ 
-          variant: "destructive", 
-          title: "Erro no cadastro", 
-          description: "Verifique os dados e tente novamente." 
+        toast({
+          variant: "destructive",
+          title: "Erro no cadastro",
+          description: "Verifique os dados e tente novamente."
         });
       }
       
