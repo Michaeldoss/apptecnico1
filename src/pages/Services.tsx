@@ -32,6 +32,20 @@ const Services = () => {
       features: ["Instalação completa", "Configuração otimizada", "Treinamento básico"]
     },
     {
+      title: "Acesso Remoto",
+      description: "Suporte técnico à distância para resolver problemas rapidamente",
+      price: "A partir de R$ 50",
+      duration: "30min-1 hora",
+      features: ["Diagnóstico remoto", "Configuração à distância", "Suporte imediato"]
+    },
+    {
+      title: "Suporte Virtual com IA",
+      description: "Assistente virtual inteligente 24/7 para dúvidas e orientações",
+      price: "Gratuito",
+      duration: "Disponível 24/7",
+      features: ["Respostas instantâneas", "Guias passo a passo", "Disponível sempre"]
+    },
+    {
       title: "Suporte Técnico",
       description: "Suporte técnico especializado",
       price: "A partir de R$ 60",
