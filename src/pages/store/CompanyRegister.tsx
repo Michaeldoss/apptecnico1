@@ -20,7 +20,7 @@ import Footer from '@/components/layout/Footer';
 import { useAuth } from '@/context/AuthContext';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useNavigate } from 'react-router-dom';
-import { Store, Building, Building2, MapPin, Mail, Phone, FileText } from 'lucide-react';
+import { Store, Building2, MapPin, Mail, FileText } from 'lucide-react';
 import GoogleLoginButton from '@/components/auth/GoogleLoginButton';
 import GoogleAuthProvider from '@/components/auth/GoogleAuthProvider';
 
@@ -418,7 +418,7 @@ const CompanyRegister = () => {
                 <div className="space-y-4">
                   <div className="border-b pb-2">
                     <h2 className="text-xl font-semibold flex items-center">
-                      <Building className="mr-2 h-5 w-5" />
+                      <Store className="mr-2 h-5 w-5" />
                       Acesso para Empresas
                     </h2>
                     <p className="text-sm text-muted-foreground mt-1">
