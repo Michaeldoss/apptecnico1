@@ -28,7 +28,7 @@ const ProductDetails = () => {
             <h1 className="text-2xl font-bold text-gray-900 mb-2">Produto não encontrado</h1>
             <p className="text-gray-600 mb-4">O produto que você está procurando não existe ou foi removido.</p>
             <Link to="/store">
-              <Button variant="outline" className="text-[#2563eb] border-[#2563eb] hover:bg-[#2563eb] hover:text-white">
+              <Button variant="outline" className="text-[#13294b] border-[#13294b] hover:bg-[#13294b] hover:text-white">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Voltar para a loja
               </Button>
@@ -58,7 +58,7 @@ const ProductDetails = () => {
         <div className="container mx-auto px-4">
           {/* Breadcrumb */}
           <div className="mb-6">
-            <Link to="/store" className="text-[#2563eb] hover:underline font-inter">
+            <Link to="/store" className="text-[#13294b] hover:underline font-inter">
               <ArrowLeft className="inline h-4 w-4 mr-2" />
               Voltar para a loja
             </Link>
@@ -79,7 +79,7 @@ const ProductDetails = () => {
 
             {/* Product Info */}
             <div>
-              <Badge variant="outline" className="border-[#2563eb] text-[#2563eb] mb-4">
+              <Badge variant="outline" className="border-[#13294b] text-[#13294b] mb-4">
                 {product.categoria}
               </Badge>
               
@@ -108,7 +108,7 @@ const ProductDetails = () => {
 
               <div className="mb-6">
                 <p className={cn(
-                  "font-bold text-[#2563eb] font-inter",
+                  "font-bold text-[#13294b] font-inter",
                   isMobile ? "text-3xl" : "text-4xl"
                 )}>
                   {formatCurrency(product.preco)}
@@ -119,9 +119,9 @@ const ProductDetails = () => {
               </div>
 
               <div className="space-y-3 mb-6">
-                <Button 
+                <Button
                   onClick={handleBuyNow}
-                  className="w-full bg-[#2563eb] hover:bg-[#1e40af] text-white font-inter"
+                  className="w-full bg-[#ff6b2c] hover:bg-[#f2551a] text-white font-inter"
                   size={isMobile ? "default" : "lg"}
                 >
                   Comprar Agora
@@ -130,7 +130,7 @@ const ProductDetails = () => {
                 <Button 
                   onClick={handleAddToCart}
                   variant="outline"
-                  className="w-full text-[#2563eb] border-[#2563eb] hover:bg-[#2563eb] hover:text-white font-inter"
+                  className="w-full text-[#13294b] border-[#13294b] hover:bg-[#13294b] hover:text-white font-inter"
                   size={isMobile ? "default" : "lg"}
                 >
                   <ShoppingCart className="mr-2 h-4 w-4" />
@@ -141,19 +141,19 @@ const ProductDetails = () => {
               {/* Features */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                 <Card className="p-4 text-center border-gray-200">
-                  <Truck className="h-8 w-8 text-[#2563eb] mx-auto mb-2" />
+                  <Truck className="h-8 w-8 text-[#ff6b2c] mx-auto mb-2" />
                   <p className="text-sm font-medium text-gray-900 font-inter">Frete Grátis</p>
                   <p className="text-xs text-gray-600 font-inter">acima de R$ 200</p>
                 </Card>
                 
                 <Card className="p-4 text-center border-gray-200">
-                  <Shield className="h-8 w-8 text-[#2563eb] mx-auto mb-2" />
+                  <Shield className="h-8 w-8 text-[#13294b] mx-auto mb-2" />
                   <p className="text-sm font-medium text-gray-900 font-inter">Garantia</p>
                   <p className="text-xs text-gray-600 font-inter">12 meses</p>
                 </Card>
                 
                 <Card className="p-4 text-center border-gray-200">
-                  <Package className="h-8 w-8 text-[#2563eb] mx-auto mb-2" />
+                  <Package className="h-8 w-8 text-[#ff6b2c] mx-auto mb-2" />
                   <p className="text-sm font-medium text-gray-900 font-inter">Em Estoque</p>
                   <p className="text-xs text-gray-600 font-inter">Pronta entrega</p>
                 </Card>

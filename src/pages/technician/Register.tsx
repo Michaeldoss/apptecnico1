@@ -128,19 +128,23 @@ const TechnicianRegister = () => {
       };
       
       // Fazer signup real usando o contexto
-      const signupSuccess = await signup(data.email, data.password, userData);
-      
-      if (signupSuccess) {
+      const signupResult = await signup(data.email, data.password, userData);
+
+      if (signupResult.success) {
         toast({
           title: "Cadastro realizado com sucesso!",
-          description: "Verifique seu email para ativar a conta.",
+          description: signupResult.requiresConfirmation
+            ? "Verifique seu email para ativar a conta."
+            : "Bem-vindo! Redirecionando para seu painel...",
         });
-        
-        // Resetar formulário
+
         form.reset();
-        
-        // Redirecionar para login após signup
-        navigate('/login');
+
+        if (signupResult.redirectPath) {
+          navigate(signupResult.redirectPath);
+        } else {
+          navigate('/login');
+        }
       } else {
         toast({
           variant: "destructive",
@@ -163,14 +167,19 @@ const TechnicianRegister = () => {
   const onLogin = async (data: LoginFormValues) => {
     setIsSubmitting(true);
     try {
-      const success = await login(data.email, data.password);
-      
-      if (success) {
+      const result = await login(data.email, data.password);
+
+      if (result.success) {
         toast({
           title: "Login realizado com sucesso!",
           description: "Bem-vindo de volta. Você será redirecionado para o painel.",
         });
-        navigate('/tecnico/painel');
+
+        if (result.redirectPath) {
+          navigate(result.redirectPath, { replace: true });
+        } else {
+          navigate('/tecnico/painel');
+        }
       }
     } catch (error) {
       console.error('Erro ao fazer login:', error);

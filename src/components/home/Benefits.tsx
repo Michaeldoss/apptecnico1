@@ -8,7 +8,7 @@ const Benefits = () => {
       icon: <Shield className="h-12 w-12 text-white" />,
       title: "Segurança Garantida",
       description: "Todos os técnicos são verificados e avaliados pela nossa equipe",
-      color: "bg-gradient-to-br from-instalei-purple-500 to-instalei-purple-600"
+      color: "bg-gradient-to-br from-instalei-navy-500 to-instalei-navy-600"
     },
     {
       icon: <Clock className="h-12 w-12 text-white" />,
@@ -20,7 +20,7 @@ const Benefits = () => {
       icon: <Star className="h-12 w-12 text-white" />,
       title: "Melhor Qualidade",
       description: "Apenas profissionais com alta avaliação e experiência comprovada",
-      color: "bg-gradient-to-br from-instalei-purple-600 to-instalei-purple-700"
+      color: "bg-gradient-to-br from-instalei-navy-600 to-instalei-navy-700"
     },
     {
       icon: <CreditCard className="h-12 w-12 text-white" />,
@@ -32,13 +32,13 @@ const Benefits = () => {
       icon: <CheckCircle2 className="h-12 w-12 text-white" />,
       title: "Garantia Total",
       description: "Todos os serviços contam com garantia e suporte pós-venda",
-      color: "bg-gradient-to-br from-green-500 to-green-600"
+      color: "bg-gradient-to-br from-instalei-navy-500 via-instalei-navy-600 to-instalei-orange-500"
     },
     {
       icon: <Users className="h-12 w-12 text-white" />,
       title: "+5.000 Profissionais",
       description: "Ampla rede de técnicos especializados em todo o Brasil",
-      color: "bg-gradient-to-br from-blue-500 to-blue-600"
+      color: "bg-gradient-to-br from-instalei-navy-600 to-instalei-navy-800"
     }
   ];
 

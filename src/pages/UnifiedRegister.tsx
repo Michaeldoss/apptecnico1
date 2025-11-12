@@ -19,7 +19,7 @@ const UnifiedRegister = () => {
       title: 'Cliente',
       description: 'Encontre técnicos especializados para manutenção e reparo dos seus equipamentos',
       icon: User,
-      color: 'bg-[#2563eb]',
+      color: 'bg-gradient-to-br from-instalei-navy-600 to-instalei-navy-700',
       benefits: [
         'Encontre técnicos qualificados',
         'Agende serviços rapidamente',
@@ -32,7 +32,7 @@ const UnifiedRegister = () => {
       title: 'Técnico',
       description: 'Ofereça seus serviços técnicos especializados e encontre novos clientes',
       icon: Briefcase,
-      color: 'bg-[#2563eb]',
+      color: 'bg-gradient-to-br from-instalei-navy-600 to-instalei-navy-700',
       benefits: [
         'Receba novos chamados',
         'Gerencie sua agenda',
@@ -45,7 +45,7 @@ const UnifiedRegister = () => {
       title: 'Lojista',
       description: 'Venda produtos e equipamentos na nossa plataforma digital',
       icon: Building,
-      color: 'bg-[#2563eb]',
+      color: 'bg-gradient-to-br from-instalei-navy-600 to-instalei-navy-700',
       benefits: [
         'Venda online facilmente',
         'Gerencie seu estoque',
@@ -105,7 +105,7 @@ const UnifiedRegister = () => {
       {/* Hero Section */}
       <section className="text-[#1f2937] py-16 px-4 relative overflow-hidden bg-white border-b border-gray-200">
         <div className="max-w-4xl mx-auto text-center relative z-10">
-          <h1 className="text-4xl md:text-6xl font-black mb-4 leading-tight text-[#2563eb]">
+          <h1 className="text-4xl md:text-6xl font-black mb-4 leading-tight text-primary">
             Crie sua conta
           </h1>
           <p className="text-xl md:text-2xl mb-8 text-gray-600 max-w-3xl mx-auto font-medium">
@@ -151,8 +151,8 @@ const UnifiedRegister = () => {
                       ))}
                     </div>
                     
-                    <Button 
-                      className="w-full mt-6 bg-white text-[#2563eb] hover:bg-white/90 font-semibold py-3 group-hover:scale-105 transition-all duration-300"
+                    <Button
+                      className="w-full mt-6 bg-white text-primary hover:bg-white/90 hover:text-instalei-orange-500 font-semibold py-3 group-hover:scale-105 transition-all duration-300"
                       onClick={(e) => {
                         e.stopPropagation();
                         handleUserTypeSelect(userType.type);
@@ -170,10 +170,10 @@ const UnifiedRegister = () => {
           {/* Login Link */}
           <div className="text-center mt-12">
             <p className="text-gray-600 mb-4">Já tem uma conta?</p>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={() => navigate('/login')}
-              className="border-[#2563eb] text-[#2563eb] hover:bg-[#2563eb] hover:text-white"
+              className="border-primary text-primary hover:bg-primary hover:text-white"
             >
               Fazer Login
             </Button>

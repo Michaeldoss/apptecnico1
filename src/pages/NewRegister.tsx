@@ -141,21 +141,23 @@ const NewRegister = () => {
       });
 
       // Tentar login automático
-      const loginSuccess = await signup(data.email, data.password, userData);
-      if (loginSuccess) {
-        // Redirecionar baseado no tipo de usuário
-        switch (userType) {
-          case 'technician':
-            navigate('/tecnico/dashboard');
-            break;
-          case 'store':
-            navigate('/loja/dashboard');
-            break;
-          default:
-            navigate('/cliente/dashboard');
+      const signupResult = await signup(data.email, data.password, userData);
+      if (signupResult.success) {
+        if (signupResult.redirectPath) {
+          navigate(signupResult.redirectPath, { replace: true });
+        } else {
+          switch (userType) {
+            case 'technician':
+              navigate('/tecnico/dashboard');
+              break;
+            case 'store':
+              navigate('/loja/dashboard');
+              break;
+            default:
+              navigate('/cliente/dashboard');
+          }
         }
       } else {
-        // Se login falhar, redirecionar para página de login
         navigate('/login');
       }
     } catch (error) {

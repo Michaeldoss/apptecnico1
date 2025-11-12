@@ -203,19 +203,26 @@ const ClientRegister = () => {
         cpf_validated: cpfValidation.isValid
       };
 
-      const success = await signup(data.email, data.password, userData);
-      
-      if (success) {
-                      toast({
-                        title: "Cadastro realizado!",
-                        description: "Complete seu perfil para ter acesso completo à plataforma.",
-                      });
-                      navigate('/customer/profile-complete');
+      const result = await signup(data.email, data.password, userData);
+
+      if (result.success) {
+        toast({
+          title: "Cadastro realizado!",
+          description: result.requiresConfirmation
+            ? "Verifique seu email para confirmar a conta."
+            : "Complete seu perfil para ter acesso completo à plataforma.",
+        });
+
+        if (result.redirectPath) {
+          navigate(result.redirectPath);
+        } else {
+          navigate('/customer/profile-complete');
+        }
       } else {
-        toast({ 
-          variant: "destructive", 
-          title: "Erro no cadastro", 
-          description: "Verifique os dados e tente novamente." 
+        toast({
+          variant: "destructive",
+          title: "Erro no cadastro",
+          description: "Verifique os dados e tente novamente."
         });
       }
       
@@ -235,14 +242,18 @@ const ClientRegister = () => {
     setIsLoading(true);
     
     try {
-      const success = await login(data.email, data.password);
-      
-      if (success) {
+      const result = await login(data.email, data.password);
+
+      if (result.success) {
         toast({
           title: "Login realizado!",
           description: "Bem-vindo de volta!",
         });
-        navigate('/customer/dashboard');
+        if (result.redirectPath) {
+          navigate(result.redirectPath, { replace: true });
+        } else {
+          navigate('/customer/dashboard');
+        }
       } else {
         toast({
           variant: "destructive",

@@ -84,15 +84,27 @@ const UnifiedLogin = () => {
     
     try {
       console.log('🔐 Tentando fazer login...', data.email);
-      const success = await login(data.email, data.password);
-      
-      if (success) {
+      const result = await login(data.email, data.password);
+
+      if (result.success) {
         toast({
           title: "Login realizado com sucesso!",
           description: "Redirecionando para o dashboard...",
         });
         console.log('✅ Login bem-sucedido, aguardando redirecionamento automático...');
-        // O useEffect irá cuidar do redirecionamento automático
+
+        const redirectPaths = {
+          customer: '/cliente/dashboard',
+          technician: '/tecnico/dashboard',
+          company: '/loja/dashboard',
+          admin: '/admin/dashboard'
+        } as const;
+
+        const redirectTarget = result.redirectPath || (result.userType ? redirectPaths[result.userType] : null);
+
+        if (redirectTarget) {
+          navigate(redirectTarget, { replace: true });
+        }
       }
       
     } catch (error) {

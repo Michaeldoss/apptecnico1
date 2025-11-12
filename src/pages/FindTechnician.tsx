@@ -121,7 +121,7 @@ const FindTechnician = () => {
       {/* Header */}
       <header className="bg-white text-[#1f2937] section-padding pt-24 border-b border-gray-200">
         <div className="container-instalei">
-          <h1 className="text-4xl md:text-5xl font-bold mb-instalei-sm text-[#2563eb]">Encontre Técnicos Especializados na Instalei</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-instalei-sm text-[#13294b]">Encontre Técnicos Especializados na Instalei</h1>
           <p className="text-xl mb-instalei-lg text-[#1f2937]">Localize profissionais qualificados para seus equipamentos</p>
           
           {/* Search Filters */}
@@ -201,7 +201,7 @@ const FindTechnician = () => {
                       <CardHeader>
                         <div className="flex justify-between items-start">
                           <div>
-                            <CardTitle className="text-[#2563eb]">{selectedTechnician.name}</CardTitle>
+                            <CardTitle className="text-[#13294b]">{selectedTechnician.name}</CardTitle>
                             <CardDescription className="flex items-center mt-1">
                               <MapPin className="h-4 w-4 mr-1" />
                               {selectedTechnician.location}
@@ -227,7 +227,7 @@ const FindTechnician = () => {
                       </CardContent>
                       <CardFooter className="flex flex-col gap-2">
                         <Button 
-                          className="w-full bg-[#2563eb] hover:bg-[#1e40af]" 
+                          className="w-full bg-[#ff6b2c] hover:bg-[#f2551a]"
                           onClick={() => handleContactRequest(selectedTechnician.id)}
                         >
                           Solicitar Serviço
@@ -301,7 +301,7 @@ const FindTechnician = () => {
                       <CardHeader>
                         <div className="flex justify-between items-start">
                           <div>
-                            <CardTitle className="text-[#2563eb]">{selectedTechnician.name}</CardTitle>
+                            <CardTitle className="text-[#13294b]">{selectedTechnician.name}</CardTitle>
                             <CardDescription className="flex items-center mt-1">
                               <MapPin className="h-4 w-4 mr-1" />
                               {selectedTechnician.location}
@@ -332,7 +332,7 @@ const FindTechnician = () => {
                       </CardContent>
                       <CardFooter className="flex flex-col gap-2">
                         <Button 
-                          className="w-full bg-[#2563eb] hover:bg-[#1e40af]" 
+                          className="w-full bg-[#ff6b2c] hover:bg-[#f2551a]"
                           onClick={() => handleContactRequest(selectedTechnician.id)}
                         >
                           Solicitar Serviço
@@ -416,33 +416,33 @@ const FindTechnician = () => {
                 <Card className="mt-4">
                   <CardHeader className="pb-2">
                     <div className="flex items-center">
-                      <AlertCircle className="h-5 w-5 mr-2 text-[#2563eb]" />
-                      <CardTitle className="text-lg text-[#2563eb]">Como funciona</CardTitle>
+                      <AlertCircle className="h-5 w-5 mr-2 text-[#ff6b2c]" />
+                      <CardTitle className="text-lg text-[#13294b]">Como funciona</CardTitle>
                     </div>
                   </CardHeader>
                   <CardContent>
                     <ul className="text-sm space-y-2">
                       <li className="flex gap-2">
-                        <span className="text-[#2563eb] font-bold">1.</span>
+                        <span className="text-[#ff6b2c] font-bold">1.</span>
                         <span className="text-gray-700">Encontre um técnico especializado em seu tipo de equipamento</span>
                       </li>
                       <li className="flex gap-2">
-                        <span className="text-[#2563eb] font-bold">2.</span>
+                        <span className="text-[#ff6b2c] font-bold">2.</span>
                         <span className="text-gray-700">Verifique suas especialidades e disponibilidade</span>
                       </li>
                       <li className="flex gap-2">
-                        <span className="text-[#2563eb] font-bold">3.</span>
+                        <span className="text-[#ff6b2c] font-bold">3.</span>
                         <span className="text-gray-700">Solicite um serviço diretamente pela plataforma</span>
                       </li>
                       <li className="flex gap-2">
-                        <span className="text-[#2563eb] font-bold">4.</span>
+                        <span className="text-[#ff6b2c] font-bold">4.</span>
                         <span className="text-gray-700">Toda comunicação acontece dentro do aplicativo</span>
                       </li>
                     </ul>
                   </CardContent>
                   <CardFooter>
                     <Link to="/register" className="w-full">
-                      <Button variant="outline" className="w-full border-[#2563eb] text-[#2563eb] hover:bg-[#2563eb] hover:text-white">
+                      <Button variant="outline" className="w-full border-[#13294b] text-[#13294b] hover:bg-[#13294b] hover:text-white">
                         Cadastre-se para solicitar serviços
                         <ArrowRight className="ml-2 h-4 w-4" />
                       </Button>
@@ -458,12 +458,12 @@ const FindTechnician = () => {
               {filteredTechnicians.map((technician) => (
                 <Card 
                   key={technician.id} 
-                  className={`cursor-pointer transition-all hover:shadow-lg ${selectedTechnician?.id === technician.id ? 'ring-2 ring-[#2563eb]' : ''}`}
+                  className={`cursor-pointer transition-all hover:shadow-lg ${selectedTechnician?.id === technician.id ? 'ring-2 ring-[#ff6b2c]' : ''}`}
                   onClick={() => setSelectedTechnician(technician)}
                 >
                   <CardHeader className="pb-2">
                     <div className="flex justify-between">
-                      <CardTitle className="text-[#2563eb]">{technician.name}</CardTitle>
+                      <CardTitle className="text-[#13294b]">{technician.name}</CardTitle>
                       <div className="flex items-center">
                         <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                         <span className="ml-1 font-medium">{technician.rating}</span>
@@ -487,7 +487,7 @@ const FindTechnician = () => {
                   </CardContent>
                   <CardFooter className="flex flex-col gap-2">
                     <Button 
-                      className="w-full bg-[#2563eb] hover:bg-[#1e40af]" 
+                      className="w-full bg-[#ff6b2c] hover:bg-[#f2551a]"
                       onClick={(e) => {
                         e.stopPropagation();
                         handleContactRequest(technician.id);

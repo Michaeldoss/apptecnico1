@@ -163,8 +163,8 @@ const Store = () => {
     <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
       <main className="flex-grow">
-        {/* Hero section - azul #2563eb */}
-        <section className="bg-gradient-to-br from-[#2563eb] to-[#1e40af] text-white py-8 md:py-12">
+        {/* Hero section - azul #13294b */}
+        <section className="bg-gradient-to-br from-[#13294b] to-[#1f3d66] text-white py-8 md:py-12">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
               <h1 className={cn(
@@ -195,7 +195,7 @@ const Store = () => {
                 <Button 
                   onClick={handleSearch}
                   className={cn(
-                    "bg-white text-[#2563eb] hover:bg-white/90 font-bold font-inter",
+                    "bg-white text-[#13294b] hover:bg-white/90 font-bold font-inter",
                     isMobile ? "rounded-md" : "rounded-l-none"
                   )}
                 >
@@ -229,7 +229,7 @@ const Store = () => {
                     setSearchTerm('');
                     setShowSearchResults(false);
                   }}
-                  className="text-[#2563eb] border-[#2563eb] hover:bg-[#2563eb] hover:text-white font-inter"
+                  className="text-[#13294b] border-[#13294b] hover:bg-[#13294b] hover:text-white font-inter"
                 >
                   Limpar Busca
                 </Button>
@@ -250,7 +250,7 @@ const Store = () => {
                       setSearchTerm('');
                       setShowSearchResults(false);
                     }}
-                    className="text-[#2563eb] border-[#2563eb] hover:bg-[#2563eb] hover:text-white font-inter"
+                    className="text-[#13294b] border-[#13294b] hover:bg-[#13294b] hover:text-white font-inter"
                   >
                     Ver Todos os Produtos
                   </Button>
@@ -272,7 +272,7 @@ const Store = () => {
                     isMobile ? "text-xl" : "text-2xl"
                   )}>Ofertas e Promoções</h2>
                   <Link to="/store/promotions">
-                    <Button variant="ghost" className="text-[#2563eb] hover:text-[#1e40af] font-inter" size={isMobile ? "sm" : "default"}>
+                    <Button variant="ghost" className="text-[#13294b] hover:text-[#ff6b2c] font-inter" size={isMobile ? "sm" : "default"}>
                       Ver todas <ArrowRight className="ml-1 h-4 w-4" />
                     </Button>
                   </Link>
@@ -306,7 +306,7 @@ const Store = () => {
                                 "absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end",
                                 isMobile ? "p-4" : "p-6"
                               )}>
-                                <Badge variant="secondary" className="w-fit mb-2 bg-[#2563eb] text-white font-inter">Promoção</Badge>
+                                <Badge variant="secondary" className="w-fit mb-2 bg-[#13294b] text-white font-inter">Promoção</Badge>
                                 <h3 className={cn(
                                   "font-bold text-white font-inter drop-shadow-lg",
                                   isMobile ? "text-lg" : "text-xl"
@@ -315,7 +315,7 @@ const Store = () => {
                                   "text-white/80 mt-2 font-inter drop-shadow-md",
                                   isMobile ? "text-xs" : "text-sm"
                                 )}>{promo.description}</p>
-                                <Button variant="secondary" className="w-fit mt-4 bg-white text-[#2563eb] hover:bg-white/90 font-inter" size={isMobile ? "sm" : "default"}>
+                                <Button variant="secondary" className="w-fit mt-4 bg-white text-[#13294b] hover:text-[#ff6b2c] hover:bg-white/90 font-inter" size={isMobile ? "sm" : "default"}>
                                   Ver Detalhes <ArrowRight className="ml-1 h-4 w-4" />
                                 </Button>
                               </div>
@@ -326,8 +326,8 @@ const Store = () => {
                     ))}
                   </CarouselContent>
                   <div className="flex justify-center mt-4 gap-2">
-                    <CarouselPrevious className="static transform-none mx-0 bg-white/80 backdrop-blur-sm border-[#2563eb]" />
-                    <CarouselNext className="static transform-none mx-0 bg-white/80 backdrop-blur-sm border-[#2563eb]" />
+                    <CarouselPrevious className="static transform-none mx-0 bg-white/80 backdrop-blur-sm border-[#13294b]" />
+                    <CarouselNext className="static transform-none mx-0 bg-white/80 backdrop-blur-sm border-[#13294b]" />
                   </div>
                 </Carousel>
               </div>
@@ -342,7 +342,7 @@ const Store = () => {
                     isMobile ? "text-xl" : "text-2xl"
                   )}>Produtos em Destaque</h2>
                   <Link to="/store/products">
-                    <Button variant="ghost" className="text-[#2563eb] hover:text-[#1e40af] font-inter" size={isMobile ? "sm" : "default"}>
+                    <Button variant="ghost" className="text-[#13294b] hover:text-[#ff6b2c] font-inter" size={isMobile ? "sm" : "default"}>
                       Ver todos <ArrowRight className="ml-1 h-4 w-4" />
                     </Button>
                   </Link>
@@ -393,11 +393,11 @@ const Store = () => {
                             </div>
                             <div className="flex justify-between items-center">
                               <Badge variant="outline" className={cn(
-                                "border-[#2563eb] text-[#2563eb] font-inter",
+                                "border-[#13294b] text-[#13294b] font-inter",
                                 isMobile ? "text-xs" : ""
                               )}>{product.categoria}</Badge>
                               <p className={cn(
-                                "font-semibold text-right text-[#2563eb] font-inter",
+                                "font-semibold text-right text-[#13294b] font-inter",
                                 isMobile ? "text-sm" : ""
                               )}>
                                 {formatCurrency(product.preco)}
@@ -407,7 +407,7 @@ const Store = () => {
                           <CardFooter className={cn(
                             isMobile ? "p-3 pt-0" : ""
                           )}>
-                            <Button variant="secondary" className="w-full bg-[#2563eb] text-white hover:bg-[#1e40af] font-inter" size={isMobile ? "sm" : "default"}>
+                            <Button variant="secondary" className="w-full font-inter" size={isMobile ? "sm" : "default"}>
                               Ver Detalhes
                             </Button>
                           </CardFooter>
@@ -428,7 +428,7 @@ const Store = () => {
                     isMobile ? "text-xl" : "text-2xl"
                   )}>Empresas em Destaque</h2>
                   <Link to="/store/companies">
-                    <Button variant="ghost" className="text-[#2563eb] hover:text-[#1e40af] font-inter" size={isMobile ? "sm" : "default"}>
+                    <Button variant="ghost" className="text-[#13294b] hover:text-[#ff6b2c] font-inter" size={isMobile ? "sm" : "default"}>
                       Ver todas <ArrowRight className="ml-1 h-4 w-4" />
                     </Button>
                   </Link>
@@ -452,7 +452,7 @@ const Store = () => {
                             isMobile ? "p-4" : ""
                           )}>
                             <div className="flex items-center gap-3">
-                              <div className="h-12 w-12 rounded-full bg-[#2563eb]/10 flex items-center justify-center overflow-hidden">
+                              <div className="h-12 w-12 rounded-full bg-[#13294b]/10 flex items-center justify-center overflow-hidden">
                                 <img 
                                   src={company.image}
                                   alt={company.name}
@@ -464,7 +464,7 @@ const Store = () => {
                                   "text-gray-900 font-inter",
                                   isMobile ? "text-base" : "text-base"
                                 )}>{company.name}</CardTitle>
-                                <div className="flex items-center text-sm text-[#2563eb]">
+                                <div className="flex items-center text-sm text-[#13294b]">
                                   <Star className="h-3 w-3 fill-current mr-1" />
                                   <span className="font-inter">{company.rating}</span>
                                 </div>
@@ -483,7 +483,7 @@ const Store = () => {
                           <CardFooter className={cn(
                             isMobile ? "p-4 pt-0" : ""
                           )}>
-                            <Button variant="outline" className="w-full text-[#2563eb] border-[#2563eb] hover:bg-[#2563eb] hover:text-white font-inter" size={isMobile ? "sm" : "default"}>
+                            <Button variant="outline" className="w-full text-[#13294b] border-[#13294b] hover:bg-[#13294b] hover:text-white font-inter" size={isMobile ? "sm" : "default"}>
                               Visitar Loja
                             </Button>
                           </CardFooter>
@@ -523,7 +523,7 @@ const Store = () => {
                     Acesse nosso diretório completo de lojas especializadas em equipamentos e peças para impressão
                   </p>
                   <Link to="/store/companies">
-                    <Button size={isMobile ? "default" : "lg"} className="gap-2 bg-[#2563eb] hover:bg-[#1e40af] text-white font-inter">
+                    <Button size={isMobile ? "default" : "lg"} className="gap-2 bg-[#ff6b2c] hover:bg-[#f2551a] text-white font-inter">
                       Ver Todas as Lojas <StoreIcon className="h-4 w-4" />
                     </Button>
                   </Link>

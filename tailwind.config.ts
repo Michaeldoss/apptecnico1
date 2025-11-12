@@ -25,10 +25,11 @@ export default {
 				ring: 'hsl(var(--ring))',
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
-				primary: {
-					DEFAULT: 'hsl(var(--primary))',
-					foreground: 'hsl(var(--primary-foreground))'
-				},
+                                primary: {
+                                        DEFAULT: 'hsl(var(--primary))',
+                                        foreground: 'hsl(var(--primary-foreground))'
+                                },
+                                'primary-dark': 'hsl(var(--primary-dark))',
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary))',
 					foreground: 'hsl(var(--secondary-foreground))'
@@ -63,60 +64,34 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Paleta Instalei 2025 - Sistema Ultra Dinâmico e Futurista
-				'instalei-purple': {
-					50: 'hsl(270, 100%, 98%)',
-					100: 'hsl(270, 100%, 95%)',
-					200: 'hsl(270, 100%, 88%)',
-					300: 'hsl(270, 100%, 78%)',
-					400: 'hsl(270, 100%, 70%)',
-					500: 'hsl(270, 100%, 65%)', // Roxo neon principal
-					600: 'hsl(270, 100%, 58%)',
-					700: 'hsl(270, 100%, 50%)',
-					800: 'hsl(270, 100%, 42%)',
-					900: 'hsl(270, 100%, 35%)',
-					950: 'hsl(270, 100%, 25%)',
-				},
-				'instalei-blue': {
-					50: 'hsl(200, 100%, 98%)',
-					100: 'hsl(200, 100%, 93%)',
-					200: 'hsl(200, 100%, 85%)',
-					300: 'hsl(200, 100%, 75%)',
-					400: 'hsl(200, 100%, 65%)',
-					500: 'hsl(200, 100%, 55%)', // Azul elétrico principal
-					600: 'hsl(200, 100%, 48%)',
-					700: 'hsl(200, 100%, 40%)',
-					800: 'hsl(200, 100%, 32%)',
-					900: 'hsl(200, 100%, 25%)',
-					950: 'hsl(200, 100%, 18%)',
-				},
-				'instalei-cyan': {
-					50: 'hsl(180, 100%, 97%)',
-					100: 'hsl(180, 100%, 90%)',
-					200: 'hsl(180, 100%, 80%)',
-					300: 'hsl(180, 100%, 70%)',
-					400: 'hsl(180, 100%, 60%)',
-					500: 'hsl(180, 100%, 50%)', // Ciano vibrante
-					600: 'hsl(180, 100%, 40%)',
-					700: 'hsl(180, 100%, 30%)',
-					800: 'hsl(180, 100%, 20%)',
-					900: 'hsl(180, 100%, 15%)',
-					950: 'hsl(180, 100%, 10%)',
-				},
-				'instalei-pink': {
-					50: 'hsl(320, 100%, 98%)',
-					100: 'hsl(320, 100%, 92%)',
-					200: 'hsl(320, 100%, 85%)',
-					300: 'hsl(320, 100%, 78%)',
-					400: 'hsl(320, 100%, 72%)',
-					500: 'hsl(320, 100%, 70%)', // Rosa neon
-					600: 'hsl(320, 100%, 60%)',
-					700: 'hsl(320, 100%, 50%)',
-					800: 'hsl(320, 100%, 40%)',
-					900: 'hsl(320, 100%, 30%)',
-					950: 'hsl(320, 100%, 20%)',
-				},
-				// Sistema de cinzas modernos
+                                // Paleta Instalei 2025 - Azul noturno e Laranja assinatura
+                                'instalei-navy': {
+                                        50: '#f2f5fb',
+                                        100: '#e2e8f5',
+                                        200: '#c7d4eb',
+                                        300: '#9fb6d6',
+                                        400: '#5d82b1',
+                                        500: '#27497f',
+                                        600: '#1d3a67',
+                                        700: '#152c4f',
+                                        800: '#0f2140',
+                                        900: '#0a1831',
+                                        950: '#050c1c',
+                                },
+                                'instalei-orange': {
+                                        50: '#fff5ec',
+                                        100: '#ffe5d0',
+                                        200: '#ffc19b',
+                                        300: '#ffa168',
+                                        400: '#ff8744',
+                                        500: '#ff6b2c',
+                                        600: '#f2551a',
+                                        700: '#cc4314',
+                                        800: '#a33515',
+                                        900: '#7d2a12',
+                                        950: '#421408',
+                                },
+                                // Sistema de cinzas modernos
 				'instalei-gray': {
 					50: 'hsl(220, 15%, 98%)',
 					100: 'hsl(220, 15%, 95%)',

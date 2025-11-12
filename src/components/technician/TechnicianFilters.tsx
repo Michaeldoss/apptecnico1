@@ -151,9 +151,9 @@ const TechnicianFilters: React.FC<TechnicianFiltersProps> = ({
       
       {/* Search Button */}
       <div className="flex justify-center">
-        <Button 
+        <Button
           onClick={handleSearch}
-          className="bg-[#2563eb] text-white hover:bg-[#1e40af] font-semibold px-8 py-2"
+          className="bg-[#ff6b2c] text-white hover:bg-[#f2551a] font-semibold px-8 py-2"
         >
           <Search className="h-4 w-4 mr-2" />
           Pesquisar Técnicos
