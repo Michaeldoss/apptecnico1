@@ -67,6 +67,7 @@ import TechnicianSchedule from '@/pages/technician/Schedule';
 import TechnicianRegister from '@/pages/technician/Register';
 import ClientRegister from '@/pages/ClientRegister';
 import StoreRegister from '@/pages/StoreRegister';
+import SimulationDemo from '@/pages/technician/SimulationDemo';
 
 // Store pages
 import CompanyDashboard from '@/pages/store/CompanyDashboard';
@@ -401,6 +402,11 @@ function App() {
               <Route path="/tecnico/agenda" element={
                 <ProtectedRoute userType="technician">
                   <TechnicianSchedule />
+                </ProtectedRoute>
+              } />
+              <Route path="/tecnico/simulacao" element={
+                <ProtectedRoute userType="technician">
+                  <SimulationDemo />
                 </ProtectedRoute>
               } />
               <Route path="/tecnico/schedule" element={
