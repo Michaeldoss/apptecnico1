@@ -164,7 +164,7 @@ const Store = () => {
       <Navbar />
       <main className="flex-grow">
         {/* Hero section - azul #13294b */}
-        <section className="bg-gradient-to-br from-[#13294b] to-[#1f3d66] text-white py-8 md:py-12">
+        <section className="bg-primary text-white py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
               <h1 className={cn(

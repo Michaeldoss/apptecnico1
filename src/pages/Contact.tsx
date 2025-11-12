@@ -35,7 +35,7 @@ const Contact = () => {
       <Navbar />
       
       {/* Header com gradiente Instalei */}
-      <div className="bg-gradient-to-br from-instalei-purple-500 via-instalei-purple-600 to-instalei-purple-700 pt-24 pb-instalei-xl">
+      <div className="bg-primary text-white py-20">
         <div className="container-instalei">
           <div className="text-center">
             <h1 className="text-5xl md:text-6xl font-bold text-white mb-instalei-md font-inter">
