@@ -152,7 +152,7 @@
     @apply font-bold;
     font-weight: 700;
     letter-spacing: -0.03em;
-    color: hsl(var(--foreground));
+    color: inherit;
     margin-bottom: 24px;
     line-height: 1.1;
     font-family: 'Inter', sans-serif;
@@ -162,7 +162,7 @@
     @apply font-semibold;
     font-weight: 600;
     letter-spacing: -0.02em;
-    color: hsl(var(--foreground));
+    color: inherit;
     margin-bottom: 20px;
     line-height: 1.2;
     font-family: 'Inter', sans-serif;
@@ -172,7 +172,7 @@
     @apply font-medium;
     font-weight: 500;
     letter-spacing: -0.01em;
-    color: hsl(var(--foreground));
+    color: inherit;
     margin-bottom: 16px;
     line-height: 1.3;
     font-family: 'Inter', sans-serif;
@@ -180,7 +180,7 @@
 
   p, span, div {
     font-weight: 400;
-    color: hsl(var(--muted-foreground));
+    color: inherit;
     line-height: 1.6;
     margin-bottom: 16px;
     font-family: 'Inter', sans-serif;
