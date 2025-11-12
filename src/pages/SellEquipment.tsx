@@ -82,13 +82,8 @@ const SellEquipment = () => {
       
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="bg-gradient-to-br from-primary via-primary-dark to-sidebar-background text-white py-16 relative overflow-hidden">
-          {/* Elementos decorativos de fundo */}
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-accent/20"></div>
-          <div className="absolute top-10 left-10 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
-          <div className="absolute bottom-10 right-10 w-40 h-40 bg-accent/10 rounded-full blur-2xl"></div>
-          
-          <div className="container mx-auto px-4 relative z-10">
+        <section className="bg-primary text-white py-16">
+          <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
               <h1 className="text-4xl md:text-5xl font-bold mb-6 text-white drop-shadow-lg">
                 Vender Equipamento
