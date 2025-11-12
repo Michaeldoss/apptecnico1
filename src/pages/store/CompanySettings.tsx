@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from '@/hooks/use-toast';
+import { WhatsAppConfig } from '@/components/technician/WhatsAppConfig';
 import { 
   Settings, 
   ArrowLeft, 
@@ -22,7 +23,8 @@ import {
   Users,
   Shield,
   Palette,
-  Globe
+  Globe,
+  MessageCircle
 } from 'lucide-react';
 
 const CompanySettings = () => {
@@ -65,6 +67,7 @@ const CompanySettings = () => {
           <Tabs defaultValue="general">
             <TabsList className="w-full mb-6">
               <TabsTrigger value="general">Geral</TabsTrigger>
+              <TabsTrigger value="whatsapp">WhatsApp</TabsTrigger>
               <TabsTrigger value="notifications">Notificações</TabsTrigger>
               <TabsTrigger value="privacy">Privacidade</TabsTrigger>
               <TabsTrigger value="billing">Faturamento</TabsTrigger>
@@ -180,6 +183,10 @@ const CompanySettings = () => {
                   </div>
                 </div>
               </form>
+            </TabsContent>
+            
+            <TabsContent value="whatsapp">
+              <WhatsAppConfig />
             </TabsContent>
             
             <TabsContent value="notifications">
