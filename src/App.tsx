@@ -113,6 +113,7 @@ function App() {
               <Route path="/tecnico/register" element={<TechnicianRegister />} />
               <Route path="/loja/register" element={<StoreRegister />} />
               <Route path="/find-technician" element={<FindTechnician />} />
+              <Route path="/encontrar-tecnico" element={<FindTechnician />} />
               <Route path="/store" element={<Store />} />
               <Route path="/store/product/:codigo" element={<ProductDetails />} />
               <Route path="/marketplace" element={<Marketplace />} />
