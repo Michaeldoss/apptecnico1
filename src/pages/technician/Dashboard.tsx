@@ -27,33 +27,43 @@ const TechnicianDashboard = () => {
 
   return (
     <TechnicianLayout title="Painel de Controle">
-      <div className="space-y-6 font-inter">
+      <div className="space-y-6 font-inter animate-fade-in">
         {/* Primeira linha - Resumo Financeiro */}
-        <FinancialSummary 
-          stats={stats} 
-          weeklyEarnings={weeklyEarnings}
-        />
+        <div className="animate-scale-in">
+          <FinancialSummary 
+            stats={stats} 
+            weeklyEarnings={weeklyEarnings}
+          />
+        </div>
 
         {/* Segunda linha - Agenda e Chamados */}
-        <div className="grid lg:grid-cols-2 gap-6 h-[400px]">
-          <WeeklyAgenda 
-            weeklySchedule={weeklySchedule}
-            totalConflicts={totalConflicts}
-          />
-          <ServiceMetricsComponent metrics={serviceMetrics} />
+        <div className="grid lg:grid-cols-2 gap-4">
+          <div className="animate-fade-in" style={{ animationDelay: '0.1s' }}>
+            <WeeklyAgenda 
+              weeklySchedule={weeklySchedule}
+              totalConflicts={totalConflicts}
+            />
+          </div>
+          <div className="animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <ServiceMetricsComponent metrics={serviceMetrics} />
+          </div>
         </div>
 
         {/* Terceira linha - KPIs e Estoque */}
-        <div className="grid lg:grid-cols-2 gap-6 h-[400px]">
-          <KPIMetricsComponent metrics={kpiMetrics} />
-          <StockControl 
-            stockItems={stockItems} 
-            urgentItems={urgentStockItems}
-          />
+        <div className="grid lg:grid-cols-2 gap-4">
+          <div className="animate-fade-in" style={{ animationDelay: '0.3s' }}>
+            <KPIMetricsComponent metrics={kpiMetrics} />
+          </div>
+          <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
+            <StockControl 
+              stockItems={stockItems} 
+              urgentItems={urgentStockItems}
+            />
+          </div>
         </div>
 
         {/* Quarta linha - Alertas */}
-        <div className="grid lg:grid-cols-1 gap-6 h-[400px]">
+        <div className="animate-fade-in" style={{ animationDelay: '0.5s' }}>
           <AlertsPanel 
             alerts={alerts}
             urgentAlerts={urgentAlerts}
@@ -61,7 +71,9 @@ const TechnicianDashboard = () => {
         </div>
 
         {/* Quinta linha - Acessos Rápidos */}
-        <QuickActions />
+        <div className="animate-fade-in" style={{ animationDelay: '0.6s' }}>
+          <QuickActions />
+        </div>
       </div>
     </TechnicianLayout>
   );

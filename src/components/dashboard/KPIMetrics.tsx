@@ -53,13 +53,15 @@ const KPIMetricsComponent: React.FC<KPIMetricsProps> = ({ metrics }) => {
   ];
 
   return (
-    <Card className="h-full">
+    <Card className="h-full bg-card/50 backdrop-blur-sm border-border/50 hover:shadow-xl transition-all duration-300">
       <CardHeader className="pb-4">
-        <CardTitle className="flex items-center gap-3 text-lg font-semibold">
-          <div className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center">
-            <BarChart3 className="h-4 w-4 text-indigo-600" />
+        <CardTitle className="flex items-center gap-3 text-lg font-bold">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center shadow-lg">
+            <BarChart3 className="h-5 w-5 text-white" />
           </div>
-          Indicadores de Performance
+          <span className="bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">
+            Indicadores de Performance
+          </span>
         </CardTitle>
       </CardHeader>
       <CardContent className="pt-0">

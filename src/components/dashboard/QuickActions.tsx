@@ -68,13 +68,15 @@ const QuickActions: React.FC = () => {
   ];
 
   return (
-    <Card>
+    <Card className="bg-card/50 backdrop-blur-sm border-border/50 hover:shadow-xl transition-all duration-300">
       <CardHeader className="pb-4">
-        <CardTitle className="flex items-center gap-3 text-lg font-semibold">
-          <div className="w-8 h-8 rounded-lg bg-yellow-100 flex items-center justify-center">
-            <Zap className="h-4 w-4 text-yellow-600" />
+        <CardTitle className="flex items-center gap-3 text-lg font-bold">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center shadow-lg">
+            <Zap className="h-5 w-5 text-white" />
           </div>
-          Acessos Rápidos
+          <span className="bg-gradient-to-r from-amber-600 to-yellow-600 bg-clip-text text-transparent">
+            Acessos Rápidos
+          </span>
         </CardTitle>
       </CardHeader>
       <CardContent className="pt-0">
