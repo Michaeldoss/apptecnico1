@@ -102,7 +102,47 @@ const TechnicianProfile = () => {
     reviewCount: 36 
   };
 
-  // Buscar endereço pelo CEP
+  // Formatar CEP
+  const formatCep = (value: string) => {
+    const cleanValue = value.replace(/\D/g, '');
+    if (cleanValue.length <= 5) {
+      return cleanValue;
+    }
+    return `${cleanValue.slice(0, 5)}-${cleanValue.slice(5, 8)}`;
+  };
+
+  // Buscar endereço pelo CEP automaticamente
+  const handleCepChange = async (cep: string) => {
+    const formattedCep = formatCep(cep);
+    setMainAddress(prev => ({ ...prev, cep: formattedCep }));
+    
+    const cleanCep = cep.replace(/\D/g, '');
+    if (cleanCep.length === 8) {
+      const addressData = await fetchAddress(cleanCep);
+      if (addressData) {
+        setMainAddress(prev => ({
+          ...prev,
+          cep: formattedCep,
+          street: addressData.street,
+          neighborhood: addressData.neighborhood,
+          city: addressData.city,
+          state: addressData.state
+        }));
+        toast({
+          title: "✅ Endereço encontrado!",
+          description: `${addressData.street}, ${addressData.neighborhood} - ${addressData.city}/${addressData.state}`,
+        });
+      } else if (cepError) {
+        toast({
+          title: "❌ Erro ao buscar CEP",
+          description: cepError,
+          variant: "destructive"
+        });
+      }
+    }
+  };
+
+  // Buscar endereço pelo CEP (mantido para compatibilidade)
   const handleCepBlur = async () => {
     if (mainAddress.cep.length === 8 || mainAddress.cep.replace(/\D/g, '').length === 8) {
       const addressData = await fetchAddress(mainAddress.cep);
@@ -128,7 +168,38 @@ const TechnicianProfile = () => {
     }
   };
 
-  // Buscar endereço de entrega pelo CEP
+  // Buscar endereço de entrega pelo CEP automaticamente
+  const handleDeliveryCepChange = async (id: string, cep: string) => {
+    const formattedCep = formatCep(cep);
+    setDeliveryAddresses(prev => prev.map(addr => 
+      addr.id === id ? { ...addr, cep: formattedCep } : addr
+    ));
+    
+    const cleanCep = cep.replace(/\D/g, '');
+    if (cleanCep.length === 8) {
+      const addressData = await fetchAddress(cleanCep);
+      if (addressData) {
+        setDeliveryAddresses(prev => prev.map(addr => 
+          addr.id === id 
+            ? {
+                ...addr,
+                cep: formattedCep,
+                street: addressData.street,
+                neighborhood: addressData.neighborhood,
+                city: addressData.city,
+                state: addressData.state
+              }
+            : addr
+        ));
+        toast({
+          title: "✅ Endereço encontrado!",
+          description: `${addressData.street}, ${addressData.neighborhood} - ${addressData.city}/${addressData.state}`,
+        });
+      }
+    }
+  };
+
+  // Buscar endereço de entrega pelo CEP (mantido para compatibilidade)
   const handleDeliveryCepBlur = async (id: string, cep: string) => {
     if (cep.length === 8 || cep.replace(/\D/g, '').length === 8) {
       const addressData = await fetchAddress(cep);
@@ -527,17 +598,26 @@ const TechnicianProfile = () => {
                   <CardContent className="space-y-6 p-6">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                       <div className="space-y-2">
-                        <Label htmlFor="cep" className="text-gray-800 font-semibold">CEP</Label>
+                        <Label htmlFor="cep" className="text-gray-800 font-semibold flex items-center gap-2">
+                          CEP
+                          {isLoadingCep && (
+                            <span className="text-xs text-blue-600 animate-pulse">Buscando...</span>
+                          )}
+                        </Label>
                         <Input 
                           id="cep" 
                           value={mainAddress.cep}
-                          onChange={(e) => setMainAddress(prev => ({ ...prev, cep: e.target.value }))}
-                          onBlur={handleCepBlur}
+                          onChange={(e) => handleCepChange(e.target.value)}
                           placeholder="00000-000"
                           maxLength={9}
-                          className="border-2 border-gray-300 focus:border-tech-primary focus:ring-tech-primary"
+                          className="border-2 border-gray-300 focus:border-tech-primary focus:ring-tech-primary font-mono"
                         />
-                        {isLoadingCep && <p className="text-sm text-blue-600">Buscando endereço...</p>}
+                        {cepError && (
+                          <p className="text-sm text-destructive">{cepError}</p>
+                        )}
+                        <p className="text-xs text-muted-foreground">
+                          Digite o CEP para preencher automaticamente
+                        </p>
                       </div>
                       
                       <div className="space-y-2 md:col-span-2">
@@ -679,18 +759,23 @@ const TechnicianProfile = () => {
 
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div className="space-y-2">
-                              <Label htmlFor={`del-cep-${address.id}`} className="text-gray-800 font-semibold">CEP</Label>
+                              <Label htmlFor={`del-cep-${address.id}`} className="text-gray-800 font-semibold flex items-center gap-2">
+                                CEP
+                                {isLoadingCep && (
+                                  <span className="text-xs text-blue-600 animate-pulse">Buscando...</span>
+                                )}
+                              </Label>
                               <Input 
                                 id={`del-cep-${address.id}`}
                                 value={address.cep}
-                                onChange={(e) => setDeliveryAddresses(prev => prev.map(addr => 
-                                  addr.id === address.id ? { ...addr, cep: e.target.value } : addr
-                                ))}
-                                onBlur={() => handleDeliveryCepBlur(address.id, address.cep)}
+                                onChange={(e) => handleDeliveryCepChange(address.id, e.target.value)}
                                 placeholder="00000-000"
                                 maxLength={9}
-                                className="border-2 border-gray-300 focus:border-tech-primary focus:ring-tech-primary"
+                                className="border-2 border-gray-300 focus:border-tech-primary focus:ring-tech-primary font-mono"
                               />
+                              <p className="text-xs text-muted-foreground">
+                                Digite o CEP para preencher automaticamente
+                              </p>
                             </div>
 
                             <div className="space-y-2 md:col-span-2">
