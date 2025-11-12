@@ -39,7 +39,7 @@ import {
   Filter
 } from 'lucide-react';
 import { useServiceOrders } from '@/hooks/useServiceOrders';
-import { ServiceOrderStatus } from '@/types/service-order';
+import { ServiceOrder, ServiceOrderStatus } from '@/types/service-order';
 import { formatCurrency } from '@/lib/format';
 import ServiceOrderForm from '@/components/service-orders/ServiceOrderForm';
 import ServiceOrderView from '@/components/service-orders/ServiceOrderView';
@@ -50,7 +50,10 @@ const TechnicianServiceOrders = () => {
     loading, 
     filters, 
     setFilters, 
-    createServiceOrder 
+    createServiceOrder,
+    updateServiceOrder,
+    shareViaWhatsApp,
+    shareViaEmail
   } = useServiceOrders();
   
   const [isCreating, setIsCreating] = useState(false);
@@ -108,6 +111,8 @@ const TechnicianServiceOrders = () => {
           order={order} 
           onBack={handleBackToList}
           onEdit={() => handleEditOrder(selectedOrderId)}
+          onShareWhatsApp={() => shareViaWhatsApp(order)}
+          onShareEmail={() => shareViaEmail(order)}
         />
       );
     }
@@ -115,10 +120,20 @@ const TechnicianServiceOrders = () => {
 
   if (viewMode === 'edit') {
     const order = selectedOrderId ? serviceOrders.find(o => o.id === selectedOrderId) : null;
+    
+    const handleSaveOrder = async (orderData: ServiceOrder) => {
+      if (order) {
+        await updateServiceOrder(order.id, orderData);
+      } else {
+        await createServiceOrder(orderData);
+      }
+      handleBackToList();
+    };
+    
     return (
       <ServiceOrderForm 
         order={order}
-        onSave={handleBackToList}
+        onSave={handleSaveOrder}
         onCancel={handleBackToList}
       />
     );
@@ -280,13 +295,13 @@ const TechnicianServiceOrders = () => {
                               <Edit className="h-4 w-4 mr-2" />
                               Editar
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => shareViaWhatsApp(order)}>
                               <Download className="h-4 w-4 mr-2" />
-                              Baixar PDF
+                              Enviar WhatsApp
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => shareViaEmail(order)}>
                               <Share2 className="h-4 w-4 mr-2" />
-                              Compartilhar
+                              Enviar E-mail
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>

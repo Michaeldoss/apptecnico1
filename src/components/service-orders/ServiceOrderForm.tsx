@@ -16,7 +16,7 @@ import TechnicianLayout from '@/components/layout/TechnicianLayout';
 
 interface ServiceOrderFormProps {
   order?: ServiceOrder;
-  onSave: (order: ServiceOrder) => void;
+  onSave: (order: ServiceOrder) => Promise<void>;
   onCancel: () => void;
 }
 
@@ -108,7 +108,7 @@ const ServiceOrderForm: React.FC<ServiceOrderFormProps> = ({ order, onSave, onCa
     }));
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const { subtotal, total } = calculateOrderTotals();
     
     const completeOrder: ServiceOrder = {
@@ -123,7 +123,7 @@ const ServiceOrderForm: React.FC<ServiceOrderFormProps> = ({ order, onSave, onCa
       ...formData
     } as ServiceOrder;
 
-    onSave(completeOrder);
+    await onSave(completeOrder);
   };
 
   return (

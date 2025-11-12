@@ -25,9 +25,17 @@ interface ServiceOrderViewProps {
   order: ServiceOrder;
   onBack: () => void;
   onEdit: () => void;
+  onShareWhatsApp?: () => void;
+  onShareEmail?: () => void;
 }
 
-const ServiceOrderView: React.FC<ServiceOrderViewProps> = ({ order, onBack, onEdit }) => {
+const ServiceOrderView: React.FC<ServiceOrderViewProps> = ({ 
+  order, 
+  onBack, 
+  onEdit,
+  onShareWhatsApp,
+  onShareEmail 
+}) => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'aberta': return 'bg-blue-100 text-blue-800';
@@ -78,14 +86,18 @@ const ServiceOrderView: React.FC<ServiceOrderViewProps> = ({ order, onBack, onEd
               <Edit className="h-4 w-4 mr-2" />
               Editar
             </Button>
-            <Button variant="outline">
-              <Download className="h-4 w-4 mr-2" />
-              PDF
-            </Button>
-            <Button variant="outline">
-              <Share2 className="h-4 w-4 mr-2" />
-              Compartilhar
-            </Button>
+            {onShareWhatsApp && (
+              <Button variant="outline" onClick={onShareWhatsApp}>
+                <Download className="h-4 w-4 mr-2" />
+                WhatsApp
+              </Button>
+            )}
+            {onShareEmail && (
+              <Button variant="outline" onClick={onShareEmail}>
+                <Share2 className="h-4 w-4 mr-2" />
+                E-mail
+              </Button>
+            )}
           </div>
         </div>
 
