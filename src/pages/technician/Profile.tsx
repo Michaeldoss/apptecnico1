@@ -18,6 +18,7 @@ import ImageUpload from '@/components/ui/image-upload';
 import FileUploadSection from '@/components/technician/FileUploadSection';
 import AppSettings from '@/components/technician/AppSettings';
 import ProfilePhotoUpload from '@/components/technician/ProfilePhotoUpload';
+import TechnicianExpensesConfig from '@/components/technician/TechnicianExpensesConfig';
 import { useViaCep } from '@/hooks/useViaCep';
 import { brazilianStates } from '@/types/technician';
 
@@ -478,40 +479,46 @@ const TechnicianProfile = () => {
         
         {/* Tabs */}
         <Tabs defaultValue="personal" className="w-full">
-          <TabsList className="grid w-full grid-cols-6 bg-gray-light border border-gray-border">
+          <TabsList className="grid w-full grid-cols-7 bg-muted border border-border">
             <TabsTrigger 
               value="personal" 
-              className="font-semibold text-gray-primary data-[state=active]:bg-tech-primary data-[state=active]:text-white"
+              className="font-semibold text-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
             >
               Pessoal
             </TabsTrigger>
             <TabsTrigger 
               value="professional"
-              className="font-semibold text-gray-primary data-[state=active]:bg-tech-primary data-[state=active]:text-white"
+              className="font-semibold text-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
             >
               Profissional
             </TabsTrigger>
             <TabsTrigger 
               value="pricing"
-              className="font-semibold text-gray-primary data-[state=active]:bg-tech-primary data-[state=active]:text-white"
+              className="font-semibold text-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
             >
               Preços
             </TabsTrigger>
             <TabsTrigger 
+              value="expenses"
+              className="font-semibold text-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+            >
+              Despesas
+            </TabsTrigger>
+            <TabsTrigger 
               value="files"
-              className="font-semibold text-gray-primary data-[state=active]:bg-tech-primary data-[state=active]:text-white"
+              className="font-semibold text-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
             >
               Arquivos
             </TabsTrigger>
             <TabsTrigger 
               value="settings"
-              className="font-semibold text-gray-primary data-[state=active]:bg-tech-primary data-[state=active]:text-white"
+              className="font-semibold text-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
             >
               Configurações
             </TabsTrigger>
             <TabsTrigger 
               value="photo"
-              className="font-semibold text-gray-primary data-[state=active]:bg-tech-primary data-[state=active]:text-white"
+              className="font-semibold text-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
             >
               Foto
             </TabsTrigger>
@@ -1207,6 +1214,10 @@ const TechnicianProfile = () => {
                 />
               </div>
             </div>
+          </TabsContent>
+
+          <TabsContent value="expenses" className="mt-6">
+            <TechnicianExpensesConfig />
           </TabsContent>
 
           <TabsContent value="files" className="mt-6">

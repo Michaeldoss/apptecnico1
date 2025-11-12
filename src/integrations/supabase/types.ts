@@ -339,6 +339,124 @@ export type Database = {
         }
         Relationships: []
       }
+      orcamentos: {
+        Row: {
+          cliente_id: string | null
+          created_at: string
+          data_aprovacao: string | null
+          data_validade: string | null
+          desconto_percentual: number | null
+          desconto_valor: number | null
+          descricao: string | null
+          despesas_extras: Json | null
+          dias_trabalho: number | null
+          distancia_km: number | null
+          horas_mao_obra: number | null
+          id: string
+          itens_pecas: Json | null
+          observacoes: string | null
+          ordem_servico_id: string | null
+          status: string | null
+          tecnico_id: string
+          titulo: string
+          updated_at: string
+          valor_alimentacao: number | null
+          valor_deslocamento: number | null
+          valor_hora_mao_obra: number | null
+          valor_hospedagem: number | null
+          valor_subtotal: number | null
+          valor_total: number | null
+          valor_total_despesas: number | null
+          valor_total_mao_obra: number | null
+          valor_total_pecas: number | null
+          valor_visita: number | null
+        }
+        Insert: {
+          cliente_id?: string | null
+          created_at?: string
+          data_aprovacao?: string | null
+          data_validade?: string | null
+          desconto_percentual?: number | null
+          desconto_valor?: number | null
+          descricao?: string | null
+          despesas_extras?: Json | null
+          dias_trabalho?: number | null
+          distancia_km?: number | null
+          horas_mao_obra?: number | null
+          id?: string
+          itens_pecas?: Json | null
+          observacoes?: string | null
+          ordem_servico_id?: string | null
+          status?: string | null
+          tecnico_id: string
+          titulo: string
+          updated_at?: string
+          valor_alimentacao?: number | null
+          valor_deslocamento?: number | null
+          valor_hora_mao_obra?: number | null
+          valor_hospedagem?: number | null
+          valor_subtotal?: number | null
+          valor_total?: number | null
+          valor_total_despesas?: number | null
+          valor_total_mao_obra?: number | null
+          valor_total_pecas?: number | null
+          valor_visita?: number | null
+        }
+        Update: {
+          cliente_id?: string | null
+          created_at?: string
+          data_aprovacao?: string | null
+          data_validade?: string | null
+          desconto_percentual?: number | null
+          desconto_valor?: number | null
+          descricao?: string | null
+          despesas_extras?: Json | null
+          dias_trabalho?: number | null
+          distancia_km?: number | null
+          horas_mao_obra?: number | null
+          id?: string
+          itens_pecas?: Json | null
+          observacoes?: string | null
+          ordem_servico_id?: string | null
+          status?: string | null
+          tecnico_id?: string
+          titulo?: string
+          updated_at?: string
+          valor_alimentacao?: number | null
+          valor_deslocamento?: number | null
+          valor_hora_mao_obra?: number | null
+          valor_hospedagem?: number | null
+          valor_subtotal?: number | null
+          valor_total?: number | null
+          valor_total_despesas?: number | null
+          valor_total_mao_obra?: number | null
+          valor_total_pecas?: number | null
+          valor_visita?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orcamentos_cliente_id_fkey"
+            columns: ["cliente_id"]
+            isOneToOne: false
+            referencedRelation: "clientes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orcamentos_ordem_servico_id_fkey"
+            columns: ["ordem_servico_id"]
+            isOneToOne: false
+            referencedRelation: "ordens_servico"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orcamentos_tecnico_id_fkey"
+            columns: ["tecnico_id"]
+            isOneToOne: false
+            referencedRelation: "tecnicos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ordens_servico: {
         Row: {
           avaliacao: number | null
@@ -815,6 +933,65 @@ export type Database = {
           },
         ]
       }
+      tecnico_despesas_config: {
+        Row: {
+          cobra_deslocamento_acima_km: number | null
+          created_at: string
+          despesas_extras: Json | null
+          id: string
+          raio_atendimento_km: number | null
+          tecnico_id: string
+          updated_at: string
+          valor_diaria_hospedagem: number | null
+          valor_estacionamento: number | null
+          valor_km_veiculo: number | null
+          valor_passagem_aviao: number | null
+          valor_passagem_onibus: number | null
+          valor_pedagio: number | null
+          valor_refeicao: number | null
+        }
+        Insert: {
+          cobra_deslocamento_acima_km?: number | null
+          created_at?: string
+          despesas_extras?: Json | null
+          id?: string
+          raio_atendimento_km?: number | null
+          tecnico_id: string
+          updated_at?: string
+          valor_diaria_hospedagem?: number | null
+          valor_estacionamento?: number | null
+          valor_km_veiculo?: number | null
+          valor_passagem_aviao?: number | null
+          valor_passagem_onibus?: number | null
+          valor_pedagio?: number | null
+          valor_refeicao?: number | null
+        }
+        Update: {
+          cobra_deslocamento_acima_km?: number | null
+          created_at?: string
+          despesas_extras?: Json | null
+          id?: string
+          raio_atendimento_km?: number | null
+          tecnico_id?: string
+          updated_at?: string
+          valor_diaria_hospedagem?: number | null
+          valor_estacionamento?: number | null
+          valor_km_veiculo?: number | null
+          valor_passagem_aviao?: number | null
+          valor_passagem_onibus?: number | null
+          valor_pedagio?: number | null
+          valor_refeicao?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tecnico_despesas_config_tecnico_id_fkey"
+            columns: ["tecnico_id"]
+            isOneToOne: true
+            referencedRelation: "tecnicos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tecnico_pagamento_config: {
         Row: {
           conta_verificada: boolean | null
@@ -1089,7 +1266,7 @@ export type Database = {
         Returns: Json
       }
       debug_auth_state: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: {
           auth_confirmed: boolean
           auth_user_email: string
@@ -1100,14 +1277,8 @@ export type Database = {
           usuarios_count: number
         }[]
       }
-      get_current_user_type: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      get_technician_customers: {
-        Args: { tech_id: string }
-        Returns: string[]
-      }
+      get_current_user_type: { Args: never; Returns: string }
+      get_technician_customers: { Args: { tech_id: string }; Returns: string[] }
       get_technician_service_orders: {
         Args: { tech_id: string }
         Returns: string[]
@@ -1119,22 +1290,10 @@ export type Database = {
         }
         Returns: boolean
       }
-      is_admin: {
-        Args: Record<PropertyKey, never>
-        Returns: boolean
-      }
-      is_company: {
-        Args: { user_id: string }
-        Returns: boolean
-      }
-      is_customer: {
-        Args: { user_id: string }
-        Returns: boolean
-      }
-      is_technician: {
-        Args: { user_id: string }
-        Returns: boolean
-      }
+      is_admin: { Args: never; Returns: boolean }
+      is_company: { Args: { user_id: string }; Returns: boolean }
+      is_customer: { Args: { user_id: string }; Returns: boolean }
+      is_technician: { Args: { user_id: string }; Returns: boolean }
       log_security_event: {
         Args: { details?: Json; event_type: string; user_id?: string }
         Returns: undefined
@@ -1152,10 +1311,7 @@ export type Database = {
         Args: { password: string }
         Returns: boolean
       }
-      validate_payment_amount: {
-        Args: { amount: number }
-        Returns: boolean
-      }
+      validate_payment_amount: { Args: { amount: number }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
