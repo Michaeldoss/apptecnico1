@@ -166,14 +166,20 @@ const TechnicianRegister = () => {
         type: 'technician'
       };
       
-      const success = await signup(data.email, data.password, technicianData);
-      
-      if (success) {
+      const result = await signup(data.email, data.password, technicianData);
+
+      if (result.success) {
         toast({
           title: "Conta criada com sucesso!",
-          description: "Faça login para acessar sua conta.",
+          description: result.requiresConfirmation
+            ? "Verifique seu email para confirmar a conta."
+            : "Faça login para acessar sua conta.",
         });
-        navigate('/login');
+        if (result.redirectPath) {
+          navigate(result.redirectPath);
+        } else {
+          navigate('/login');
+        }
       }
       
     } catch (error) {

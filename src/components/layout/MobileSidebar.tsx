@@ -33,8 +33,8 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isMenuOpen, toggleMenu, c
   const { logout, isAuthenticated, userType } = useAuth();
   const isMobile = useIsMobile();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     navigate('/');
   };
 
@@ -160,9 +160,9 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isMenuOpen, toggleMenu, c
         </div>
         
         <div className="pt-4 mt-6 border-t border-border">
-          <button 
+          <button
             onClick={() => {
-              handleLogout();
+              void handleLogout();
               closeMenu();
             }}
             className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm transition-all duration-300 hover:bg-destructive hover:shadow-lg hover:shadow-destructive/20 text-destructive-foreground hover:text-destructive-foreground w-full text-left font-semibold bg-destructive/90 shadow-md hover:scale-[1.02]"

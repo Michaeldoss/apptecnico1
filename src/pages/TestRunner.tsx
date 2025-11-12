@@ -38,7 +38,7 @@ const TestRunner = () => {
   const testUsers: TestUser[] = [
     {
       email: 'cliente@exemplo.com',
-      password: '123456',
+      password: 'Cliente!123',
       type: 'customer',
       nome: 'Cliente Teste',
       telefone: '11999999999',
@@ -50,7 +50,7 @@ const TestRunner = () => {
     },
     {
       email: 'tecnico@exemplo.com',
-      password: '123456',
+      password: 'Tecnico!123',
       type: 'technician',
       nome: 'Técnico Teste',
       telefone: '11888888888',
@@ -62,7 +62,7 @@ const TestRunner = () => {
     },
     {
       email: 'loja@exemplo.com',
-      password: '123456',
+      password: 'Loja!1234',
       type: 'company',
       nome: 'Loja Teste',
       telefone: '11777777777',
@@ -74,7 +74,7 @@ const TestRunner = () => {
     },
     {
       email: 'admin@exemplo.com',
-      password: '123456',
+      password: 'Admin!1234',
       type: 'admin',
       nome: 'Admin Teste',
       telefone: '11666666666'
@@ -134,8 +134,8 @@ const TestRunner = () => {
     addLog(`Iniciando cadastro para ${testUser.email} (${testUser.type})`);
     
     const result = await signup(testUser.email, testUser.password, testUser);
-    
-    if (!result) {
+
+    if (!result.success) {
       throw new Error('Cadastro falhou');
     }
 
@@ -171,23 +171,23 @@ const TestRunner = () => {
     await sleep(1000);
 
     const result = await login(testUser.email, testUser.password);
-    
-    if (!result) {
+
+    if (!result.success) {
       throw new Error('Login falhou');
     }
 
-    await sleep(2000);
+    if (result.userType && result.userType !== testUser.type) {
+      throw new Error(`Tipo de usuário incorreto. Esperado: ${testUser.type}, Atual: ${result.userType}`);
+    }
 
-    // Check if user is authenticated and has correct type
-    if (!user) {
+    await sleep(1000);
+
+    const { data: authUserResponse, error: authUserError } = await supabase.auth.getUser();
+    if (authUserError || !authUserResponse.user) {
       throw new Error('Usuário não está autenticado após login');
     }
 
-    if (userType !== testUser.type) {
-      throw new Error(`Tipo de usuário incorreto. Esperado: ${testUser.type}, Atual: ${userType}`);
-    }
-
-    addLog(`✅ Login bem-sucedido para ${testUser.email} (${userType})`, 'success');
+    addLog(`✅ Login bem-sucedido para ${testUser.email} (${result.userType ?? 'tipo não identificado'})`, 'success');
     return true;
   };
 
