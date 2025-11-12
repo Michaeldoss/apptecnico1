@@ -72,8 +72,8 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
   // Usar rotas em português que estão funcionando
   const pathPrefix = '/tecnico';
   
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
   };
 
   const toggleMenu = () => {
@@ -189,9 +189,9 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
           </div>
           
           <div className="pt-6 mt-6 border-t border-border">
-            <button 
+            <button
               onClick={() => {
-                handleLogout();
+                void handleLogout();
                 closeMenu();
               }}
               className="flex items-center gap-3 rounded-lg px-4 py-3 text-base transition-all duration-200 hover:bg-muted text-foreground w-full text-left font-inter font-medium"

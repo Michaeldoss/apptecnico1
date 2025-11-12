@@ -1,56 +1,17 @@
-import React, { useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Technician } from '@/types/technician';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, Star, MapPin } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 
 // Fix for default markers in leaflet
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
   iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png'
 });
-
-interface MapUpdaterProps {
-  technicians: Technician[];
-  userLocation: [number, number] | null;
-}
-
-// Component to update map bounds
-const MapUpdater: React.FC<MapUpdaterProps> = ({ technicians, userLocation }) => {
-  const map = useMap();
-
-  useEffect(() => {
-    if (technicians.length === 0) return;
-
-    const bounds = L.latLngBounds([]);
-    
-    // Add technician coordinates to bounds
-    technicians.forEach(tech => {
-      if (tech.coordinates) {
-        bounds.extend([tech.coordinates[1], tech.coordinates[0]]);
-      }
-    });
-
-    // Add user location to bounds if available
-    if (userLocation) {
-      bounds.extend(userLocation);
-    }
-
-    // If we have bounds, fit the map to them
-    if (bounds.isValid()) {
-      map.fitBounds(bounds, { padding: [20, 20] });
-    } else {
-      // Default to São Paulo if no valid bounds
-      map.setView([-23.5505, -46.6333], 10);
-    }
-  }, [map, technicians, userLocation]);
-
-  return null;
-};
 
 interface LeafletMapProps {
   technicians: Technician[];
@@ -58,149 +19,190 @@ interface LeafletMapProps {
   setSelectedTechnician: (technician: Technician | null) => void;
 }
 
+const defaultCenter: [number, number] = [-23.5505, -46.6333];
+
+const formatCurrency = (value: number | undefined) => {
+  if (typeof value !== 'number') return '';
+  return value.toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+    minimumFractionDigits: 0
+  });
+};
+
+const createPopupContent = (technician: Technician) => {
+  const specialties = technician.specialties?.length
+    ? `${technician.specialties.slice(0, 3).join(', ')}${
+        technician.specialties.length > 3 ? '...' : ''
+      }`
+    : 'Especialidades não informadas';
+
+  const visitPrice = formatCurrency(technician.pricing?.visitPrice);
+  const laborPrice = formatCurrency(technician.pricing?.laborPrice);
+  const mapUrl = `https://www.google.com/maps/search/${encodeURIComponent(
+    `${technician.name} ${technician.location ?? ''}`
+  )}`;
+
+  return `
+    <div class="max-w-xs">
+      <div class="font-semibold text-lg mb-2">${technician.name}</div>
+      <div class="flex items-center gap-1 mb-2 text-sm">
+        <span class="inline-flex items-center gap-1 font-medium text-yellow-500">
+          <span>★</span>
+          ${technician.rating ?? 'N/D'}
+        </span>
+        <span class="text-gray-500">(${technician.reviewCount ?? 0} avaliações)</span>
+      </div>
+      <div class="flex items-center gap-1 mb-2 text-sm text-gray-600">
+        <span>📍</span>
+        <span>${technician.location ?? 'Localização não informada'}</span>
+      </div>
+      <div class="mb-3 text-sm">
+        <div class="font-medium">Especialidades:</div>
+        <div class="text-gray-600">${specialties}</div>
+      </div>
+      <div class="mb-3 text-sm bg-gray-50 rounded p-2">
+        <div>Orçamento: <span class="font-medium text-green-600">Gratuito</span></div>
+        ${visitPrice ? `<div>Visita: <span class="font-medium">${visitPrice}</span></div>` : ''}
+        ${laborPrice ? `<div>Mão de obra: <span class="font-medium">${laborPrice}/h</span></div>` : ''}
+      </div>
+      <a class="inline-flex items-center justify-center gap-2 w-full text-sm font-medium text-[#ff6b2c] border border-[#ff6b2c] rounded px-3 py-2 hover:bg-[#ff6b2c] hover:text-white transition" href="${mapUrl}" target="_blank" rel="noopener noreferrer">
+        <span>Ver no Google Maps</span>
+        <span>↗</span>
+      </a>
+    </div>
+  `;
+};
+
 const LeafletMap: React.FC<LeafletMapProps> = ({
   technicians,
   selectedTechnician,
   setSelectedTechnician
 }) => {
-  const [userLocation, setUserLocation] = React.useState<[number, number] | null>(null);
+  const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
+  const mapRef = useRef<L.Map | null>(null);
+  const markersLayerRef = useRef<L.LayerGroup | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    // Get user location
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setUserLocation([position.coords.latitude, position.coords.longitude]);
-        },
-        (error) => {
-          console.warn('Erro ao obter localização:', error);
-          // Default to São Paulo
-          setUserLocation([-23.5505, -46.6333]);
-        }
-      );
-    } else {
-      // Default to São Paulo if geolocation is not available
-      setUserLocation([-23.5505, -46.6333]);
-    }
+    if (!containerRef.current || mapRef.current) return;
+
+    const map = L.map(containerRef.current, {
+      center: defaultCenter,
+      zoom: 10
+    });
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    markersLayerRef.current = L.layerGroup().addTo(map);
+    mapRef.current = map;
+
+    return () => {
+      map.remove();
+      mapRef.current = null;
+      markersLayerRef.current = null;
+    };
   }, []);
 
-  const openGoogleMaps = (technician: Technician) => {
-    const query = encodeURIComponent(`${technician.name} ${technician.location}`);
-    const url = `https://www.google.com/maps/search/${query}`;
-    window.open(url, '_blank');
-  };
+  useEffect(() => {
+    if (!navigator.geolocation) {
+      setUserLocation(defaultCenter);
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setUserLocation([position.coords.latitude, position.coords.longitude]);
+      },
+      () => {
+        setUserLocation(defaultCenter);
+      }
+    );
+  }, []);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    const markersLayer = markersLayerRef.current;
+
+    if (!map || !markersLayer) return;
+
+    markersLayer.clearLayers();
+    const bounds = L.latLngBounds([]);
+
+    if (userLocation) {
+      const userMarker = L.marker(userLocation);
+      userMarker.bindPopup('<div class="font-medium">Sua localização</div>');
+      userMarker.addTo(markersLayer);
+      bounds.extend(userLocation);
+    }
+
+    technicians.forEach((technician) => {
+      if (!technician.coordinates) return;
+
+      const position: [number, number] = [
+        technician.coordinates[1],
+        technician.coordinates[0]
+      ];
+
+      const marker = L.marker(position);
+      marker.on('click', () => setSelectedTechnician(technician));
+      marker.bindPopup(createPopupContent(technician));
+      marker.addTo(markersLayer);
+      bounds.extend(position);
+    });
+
+    if (bounds.isValid()) {
+      map.fitBounds(bounds, { padding: [20, 20] });
+    } else {
+      map.setView(defaultCenter, 10);
+    }
+  }, [technicians, userLocation, setSelectedTechnician]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    const markersLayer = markersLayerRef.current;
+    if (!map || !markersLayer || !selectedTechnician?.coordinates) return;
+
+    const position: [number, number] = [
+      selectedTechnician.coordinates[1],
+      selectedTechnician.coordinates[0]
+    ];
+
+    map.setView(position, 13, { animate: true });
+
+    let targetMarker: L.Marker | null = null;
+    markersLayer.eachLayer((layer) => {
+      if (layer instanceof L.Marker) {
+        const markerPosition = layer.getLatLng();
+        if (
+          Math.abs(markerPosition.lat - position[0]) < 0.0001 &&
+          Math.abs(markerPosition.lng - position[1]) < 0.0001
+        ) {
+          targetMarker = layer;
+        }
+      }
+    });
+
+    targetMarker?.openPopup();
+  }, [selectedTechnician]);
 
   const openGoogleMapsGeneral = () => {
     if (technicians.length === 0) return;
-    
+
     const query = encodeURIComponent('Técnicos especializados próximos');
     const url = `https://www.google.com/maps/search/${query}`;
     window.open(url, '_blank');
   };
 
-  // Default center (São Paulo)
-  const defaultCenter: [number, number] = [-23.5505, -46.6333];
-  const mapCenter = userLocation || defaultCenter;
-
   return (
     <div className="relative w-full h-full">
-      <MapContainer
-        center={mapCenter}
-        zoom={10}
-        style={{ height: '100%', width: '100%' }}
-        className="rounded-lg"
-      >
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        />
-        
-        <MapUpdater technicians={technicians} userLocation={userLocation} />
-        
-        {/* User location marker */}
-        {userLocation && (
-          <Marker position={userLocation}>
-            <Popup>
-              <div className="text-center">
-                <strong>Sua localização</strong>
-              </div>
-            </Popup>
-          </Marker>
-        )}
-        
-        {/* Technician markers */}
-        {technicians.map((technician) => {
-          if (!technician.coordinates) return null;
-          
-          const position: [number, number] = [technician.coordinates[1], technician.coordinates[0]];
-          
-          return (
-            <Marker
-              key={technician.id}
-              position={position}
-              eventHandlers={{
-                click: () => setSelectedTechnician(technician)
-              }}
-            >
-              <Popup>
-                <div className="max-w-xs">
-                  <div className="font-semibold text-lg mb-2">{technician.name}</div>
-                  
-                  <div className="flex items-center gap-1 mb-2">
-                    <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                    <span className="font-medium">{technician.rating}</span>
-                    <span className="text-sm text-gray-500">({technician.reviewCount} avaliações)</span>
-                  </div>
-                  
-                  <div className="flex items-center gap-1 mb-2">
-                    <MapPin className="h-4 w-4 text-gray-500" />
-                    <span className="text-sm">{technician.location}</span>
-                  </div>
-                  
-                  <div className="mb-3">
-                    <div className="text-sm font-medium mb-1">Especialidades:</div>
-                    <div className="text-sm text-gray-600">
-                      {technician.specialties.slice(0, 3).join(', ')}
-                      {technician.specialties.length > 3 && '...'}
-                    </div>
-                  </div>
-                  
-                  {technician.pricing && (
-                    <div className="mb-3 p-2 bg-gray-50 rounded">
-                      <div className="text-sm">
-                        <div>Orçamento: <span className="font-medium text-green-600">Gratuito</span></div>
-                        <div>Visita: <span className="font-medium">R$ {technician.pricing.visitPrice}</span></div>
-                        <div>Mão de obra: <span className="font-medium">R$ {technician.pricing.laborPrice}/h</span></div>
-                      </div>
-                    </div>
-                  )}
-                  
-                  <div className="space-y-2">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="w-full"
-                      onClick={() => openGoogleMaps(technician)}
-                    >
-                      <ExternalLink className="h-4 w-4 mr-2" />
-                      Ver no Google Maps
-                    </Button>
-                  </div>
-                </div>
-              </Popup>
-            </Marker>
-          );
-        })}
-      </MapContainer>
-      
-      {/* Google Maps button */}
+      <div ref={containerRef} className="h-full w-full rounded-lg" />
+
       <div className="absolute bottom-4 right-4 z-[1000]">
-        <Button
-          variant="secondary"
-          size="sm"
-          onClick={openGoogleMapsGeneral}
-          className="shadow-lg"
-        >
+        <Button variant="secondary" size="sm" onClick={openGoogleMapsGeneral} className="shadow-lg">
           <ExternalLink className="h-4 w-4 mr-2" />
           Abrir no Google Maps
         </Button>

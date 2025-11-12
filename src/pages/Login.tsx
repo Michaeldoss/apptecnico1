@@ -108,23 +108,22 @@ const Login = () => {
     setIsLoading(true);
     
     try {
-      const success = await login(email, password);
-      
-      if (success) {
+      const result = await login(email, password);
+
+      if (result.success) {
         console.log('✅ Login realizado com sucesso');
-        // Aguardar o userType ser definido e redirecionar
-        setTimeout(() => {
-          const redirectPaths = {
-            customer: '/cliente/dashboard',
-            technician: '/tecnico/dashboard',
-            company: '/loja/dashboard',
-            admin: '/admin/dashboard'
-          };
-          
-          if (userType && redirectPaths[userType]) {
-            navigate(redirectPaths[userType], { replace: true });
-          }
-        }, 1000);
+        const redirectPaths = {
+          customer: '/cliente/dashboard',
+          technician: '/tecnico/dashboard',
+          company: '/loja/dashboard',
+          admin: '/admin/dashboard'
+        } as const;
+
+        const redirectTarget = result.redirectPath || (result.userType ? redirectPaths[result.userType] : null);
+
+        if (redirectTarget) {
+          navigate(redirectTarget, { replace: true });
+        }
       }
     } catch (error) {
       console.error('💥 Erro no login:', error);
@@ -215,7 +214,7 @@ const Login = () => {
               
               <Button 
                 type="submit" 
-                className="w-full h-12 text-base font-semibold bg-[#2563eb] hover:bg-[#1d4ed8] text-white rounded-lg shadow-md transition-all duration-200" 
+                className="w-full h-12 text-base font-semibold bg-[#ff6b2c] hover:bg-[#f2551a] text-white rounded-lg shadow-md transition-all duration-200"
                 disabled={isLoading || !email || !password}
               >
                 {isLoading ? (

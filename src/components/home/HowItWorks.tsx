@@ -14,7 +14,7 @@ const HowItWorks = () => {
       icon: <User className="h-12 w-12 text-white" />,
       title: "Receba propostas",
       description: "Técnicos qualificados da sua região enviarão orçamentos personalizados",
-      color: "bg-gradient-to-br from-instalei-purple-500 to-instalei-purple-600"
+      color: "bg-gradient-to-br from-instalei-navy-500 to-instalei-navy-600"
     },
     {
       icon: <CheckCircle2 className="h-12 w-12 text-white" />,

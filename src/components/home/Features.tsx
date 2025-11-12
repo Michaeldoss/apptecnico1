@@ -37,7 +37,7 @@ const Features = () => {
         {/* Passos */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-instalei-lg mb-instalei-2xl">
           <div className="text-center">
-            <div className="bg-gradient-to-br from-instalei-purple-500 to-instalei-purple-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-instalei-md shadow-lg hover:scale-110 transition-transform duration-200">
+            <div className="bg-gradient-to-br from-instalei-navy-500 to-instalei-navy-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-instalei-md shadow-lg hover:scale-110 transition-transform duration-200">
               <span className="text-3xl font-bold text-white">1</span>
             </div>
             <h3 className="text-2xl font-bold mb-instalei-sm text-primary">Descreva seu problema</h3>
@@ -47,7 +47,7 @@ const Features = () => {
           </div>
 
           <div className="text-center">
-            <div className="bg-gradient-to-br from-instalei-purple-500 to-instalei-purple-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-instalei-md shadow-lg hover:scale-110 transition-transform duration-200">
+            <div className="bg-gradient-to-br from-instalei-navy-500 to-instalei-navy-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-instalei-md shadow-lg hover:scale-110 transition-transform duration-200">
               <span className="text-3xl font-bold text-white">2</span>
             </div>
             <h3 className="text-2xl font-bold mb-instalei-sm text-primary">Receba propostas</h3>
@@ -57,7 +57,7 @@ const Features = () => {
           </div>
 
           <div className="text-center">
-            <div className="bg-gradient-to-br from-instalei-purple-500 to-instalei-purple-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-instalei-md shadow-lg hover:scale-110 transition-transform duration-200">
+            <div className="bg-gradient-to-br from-instalei-navy-500 to-instalei-navy-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-instalei-md shadow-lg hover:scale-110 transition-transform duration-200">
               <span className="text-3xl font-bold text-white">3</span>
             </div>
             <h3 className="text-2xl font-bold mb-instalei-sm text-primary">Escolha o melhor</h3>
@@ -80,7 +80,7 @@ const Features = () => {
               icon: <Shield className="h-10 w-10 text-white" />,
               title: "Segurança Garantida",
               description: "Todos os técnicos são verificados e avaliados",
-              color: "bg-gradient-to-br from-instalei-purple-500 to-instalei-purple-600"
+              color: "bg-gradient-to-br from-instalei-navy-500 to-instalei-navy-600"
             },
             {
               icon: <Clock className="h-10 w-10 text-white" />,
@@ -92,7 +92,7 @@ const Features = () => {
               icon: <Star className="h-10 w-10 text-white" />,
               title: "Melhor Qualidade",
               description: "Apenas profissionais com alta avaliação",
-              color: "bg-gradient-to-br from-instalei-purple-600 to-instalei-purple-700"
+              color: "bg-gradient-to-br from-instalei-navy-600 to-instalei-navy-700"
             },
             {
               icon: <CreditCard className="h-10 w-10 text-white" />,
@@ -117,7 +117,7 @@ const Features = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-instalei-md mb-instalei-2xl">
           {/* Cliente */}
           <div className="card-instalei text-center group flex flex-col">
-            <div className="bg-gradient-to-br from-instalei-purple-500 to-instalei-purple-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-instalei-md shadow-lg group-hover:scale-110 transition-transform duration-300">
+            <div className="bg-gradient-to-br from-instalei-navy-500 to-instalei-navy-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-instalei-md shadow-lg group-hover:scale-110 transition-transform duration-300">
               <User className="h-10 w-10 text-white" />
             </div>
             <h3 className="text-2xl font-bold mb-instalei-sm text-primary">Cadastro de Cliente</h3>
@@ -149,7 +149,7 @@ const Features = () => {
 
           {/* Lojista */}
           <div className="card-instalei text-center group flex flex-col">
-            <div className="bg-gradient-to-br from-instalei-purple-600 to-instalei-purple-700 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-instalei-md shadow-lg group-hover:scale-110 transition-transform duration-300">
+            <div className="bg-gradient-to-br from-instalei-navy-600 to-instalei-navy-700 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-instalei-md shadow-lg group-hover:scale-110 transition-transform duration-300">
               <Store className="h-10 w-10 text-white" />
             </div>
             <h3 className="text-2xl font-bold mb-instalei-sm text-primary">Cadastro de Lojista</h3>
@@ -175,23 +175,23 @@ const Features = () => {
           
           {/* Links de Comunidade */}
           <div className="flex flex-wrap justify-center gap-instalei-sm">
-            <a href="#" className="bg-green-500 hover:bg-green-600 text-white px-instalei-md py-instalei-sm rounded-instalei flex items-center gap-2 transition-all duration-200 hover:scale-105 hover:shadow-lg">
+            <a href="#" className="bg-instalei-orange-500 hover:bg-instalei-orange-600 text-white px-instalei-md py-instalei-sm rounded-instalei flex items-center gap-2 transition-all duration-200 hover:scale-105 hover:shadow-lg">
               <MessageCircle className="h-5 w-5" />
               WhatsApp
             </a>
-            <a href="#" className="bg-blue-500 hover:bg-blue-600 text-white px-instalei-md py-instalei-sm rounded-instalei flex items-center gap-2 transition-all duration-200 hover:scale-105 hover:shadow-lg">
+            <a href="#" className="bg-instalei-navy-600 hover:bg-instalei-navy-700 text-white px-instalei-md py-instalei-sm rounded-instalei flex items-center gap-2 transition-all duration-200 hover:scale-105 hover:shadow-lg">
               <Send className="h-5 w-5" />
               Telegram
             </a>
-            <a href="#" className="bg-red-600 hover:bg-red-700 text-white px-instalei-md py-instalei-sm rounded-instalei flex items-center gap-2 transition-all duration-200 hover:scale-105 hover:shadow-lg">
+            <a href="#" className="bg-instalei-orange-600 hover:bg-instalei-orange-700 text-white px-instalei-md py-instalei-sm rounded-instalei flex items-center gap-2 transition-all duration-200 hover:scale-105 hover:shadow-lg">
               <Youtube className="h-5 w-5" />
               YouTube
             </a>
-            <a href="#" className="bg-blue-600 hover:bg-blue-700 text-white px-instalei-md py-instalei-sm rounded-instalei flex items-center gap-2 transition-all duration-200 hover:scale-105 hover:shadow-lg">
+            <a href="#" className="bg-instalei-navy-700 hover:bg-instalei-navy-800 text-white px-instalei-md py-instalei-sm rounded-instalei flex items-center gap-2 transition-all duration-200 hover:scale-105 hover:shadow-lg">
               <Facebook className="h-5 w-5" />
               Facebook
             </a>
-            <a href="#" className="bg-pink-500 hover:bg-pink-600 text-white px-instalei-md py-instalei-sm rounded-instalei flex items-center gap-2 transition-all duration-200 hover:scale-105 hover:shadow-lg">
+            <a href="#" className="bg-instalei-orange-400 hover:bg-instalei-orange-500 text-white px-instalei-md py-instalei-sm rounded-instalei flex items-center gap-2 transition-all duration-200 hover:scale-105 hover:shadow-lg">
               <Instagram className="h-5 w-5" />
               Instagram
             </a>

@@ -15,9 +15,8 @@ import {
 } from '@/components/ui/form';
 import { toast } from '@/hooks/use-toast';
 import { useAuth } from '@/context/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
 import GoogleLoginButton from '@/components/auth/GoogleLoginButton';
-import { Eye, EyeOff, User, Mail, Lock, Building, Calendar, Briefcase, Loader2, CheckCircle, X } from 'lucide-react';
+import { Eye, EyeOff, User, Mail, Lock, Building, Briefcase, Loader2, X } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 // Schema simplificado para o primeiro passo do cadastro
@@ -28,7 +27,8 @@ const registrationSchema = z.object({
     .min(8, "Senha deve ter pelo menos 8 caracteres")
     .regex(/[A-Z]/, "Deve conter pelo menos uma letra maiúscula")
     .regex(/[a-z]/, "Deve conter pelo menos uma letra minúscula")
-    .regex(/[0-9]/, "Deve conter pelo menos um número"),
+    .regex(/[0-9]/, "Deve conter pelo menos um número")
+    .regex(/[!@#$%^&*(),.?":{}|<>]/, "Deve conter pelo menos um caractere especial"),
   confirmPassword: z.string(),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Senhas não coincidem",
@@ -75,16 +75,22 @@ const UserRegistrationForm: React.FC<UserRegistrationFormProps> = ({
         type: userType === 'client' ? 'customer' : userType === 'store' ? 'company' : userType,
       };
 
-      const success = await signup(data.email, data.password, userData);
-      
-      if (success) {
+      const result = await signup(data.email, data.password, userData);
+
+      if (result.success) {
         toast({
           title: "Conta criada com sucesso!",
-          description: "Redirecionando para seu dashboard...",
+          description: result.requiresConfirmation
+            ? "Verifique seu email para confirmar a conta."
+            : "Redirecionando para seu dashboard...",
         });
-        
+
         // O AuthContext irá redirecionar automaticamente após o signup
         console.log('📝 Cadastro concluído, aguardando redirecionamento automático...');
+
+        if (onSuccess) {
+          onSuccess();
+        }
       }
       
     } catch (error: any) {
