@@ -27,6 +27,11 @@ const SellEquipmentCreate = () => {
     condition: 'seminovo' as SellEquipmentCondition,
     price: 0,
     description: '',
+    serialNumber: '',
+    usageHours: 0,
+    lastHeadReplacement: '',
+    lastPreventiveMaintenance: '',
+    technicalNotes: '',
     city: '',
     state: '',
     contactName: '',
@@ -234,6 +239,68 @@ const SellEquipmentCreate = () => {
                       required
                     />
                   </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-border bg-card">
+              <CardHeader className="bg-muted/50">
+                <CardTitle className="text-foreground">Informações Técnicas</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <Label htmlFor="serialNumber">Número de Série</Label>
+                  <Input
+                    id="serialNumber"
+                    value={formData.serialNumber}
+                    onChange={(e) => handleInputChange('serialNumber', e.target.value)}
+                    placeholder="Ex: ABC123456789"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="usageHours">Horas de Uso</Label>
+                    <Input
+                      id="usageHours"
+                      type="number"
+                      value={formData.usageHours}
+                      onChange={(e) => handleInputChange('usageHours', parseFloat(e.target.value) || 0)}
+                      placeholder="0"
+                      min="0"
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="lastHeadReplacement">Última Troca de Cabeça</Label>
+                    <Input
+                      id="lastHeadReplacement"
+                      type="date"
+                      value={formData.lastHeadReplacement}
+                      onChange={(e) => handleInputChange('lastHeadReplacement', e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="lastPreventiveMaintenance">Última Manutenção Preventiva</Label>
+                  <Input
+                    id="lastPreventiveMaintenance"
+                    type="date"
+                    value={formData.lastPreventiveMaintenance}
+                    onChange={(e) => handleInputChange('lastPreventiveMaintenance', e.target.value)}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="technicalNotes">Observações Técnicas</Label>
+                  <Textarea
+                    id="technicalNotes"
+                    value={formData.technicalNotes}
+                    onChange={(e) => handleInputChange('technicalNotes', e.target.value)}
+                    placeholder="Histórico de manutenções, peças trocadas, upgrades realizados..."
+                    rows={3}
+                  />
                 </div>
               </CardContent>
             </Card>
