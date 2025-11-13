@@ -2,9 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { SellEquipmentItem } from '@/types/sellEquipment';
-import { MapPin, Loader2, AlertCircle } from 'lucide-react';
-import { Card } from '@/components/ui/card';
+import { MapPin, Loader2, AlertCircle, Settings } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
@@ -213,10 +214,10 @@ const SellEquipmentMap: React.FC<SellEquipmentMapProps> = ({
 
   if (isLoading) {
     return (
-      <div className="w-full h-full flex items-center justify-center bg-gray-50 rounded-lg">
+      <div className="w-full h-full flex items-center justify-center bg-background rounded-lg border border-border">
         <div className="text-center p-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Carregando mapa...</p>
+          <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-4" />
+          <p className="text-muted-foreground">Carregando mapa...</p>
         </div>
       </div>
     );
@@ -224,12 +225,12 @@ const SellEquipmentMap: React.FC<SellEquipmentMapProps> = ({
 
   if (!webglSupported) {
     return (
-      <div className="w-full h-full flex items-center justify-center bg-gray-50 rounded-lg">
-        <Card className="max-w-md">
+      <div className="w-full h-full flex items-center justify-center bg-background rounded-lg">
+        <Card className="max-w-md border-destructive/50">
           <CardContent className="text-center p-8">
-            <Settings className="h-16 w-16 text-orange-400 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold mb-2 text-orange-600">WebGL não suportado</h3>
-            <p className="text-sm text-gray-600 mb-4">Use um browser mais moderno para visualizar o mapa</p>
+            <AlertCircle className="h-16 w-16 text-destructive mx-auto mb-4" />
+            <h3 className="text-lg font-semibold mb-2 text-destructive">WebGL não suportado</h3>
+            <p className="text-sm text-muted-foreground mb-4">Use um browser mais moderno para visualizar o mapa</p>
           </CardContent>
         </Card>
       </div>
@@ -238,12 +239,12 @@ const SellEquipmentMap: React.FC<SellEquipmentMapProps> = ({
 
   if (error) {
     return (
-      <div className="w-full h-full flex items-center justify-center bg-gray-50 rounded-lg">
+      <div className="w-full h-full flex items-center justify-center bg-background rounded-lg">
         <Card className="max-w-md">
           <CardContent className="text-center p-8">
-            <MapPin className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold mb-2 text-red-600">Erro no Mapa</h3>
-            <p className="text-sm text-gray-600 mb-4">{error}</p>
+            <AlertCircle className="h-16 w-16 text-destructive mx-auto mb-4" />
+            <h3 className="text-lg font-semibold mb-2 text-destructive">Erro no Mapa</h3>
+            <p className="text-sm text-muted-foreground mb-4">{error}</p>
             <Button 
               onClick={() => window.location.reload()} 
               className="mt-2"
@@ -263,12 +264,14 @@ const SellEquipmentMap: React.FC<SellEquipmentMapProps> = ({
         className="w-full h-full rounded-lg overflow-hidden"
       />
       
-      <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg p-2 text-xs text-gray-600">
-        <div className="flex items-center gap-1">
-          <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-          <span>{equipments.length} equipamentos</span>
-        </div>
-      </div>
+      <Card className="absolute bottom-4 left-4 bg-card/90 backdrop-blur-sm border-border">
+        <CardContent className="p-3">
+          <div className="flex items-center gap-2 text-sm">
+            <div className="w-3 h-3 bg-primary rounded-full"></div>
+            <span className="text-foreground font-medium">{equipments.length} equipamentos</span>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
