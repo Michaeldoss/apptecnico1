@@ -81,37 +81,37 @@ const SellEquipmentCreate = () => {
       <Navbar />
       
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-12 relative overflow-hidden">
+      <section className="bg-gradient-to-br from-primary via-primary/90 to-primary/80 text-primary-foreground py-12 relative overflow-hidden">
         {/* Elementos decorativos de fundo */}
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-transparent to-purple-600/20"></div>
-        <div className="absolute top-6 left-6 w-24 h-24 bg-white/5 rounded-full blur-2xl"></div>
-        <div className="absolute bottom-6 right-6 w-32 h-32 bg-yellow-300/10 rounded-full blur-2xl"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-accent/20"></div>
+        <div className="absolute top-6 left-6 w-24 h-24 bg-primary-foreground/5 rounded-full blur-2xl"></div>
+        <div className="absolute bottom-6 right-6 w-32 h-32 bg-accent/10 rounded-full blur-2xl"></div>
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-2xl mx-auto">
             <div className="flex items-center mb-4">
               <Link to="/sell-equipment">
-                <Button variant="outline" size="sm" className="mr-4 bg-white/10 border-white/30 text-white hover:bg-white hover:text-blue-600 backdrop-blur-sm">
+                <Button variant="outline" size="sm" className="mr-4 bg-primary-foreground/10 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground hover:text-primary backdrop-blur-sm">
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Voltar
                 </Button>
               </Link>
               <div>
-                <h1 className="text-3xl md:text-4xl font-bold text-white drop-shadow-lg">Anunciar Equipamento</h1>
-                <p className="text-white/90 drop-shadow-md">Preencha as informações do seu equipamento</p>
+                <h1 className="text-3xl md:text-4xl font-bold text-primary-foreground drop-shadow-lg">Anunciar Equipamento</h1>
+                <p className="text-primary-foreground/90 drop-shadow-md">Preencha as informações do seu equipamento</p>
               </div>
             </div>
           </div>
         </div>
       </section>
       
-      <main className="flex-grow container mx-auto px-4 py-8 bg-gray-50">
+      <main className="flex-grow container mx-auto px-4 py-8 bg-background">
         <div className="max-w-2xl mx-auto">
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Informações Básicas</CardTitle>
+            <Card className="border-border bg-card">
+              <CardHeader className="bg-muted/50">
+                <CardTitle className="text-foreground">Informações Básicas</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
@@ -207,9 +207,9 @@ const SellEquipmentCreate = () => {
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Localização</CardTitle>
+            <Card className="border-border bg-card">
+              <CardHeader className="bg-muted/50">
+                <CardTitle className="text-foreground">Localização</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -238,15 +238,15 @@ const SellEquipmentCreate = () => {
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Fotos do Equipamento</CardTitle>
+            <Card className="border-border bg-card">
+              <CardHeader className="bg-muted/50">
+                <CardTitle className="text-foreground">Fotos do Equipamento</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                     {images.map((image, index) => (
-                      <div key={index} className="relative aspect-square border rounded-lg overflow-hidden">
+                      <div key={index} className="relative aspect-square border border-border rounded-lg overflow-hidden">
                         <img src={image} alt={`Equipamento ${index + 1}`} className="w-full h-full object-cover" />
                         <Button
                           type="button"
@@ -261,10 +261,10 @@ const SellEquipmentCreate = () => {
                     ))}
                     
                     {images.length < 5 && (
-                      <label className="aspect-square border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center cursor-pointer hover:border-gray-400">
+                      <label className="aspect-square border-2 border-dashed border-border rounded-lg flex items-center justify-center cursor-pointer hover:border-primary transition-colors bg-muted/30">
                         <div className="text-center">
-                          <Upload className="h-6 w-6 mx-auto mb-2 text-gray-400" />
-                          <span className="text-sm text-gray-600">Adicionar Foto</span>
+                          <Upload className="h-6 w-6 mx-auto mb-2 text-muted-foreground" />
+                          <span className="text-sm text-foreground">Adicionar Foto</span>
                         </div>
                         <input
                           type="file"
@@ -276,16 +276,16 @@ const SellEquipmentCreate = () => {
                       </label>
                     )}
                   </div>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-muted-foreground">
                     Adicione até 5 fotos. Fotos de qualidade ajudam a vender mais rápido.
                   </p>
                 </div>
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Informações de Contato</CardTitle>
+            <Card className="border-border bg-card">
+              <CardHeader className="bg-muted/50">
+                <CardTitle className="text-foreground">Informações de Contato</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
@@ -334,8 +334,13 @@ const SellEquipmentCreate = () => {
               </CardContent>
             </Card>
 
-            <div className="flex gap-4">
-              <Button type="submit" disabled={loading} className="flex-1">
+            <div className="flex justify-end gap-4">
+              <Link to="/sell-equipment">
+                <Button type="button" variant="outline" className="border-border">
+                  Cancelar
+                </Button>
+              </Link>
+              <Button type="submit" disabled={loading} className="bg-primary text-primary-foreground hover:bg-primary/90">
                 {loading ? "Salvando..." : (
                   <>
                     <Save className="h-4 w-4 mr-2" />
