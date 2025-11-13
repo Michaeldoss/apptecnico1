@@ -2,10 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { SellEquipmentItem } from '@/types/sellEquipment';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { MapPin, Settings } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { MapPin, Loader2, AlertCircle } from 'lucide-react';
+import { Card } from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
@@ -98,14 +97,24 @@ const SellEquipmentMap: React.FC<SellEquipmentMapProps> = ({
       
       map.current = new mapboxgl.Map({
         container: mapContainer.current,
-        style: 'mapbox://styles/mapbox/light-v11',
-        center: [-46.6333, -23.5505], // São Paulo como centro
-        zoom: 5
+        style: 'mapbox://styles/mapbox/streets-v12',
+        center: [-46.6333, -23.5505],
+        zoom: 4.5,
+        pitch: 0,
+        bearing: 0
       });
 
-      // Add navigation controls
+      // Adicionar controles de navegação com estilo customizado
       map.current.addControl(
-        new mapboxgl.NavigationControl(),
+        new mapboxgl.NavigationControl({
+          visualizePitch: true
+        }),
+        'top-right'
+      );
+
+      // Adicionar controle de fullscreen
+      map.current.addControl(
+        new mapboxgl.FullscreenControl(),
         'top-right'
       );
 
