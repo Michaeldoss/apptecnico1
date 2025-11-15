@@ -115,48 +115,51 @@ const SellEquipmentCreate = () => {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <Card className="border-border bg-card">
-              <CardHeader className="bg-muted/50">
-                <CardTitle className="text-foreground font-semibold">Informações Básicas</CardTitle>
+              <CardHeader className="bg-muted/50 border-b border-border">
+                <CardTitle className="text-card-foreground font-semibold">Informações Básicas</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="pt-6 space-y-4">
                 <div>
-                  <Label htmlFor="title">Título do Anúncio *</Label>
+                  <Label htmlFor="title" className="text-card-foreground">Título do Anúncio *</Label>
                   <Input
                     id="title"
                     value={formData.title}
                     onChange={(e) => handleInputChange('title', e.target.value)}
                     placeholder="Ex: Plotter Roland VersaCAMM VS-640i"
                     required
+                    className="mt-1.5"
                   />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="brand">Marca *</Label>
+                    <Label htmlFor="brand" className="text-card-foreground">Marca *</Label>
                     <Input
                       id="brand"
                       value={formData.brand}
                       onChange={(e) => handleInputChange('brand', e.target.value)}
                       placeholder="Ex: Roland, Epson, Mimaki"
                       required
+                      className="mt-1.5"
                     />
                   </div>
                   
                   <div>
-                    <Label htmlFor="model">Modelo *</Label>
+                    <Label htmlFor="model" className="text-card-foreground">Modelo *</Label>
                     <Input
                       id="model"
                       value={formData.model}
                       onChange={(e) => handleInputChange('model', e.target.value)}
                       placeholder="Ex: VersaCAMM VS-640i"
                       required
+                      className="mt-1.5"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="year">Ano</Label>
+                    <Label htmlFor="year" className="text-card-foreground">Ano</Label>
                     <Input
                       id="year"
                       type="number"
@@ -164,13 +167,14 @@ const SellEquipmentCreate = () => {
                       onChange={(e) => handleInputChange('year', parseInt(e.target.value))}
                       min="1990"
                       max={new Date().getFullYear()}
+                      className="mt-1.5"
                     />
                   </div>
                   
                   <div>
-                    <Label htmlFor="condition">Estado *</Label>
+                    <Label htmlFor="condition" className="text-card-foreground">Estado *</Label>
                     <Select value={formData.condition} onValueChange={(value) => handleInputChange('condition', value)}>
-                      <SelectTrigger>
+                      <SelectTrigger className="mt-1.5">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -185,7 +189,7 @@ const SellEquipmentCreate = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="price">Preço (R$) *</Label>
+                  <Label htmlFor="price" className="text-card-foreground">Preço (R$) *</Label>
                   <Input
                     id="price"
                     type="number"
@@ -195,11 +199,12 @@ const SellEquipmentCreate = () => {
                     min="0"
                     step="0.01"
                     required
+                    className="mt-1.5"
                   />
                 </div>
 
                 <div>
-                  <Label htmlFor="description">Descrição *</Label>
+                  <Label htmlFor="description" className="text-card-foreground">Descrição *</Label>
                   <Textarea
                     id="description"
                     value={formData.description}
@@ -207,36 +212,39 @@ const SellEquipmentCreate = () => {
                     placeholder="Descreva o equipamento, estado de conservação, acessórios inclusos..."
                     rows={4}
                     required
+                    className="mt-1.5"
                   />
                 </div>
               </CardContent>
             </Card>
 
             <Card className="border-border bg-card">
-              <CardHeader className="bg-muted/50">
-                <CardTitle className="text-foreground">Localização</CardTitle>
+              <CardHeader className="bg-muted/50 border-b border-border">
+                <CardTitle className="text-card-foreground font-semibold">Localização</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="pt-6 space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="city">Cidade *</Label>
+                    <Label htmlFor="city" className="text-card-foreground">Cidade *</Label>
                     <Input
                       id="city"
                       value={formData.city}
                       onChange={(e) => handleInputChange('city', e.target.value)}
                       placeholder="Ex: São Paulo"
                       required
+                      className="mt-1.5"
                     />
                   </div>
                   
                   <div>
-                    <Label htmlFor="state">Estado *</Label>
+                    <Label htmlFor="state" className="text-card-foreground">Estado *</Label>
                     <Input
                       id="state"
                       value={formData.state}
                       onChange={(e) => handleInputChange('state', e.target.value)}
                       placeholder="Ex: SP"
                       required
+                      className="mt-1.5"
                     />
                   </div>
                 </div>
@@ -244,23 +252,24 @@ const SellEquipmentCreate = () => {
             </Card>
 
             <Card className="border-border bg-card">
-              <CardHeader className="bg-muted/50">
-                <CardTitle className="text-foreground font-semibold">Informações Técnicas</CardTitle>
+              <CardHeader className="bg-muted/50 border-b border-border">
+                <CardTitle className="text-card-foreground font-semibold">Informações Técnicas</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="pt-6 space-y-4">
                 <div>
-                  <Label htmlFor="serialNumber" className="text-foreground">Número de Série</Label>
+                  <Label htmlFor="serialNumber" className="text-card-foreground">Número de Série</Label>
                   <Input
                     id="serialNumber"
                     value={formData.serialNumber}
                     onChange={(e) => handleInputChange('serialNumber', e.target.value)}
                     placeholder="Ex: ABC123456789"
+                    className="mt-1.5"
                   />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="usageHours" className="text-foreground">Horas de Uso</Label>
+                    <Label htmlFor="usageHours" className="text-card-foreground">Horas de Uso</Label>
                     <Input
                       id="usageHours"
                       type="number"
@@ -268,48 +277,52 @@ const SellEquipmentCreate = () => {
                       onChange={(e) => handleInputChange('usageHours', parseFloat(e.target.value) || 0)}
                       placeholder="0"
                       min="0"
+                      className="mt-1.5"
                     />
                   </div>
 
                   <div>
-                    <Label htmlFor="lastHeadReplacement" className="text-foreground">Última Troca de Cabeça</Label>
+                    <Label htmlFor="lastHeadReplacement" className="text-card-foreground">Última Troca de Cabeça</Label>
                     <Input
                       id="lastHeadReplacement"
                       type="date"
                       value={formData.lastHeadReplacement}
                       onChange={(e) => handleInputChange('lastHeadReplacement', e.target.value)}
+                      className="mt-1.5"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <Label htmlFor="lastPreventiveMaintenance" className="text-foreground">Última Manutenção Preventiva</Label>
+                  <Label htmlFor="lastPreventiveMaintenance" className="text-card-foreground">Última Manutenção Preventiva</Label>
                   <Input
                     id="lastPreventiveMaintenance"
                     type="date"
                     value={formData.lastPreventiveMaintenance}
                     onChange={(e) => handleInputChange('lastPreventiveMaintenance', e.target.value)}
+                    className="mt-1.5"
                   />
                 </div>
 
                 <div>
-                  <Label htmlFor="technicalNotes" className="text-foreground">Observações Técnicas</Label>
+                  <Label htmlFor="technicalNotes" className="text-card-foreground">Observações Técnicas</Label>
                   <Textarea
                     id="technicalNotes"
                     value={formData.technicalNotes}
                     onChange={(e) => handleInputChange('technicalNotes', e.target.value)}
                     placeholder="Histórico de manutenções, peças trocadas, upgrades realizados..."
                     rows={3}
+                    className="mt-1.5"
                   />
                 </div>
               </CardContent>
             </Card>
 
             <Card className="border-border bg-card">
-              <CardHeader className="bg-muted/50">
-                <CardTitle className="text-foreground font-semibold">Fotos do Equipamento</CardTitle>
+              <CardHeader className="bg-muted/50 border-b border-border">
+                <CardTitle className="text-card-foreground font-semibold">Fotos do Equipamento</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="pt-6">
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                     {images.map((image, index) => (
@@ -331,7 +344,7 @@ const SellEquipmentCreate = () => {
                       <label className="aspect-square border-2 border-dashed border-border rounded-lg flex items-center justify-center cursor-pointer hover:border-primary transition-colors bg-muted/30">
                         <div className="text-center">
                           <Upload className="h-6 w-6 mx-auto mb-2 text-primary/60" />
-                          <span className="text-sm text-foreground font-medium">Adicionar Foto</span>
+                          <span className="text-sm text-card-foreground font-medium">Adicionar Foto</span>
                         </div>
                         <input
                           type="file"
@@ -343,7 +356,7 @@ const SellEquipmentCreate = () => {
                       </label>
                     )}
                   </div>
-                  <p className="text-sm text-muted-foreground/80">
+                  <p className="text-sm text-muted-foreground">
                     Adicione até 5 fotos. Fotos de qualidade ajudam a vender mais rápido.
                   </p>
                 </div>
@@ -351,51 +364,55 @@ const SellEquipmentCreate = () => {
             </Card>
 
             <Card className="border-border bg-card">
-              <CardHeader className="bg-muted/50">
-                <CardTitle className="text-foreground font-semibold">Informações de Contato</CardTitle>
+              <CardHeader className="bg-muted/50 border-b border-border">
+                <CardTitle className="text-card-foreground font-semibold">Informações de Contato</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="pt-6 space-y-4">
                 <div>
-                  <Label htmlFor="contactName">Nome completo *</Label>
+                  <Label htmlFor="contactName" className="text-card-foreground">Nome completo *</Label>
                   <Input
                     id="contactName"
                     value={formData.contactName}
                     onChange={(e) => handleInputChange('contactName', e.target.value)}
                     required
+                    className="mt-1.5"
                   />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="contactPhone">Telefone *</Label>
+                    <Label htmlFor="contactPhone" className="text-card-foreground">Telefone *</Label>
                     <Input
                       id="contactPhone"
                       value={formData.contactPhone}
                       onChange={(e) => handleInputChange('contactPhone', e.target.value)}
                       placeholder="(11) 99999-9999"
                       required
+                      className="mt-1.5"
                     />
                   </div>
                   
                   <div>
-                    <Label htmlFor="contactWhatsapp">WhatsApp</Label>
+                    <Label htmlFor="contactWhatsapp" className="text-card-foreground">WhatsApp</Label>
                     <Input
                       id="contactWhatsapp"
                       value={formData.contactWhatsapp}
                       onChange={(e) => handleInputChange('contactWhatsapp', e.target.value)}
                       placeholder="11999999999"
+                      className="mt-1.5"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <Label htmlFor="contactEmail">E-mail *</Label>
+                  <Label htmlFor="contactEmail" className="text-card-foreground">E-mail *</Label>
                   <Input
                     id="contactEmail"
                     type="email"
                     value={formData.contactEmail}
                     onChange={(e) => handleInputChange('contactEmail', e.target.value)}
                     required
+                    className="mt-1.5"
                   />
                 </div>
               </CardContent>
