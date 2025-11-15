@@ -86,25 +86,24 @@ const SellEquipmentCreate = () => {
       <Navbar />
       
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary via-primary/90 to-primary/80 text-primary-foreground py-12 relative overflow-hidden">
-        {/* Elementos decorativos de fundo */}
+      <section className="bg-gradient-to-br from-primary via-primary/90 to-primary/80 py-12 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-accent/20"></div>
-        <div className="absolute top-6 left-6 w-24 h-24 bg-primary-foreground/5 rounded-full blur-2xl"></div>
+        <div className="absolute top-6 left-6 w-24 h-24 bg-background/5 rounded-full blur-2xl"></div>
         <div className="absolute bottom-6 right-6 w-32 h-32 bg-accent/10 rounded-full blur-2xl"></div>
         
         <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-2xl mx-auto">
-            <div className="flex items-center mb-4">
+          <div className="max-w-2xl mx-auto text-center">
+            <div className="flex items-center justify-center mb-6">
               <Link to="/sell-equipment">
-                <Button variant="outline" size="sm" className="mr-4 bg-primary-foreground/10 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground hover:text-primary backdrop-blur-sm">
-                  <ArrowLeft className="h-4 w-4 mr-2 text-primary-foreground" />
+                <Button variant="outline" size="sm" className="bg-background/10 border-background/30 text-background hover:bg-background hover:text-primary backdrop-blur-sm">
+                  <ArrowLeft className="h-4 w-4 mr-2" />
                   Voltar
                 </Button>
               </Link>
-              <div>
-                <h1 className="text-3xl md:text-4xl font-bold text-primary-foreground drop-shadow-lg">Anunciar Equipamento</h1>
-                <p className="text-primary-foreground/80 drop-shadow-md">Preencha as informações do seu equipamento</p>
-              </div>
+            </div>
+            <div>
+              <h1 className="text-4xl md:text-5xl font-bold text-background drop-shadow-lg mb-3">Anunciar Equipamento</h1>
+              <p className="text-lg md:text-xl text-background/90">Preencha as informações do seu equipamento</p>
             </div>
           </div>
         </div>
