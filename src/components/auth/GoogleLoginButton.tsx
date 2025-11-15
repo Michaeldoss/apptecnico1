@@ -14,7 +14,6 @@ const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({ onSuccess }) => {
         provider: 'google',
         options: {
           redirectTo: `${window.location.origin}/auth/callback`,
-          skipBrowserRedirect: true,
           queryParams: {
             access_type: 'offline',
             prompt: 'consent',
@@ -23,13 +22,6 @@ const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({ onSuccess }) => {
       });
 
       if (error) throw error;
-
-      // Ensure top-level navigation when app runs inside an iframe (preview)
-      if (data?.url) {
-        const target = window.top ?? window;
-        target.location.href = data.url;
-        return;
-      }
 
       toast({
         title: 'Redirecionando...',
