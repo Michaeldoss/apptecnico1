@@ -22,14 +22,14 @@ const PageHeader: React.FC<PageHeaderProps> = ({
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div className="flex-1">
           <h1 className={cn(
-            "text-4xl font-bold text-white font-inter mb-3",
+            "text-4xl font-bold text-foreground font-inter mb-3",
             isMobile ? "text-2xl text-center" : ""
           )}>
             {title}
           </h1>
           {subtitle && (
             <p className={cn(
-              "text-white/80 text-lg font-medium",
+              "text-muted-foreground text-lg font-medium",
               isMobile ? "text-center text-base" : ""
             )}>
               {subtitle}
@@ -37,9 +37,9 @@ const PageHeader: React.FC<PageHeaderProps> = ({
           )}
         </div>
         {showDate && (
-          <div className="hidden md:flex items-center bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg border border-white/20 shrink-0">
-            <Calendar className="h-5 w-5 text-white mr-2" />
-            <span className="text-white font-semibold text-sm">
+          <div className="hidden md:flex items-center bg-accent/10 backdrop-blur-sm px-4 py-2 rounded-lg border border-border shrink-0">
+            <Calendar className="h-5 w-5 text-primary mr-2" />
+            <span className="text-foreground font-semibold text-sm">
               {new Date().toLocaleDateString('pt-BR', { 
                 weekday: 'long', 
                 year: 'numeric', 
