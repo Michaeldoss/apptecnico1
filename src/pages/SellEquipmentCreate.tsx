@@ -97,13 +97,13 @@ const SellEquipmentCreate = () => {
             <div className="flex items-center mb-4">
               <Link to="/sell-equipment">
                 <Button variant="outline" size="sm" className="mr-4 bg-primary-foreground/10 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground hover:text-primary backdrop-blur-sm">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  <ArrowLeft className="h-4 w-4 mr-2 text-primary-foreground" />
                   Voltar
                 </Button>
               </Link>
               <div>
                 <h1 className="text-3xl md:text-4xl font-bold text-primary-foreground drop-shadow-lg">Anunciar Equipamento</h1>
-                <p className="text-primary-foreground/90 drop-shadow-md">Preencha as informações do seu equipamento</p>
+                <p className="text-primary-foreground/80 drop-shadow-md">Preencha as informações do seu equipamento</p>
               </div>
             </div>
           </div>
@@ -116,7 +116,7 @@ const SellEquipmentCreate = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             <Card className="border-border bg-card">
               <CardHeader className="bg-muted/50">
-                <CardTitle className="text-foreground">Informações Básicas</CardTitle>
+                <CardTitle className="text-foreground font-semibold">Informações Básicas</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
@@ -245,11 +245,11 @@ const SellEquipmentCreate = () => {
 
             <Card className="border-border bg-card">
               <CardHeader className="bg-muted/50">
-                <CardTitle className="text-foreground">Informações Técnicas</CardTitle>
+                <CardTitle className="text-foreground font-semibold">Informações Técnicas</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <Label htmlFor="serialNumber">Número de Série</Label>
+                  <Label htmlFor="serialNumber" className="text-foreground">Número de Série</Label>
                   <Input
                     id="serialNumber"
                     value={formData.serialNumber}
@@ -260,7 +260,7 @@ const SellEquipmentCreate = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="usageHours">Horas de Uso</Label>
+                    <Label htmlFor="usageHours" className="text-foreground">Horas de Uso</Label>
                     <Input
                       id="usageHours"
                       type="number"
@@ -272,7 +272,7 @@ const SellEquipmentCreate = () => {
                   </div>
 
                   <div>
-                    <Label htmlFor="lastHeadReplacement">Última Troca de Cabeça</Label>
+                    <Label htmlFor="lastHeadReplacement" className="text-foreground">Última Troca de Cabeça</Label>
                     <Input
                       id="lastHeadReplacement"
                       type="date"
@@ -283,7 +283,7 @@ const SellEquipmentCreate = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="lastPreventiveMaintenance">Última Manutenção Preventiva</Label>
+                  <Label htmlFor="lastPreventiveMaintenance" className="text-foreground">Última Manutenção Preventiva</Label>
                   <Input
                     id="lastPreventiveMaintenance"
                     type="date"
@@ -293,7 +293,7 @@ const SellEquipmentCreate = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="technicalNotes">Observações Técnicas</Label>
+                  <Label htmlFor="technicalNotes" className="text-foreground">Observações Técnicas</Label>
                   <Textarea
                     id="technicalNotes"
                     value={formData.technicalNotes}
@@ -307,7 +307,7 @@ const SellEquipmentCreate = () => {
 
             <Card className="border-border bg-card">
               <CardHeader className="bg-muted/50">
-                <CardTitle className="text-foreground">Fotos do Equipamento</CardTitle>
+                <CardTitle className="text-foreground font-semibold">Fotos do Equipamento</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -330,8 +330,8 @@ const SellEquipmentCreate = () => {
                     {images.length < 5 && (
                       <label className="aspect-square border-2 border-dashed border-border rounded-lg flex items-center justify-center cursor-pointer hover:border-primary transition-colors bg-muted/30">
                         <div className="text-center">
-                          <Upload className="h-6 w-6 mx-auto mb-2 text-muted-foreground" />
-                          <span className="text-sm text-foreground">Adicionar Foto</span>
+                          <Upload className="h-6 w-6 mx-auto mb-2 text-primary/60" />
+                          <span className="text-sm text-foreground font-medium">Adicionar Foto</span>
                         </div>
                         <input
                           type="file"
@@ -343,7 +343,7 @@ const SellEquipmentCreate = () => {
                       </label>
                     )}
                   </div>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-muted-foreground/80">
                     Adicione até 5 fotos. Fotos de qualidade ajudam a vender mais rápido.
                   </p>
                 </div>
@@ -352,7 +352,7 @@ const SellEquipmentCreate = () => {
 
             <Card className="border-border bg-card">
               <CardHeader className="bg-muted/50">
-                <CardTitle className="text-foreground">Informações de Contato</CardTitle>
+                <CardTitle className="text-foreground font-semibold">Informações de Contato</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
