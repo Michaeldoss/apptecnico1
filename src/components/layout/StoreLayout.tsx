@@ -86,7 +86,7 @@ const StoreLayout: React.FC<StoreLayoutProps> = ({ children, title, subtitle }) 
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-primary">
+    <div className="min-h-screen flex flex-col bg-primary-dark">
       <Navbar />
       
       <div className="flex-1 flex container mx-auto px-4 py-6 gap-6 max-w-7xl pt-24">
