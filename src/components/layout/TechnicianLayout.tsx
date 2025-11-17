@@ -90,17 +90,17 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
       
-      {/* Cabeçalho Azul */}
-      <div className="bg-primary text-primary-foreground py-20 px-4">
+      {/* Cabeçalho Azul Navy */}
+      <div className="bg-primary-dark text-white py-20 px-4">
         <div className="max-w-7xl mx-auto text-center">
           <h1 className={cn(
-            "text-5xl md:text-6xl lg:text-7xl font-bold mb-8 font-inter text-primary-foreground animate-fade-in",
+            "text-5xl md:text-6xl lg:text-7xl font-bold mb-8 font-inter text-white animate-fade-in",
             isMobile ? "text-4xl" : ""
           )}>
             {title}
           </h1>
           <p className={cn(
-            "text-xl md:text-2xl text-primary-foreground/90 max-w-4xl mx-auto leading-relaxed animate-fade-in",
+            "text-xl md:text-2xl text-white/90 max-w-4xl mx-auto leading-relaxed animate-fade-in",
             isMobile ? "text-lg" : ""
           )}>
             Gerencie seus serviços e equipamentos
