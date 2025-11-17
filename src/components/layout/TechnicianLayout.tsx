@@ -90,8 +90,25 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
       
-      {/* Adicionado pt-24 para compensar a navbar absoluta */}
-      <div className="flex-1 flex container mx-auto px-4 gap-6 max-w-7xl pt-24">
+      {/* Cabeçalho Azul */}
+      <div className="bg-primary text-primary-foreground py-20 px-4">
+        <div className="max-w-7xl mx-auto text-center">
+          <h1 className={cn(
+            "text-5xl md:text-6xl lg:text-7xl font-bold mb-8 font-inter text-primary-foreground animate-fade-in",
+            isMobile ? "text-4xl" : ""
+          )}>
+            {title}
+          </h1>
+          <p className={cn(
+            "text-xl md:text-2xl text-primary-foreground/90 max-w-4xl mx-auto leading-relaxed animate-fade-in",
+            isMobile ? "text-lg" : ""
+          )}>
+            Gerencie seus serviços e equipamentos
+          </p>
+        </div>
+      </div>
+      
+      <div className="flex-1 flex container mx-auto px-4 gap-6 max-w-7xl py-8">
         {isMobile && (
           <button 
             onClick={toggleMenu}
@@ -110,7 +127,7 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({ children, title }) 
         
         <aside className={cn(
           "w-64 shrink-0 transition-all duration-300 bg-card border border-border rounded-lg",
-          isMobile ? "fixed left-0 top-16 bottom-0 z-30 h-[calc(100vh-4rem)] px-4 pt-16 pb-6 shadow-xl overflow-y-auto" : "hidden md:block p-6 h-fit sticky top-24"
+          isMobile ? "fixed left-0 top-16 bottom-0 z-30 h-[calc(100vh-4rem)] px-4 pt-16 pb-6 shadow-xl overflow-y-auto" : "hidden md:block p-6 h-fit sticky top-6"
         )}>
           <div className="space-y-2 py-4">
             <SidebarItem 
