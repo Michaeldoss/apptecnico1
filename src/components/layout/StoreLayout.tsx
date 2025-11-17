@@ -86,24 +86,42 @@ const StoreLayout: React.FC<StoreLayoutProps> = ({ children, title, subtitle }) 
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-primary-dark">
+    <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
       
-      <div className="flex-1 flex container mx-auto px-4 py-6 gap-6 max-w-7xl pt-24">
+      {/* Cabeçalho Azul Navy */}
+      <div className="bg-primary-dark text-white py-20 px-4">
+        <div className="max-w-7xl mx-auto text-center">
+          <h1 className={cn(
+            "text-5xl md:text-6xl lg:text-7xl font-bold mb-8 font-inter text-white animate-fade-in",
+            isMobile ? "text-4xl" : ""
+          )}>
+            {title}
+          </h1>
+          <p className={cn(
+            "text-xl md:text-2xl text-white/90 max-w-4xl mx-auto leading-relaxed animate-fade-in",
+            isMobile ? "text-lg" : ""
+          )}>
+            {subtitle || "Gerencie sua loja e produtos"}
+          </p>
+        </div>
+      </div>
+      
+      <div className="flex-1 flex container mx-auto px-4 gap-6 max-w-7xl py-8">
         {/* Sidebar */}
         {!isMobile && (
-          <aside className="w-64 bg-white/10 backdrop-blur-xl rounded-lg border border-white/20 p-4 h-fit sticky top-6">
+          <aside className="w-64 bg-card border border-border rounded-lg p-6 h-fit sticky top-6">
             <nav className="space-y-2">
               {sidebarItems.map((item) => (
                 <Link
                   key={item.href}
                   to={item.href}
                   className={cn(
-                    "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-200 hover:bg-primary/50 font-inter font-medium",
-                    item.active ? "bg-white text-primary shadow-sm" : "text-white hover:text-secondary"
+                    "flex items-center gap-3 rounded-lg px-4 py-3 text-base transition-all duration-200 hover:bg-muted font-inter font-medium",
+                    item.active ? "bg-primary text-primary-foreground shadow-sm" : "text-foreground/80 hover:text-foreground"
                   )}
                 >
-                  <item.icon className={cn("h-4 w-4 flex-shrink-0", item.active ? "text-primary" : "text-accent")} />
+                  <item.icon className={cn("h-5 w-5 flex-shrink-0", item.active ? "text-primary-foreground" : "text-primary")} />
                   <span className="truncate">{item.label}</span>
                 </Link>
               ))}
@@ -113,7 +131,6 @@ const StoreLayout: React.FC<StoreLayoutProps> = ({ children, title, subtitle }) 
         
         {/* Main content */}
         <main className={cn("flex-1 min-w-0 relative", isMobile ? "pl-0" : "")}>
-          <PageHeader title={title} subtitle={subtitle} />
           
           <div className={cn("w-full", isMobile ? "px-1" : "")}>
             {children}
