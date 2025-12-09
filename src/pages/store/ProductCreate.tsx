@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Navigate, Link, useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { Button } from '@/components/ui/button';
@@ -179,29 +180,42 @@ const ProductCreate = () => {
         throw new Error('Selecione pelo menos uma marca compatível');
       }
 
-      // Mock product creation - in production would call API
+      if (formData.precoFinal <= 0) {
+        throw new Error('Informe um preço válido para o produto');
+      }
+
+      // Get current user
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        throw new Error('Usuário não autenticado');
+      }
+
+      // Prepare product data for database
       const productData = {
-        ...formData,
-        tipoEquipamento: selectedEquipmentTypes,
-        marca: selectedBrands,
-        modelosCompativeis: compatibleModels.filter(model => model.trim() !== ''),
-        imagens: images,
-        imagemPrincipal: images[0] || '/placeholder.svg',
-        id: Date.now().toString(),
-        vendorId: 'current-user-id',
-        vendorName: 'Sua Loja',
-        vendorRating: 4.5,
-        dimensoes: {
-          comprimento: formData.comprimento,
-          largura: formData.largura,
-          altura: formData.altura
-        },
-        ativo: true,
-        criadoEm: new Date().toISOString(),
-        atualizadoEm: new Date().toISOString()
+        nome: formData.nome,
+        categoria: formData.categoria,
+        descricao: formData.descricao,
+        marca: selectedBrands.join(', '),
+        modelo: compatibleModels.filter(m => m.trim()).join(', '),
+        preco: formData.precoFinal,
+        estoque: formData.quantidadeEstoque,
+        imagens_url: images.length > 0 ? images : null,
+        loja_id: user.id,
+        ativo: true
       };
 
-      console.log('Produto criado:', productData);
+      const { data, error } = await supabase
+        .from('produtos')
+        .insert(productData)
+        .select()
+        .single();
+
+      if (error) {
+        console.error('Erro ao salvar produto:', error);
+        throw new Error(error.message || 'Erro ao salvar produto no banco de dados');
+      }
+
+      console.log('Produto criado:', data);
       
       toast({
         title: "Produto cadastrado com sucesso!",
@@ -210,6 +224,7 @@ const ProductCreate = () => {
 
       navigate('/loja/products');
     } catch (error) {
+      console.error('Erro:', error);
       toast({
         title: "Erro ao cadastrar produto",
         description: error instanceof Error ? error.message : "Tente novamente.",
