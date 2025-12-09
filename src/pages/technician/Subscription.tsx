@@ -5,7 +5,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import SubscriptionPlans from '@/components/subscription/SubscriptionPlans';
 import CurrentPlanStatus from '@/components/subscription/CurrentPlanStatus';
 import CommissionSummary from '@/components/subscription/CommissionSummary';
-import PlansComparison from '@/components/subscription/PlansComparison';
 import { useSubscription } from '@/hooks/useSubscription';
 import { useToast } from '@/hooks/use-toast';
 
@@ -77,18 +76,12 @@ const TechnicianSubscription = () => {
         )}
 
         <Tabs defaultValue="current" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 bg-card border border-border p-1 rounded-xl shadow-sm">
+          <TabsList className="grid w-full grid-cols-2 bg-card border border-border p-1 rounded-xl shadow-sm">
             <TabsTrigger 
               value="current"
               className="rounded-lg font-medium transition-all data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md"
             >
               Plano Atual
-            </TabsTrigger>
-            <TabsTrigger 
-              value="comparison"
-              className="rounded-lg font-medium transition-all data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md"
-            >
-              🪙 Todos os Planos
             </TabsTrigger>
             <TabsTrigger 
               value="plans"
@@ -116,13 +109,6 @@ const TechnicianSubscription = () => {
                 <CommissionSummary commissions={subscription.commissions} />
               </>
             )}
-          </TabsContent>
-
-          <TabsContent value="comparison" className="mt-8 animate-fade-in">
-            <PlansComparison
-              currentPlan={subscription?.planType}
-              onUpgrade={handleUpgrade}
-            />
           </TabsContent>
 
           <TabsContent value="plans" className="mt-8 animate-fade-in">
