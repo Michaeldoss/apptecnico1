@@ -111,7 +111,7 @@ const plans: Plan[] = [
 
 interface SubscriptionPlansProps {
   currentPlan?: string;
-  onUpgrade?: (planId: string) => void;
+  onUpgrade?: (planId: string, paymentMethod: string) => Promise<void>;
 }
 
 const SubscriptionPlans: React.FC<SubscriptionPlansProps> = ({ 
@@ -137,7 +137,7 @@ const SubscriptionPlans: React.FC<SubscriptionPlansProps> = ({
     
     try {
       // Chamar função de upgrade passando o plano e método de pagamento
-      await onUpgrade(selectedPlan);
+      await onUpgrade(selectedPlan, method);
       setIsPaymentOpen(false);
       setSelectedPlan(null);
     } catch (error) {

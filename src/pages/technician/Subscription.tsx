@@ -12,11 +12,20 @@ const TechnicianSubscription = () => {
   const { subscription, loading, upgradePlan, checkLimit } = useSubscription();
   const { toast } = useToast();
 
-  const handleUpgrade = async (planId: string) => {
-    console.log('Upgrade para plano:', planId);
+  const handleUpgrade = async (planId: string, paymentMethod: string) => {
+    console.log('Upgrade para plano:', planId, 'Método:', paymentMethod);
     
-    if (planId === 'basic' || planId === 'professional' || planId === 'premium') {
-      await upgradePlan(planId);
+    // Mapear planId para o nome do plano esperado pelo upgradePlan
+    const planMap: Record<string, string> = {
+      'basic': 'basic',
+      'professional': 'professional', 
+      'corporate': 'premium'
+    };
+    
+    const mappedPlan = planMap[planId] || planId;
+    
+    if (mappedPlan === 'basic' || mappedPlan === 'professional' || mappedPlan === 'premium') {
+      await upgradePlan(mappedPlan, paymentMethod);
     }
   };
 
