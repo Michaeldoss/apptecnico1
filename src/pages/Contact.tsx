@@ -1,12 +1,71 @@
-
 import React, { useState } from 'react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import { Mail, Phone, Contact as ContactIcon, MapPin, Clock, Send } from 'lucide-react';
+import { Mail, Phone, MapPin, Clock, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { motion } from 'framer-motion';
+
+const contactInfo = [
+  {
+    icon: Mail,
+    title: 'Email',
+    content: 'comercial@dossgroup.com.br',
+    action: {
+      label: 'Enviar Email',
+      href: 'mailto:comercial@dossgroup.com.br',
+    },
+  },
+  {
+    icon: Phone,
+    title: 'Telefone',
+    content: ['(47) 99230-7367', '(47) 3032-1234'],
+    action: {
+      label: 'Ligar Agora',
+      href: 'tel:+5547992307367',
+    },
+  },
+  {
+    icon: MapPin,
+    title: 'Endereço',
+    content: ['Rua Victor Konder, 208', 'Comasa - Joinville/SC', 'CEP: 89227-240'],
+    action: {
+      label: 'Ver Mapa',
+      href: 'https://maps.google.com/?q=Rua+Victor+Konder+208+Comasa+Joinville+SC',
+      external: true,
+    },
+  },
+  {
+    icon: Clock,
+    title: 'Horário',
+    content: 'Atendimento 24 horas',
+    highlight: true,
+  },
+];
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: 'easeOut',
+    },
+  },
+};
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -27,88 +86,89 @@ const Contact = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Form submitted:', formData);
-    // Aqui você adicionaria a lógica de envio do formulário
   };
 
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
       
-      {/* Header com gradiente Instalei */}
+      {/* Header */}
       <div className="bg-primary text-white py-20">
         <div className="container-instalei">
-          <div className="text-center">
-            <h1 className="text-5xl md:text-6xl font-bold text-white mb-instalei-md font-inter">
-              Entre em Contato com a Instalei
+          <motion.div 
+            className="text-center"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+              Entre em Contato
             </h1>
-            <p className="text-xl text-instalei-gray-200 max-w-3xl mx-auto font-inter">
-              Estamos aqui para ajudar você. Entre em contato conosco através dos canais abaixo ou envie uma mensagem.
+            <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed">
+              Estamos aqui para ajudar você. Entre em contato conosco através dos canais abaixo.
             </p>
-          </div>
+          </motion.div>
         </div>
       </div>
       
       <div className="flex-1 bg-background section-padding">
         <div className="container-instalei">
           {/* Contact Cards */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-instalei-md mb-instalei-2xl">
-            <Card className="card-instalei text-center group">
-              <CardHeader>
-                <Mail className="h-12 w-12 icon-accent mx-auto mb-4 group-hover:scale-110 transition-transform duration-200" />
-                <CardTitle className="text-lg font-semibold text-primary font-inter">Email</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-4 font-inter">comercial@dossgroup.com.br</p>
-                <Button variant="outline" size="sm" className="font-inter" asChild>
-                  <a href="mailto:comercial@dossgroup.com.br">Enviar Email</a>
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card className="card-instalei text-center group">
-              <CardHeader>
-                <Phone className="h-12 w-12 icon-accent mx-auto mb-4 group-hover:scale-110 transition-transform duration-200" />
-                <CardTitle className="text-lg font-semibold text-primary font-inter">Telefone</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-2 font-inter">(47) 99230-7367</p>
-                <p className="text-muted-foreground mb-4 font-inter">(47) 3032-1234</p>
-                <Button variant="outline" size="sm" className="font-inter" asChild>
-                  <a href="tel:+5547992307367">Ligar Agora</a>
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card className="card-instalei text-center group">
-              <CardHeader>
-                <MapPin className="h-12 w-12 icon-accent mx-auto mb-4 group-hover:scale-110 transition-transform duration-200" />
-                <CardTitle className="text-lg font-semibold text-primary font-inter">Endereço</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-4 font-inter text-sm">
-                  Rua Victor Konder, 208<br />
-                  Comasa - Joinville/SC<br />
-                  CEP: 89227-240
-                </p>
-                <Button variant="outline" size="sm" className="font-inter" asChild>
-                  <a href="https://maps.google.com/?q=Rua+Victor+Konder+208+Comasa+Joinville+SC" target="_blank" rel="noopener noreferrer">Ver Mapa</a>
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card className="card-instalei text-center group">
-              <CardHeader>
-                <Clock className="h-12 w-12 icon-accent mx-auto mb-4 group-hover:scale-110 transition-transform duration-200" />
-                <CardTitle className="text-lg font-semibold text-primary font-inter">Horário</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-4 font-inter font-semibold">Atendimento 24 horas</p>
-                <Button variant="outline" size="sm" className="font-inter">
-                  Ver Detalhes
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
+          <motion.div 
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            {contactInfo.map((info, index) => {
+              const IconComponent = info.icon;
+              return (
+                <motion.div key={index} variants={itemVariants}>
+                  <Card className="h-full bg-card border border-border/50 hover:border-primary/30 hover:shadow-lg transition-all duration-300 group">
+                    <CardContent className="p-6 flex flex-col items-center justify-center text-center min-h-[220px]">
+                      <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
+                        <IconComponent className="h-7 w-7 text-primary" />
+                      </div>
+                      
+                      <h3 className="text-lg font-semibold text-foreground mb-3">
+                        {info.title}
+                      </h3>
+                      
+                      <div className="flex-1 flex flex-col items-center justify-center mb-4">
+                        {Array.isArray(info.content) ? (
+                          info.content.map((line, i) => (
+                            <p key={i} className="text-muted-foreground text-sm leading-relaxed">
+                              {line}
+                            </p>
+                          ))
+                        ) : (
+                          <p className={`text-sm leading-relaxed ${info.highlight ? 'text-primary font-semibold' : 'text-muted-foreground'}`}>
+                            {info.content}
+                          </p>
+                        )}
+                      </div>
+                      
+                      {info.action && (
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="mt-auto hover:bg-primary hover:text-primary-foreground transition-colors"
+                          asChild
+                        >
+                          <a 
+                            href={info.action.href}
+                            {...(info.action.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                          >
+                            {info.action.label}
+                          </a>
+                        </Button>
+                      )}
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              );
+            })}
+          </motion.div>
 
           {/* Contact Form */}
           <div className="max-w-4xl mx-auto">
