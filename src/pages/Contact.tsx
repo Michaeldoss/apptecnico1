@@ -84,6 +84,25 @@ const faqTecnicos = [
   },
 ];
 
+const faqLojistas = [
+  {
+    question: 'Como cadastrar minha loja na plataforma?',
+    answer: 'Clique em "Cadastrar-se como Loja", preencha os dados da sua empresa, envie os documentos necessários (CNPJ, contrato social) e aguarde a aprovação da nossa equipe.',
+  },
+  {
+    question: 'Quais são as taxas e comissões?',
+    answer: 'Trabalhamos com taxas competitivas que variam conforme o plano escolhido. Você pode visualizar todos os detalhes no painel da loja após o cadastro.',
+  },
+  {
+    question: 'Como gerencio meus produtos?',
+    answer: 'Através do painel do lojista, você pode cadastrar, editar e remover produtos, além de controlar estoque, preços e promoções de forma simples e intuitiva.',
+  },
+  {
+    question: 'Como recebo pelos produtos vendidos?',
+    answer: 'Os pagamentos são processados automaticamente e transferidos para sua conta bancária cadastrada, com relatórios detalhados disponíveis no painel.',
+  },
+];
+
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -318,7 +337,7 @@ const Contact = () => {
               </p>
             </div>
             
-            <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
               {/* FAQ Clientes */}
               <Card className="bg-card border border-border/50">
                 <CardHeader className="pb-2">
@@ -355,6 +374,29 @@ const Contact = () => {
                   <Accordion type="single" collapsible className="w-full">
                     {faqTecnicos.map((faq, index) => (
                       <AccordionItem key={index} value={`tecnico-${index}`} className="border-border/50">
+                        <AccordionTrigger className="text-left text-sm hover:text-primary transition-colors">
+                          {faq.question}
+                        </AccordionTrigger>
+                        <AccordionContent className="text-muted-foreground text-sm leading-relaxed">
+                          {faq.answer}
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+                  </Accordion>
+                </CardContent>
+              </Card>
+              {/* FAQ Lojistas */}
+              <Card className="bg-card border border-border/50 md:col-span-2 lg:col-span-1">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg font-semibold text-primary flex items-center gap-2">
+                    <span className="w-2 h-2 bg-primary rounded-full"></span>
+                    Para Lojistas
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Accordion type="single" collapsible className="w-full">
+                    {faqLojistas.map((faq, index) => (
+                      <AccordionItem key={index} value={`lojista-${index}`} className="border-border/50">
                         <AccordionTrigger className="text-left text-sm hover:text-primary transition-colors">
                           {faq.question}
                         </AccordionTrigger>
