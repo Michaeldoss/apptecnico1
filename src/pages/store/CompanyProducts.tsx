@@ -1,7 +1,8 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Navigate, Link } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
 import StoreLayout from '@/components/layout/StoreLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -17,7 +18,8 @@ import {
   Copy,
   Trash2,
   Eye,
-  ArrowLeft
+  ArrowLeft,
+  Loader2
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -28,49 +30,24 @@ import {
 import { toast } from '@/hooks/use-toast';
 import { formatCurrency } from '@/lib/format';
 
-// Mock products data
-const mockProducts = [
-  {
-    id: '1',
-    nome: 'Damper UV Premium - Epson DX5',
-    categoria: 'damper',
-    preco: 45.90,
-    quantidadeEstoque: 25,
-    imagem: '/placeholder.svg',
-    ativo: true,
-    criadoEm: '2024-01-15',
-    tipoEquipamento: ['UV'],
-    marca: ['Epson']
-  },
-  {
-    id: '2',
-    nome: 'Cabeça de Impressão DTF - XP600',
-    categoria: 'cabeca-impressao',
-    preco: 850.00,
-    quantidadeEstoque: 8,
-    imagem: '/placeholder.svg',
-    ativo: true,
-    criadoEm: '2024-01-10',
-    tipoEquipamento: ['DTF'],
-    marca: ['Epson']
-  },
-  {
-    id: '3',
-    nome: 'Wiper Blade Original - Roland',
-    categoria: 'wiper',
-    preco: 12.50,
-    quantidadeEstoque: 0,
-    imagem: '/placeholder.svg',
-    ativo: false,
-    criadoEm: '2024-01-05',
-    tipoEquipamento: ['Solvente'],
-    marca: ['Roland']
-  }
-];
+interface Product {
+  id: string;
+  nome: string;
+  categoria: string | null;
+  preco: number;
+  estoque: number | null;
+  imagens_url: string[] | null;
+  ativo: boolean | null;
+  created_at: string;
+  marca: string | null;
+  modelo: string | null;
+  descricao: string | null;
+}
 
 const CompanyProducts = () => {
-  const { isAuthenticated, userType } = useAuth();
-  const [products, setProducts] = useState(mockProducts);
+  const { isAuthenticated, userType, user } = useAuth();
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState<'all' | 'active' | 'inactive' | 'low-stock'>('all');
 
@@ -79,28 +56,97 @@ const CompanyProducts = () => {
     return <Navigate to="/loja/register" replace />;
   }
 
-  const handleToggleStatus = (productId: string) => {
-    setProducts(prev => prev.map(product => 
-      product.id === productId 
-        ? { ...product, ativo: !product.ativo }
-        : product
-    ));
-    toast({
-      title: "Status atualizado",
-      description: "O status do produto foi alterado com sucesso.",
-    });
+  useEffect(() => {
+    loadProducts();
+  }, [user]);
+
+  const loadProducts = async () => {
+    if (!user) return;
+    
+    setLoading(true);
+    const { data, error } = await supabase
+      .from('produtos')
+      .select('*')
+      .eq('loja_id', user.id)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Erro ao carregar produtos:', error);
+      toast({
+        title: "Erro ao carregar produtos",
+        description: error.message,
+        variant: "destructive"
+      });
+    } else {
+      // Type-safe transformation of imagens_url
+      const transformedData = (data || []).map(item => ({
+        ...item,
+        imagens_url: Array.isArray(item.imagens_url) 
+          ? item.imagens_url as string[]
+          : null
+      }));
+      setProducts(transformedData);
+    }
+    setLoading(false);
   };
 
-  const handleDuplicate = (productId: string) => {
+  const handleToggleStatus = async (productId: string) => {
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+
+    const { error } = await supabase
+      .from('produtos')
+      .update({ ativo: !product.ativo })
+      .eq('id', productId);
+
+    if (error) {
+      toast({
+        title: "Erro ao atualizar status",
+        description: error.message,
+        variant: "destructive"
+      });
+    } else {
+      setProducts(prev => prev.map(p => 
+        p.id === productId ? { ...p, ativo: !p.ativo } : p
+      ));
+      toast({
+        title: "Status atualizado",
+        description: "O status do produto foi alterado com sucesso.",
+      });
+    }
+  };
+
+  const handleDuplicate = async (productId: string) => {
     const productToDuplicate = products.find(p => p.id === productId);
-    if (productToDuplicate) {
-      const duplicatedProduct = {
-        ...productToDuplicate,
-        id: Date.now().toString(),
-        nome: productToDuplicate.nome + ' - Cópia',
-        criadoEm: new Date().toISOString().split('T')[0]
+    if (!productToDuplicate || !user) return;
+
+    const { id, created_at, ...productData } = productToDuplicate;
+    const duplicatedProduct = {
+      ...productData,
+      nome: productData.nome + ' - Cópia',
+      loja_id: user.id
+    };
+
+    const { data, error } = await supabase
+      .from('produtos')
+      .insert(duplicatedProduct)
+      .select()
+      .single();
+
+    if (error) {
+      toast({
+        title: "Erro ao duplicar produto",
+        description: error.message,
+        variant: "destructive"
+      });
+    } else {
+      const transformedData = {
+        ...data,
+        imagens_url: Array.isArray(data.imagens_url) 
+          ? data.imagens_url as string[]
+          : null
       };
-      setProducts(prev => [duplicatedProduct, ...prev]);
+      setProducts(prev => [transformedData, ...prev]);
       toast({
         title: "Produto duplicado",
         description: "Uma cópia do produto foi criada com sucesso.",
@@ -108,8 +154,21 @@ const CompanyProducts = () => {
     }
   };
 
-  const handleDelete = (productId: string) => {
-    if (window.confirm('Tem certeza que deseja excluir este produto?')) {
+  const handleDelete = async (productId: string) => {
+    if (!window.confirm('Tem certeza que deseja excluir este produto?')) return;
+
+    const { error } = await supabase
+      .from('produtos')
+      .delete()
+      .eq('id', productId);
+
+    if (error) {
+      toast({
+        title: "Erro ao excluir produto",
+        description: error.message,
+        variant: "destructive"
+      });
+    } else {
       setProducts(prev => prev.filter(p => p.id !== productId));
       toast({
         title: "Produto excluído",
@@ -119,7 +178,8 @@ const CompanyProducts = () => {
   };
 
   const filteredProducts = products.filter(product => {
-    const matchesSearch = product.nome.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = product.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (product.marca?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false);
     
     switch (filter) {
       case 'active':
@@ -127,15 +187,16 @@ const CompanyProducts = () => {
       case 'inactive':
         return matchesSearch && !product.ativo;
       case 'low-stock':
-        return matchesSearch && product.quantidadeEstoque <= 5;
+        return matchesSearch && (product.estoque ?? 0) <= 5;
       default:
         return matchesSearch;
     }
   });
 
-  const getStockStatus = (quantity: number) => {
-    if (quantity === 0) return { label: 'Sem estoque', color: 'destructive' };
-    if (quantity <= 5) return { label: 'Estoque baixo', color: 'secondary' };
+  const getStockStatus = (quantity: number | null) => {
+    const qty = quantity ?? 0;
+    if (qty === 0) return { label: 'Sem estoque', color: 'destructive' };
+    if (qty <= 5) return { label: 'Estoque baixo', color: 'secondary' };
     return { label: 'Em estoque', color: 'default' };
   };
 
@@ -209,18 +270,23 @@ const CompanyProducts = () => {
                   onClick={() => setFilter('low-stock')}
                   className={filter === 'low-stock' ? '' : 'bg-white/5 border-white/20 text-white hover:bg-white/10'}
                 >
-                  Estoque Baixo ({products.filter(p => p.quantidadeEstoque <= 5).length})
+                  Estoque Baixo ({products.filter(p => (p.estoque ?? 0) <= 5).length})
                 </Button>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Products Grid */}
-        {filteredProducts.length > 0 ? (
+        {/* Loading State */}
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin text-white" />
+          </div>
+        ) : filteredProducts.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredProducts.map((product) => {
-              const stockStatus = getStockStatus(product.quantidadeEstoque);
+              const stockStatus = getStockStatus(product.estoque);
+              const mainImage = product.imagens_url?.[0] || '/placeholder.svg';
               
               return (
                 <Card key={product.id} className="bg-white/95 backdrop-blur-sm hover:bg-white transition-all duration-300 hover:shadow-xl border-white/20">
@@ -276,7 +342,7 @@ const CompanyProducts = () => {
                   <CardContent>
                     <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden mb-4">
                       <img 
-                        src={product.imagem} 
+                        src={mainImage} 
                         alt={product.nome}
                         className="w-full h-full object-cover"
                       />
@@ -288,20 +354,20 @@ const CompanyProducts = () => {
                           {formatCurrency(product.preco)}
                         </span>
                         <span className="text-sm text-gray-600">
-                          Estoque: {product.quantidadeEstoque}
+                          Estoque: {product.estoque ?? 0}
                         </span>
                       </div>
                       
-                      <div className="flex flex-wrap gap-1">
-                        {product.tipoEquipamento.map((tipo) => (
-                          <Badge key={tipo} variant="outline" className="text-xs">
-                            {tipo}
+                      {product.marca && (
+                        <div className="flex flex-wrap gap-1">
+                          <Badge variant="outline" className="text-xs">
+                            {product.marca}
                           </Badge>
-                        ))}
-                      </div>
+                        </div>
+                      )}
                       
                       <div className="text-sm text-gray-500">
-                        Criado em: {new Date(product.criadoEm).toLocaleDateString('pt-BR')}
+                        Criado em: {new Date(product.created_at).toLocaleDateString('pt-BR')}
                       </div>
                     </div>
                   </CardContent>

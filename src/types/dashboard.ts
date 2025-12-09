@@ -24,11 +24,12 @@ export interface ServiceMetrics {
 }
 
 export interface StockItem {
-  id: number;
+  id: string | number;
   name: string;
   currentStock: number;
   minStock: number;
   urgent: boolean;
+  unit?: string;
 }
 
 export interface KPIMetrics {
@@ -45,10 +46,11 @@ export interface WeeklyEarnings {
 }
 
 export interface Alert {
-  id: number;
+  id: string | number;
   type: 'message' | 'stock' | 'schedule' | 'payment';
   title: string;
   description: string;
   urgent: boolean;
   time: string;
+  message?: string;
 }

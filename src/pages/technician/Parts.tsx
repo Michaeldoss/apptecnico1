@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import TechnicianLayout from '@/components/layout/TechnicianLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,6 +12,11 @@ import PartsAlerts from '@/components/parts/PartsAlerts';
 const TechnicianParts = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isAddingPart, setIsAddingPart] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const handlePartAdded = () => {
+    setRefreshKey(prev => prev + 1);
+  };
 
   return (
     <TechnicianLayout title="Controle de Peças e Estoque">
@@ -43,7 +47,7 @@ const TechnicianParts = () => {
           </TabsList>
           
           <TabsContent value="inventory" className="space-y-4">
-            <PartsInventory searchQuery={searchQuery} />
+            <PartsInventory key={refreshKey} searchQuery={searchQuery} />
           </TabsContent>
           
           <TabsContent value="alerts" className="space-y-4">
@@ -65,6 +69,7 @@ const TechnicianParts = () => {
         <PartForm 
           isOpen={isAddingPart}
           onClose={() => setIsAddingPart(false)}
+          onSuccess={handlePartAdded}
         />
       </div>
     </TechnicianLayout>

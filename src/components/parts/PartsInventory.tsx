@@ -1,5 +1,6 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -17,29 +18,22 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { MoreVertical, Package, AlertTriangle, Edit, Trash2, Eye, Plus } from 'lucide-react';
+import { MoreVertical, Package, AlertTriangle, Edit, Trash2, Eye, Plus, Loader2 } from 'lucide-react';
 import { formatCurrency } from '@/lib/format';
+import { toast } from '@/hooks/use-toast';
 
 interface Part {
-  id: number;
-  name: string;
-  mcmCode: string;
-  category: string;
-  machine: string;
-  type: 'nova' | 'usada' | 'recondicionada';
-  purchasePrice: number;
-  shippingCost: number;
-  additionalCosts: number;
-  totalCost: number;
-  markupPercent: number;
-  suggestedPrice: number;
-  finalPrice: number;
-  currentStock: number;
-  minStock: number;
-  maxStock: number;
-  entryDate: string;
-  images?: string[];
-  invoiceNumber?: string;
+  id: string;
+  nome: string;
+  categoria: string | null;
+  marca: string | null;
+  modelo: string | null;
+  preco: number;
+  estoque: number | null;
+  descricao: string | null;
+  compatibilidade: string[] | null;
+  ativo: boolean | null;
+  created_at: string;
 }
 
 interface PartsInventoryProps {
@@ -47,88 +41,108 @@ interface PartsInventoryProps {
 }
 
 const PartsInventory: React.FC<PartsInventoryProps> = ({ searchQuery }) => {
-  const [parts] = useState<Part[]>([
-    {
-      id: 1,
-      name: 'Capping DX5',
-      mcmCode: 'CAP-DX5-001',
-      category: 'Cabeçote',
-      machine: 'Grando 60cm',
-      type: 'nova',
-      purchasePrice: 120.00,
-      shippingCost: 30.00,
-      additionalCosts: 0.00,
-      totalCost: 150.00,
-      markupPercent: 100,
-      suggestedPrice: 300.00,
-      finalPrice: 300.00,
-      currentStock: 3,
-      minStock: 3,
-      maxStock: 10,
-      entryDate: '2024-01-15',
-      invoiceNumber: 'NF-001234'
-    },
-    {
-      id: 2,
-      name: 'Damper Epson DX7',
-      mcmCode: 'DMP-DX7-002',
-      category: 'Damper',
-      machine: 'Epson F170',
-      type: 'nova',
-      purchasePrice: 45.00,
-      shippingCost: 15.00,
-      additionalCosts: 5.00,
-      totalCost: 65.00,
-      markupPercent: 150,
-      suggestedPrice: 162.50,
-      finalPrice: 160.00,
-      currentStock: 8,
-      minStock: 5,
-      maxStock: 20,
-      entryDate: '2024-01-10'
-    },
-    {
-      id: 3,
-      name: 'Correia Motor Principal',
-      mcmCode: 'COR-MOT-003',
-      category: 'Correia',
-      machine: '',
-      type: 'recondicionada',
-      purchasePrice: 80.00,
-      shippingCost: 20.00,
-      additionalCosts: 10.00,
-      totalCost: 110.00,
-      markupPercent: 80,
-      suggestedPrice: 198.00,
-      finalPrice: 200.00,
-      currentStock: 2,
-      minStock: 4,
-      maxStock: 8,
-      entryDate: '2024-01-05'
+  const [parts, setParts] = useState<Part[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadParts();
+  }, []);
+
+  const loadParts = async () => {
+    const { data: user } = await supabase.auth.getUser();
+    if (!user.user) return;
+
+    setLoading(true);
+    const { data, error } = await supabase
+      .from('pecas')
+      .select('*')
+      .eq('tecnico_id', user.user.id)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Erro ao carregar peças:', error);
+      toast({
+        title: "Erro ao carregar peças",
+        description: error.message,
+        variant: "destructive"
+      });
+    } else {
+      setParts(data || []);
     }
-  ]);
+    setLoading(false);
+  };
+
+  const handleDelete = async (partId: string) => {
+    if (!window.confirm('Tem certeza que deseja excluir esta peça?')) return;
+
+    const { error } = await supabase
+      .from('pecas')
+      .delete()
+      .eq('id', partId);
+
+    if (error) {
+      toast({
+        title: "Erro ao excluir peça",
+        description: error.message,
+        variant: "destructive"
+      });
+    } else {
+      setParts(prev => prev.filter(p => p.id !== partId));
+      toast({
+        title: "Peça excluída",
+        description: "A peça foi removida com sucesso.",
+      });
+    }
+  };
+
+  const handleUpdateStock = async (partId: string, newStock: number) => {
+    const { error } = await supabase
+      .from('pecas')
+      .update({ estoque: newStock })
+      .eq('id', partId);
+
+    if (error) {
+      toast({
+        title: "Erro ao atualizar estoque",
+        description: error.message,
+        variant: "destructive"
+      });
+    } else {
+      setParts(prev => prev.map(p => 
+        p.id === partId ? { ...p, estoque: newStock } : p
+      ));
+      toast({
+        title: "Estoque atualizado",
+        description: "O estoque foi atualizado com sucesso.",
+      });
+    }
+  };
 
   const filteredParts = parts.filter(part => 
-    part.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    part.mcmCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    part.machine.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    part.category.toLowerCase().includes(searchQuery.toLowerCase())
+    part.nome.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (part.marca?.toLowerCase().includes(searchQuery.toLowerCase()) ?? false) ||
+    (part.modelo?.toLowerCase().includes(searchQuery.toLowerCase()) ?? false) ||
+    (part.categoria?.toLowerCase().includes(searchQuery.toLowerCase()) ?? false)
   );
 
-  const getTypeColor = (type: string) => {
-    switch (type) {
-      case 'nova': return 'bg-green-100 text-green-800';
-      case 'usada': return 'bg-yellow-100 text-yellow-800';
-      case 'recondicionada': return 'bg-blue-100 text-blue-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
+  const getStockStatus = (current: number | null, min: number = 3) => {
+    const stock = current ?? 0;
+    if (stock <= min) return { color: 'text-red-500', icon: AlertTriangle, status: 'Crítico' };
+    if (stock <= min * 1.5) return { color: 'text-yellow-500', icon: AlertTriangle, status: 'Baixo' };
+    return { color: 'text-green-500', icon: Package, status: 'Normal' };
   };
 
-  const getStockStatus = (current: number, min: number) => {
-    if (current <= min) return { color: 'text-red-500', icon: AlertTriangle };
-    if (current <= min * 1.5) return { color: 'text-yellow-500', icon: AlertTriangle };
-    return { color: 'text-green-500', icon: Package };
-  };
+  if (loading) {
+    return (
+      <Card>
+        <CardContent className="py-12">
+          <div className="flex items-center justify-center">
+            <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card>
@@ -146,10 +160,9 @@ const PartsInventory: React.FC<PartsInventoryProps> = ({ searchQuery }) => {
           <TableHeader>
             <TableRow>
               <TableHead>Peça</TableHead>
-              <TableHead>Máquina</TableHead>
-              <TableHead>Tipo</TableHead>
-              <TableHead>Custo Total</TableHead>
-              <TableHead>Preço Final</TableHead>
+              <TableHead>Marca/Modelo</TableHead>
+              <TableHead>Categoria</TableHead>
+              <TableHead>Preço</TableHead>
               <TableHead>Estoque</TableHead>
               <TableHead>Status</TableHead>
               <TableHead className="text-right">Ações</TableHead>
@@ -158,75 +171,55 @@ const PartsInventory: React.FC<PartsInventoryProps> = ({ searchQuery }) => {
           <TableBody>
             {filteredParts.length > 0 ? (
               filteredParts.map((part) => {
-                const stockStatus = getStockStatus(part.currentStock, part.minStock);
+                const stockStatus = getStockStatus(part.estoque);
                 const StatusIcon = stockStatus.icon;
                 
                 return (
                   <TableRow key={part.id}>
                     <TableCell>
                       <div>
-                        <p className="font-medium">{part.name}</p>
-                        <div className="flex items-center gap-2 mt-1">
-                          <Badge variant="outline" className="text-xs">
-                            {part.mcmCode}
-                          </Badge>
-                          <Badge variant="secondary" className="text-xs">
-                            {part.category}
-                          </Badge>
-                        </div>
+                        <p className="font-medium">{part.nome}</p>
+                        {part.descricao && (
+                          <p className="text-xs text-muted-foreground line-clamp-1">
+                            {part.descricao}
+                          </p>
+                        )}
                       </div>
                     </TableCell>
                     <TableCell>
-                      <span className="text-sm">{part.machine}</span>
-                    </TableCell>
-                    <TableCell>
-                      <Badge className={`text-xs ${getTypeColor(part.type)}`}>
-                        {part.type}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <div className="text-sm">
-                        <p className="font-medium">{formatCurrency(part.totalCost)}</p>
-                        <p className="text-xs text-muted-foreground">
-                          Compra: {formatCurrency(part.purchasePrice)}
-                        </p>
+                      <div className="flex flex-col gap-1">
+                        {part.marca && <Badge variant="outline" className="text-xs w-fit">{part.marca}</Badge>}
+                        {part.modelo && <span className="text-sm text-muted-foreground">{part.modelo}</span>}
                       </div>
                     </TableCell>
                     <TableCell>
-                      <div className="text-sm">
-                        <p className="font-medium text-green-600">
-                          {formatCurrency(part.finalPrice)}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          Lucro: {part.markupPercent}%
-                        </p>
-                      </div>
+                      {part.categoria && (
+                        <Badge variant="secondary" className="text-xs">
+                          {part.categoria}
+                        </Badge>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <span className="font-medium text-green-600">
+                        {formatCurrency(part.preco)}
+                      </span>
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <StatusIcon className={`h-4 w-4 ${stockStatus.color}`} />
                         <span className={`font-medium ${stockStatus.color}`}>
-                          {part.currentStock}
-                        </span>
-                        <span className="text-xs text-muted-foreground">
-                          / {part.maxStock}
+                          {part.estoque ?? 0}
                         </span>
                       </div>
                     </TableCell>
                     <TableCell>
-                      {part.currentStock <= part.minStock ? (
-                        <Badge variant="destructive" className="text-xs">
-                          Crítico
-                        </Badge>
-                      ) : part.currentStock <= part.minStock * 1.5 ? (
-                        <Badge variant="secondary" className="text-xs">
-                          Baixo
-                        </Badge>
-                      ) : (
-                        <Badge className="text-xs bg-green-100 text-green-800">
-                          Normal
-                        </Badge>
-                      )}
+                      <Badge 
+                        variant={stockStatus.status === 'Crítico' ? 'destructive' : 
+                                stockStatus.status === 'Baixo' ? 'secondary' : 'default'}
+                        className="text-xs"
+                      >
+                        {stockStatus.status}
+                      </Badge>
                     </TableCell>
                     <TableCell className="text-right">
                       <DropdownMenu>
@@ -244,15 +237,30 @@ const PartsInventory: React.FC<PartsInventoryProps> = ({ searchQuery }) => {
                             <Edit className="h-4 w-4 mr-2" />
                             Editar
                           </DropdownMenuItem>
-                          <DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => {
+                            const newStock = prompt('Novo estoque:', String(part.estoque ?? 0));
+                            if (newStock !== null) {
+                              handleUpdateStock(part.id, parseInt(newStock) || 0);
+                            }
+                          }}>
                             <Package className="h-4 w-4 mr-2" />
+                            Atualizar estoque
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => {
+                            const qty = prompt('Quantidade a dar baixa:', '1');
+                            if (qty !== null) {
+                              const current = part.estoque ?? 0;
+                              const newStock = Math.max(0, current - (parseInt(qty) || 0));
+                              handleUpdateStock(part.id, newStock);
+                            }
+                          }}>
+                            <Plus className="h-4 w-4 mr-2" />
                             Dar baixa
                           </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <Plus className="h-4 w-4 mr-2" />
-                            Adicionar estoque
-                          </DropdownMenuItem>
-                          <DropdownMenuItem className="text-red-500">
+                          <DropdownMenuItem 
+                            className="text-red-500"
+                            onClick={() => handleDelete(part.id)}
+                          >
                             <Trash2 className="h-4 w-4 mr-2" />
                             Remover
                           </DropdownMenuItem>
@@ -264,8 +272,8 @@ const PartsInventory: React.FC<PartsInventoryProps> = ({ searchQuery }) => {
               })
             ) : (
               <TableRow>
-                <TableCell colSpan={8} className="text-center text-muted-foreground">
-                  Nenhuma peça encontrada.
+                <TableCell colSpan={7} className="text-center text-muted-foreground py-8">
+                  {searchQuery ? 'Nenhuma peça encontrada com os termos de busca.' : 'Nenhuma peça cadastrada. Clique em "Nova Peça" para adicionar.'}
                 </TableCell>
               </TableRow>
             )}
