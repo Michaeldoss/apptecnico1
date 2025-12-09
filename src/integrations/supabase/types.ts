@@ -192,6 +192,86 @@ export type Database = {
           },
         ]
       }
+      carteira_cliente: {
+        Row: {
+          cliente_id: string
+          created_at: string
+          id: string
+          saldo: number
+          saldo_bloqueado: number
+          updated_at: string
+        }
+        Insert: {
+          cliente_id: string
+          created_at?: string
+          id?: string
+          saldo?: number
+          saldo_bloqueado?: number
+          updated_at?: string
+        }
+        Update: {
+          cliente_id?: string
+          created_at?: string
+          id?: string
+          saldo?: number
+          saldo_bloqueado?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      carteira_movimentacoes: {
+        Row: {
+          carteira_id: string
+          created_at: string
+          descricao: string | null
+          id: string
+          mercadopago_payment_id: string | null
+          referencia_id: string | null
+          referencia_tipo: string | null
+          saldo_anterior: number
+          saldo_posterior: number
+          status: string
+          tipo: string
+          valor: number
+        }
+        Insert: {
+          carteira_id: string
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          mercadopago_payment_id?: string | null
+          referencia_id?: string | null
+          referencia_tipo?: string | null
+          saldo_anterior: number
+          saldo_posterior: number
+          status?: string
+          tipo: string
+          valor: number
+        }
+        Update: {
+          carteira_id?: string
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          mercadopago_payment_id?: string | null
+          referencia_id?: string | null
+          referencia_tipo?: string | null
+          saldo_anterior?: number
+          saldo_posterior?: number
+          status?: string
+          tipo?: string
+          valor?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "carteira_movimentacoes_carteira_id_fkey"
+            columns: ["carteira_id"]
+            isOneToOne: false
+            referencedRelation: "carteira_cliente"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       clientes: {
         Row: {
           ativo: boolean | null
@@ -531,6 +611,56 @@ export type Database = {
             columns: ["tecnico_id"]
             isOneToOne: false
             referencedRelation: "tecnicos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pagamentos_assinatura: {
+        Row: {
+          created_at: string
+          data_pagamento: string | null
+          id: string
+          meio_pagamento: string
+          mercadopago_payment_id: string | null
+          mercadopago_preference_id: string | null
+          plano_contratado_id: string | null
+          status: string
+          updated_at: string
+          usuario_id: string
+          valor: number
+        }
+        Insert: {
+          created_at?: string
+          data_pagamento?: string | null
+          id?: string
+          meio_pagamento: string
+          mercadopago_payment_id?: string | null
+          mercadopago_preference_id?: string | null
+          plano_contratado_id?: string | null
+          status?: string
+          updated_at?: string
+          usuario_id: string
+          valor: number
+        }
+        Update: {
+          created_at?: string
+          data_pagamento?: string | null
+          id?: string
+          meio_pagamento?: string
+          mercadopago_payment_id?: string | null
+          mercadopago_preference_id?: string | null
+          plano_contratado_id?: string | null
+          status?: string
+          updated_at?: string
+          usuario_id?: string
+          valor?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pagamentos_assinatura_plano_contratado_id_fkey"
+            columns: ["plano_contratado_id"]
+            isOneToOne: false
+            referencedRelation: "planos_contratados"
             referencedColumns: ["id"]
           },
         ]

@@ -50,6 +50,7 @@ import CustomerServiceRequest from '@/pages/customer/ServiceRequest';
 import CustomerEmergency from '@/pages/customer/Emergency';
 import CustomerPreventiveMaintenance from '@/pages/customer/PreventiveMaintenance';
 import CustomerBusinessReports from '@/pages/customer/BusinessReports';
+import CustomerWallet from '@/pages/customer/Wallet';
 
 // Technician pages
 import TechnicianDashboard from '@/pages/technician/Dashboard';
@@ -321,6 +322,11 @@ function App() {
               <Route path="/cliente/relatorios" element={
                 <ProtectedRoute userType="customer">
                   <CustomerBusinessReports />
+                </ProtectedRoute>
+              } />
+              <Route path="/cliente/carteira" element={
+                <ProtectedRoute userType="customer">
+                  <CustomerWallet />
                 </ProtectedRoute>
               } />
 
