@@ -53,7 +53,7 @@ const faqClientes = [
   },
   {
     question: 'Quais são as formas de pagamento aceitas?',
-    answer: 'Aceitamos diversas formas de pagamento: cartão de crédito, débito, PIX e boleto bancário. O pagamento é realizado apenas após a conclusão do serviço.',
+    answer: 'Aceitamos diversas formas de pagamento: cartão de crédito, débito, PIX e boleto bancário. O pagamento é liberado apenas após a conclusão do serviço e confirmação do cliente e do técnico.',
   },
   {
     question: 'Como acompanhar meu chamado?',
