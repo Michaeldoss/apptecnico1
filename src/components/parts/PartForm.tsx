@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 import {
   Dialog,
   DialogContent,
@@ -22,30 +23,28 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import ImageUpload from '@/components/ui/image-upload';
-import { Calculator, Save } from 'lucide-react';
+import { Calculator, Save, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface PartFormProps {
   isOpen: boolean;
   onClose: () => void;
+  onSuccess?: () => void;
 }
 
-const PartForm: React.FC<PartFormProps> = ({ isOpen, onClose }) => {
+const PartForm: React.FC<PartFormProps> = ({ isOpen, onClose, onSuccess }) => {
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
-    mcmCode: '',
     category: '',
     machine: '',
-    type: 'nova' as 'nova' | 'usada' | 'recondicionada',
+    marca: '',
     purchasePrice: 0,
     shippingCost: 0,
     additionalCosts: 0,
     markupPercent: 100,
     finalPrice: 0,
     currentStock: 0,
-    minStock: 0,
-    maxStock: 0,
-    invoiceNumber: '',
     description: ''
   });
 
@@ -69,14 +68,55 @@ const PartForm: React.FC<PartFormProps> = ({ isOpen, onClose }) => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Validações básicas
-    if (!formData.name || !formData.mcmCode || !formData.category) {
+    if (!formData.name || !formData.category) {
       toast({
         title: "Campos obrigatórios",
         description: "Preencha todos os campos obrigatórios.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setLoading(true);
+    
+    const { data: user } = await supabase.auth.getUser();
+    if (!user.user) {
+      toast({
+        title: "Erro de autenticação",
+        description: "Você precisa estar logado para cadastrar peças.",
+        variant: "destructive"
+      });
+      setLoading(false);
+      return;
+    }
+
+    const partData = {
+      tecnico_id: user.user.id,
+      nome: formData.name,
+      categoria: formData.category,
+      marca: formData.marca || null,
+      modelo: formData.machine || null,
+      preco: formData.finalPrice || suggestedPrice,
+      estoque: formData.currentStock,
+      descricao: formData.description || null,
+      ativo: true
+    };
+
+    const { error } = await supabase
+      .from('pecas')
+      .insert(partData);
+
+    setLoading(false);
+
+    if (error) {
+      console.error('Erro ao cadastrar peça:', error);
+      toast({
+        title: "Erro ao cadastrar peça",
+        description: error.message,
         variant: "destructive"
       });
       return;
@@ -87,6 +127,22 @@ const PartForm: React.FC<PartFormProps> = ({ isOpen, onClose }) => {
       description: `${formData.name} foi adicionada ao estoque.`
     });
     
+    // Reset form
+    setFormData({
+      name: '',
+      category: '',
+      machine: '',
+      marca: '',
+      purchasePrice: 0,
+      shippingCost: 0,
+      additionalCosts: 0,
+      markupPercent: 100,
+      finalPrice: 0,
+      currentStock: 0,
+      description: ''
+    });
+    
+    onSuccess?.();
     onClose();
   };
 
@@ -132,13 +188,12 @@ const PartForm: React.FC<PartFormProps> = ({ isOpen, onClose }) => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="mcm">Código MCM/SKU *</Label>
+                <Label htmlFor="marca">Marca</Label>
                 <Input 
-                  id="mcm"
-                  value={formData.mcmCode}
-                  onChange={(e) => handleInputChange('mcmCode', e.target.value)}
-                  placeholder="Ex: CAP-DX5-001"
-                  required 
+                  id="marca"
+                  value={formData.marca}
+                  onChange={(e) => handleInputChange('marca', e.target.value)}
+                  placeholder="Ex: Epson, Roland"
                 />
               </div>
             </div>
@@ -158,42 +213,21 @@ const PartForm: React.FC<PartFormProps> = ({ isOpen, onClose }) => {
                     <SelectItem value="correia">Correia</SelectItem>
                     <SelectItem value="sensor">Sensor</SelectItem>
                     <SelectItem value="fonte">Fonte</SelectItem>
+                    <SelectItem value="capping">Capping</SelectItem>
+                    <SelectItem value="wiper">Wiper</SelectItem>
+                    <SelectItem value="filtro">Filtro</SelectItem>
+                    <SelectItem value="bomba">Bomba</SelectItem>
                     <SelectItem value="outros">Outros</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="machine">Máquina Associada</Label>
+                <Label htmlFor="machine">Modelo/Máquina</Label>
                 <Input 
                   id="machine"
                   value={formData.machine}
                   onChange={(e) => handleInputChange('machine', e.target.value)}
-                  placeholder="Ex: Epson F170, Grando 60cm"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-3 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="type">Tipo da Peça</Label>
-                <Select onValueChange={(value) => handleInputChange('type', value)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Nova" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="nova">Nova</SelectItem>
-                    <SelectItem value="usada">Usada</SelectItem>
-                    <SelectItem value="recondicionada">Recondicionada</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="invoice">Número da NF</Label>
-                <Input 
-                  id="invoice"
-                  value={formData.invoiceNumber}
-                  onChange={(e) => handleInputChange('invoiceNumber', e.target.value)}
-                  placeholder="Opcional"
+                  placeholder="Ex: DX5, XP600, F170"
                 />
               </div>
             </div>
@@ -262,6 +296,7 @@ const PartForm: React.FC<PartFormProps> = ({ isOpen, onClose }) => {
                     <Input 
                       value={`R$ ${suggestedPrice.toFixed(2)}`}
                       className="bg-background"
+                      readOnly
                     />
                     <Button 
                       type="button"
@@ -292,34 +327,14 @@ const PartForm: React.FC<PartFormProps> = ({ isOpen, onClose }) => {
             <div className="space-y-4">
               <Label className="text-lg font-semibold">Controle de Estoque</Label>
               
-              <div className="grid grid-cols-3 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="current">Quantidade Atual</Label>
-                  <Input 
-                    id="current"
-                    type="number"
-                    value={formData.currentStock}
-                    onChange={(e) => handleInputChange('currentStock', parseInt(e.target.value) || 0)}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="min">Estoque Mínimo</Label>
-                  <Input 
-                    id="min"
-                    type="number"
-                    value={formData.minStock}
-                    onChange={(e) => handleInputChange('minStock', parseInt(e.target.value) || 0)}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="max">Estoque Máximo</Label>
-                  <Input 
-                    id="max"
-                    type="number"
-                    value={formData.maxStock}
-                    onChange={(e) => handleInputChange('maxStock', parseInt(e.target.value) || 0)}
-                  />
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="current">Quantidade em Estoque</Label>
+                <Input 
+                  id="current"
+                  type="number"
+                  value={formData.currentStock}
+                  onChange={(e) => handleInputChange('currentStock', parseInt(e.target.value) || 0)}
+                />
               </div>
             </div>
 
@@ -336,12 +351,21 @@ const PartForm: React.FC<PartFormProps> = ({ isOpen, onClose }) => {
           </div>
           
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={onClose}>
+            <Button type="button" variant="outline" onClick={onClose} disabled={loading}>
               Cancelar
             </Button>
-            <Button type="submit">
-              <Save className="h-4 w-4 mr-2" />
-              Cadastrar Peça
+            <Button type="submit" disabled={loading}>
+              {loading ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Salvando...
+                </>
+              ) : (
+                <>
+                  <Save className="h-4 w-4 mr-2" />
+                  Cadastrar Peça
+                </>
+              )}
             </Button>
           </DialogFooter>
         </form>
