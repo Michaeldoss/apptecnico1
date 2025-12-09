@@ -55,15 +55,18 @@ serve(async (req) => {
       );
     }
 
+    console.log('Token MercadoPago configurado, criando preferência...');
+    console.log('Dados da requisição:', { plano_id, usuario_id, valor, meio_pagamento, plano_nome });
+
     // Criar preferência no Mercado Pago
     const preferenceData = {
       items: [
         {
           title: `Assinatura ${plano_nome}`,
           description: `Plano de assinatura mensal - ${plano_nome}`,
-          unit_price: valor,
+          unit_price: Number(valor),
           quantity: 1,
-          category_id: 'subscription',
+          currency_id: 'BRL',
         }
       ],
       payment_methods: {
@@ -80,7 +83,7 @@ serve(async (req) => {
       notification_url: `${Deno.env.get('SUPABASE_URL')}/functions/v1/mercadopago-webhook`,
     };
 
-    console.log('Criando preferência de assinatura:', preferenceData);
+    console.log('Preferência a ser criada:', JSON.stringify(preferenceData));
 
     const mpResponse = await fetch('https://api.mercadopago.com/checkout/preferences', {
       method: 'POST',
@@ -94,9 +97,20 @@ serve(async (req) => {
     const mpData = await mpResponse.json();
 
     if (!mpResponse.ok) {
-      console.error('Erro no Mercado Pago:', mpData);
+      console.error('Erro no Mercado Pago:', JSON.stringify(mpData));
+      console.error('Status:', mpResponse.status);
+      
+      // Mensagem mais detalhada para debug
+      let errorMessage = 'Falha ao processar pagamento';
+      if (mpData.message) {
+        errorMessage = `Erro MercadoPago: ${mpData.message}`;
+      }
+      if (mpResponse.status === 401 || mpResponse.status === 403) {
+        errorMessage = 'Token do MercadoPago inválido ou sem permissões. Verifique se está usando o Access Token de produção correto.';
+      }
+      
       return new Response(
-        JSON.stringify({ error: 'Falha ao processar pagamento' }),
+        JSON.stringify({ error: errorMessage, details: mpData }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
