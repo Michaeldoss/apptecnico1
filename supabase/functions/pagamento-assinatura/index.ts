@@ -94,7 +94,19 @@ serve(async (req) => {
       body: JSON.stringify(preferenceData),
     });
 
-    const mpData = await mpResponse.json();
+    const responseText = await mpResponse.text();
+    console.log('Resposta MercadoPago (raw):', responseText);
+    
+    let mpData;
+    try {
+      mpData = responseText ? JSON.parse(responseText) : {};
+    } catch (parseError) {
+      console.error('Erro ao fazer parse da resposta:', parseError);
+      return new Response(
+        JSON.stringify({ error: 'Resposta inválida do MercadoPago', details: responseText }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
 
     if (!mpResponse.ok) {
       console.error('Erro no Mercado Pago:', JSON.stringify(mpData));
