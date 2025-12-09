@@ -296,68 +296,30 @@ export const useSubscription = () => {
         throw new Error('Plano não encontrado');
       }
 
-      // Calcular data de fim (30 dias)
-      const dataInicio = new Date();
-      const dataFim = new Date();
-      dataFim.setDate(dataFim.getDate() + 30);
-
-      // Buscar tipo de usuário
-      const { data: userData } = await supabase
-        .from('usuarios')
-        .select('tipo_usuario')
-        .eq('id', user.id)
-        .single();
-
-      // Desativar plano anterior se existir
-      await supabase
-        .from('planos_contratados')
-        .update({ status: 'cancelado' })
-        .eq('usuario_id', user.id)
-        .eq('status', 'ativo');
-
-      // Criar novo plano contratado
-      const { error: insertError } = await supabase
-        .from('planos_contratados')
-        .insert({
+      // Criar pagamento via MercadoPago
+      const { data: mpData, error: mpError } = await supabase.functions.invoke('pagamento-assinatura', {
+        body: {
           plano_id: planData.id,
           usuario_id: user.id,
-          usuario_tipo: userData?.tipo_usuario || 'tecnico',
-          data_inicio: dataInicio.toISOString(),
-          data_fim: dataFim.toISOString(),
-          valor_pago: planData.preco_mensal,
-          forma_pagamento: paymentMethod,
-          status: 'ativo'
-        });
+          valor: planData.preco_mensal,
+          meio_pagamento: paymentMethod as 'pix' | 'cartao_credito' | 'cartao_debito' | 'boleto',
+          plano_nome: planData.nome,
+        },
+      });
 
-      if (insertError) {
-        throw insertError;
+      if (mpError) {
+        throw mpError;
       }
 
-      // Atualizar estado local
-      const planType = planTypeMapping[planData.nome] || 'free';
-      
-      setSubscription(prev => prev ? {
-        ...prev,
-        planType,
-        planName: planData.nome,
-        planId: planData.id,
-        expiresAt: dataFim.toISOString(),
-        daysRemaining: 30,
-        limits: {
-          ...prev.limits,
-          serviceCalls: { ...prev.limits.serviceCalls, max: planData.limite_servicos || -1 },
-          clients: { ...prev.limits.clients, max: (planData.limite_usuarios || 1) * 10 }
-        },
-        commissions: {
-          ...prev.commissions,
-          commissionRate: commissionRates[planType]
-        }
-      } : null);
-
       toast({
-        title: 'Upgrade realizado!',
-        description: `Você agora está no plano ${planData.nome}.`
+        title: 'Pagamento iniciado!',
+        description: 'Redirecionando para o checkout...'
       });
+
+      // Redirecionar para o checkout do MercadoPago
+      if (mpData.init_point) {
+        window.open(mpData.init_point, '_blank');
+      }
 
       return true;
     } catch (error) {
@@ -365,7 +327,7 @@ export const useSubscription = () => {
       toast({
         variant: 'destructive',
         title: 'Erro no upgrade',
-        description: 'Não foi possível processar o upgrade. Tente novamente.'
+        description: 'Não foi possível processar o pagamento. Tente novamente.'
       });
       return false;
     }

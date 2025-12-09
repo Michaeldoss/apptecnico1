@@ -1,1 +1,40 @@
 project_id = "zvokljetwvykcpolyqgp"
+
+[functions.criar-pagamento]
+verify_jwt = true
+
+[functions.liberar-pagamento]
+verify_jwt = true
+
+[functions.mercadopago-webhook]
+verify_jwt = false
+
+[functions.pagamento-assinatura]
+verify_jwt = true
+
+[functions.pagamento-callback]
+verify_jwt = false
+
+[functions.carteira-deposito]
+verify_jwt = true
+
+[functions.get-mapbox-token]
+verify_jwt = false
+
+[functions.send-confirmation-email]
+verify_jwt = true
+
+[functions.validate-cpf]
+verify_jwt = false
+
+[functions.whatsapp-send-message]
+verify_jwt = true
+
+[functions.whatsapp-webhook]
+verify_jwt = false
+
+[functions.secure-cors-handler]
+verify_jwt = false
+
+[functions.processar-liberacao-automatica]
+verify_jwt = false

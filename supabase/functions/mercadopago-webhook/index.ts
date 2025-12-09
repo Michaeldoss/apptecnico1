@@ -70,96 +70,22 @@ serve(async (req) => {
 
       const paymentData = await paymentResponse.json();
       
-      // Log sanitizado - sem dados sensíveis
       console.log('Webhook recebido - Payment ID:', paymentId, 'Status:', paymentData.status);
 
       if (!paymentResponse.ok) {
         console.error('Erro ao buscar pagamento - Status:', paymentResponse.status);
-        await supabaseClient.rpc('log_security_event', {
-          event_type: 'webhook_mercadopago_error',
-          details: { payment_id: paymentId, status: paymentResponse.status }
-        });
         return new Response('OK', { status: 200, headers: corsHeaders });
       }
 
-      // Buscar transação no banco pela referência externa (servico_id)
-      const servicoId = paymentData.external_reference;
+      const externalReference = paymentData.external_reference || '';
       
-      const { data: transacao, error: findError } = await supabaseClient
-        .from('transacoes')
-        .select('*')
-        .eq('servico_id', servicoId)
-        .single();
-
-      if (findError || !transacao) {
-        console.error('Transação não encontrada - Serviço ID:', servicoId);
-        await supabaseClient.rpc('log_security_event', {
-          event_type: 'webhook_transaction_not_found',
-          details: { servico_id: servicoId }
-        });
-        return new Response('OK', { status: 200, headers: corsHeaders });
-      }
-
-      console.log('Transação encontrada:', transacao.id);
-
-      // Atualizar status da transação baseado no status do pagamento
-      let novoStatus = 'pendente';
-      let dataLiberacao = null;
-
-      switch (paymentData.status) {
-        case 'approved':
-          novoStatus = 'retido'; // Pagamento aprovado, valor fica retido
-          // Liberar automaticamente em 24 horas
-          dataLiberacao = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
-          break;
-        case 'pending':
-          novoStatus = 'pendente';
-          break;
-        case 'rejected':
-        case 'cancelled':
-          novoStatus = 'falhado';
-          break;
-        default:
-          novoStatus = 'pendente';
-      }
-
-      console.log('Atualizando transação para status:', novoStatus);
-
-      // Atualizar transação
-      const { error: updateError } = await supabaseClient
-        .from('transacoes')
-        .update({
-          status: novoStatus,
-          mercadopago_payment_id: paymentId,
-          data_pagamento: paymentData.status === 'approved' ? new Date().toISOString() : null,
-          data_liberacao: dataLiberacao,
-        })
-        .eq('id', transacao.id);
-
-      if (updateError) {
-        console.error('Erro ao atualizar transação - ID:', transacao.id);
-        await supabaseClient.rpc('log_security_event', {
-          event_type: 'webhook_update_failed',
-          details: { transaction_id: transacao.id }
-        });
+      // Identificar tipo de pagamento pela referência externa
+      if (externalReference.startsWith('assinatura_')) {
+        await processarPagamentoAssinatura(supabaseClient, paymentData, paymentId);
+      } else if (externalReference.startsWith('deposito_')) {
+        await processarDepositoCarteira(supabaseClient, paymentData, paymentId, externalReference);
       } else {
-        console.log('Transação atualizada - ID:', transacao.id, 'Novo status:', novoStatus);
-        await supabaseClient.rpc('log_security_event', {
-          event_type: 'payment_status_updated',
-          details: { 
-            transaction_id: transacao.id, 
-            status: novoStatus,
-            payment_id: paymentId 
-          }
-        });
-      }
-
-      // Se foi aprovado, enviar notificação para o técnico
-      if (paymentData.status === 'approved') {
-        console.log('Pagamento aprovado - valor retido, será liberado em 24h');
-        
-        // Aqui você pode implementar notificação por email/push
-        // usando a função de envio de emails ou notificações
+        await processarPagamentoServico(supabaseClient, paymentData, paymentId, externalReference);
       }
     }
 
@@ -170,3 +96,185 @@ serve(async (req) => {
     return new Response('OK', { status: 200, headers: corsHeaders });
   }
 });
+
+// Processar pagamento de serviço (técnico)
+async function processarPagamentoServico(supabaseClient: any, paymentData: any, paymentId: string, servicoId: string) {
+  const { data: transacao, error: findError } = await supabaseClient
+    .from('transacoes')
+    .select('*')
+    .eq('servico_id', servicoId)
+    .single();
+
+  if (findError || !transacao) {
+    console.error('Transação não encontrada - Serviço ID:', servicoId);
+    return;
+  }
+
+  let novoStatus = 'pendente';
+  let dataLiberacao = null;
+
+  switch (paymentData.status) {
+    case 'approved':
+      novoStatus = 'retido';
+      dataLiberacao = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+      break;
+    case 'pending':
+      novoStatus = 'pendente';
+      break;
+    case 'rejected':
+    case 'cancelled':
+      novoStatus = 'falhado';
+      break;
+  }
+
+  await supabaseClient
+    .from('transacoes')
+    .update({
+      status: novoStatus,
+      mercadopago_payment_id: paymentId,
+      data_pagamento: paymentData.status === 'approved' ? new Date().toISOString() : null,
+      data_liberacao: dataLiberacao,
+    })
+    .eq('id', transacao.id);
+
+  console.log('Transação serviço atualizada:', transacao.id, 'Status:', novoStatus);
+}
+
+// Processar pagamento de assinatura
+async function processarPagamentoAssinatura(supabaseClient: any, paymentData: any, paymentId: string) {
+  // Buscar pagamento de assinatura pendente
+  const { data: pagamento, error: findError } = await supabaseClient
+    .from('pagamentos_assinatura')
+    .select('*')
+    .eq('status', 'pendente')
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .single();
+
+  if (findError || !pagamento) {
+    console.error('Pagamento de assinatura não encontrado');
+    return;
+  }
+
+  let novoStatus = 'pendente';
+
+  switch (paymentData.status) {
+    case 'approved':
+      novoStatus = 'aprovado';
+      
+      // Ativar o plano contratado
+      const dataFim = new Date();
+      dataFim.setDate(dataFim.getDate() + 30);
+
+      // Desativar planos anteriores
+      await supabaseClient
+        .from('planos_contratados')
+        .update({ status: 'cancelado' })
+        .eq('usuario_id', pagamento.usuario_id)
+        .eq('status', 'ativo');
+
+      // Criar ou atualizar plano contratado
+      if (pagamento.plano_contratado_id) {
+        await supabaseClient
+          .from('planos_contratados')
+          .update({
+            status: 'ativo',
+            data_fim: dataFim.toISOString(),
+          })
+          .eq('id', pagamento.plano_contratado_id);
+      }
+      break;
+    case 'rejected':
+    case 'cancelled':
+      novoStatus = 'rejeitado';
+      break;
+  }
+
+  await supabaseClient
+    .from('pagamentos_assinatura')
+    .update({
+      status: novoStatus,
+      mercadopago_payment_id: paymentId,
+      data_pagamento: paymentData.status === 'approved' ? new Date().toISOString() : null,
+    })
+    .eq('id', pagamento.id);
+
+  console.log('Pagamento assinatura atualizado:', pagamento.id, 'Status:', novoStatus);
+}
+
+// Processar depósito na carteira
+async function processarDepositoCarteira(supabaseClient: any, paymentData: any, paymentId: string, externalReference: string) {
+  // Extrair carteira_id da referência (formato: deposito_{carteira_id}_{timestamp})
+  const parts = externalReference.split('_');
+  const carteiraId = parts[1];
+
+  if (!carteiraId) {
+    console.error('Carteira ID não encontrado na referência:', externalReference);
+    return;
+  }
+
+  // Buscar movimentação pendente
+  const { data: movimentacao, error: findError } = await supabaseClient
+    .from('carteira_movimentacoes')
+    .select('*')
+    .eq('carteira_id', carteiraId)
+    .eq('tipo', 'deposito')
+    .eq('status', 'pendente')
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .single();
+
+  if (findError || !movimentacao) {
+    console.error('Movimentação de carteira não encontrada');
+    return;
+  }
+
+  let novoStatus = 'pendente';
+
+  switch (paymentData.status) {
+    case 'approved':
+      novoStatus = 'aprovado';
+      
+      // Buscar carteira e atualizar saldo
+      const { data: carteira } = await supabaseClient
+        .from('carteira_cliente')
+        .select('*')
+        .eq('id', carteiraId)
+        .single();
+
+      if (carteira) {
+        const novoSaldo = carteira.saldo + movimentacao.valor;
+        
+        await supabaseClient
+          .from('carteira_cliente')
+          .update({ saldo: novoSaldo })
+          .eq('id', carteiraId);
+
+        // Atualizar saldo_posterior na movimentação
+        await supabaseClient
+          .from('carteira_movimentacoes')
+          .update({
+            status: novoStatus,
+            saldo_posterior: novoSaldo,
+            mercadopago_payment_id: paymentId,
+          })
+          .eq('id', movimentacao.id);
+
+        console.log('Carteira atualizada - Novo saldo:', novoSaldo);
+      }
+      break;
+    case 'rejected':
+    case 'cancelled':
+      novoStatus = 'rejeitado';
+      await supabaseClient
+        .from('carteira_movimentacoes')
+        .update({
+          status: novoStatus,
+          mercadopago_payment_id: paymentId,
+        })
+        .eq('id', movimentacao.id);
+      break;
+  }
+
+  console.log('Depósito carteira atualizado:', movimentacao.id, 'Status:', novoStatus);
+}
