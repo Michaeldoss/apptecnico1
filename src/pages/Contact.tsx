@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { motion } from 'framer-motion';
 
 const contactInfo = [
@@ -42,6 +43,44 @@ const contactInfo = [
     title: 'Horário',
     content: 'Atendimento 24 horas',
     highlight: true,
+  },
+];
+
+const faqClientes = [
+  {
+    question: 'Como agendar um serviço técnico na Instalei?',
+    answer: 'Você pode agendar um serviço através do nosso site, clicando em "Solicitar Serviço", preenchendo o formulário com os detalhes do seu problema e escolhendo a data e horário mais convenientes.',
+  },
+  {
+    question: 'Quais são as formas de pagamento aceitas?',
+    answer: 'Aceitamos diversas formas de pagamento: cartão de crédito, débito, PIX e boleto bancário. O pagamento é realizado apenas após a conclusão do serviço.',
+  },
+  {
+    question: 'Como acompanhar meu chamado?',
+    answer: 'Após abrir um chamado, você receberá um número de protocolo. Com ele, pode acompanhar o status em tempo real através da nossa plataforma ou aplicativo.',
+  },
+  {
+    question: 'Qual o prazo para atendimento?',
+    answer: 'Oferecemos atendimento 24 horas. O prazo varia conforme a urgência e disponibilidade, mas geralmente conseguimos atender em até 24 horas para chamados regulares.',
+  },
+];
+
+const faqTecnicos = [
+  {
+    question: 'Como me cadastrar na plataforma Instalei?',
+    answer: 'Clique em "Cadastrar-se como Técnico", preencha seus dados pessoais e profissionais, envie seus documentos e aguarde a aprovação da nossa equipe.',
+  },
+  {
+    question: 'Como recebo os pagamentos?',
+    answer: 'Os pagamentos são realizados semanalmente via PIX ou transferência bancária, diretamente na conta cadastrada. Você acompanha todos os valores pelo painel do técnico.',
+  },
+  {
+    question: 'Posso escolher meus horários?',
+    answer: 'Sim! Você tem total flexibilidade para definir sua disponibilidade. Configure seus horários de atendimento diretamente no aplicativo.',
+  },
+  {
+    question: 'Qual equipamento preciso ter?',
+    answer: 'Você precisa ter as ferramentas básicas da sua especialidade, smartphone com internet para uso do aplicativo e transporte próprio para deslocamento.',
   },
 ];
 
@@ -264,37 +303,71 @@ const Contact = () => {
           </div>
 
           {/* FAQ Section */}
-          <div className="mt-instalei-2xl">
-            <Card className="card-instalei">
-              <CardHeader className="text-center">
-                <CardTitle className="text-2xl font-bold text-primary font-inter">
-                  Perguntas Frequentes sobre a Instalei
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid md:grid-cols-2 gap-instalei-lg">
-                  <div>
-                    <h3 className="text-lg font-semibold text-primary mb-instalei-sm font-inter">Para Clientes</h3>
-                    <ul className="space-y-2 text-foreground font-inter">
-                      <li>• Como agendar um serviço técnico na Instalei?</li>
-                      <li>• Quais são as formas de pagamento aceitas?</li>
-                      <li>• Como acompanhar meu chamado?</li>
-                      <li>• Qual o prazo para atendimento?</li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-primary mb-instalei-sm font-inter">Para Técnicos</h3>
-                    <ul className="space-y-2 text-foreground font-inter">
-                      <li>• Como me cadastrar na plataforma Instalei?</li>
-                      <li>• Como recebo os pagamentos?</li>
-                      <li>• Posso escolher meus horários?</li>
-                      <li>• Qual equipamento preciso ter?</li>
-                    </ul>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          <motion.div 
+            className="mt-16"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            <div className="text-center mb-10">
+              <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-3">
+                Perguntas Frequentes
+              </h2>
+              <p className="text-muted-foreground max-w-xl mx-auto">
+                Encontre respostas para as dúvidas mais comuns
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+              {/* FAQ Clientes */}
+              <Card className="bg-card border border-border/50">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg font-semibold text-primary flex items-center gap-2">
+                    <span className="w-2 h-2 bg-primary rounded-full"></span>
+                    Para Clientes
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Accordion type="single" collapsible className="w-full">
+                    {faqClientes.map((faq, index) => (
+                      <AccordionItem key={index} value={`cliente-${index}`} className="border-border/50">
+                        <AccordionTrigger className="text-left text-sm hover:text-primary transition-colors">
+                          {faq.question}
+                        </AccordionTrigger>
+                        <AccordionContent className="text-muted-foreground text-sm leading-relaxed">
+                          {faq.answer}
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+                  </Accordion>
+                </CardContent>
+              </Card>
+
+              {/* FAQ Técnicos */}
+              <Card className="bg-card border border-border/50">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg font-semibold text-primary flex items-center gap-2">
+                    <span className="w-2 h-2 bg-primary rounded-full"></span>
+                    Para Técnicos
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Accordion type="single" collapsible className="w-full">
+                    {faqTecnicos.map((faq, index) => (
+                      <AccordionItem key={index} value={`tecnico-${index}`} className="border-border/50">
+                        <AccordionTrigger className="text-left text-sm hover:text-primary transition-colors">
+                          {faq.question}
+                        </AccordionTrigger>
+                        <AccordionContent className="text-muted-foreground text-sm leading-relaxed">
+                          {faq.answer}
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+                  </Accordion>
+                </CardContent>
+              </Card>
+            </div>
+          </motion.div>
         </div>
       </div>
 
