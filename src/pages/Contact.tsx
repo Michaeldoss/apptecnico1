@@ -58,9 +58,9 @@ const Contact = () => {
                 <CardTitle className="text-lg font-semibold text-primary font-inter">Email</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground mb-4 font-inter">contato@instalei.com</p>
-                <Button variant="outline" size="sm" className="font-inter">
-                  Enviar Email
+                <p className="text-muted-foreground mb-4 font-inter">comercial@dossgroup.com.br</p>
+                <Button variant="outline" size="sm" className="font-inter" asChild>
+                  <a href="mailto:comercial@dossgroup.com.br">Enviar Email</a>
                 </Button>
               </CardContent>
             </Card>
@@ -71,9 +71,10 @@ const Contact = () => {
                 <CardTitle className="text-lg font-semibold text-primary font-inter">Telefone</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground mb-4 font-inter">(11) 4002-8922</p>
-                <Button variant="outline" size="sm" className="font-inter">
-                  Ligar Agora
+                <p className="text-muted-foreground mb-2 font-inter">(47) 99230-7367</p>
+                <p className="text-muted-foreground mb-4 font-inter">(47) 3032-1234</p>
+                <Button variant="outline" size="sm" className="font-inter" asChild>
+                  <a href="tel:+5547992307367">Ligar Agora</a>
                 </Button>
               </CardContent>
             </Card>
@@ -84,9 +85,13 @@ const Contact = () => {
                 <CardTitle className="text-lg font-semibold text-primary font-inter">Endereço</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground mb-4 font-inter">São Paulo, SP<br />Brasil</p>
-                <Button variant="outline" size="sm" className="font-inter">
-                  Ver Mapa
+                <p className="text-muted-foreground mb-4 font-inter text-sm">
+                  Rua Victor Konder, 208<br />
+                  Comasa - Joinville/SC<br />
+                  CEP: 89227-240
+                </p>
+                <Button variant="outline" size="sm" className="font-inter" asChild>
+                  <a href="https://maps.google.com/?q=Rua+Victor+Konder+208+Comasa+Joinville+SC" target="_blank" rel="noopener noreferrer">Ver Mapa</a>
                 </Button>
               </CardContent>
             </Card>
@@ -97,7 +102,7 @@ const Contact = () => {
                 <CardTitle className="text-lg font-semibold text-primary font-inter">Horário</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground mb-4 font-inter">Seg - Sex: 8h às 18h<br />Sáb: 8h às 12h</p>
+                <p className="text-muted-foreground mb-4 font-inter font-semibold">Atendimento 24 horas</p>
                 <Button variant="outline" size="sm" className="font-inter">
                   Ver Detalhes
                 </Button>
