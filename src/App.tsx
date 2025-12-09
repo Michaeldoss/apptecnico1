@@ -122,6 +122,7 @@ function App() {
               <Route path="/sell-equipment" element={<SellEquipment />} />
               <Route path="/sell-equipment/create" element={<SellEquipmentCreate />} />
               <Route path="/services" element={<Services />} />
+              <Route path="/servicos" element={<Services />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/support" element={<Support />} />
