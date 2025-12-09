@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -7,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { z } from 'zod';
 import { useToast } from '@/hooks/use-toast';
+import { CreditCard, Smartphone, FileText, Banknote } from 'lucide-react';
 
 // Card validation schemas
 const cardNumberSchema = z.string()
@@ -27,9 +27,44 @@ export interface PaymentFormProps {
   onSubmit: (method: string, cardData?: { number: string; expiry: string; cvc: string }) => void;
 }
 
+const paymentMethods = [
+  {
+    id: 'pix',
+    label: 'PIX',
+    description: 'Pagamento instantâneo - aprovação imediata',
+    icon: Smartphone,
+    color: 'text-emerald-600',
+    bgColor: 'bg-emerald-50',
+  },
+  {
+    id: 'cartao_credito',
+    label: 'Cartão de Crédito',
+    description: 'Pague em até 12x sem juros',
+    icon: CreditCard,
+    color: 'text-blue-600',
+    bgColor: 'bg-blue-50',
+  },
+  {
+    id: 'cartao_debito',
+    label: 'Cartão de Débito',
+    description: 'Débito à vista - processamento imediato',
+    icon: Banknote,
+    color: 'text-purple-600',
+    bgColor: 'bg-purple-50',
+  },
+  {
+    id: 'boleto',
+    label: 'Boleto Bancário',
+    description: 'Vencimento em 3 dias úteis',
+    icon: FileText,
+    color: 'text-orange-600',
+    bgColor: 'bg-orange-50',
+  },
+];
+
 const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit }) => {
   const { toast } = useToast();
-  const [paymentMethod, setPaymentMethod] = useState('credit');
+  const [paymentMethod, setPaymentMethod] = useState('pix');
   const [cardNumber, setCardNumber] = useState('');
   const [expiry, setExpiry] = useState('');
   const [cvc, setCvc] = useState('');
@@ -73,7 +108,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (paymentMethod === 'credit' || paymentMethod === 'debit') {
+    if (paymentMethod === 'cartao_credito' || paymentMethod === 'cartao_debito') {
       if (!validateCardFields()) {
         toast({
           variant: "destructive",
@@ -83,8 +118,6 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit }) => {
         return;
       }
       
-      // AVISO: Em produção, NUNCA envie dados brutos do cartão
-      // Use tokenização (Stripe, MercadoPago, etc)
       onSubmit(paymentMethod, {
         number: cardNumber.replace(/\s/g, ''),
         expiry,
@@ -94,63 +127,75 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit }) => {
       onSubmit(paymentMethod);
     }
   };
+
+  const isCardPayment = paymentMethod === 'cartao_credito' || paymentMethod === 'cartao_debito';
   
   return (
     <form onSubmit={handleSubmit}>
       <div className="space-y-4">
-        <RadioGroup 
-          value={paymentMethod} 
-          onValueChange={setPaymentMethod}
-          className="grid gap-4"
-        >
-          <Card className={`cursor-pointer transition ${paymentMethod === 'credit' ? 'ring-2 ring-primary' : ''}`}>
-            <CardContent className="flex items-center gap-4 p-4">
-              <RadioGroupItem value="credit" id="credit" className="mt-0" />
-              <div className="flex-1">
-                <Label htmlFor="credit" className="font-medium">Cartão de Crédito</Label>
-                <p className="text-sm text-muted-foreground">Pague em até 12x</p>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card className={`cursor-pointer transition ${paymentMethod === 'debit' ? 'ring-2 ring-primary' : ''}`}>
-            <CardContent className="flex items-center gap-4 p-4">
-              <RadioGroupItem value="debit" id="debit" className="mt-0" />
-              <div className="flex-1">
-                <Label htmlFor="debit" className="font-medium">Cartão de Débito</Label>
-                <p className="text-sm text-muted-foreground">Processamento imediato</p>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card className={`cursor-pointer transition ${paymentMethod === 'pix' ? 'ring-2 ring-primary' : ''}`}>
-            <CardContent className="flex items-center gap-4 p-4">
-              <RadioGroupItem value="pix" id="pix" className="mt-0" />
-              <div className="flex-1">
-                <Label htmlFor="pix" className="font-medium">Pix</Label>
-                <p className="text-sm text-muted-foreground">Transferência instantânea</p>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card className={`cursor-pointer transition ${paymentMethod === 'invoice' ? 'ring-2 ring-primary' : ''}`}>
-            <CardContent className="flex items-center gap-4 p-4">
-              <RadioGroupItem value="invoice" id="invoice" className="mt-0" />
-              <div className="flex-1">
-                <Label htmlFor="invoice" className="font-medium">Boleto Bancário</Label>
-                <p className="text-sm text-muted-foreground">Vencimento em 3 dias úteis</p>
-              </div>
-            </CardContent>
-          </Card>
-        </RadioGroup>
+        <div className="mb-4">
+          <h3 className="text-sm font-medium text-muted-foreground mb-3">
+            Selecione a forma de pagamento
+          </h3>
+          <RadioGroup 
+            value={paymentMethod} 
+            onValueChange={setPaymentMethod}
+            className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+          >
+            {paymentMethods.map((method) => {
+              const Icon = method.icon;
+              const isSelected = paymentMethod === method.id;
+              
+              return (
+                <Card 
+                  key={method.id}
+                  className={`cursor-pointer transition-all duration-200 hover:shadow-md ${
+                    isSelected 
+                      ? 'ring-2 ring-primary border-primary shadow-sm' 
+                      : 'hover:border-muted-foreground/30'
+                  }`}
+                  onClick={() => setPaymentMethod(method.id)}
+                >
+                  <CardContent className="flex items-start gap-3 p-4">
+                    <RadioGroupItem 
+                      value={method.id} 
+                      id={method.id} 
+                      className="mt-1 shrink-0" 
+                    />
+                    <div className={`p-2 rounded-lg ${method.bgColor} shrink-0`}>
+                      <Icon className={`h-5 w-5 ${method.color}`} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <Label 
+                        htmlFor={method.id} 
+                        className="font-semibold cursor-pointer block"
+                      >
+                        {method.label}
+                      </Label>
+                      <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
+                        {method.description}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </RadioGroup>
+        </div>
         
-        {(paymentMethod === 'credit' || paymentMethod === 'debit') && (
-          <div className="grid gap-4">
-            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-2">
+        {isCardPayment && (
+          <div className="space-y-4 p-4 bg-muted/30 rounded-lg border">
+            <div className="flex items-center gap-2 mb-2">
+              <CreditCard className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm font-medium">Dados do Cartão</span>
+            </div>
+            
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
               <p className="text-xs text-amber-800">
-                ⚠️ <strong>Demonstração apenas:</strong> Em produção, use processador PCI-compliant
+                ⚠️ <strong>Ambiente de teste:</strong> Use cartões de teste do MercadoPago
               </p>
             </div>
+            
             <div>
               <Label htmlFor="cardNumber">Número do Cartão</Label>
               <Input 
@@ -171,6 +216,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit }) => {
                 <p className="text-xs text-red-500 mt-1">{errors.cardNumber}</p>
               )}
             </div>
+            
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="expiry">Validade</Label>
@@ -216,8 +262,32 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit }) => {
             </div>
           </div>
         )}
+
+        {paymentMethod === 'pix' && (
+          <div className="p-4 bg-emerald-50 rounded-lg border border-emerald-200">
+            <div className="flex items-center gap-2 text-emerald-700">
+              <Smartphone className="h-4 w-4" />
+              <span className="text-sm font-medium">Pagamento via PIX</span>
+            </div>
+            <p className="text-xs text-emerald-600 mt-1">
+              Após confirmar, você será redirecionado para gerar o QR Code ou copiar o código PIX.
+            </p>
+          </div>
+        )}
+
+        {paymentMethod === 'boleto' && (
+          <div className="p-4 bg-orange-50 rounded-lg border border-orange-200">
+            <div className="flex items-center gap-2 text-orange-700">
+              <FileText className="h-4 w-4" />
+              <span className="text-sm font-medium">Boleto Bancário</span>
+            </div>
+            <p className="text-xs text-orange-600 mt-1">
+              O boleto será gerado após a confirmação. Vencimento em 3 dias úteis.
+            </p>
+          </div>
+        )}
         
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="w-full" size="lg">
           Confirmar Pagamento
         </Button>
       </div>
