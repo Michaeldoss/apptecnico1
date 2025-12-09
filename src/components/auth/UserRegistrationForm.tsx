@@ -171,7 +171,7 @@ const UserRegistrationForm: React.FC<UserRegistrationFormProps> = ({
         <CardContent className="space-y-6">
           {/* Google Login */}
           <div className="space-y-4">
-            <GoogleLoginButton />
+            <GoogleLoginButton userType={userType} />
             
             <div className="relative">
               <div className="absolute inset-0 flex items-center">

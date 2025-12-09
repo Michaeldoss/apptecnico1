@@ -30,10 +30,20 @@ const GoogleAuthCallback: React.FC = () => {
         const { role } = await buscarTipoUsuario(user.id);
 
         if (role === 'desconhecido') {
-          // Novo usuário - mostrar seletor de tipo
-          setShowTypeSelector(true);
+          // Check if there's a pending user type from registration flow
+          const pendingType = localStorage.getItem('pendingGoogleUserType');
+          
+          if (pendingType && ['customer', 'technician', 'company'].includes(pendingType)) {
+            // Auto-register with the pending type
+            localStorage.removeItem('pendingGoogleUserType');
+            await handleUserTypeSelection(pendingType as 'customer' | 'technician' | 'company');
+          } else {
+            // Novo usuário sem tipo pré-selecionado - mostrar seletor
+            setShowTypeSelector(true);
+          }
         } else {
           // Usuário existente - redirecionar para dashboard apropriado
+          localStorage.removeItem('pendingGoogleUserType');
           redirectToDashboard(role);
         }
       } catch (error) {

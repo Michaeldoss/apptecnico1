@@ -5,11 +5,18 @@ import { toast } from '@/hooks/use-toast';
 
 interface GoogleLoginButtonProps {
   onSuccess?: () => void;
+  userType?: 'customer' | 'technician' | 'company' | 'client' | 'store';
 }
 
-const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({ onSuccess }) => {
+const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({ onSuccess, userType }) => {
   const handleGoogleLogin = async () => {
     try {
+      // Save user type to localStorage if provided (for registration flow)
+      if (userType) {
+        const normalizedType = userType === 'client' ? 'customer' : userType === 'store' ? 'company' : userType;
+        localStorage.setItem('pendingGoogleUserType', normalizedType);
+      }
+
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
