@@ -12,16 +12,11 @@ const TechnicianSubscription = () => {
   const { subscription, loading, upgradePlan, checkLimit } = useSubscription();
   const { toast } = useToast();
 
-  const handleUpgrade = (planId: string) => {
+  const handleUpgrade = async (planId: string) => {
     console.log('Upgrade para plano:', planId);
     
     if (planId === 'basic' || planId === 'professional' || planId === 'premium') {
-      upgradePlan(planId);
-      
-      toast({
-        title: "Plano atualizado!",
-        description: `Você agora está no plano ${planId}. Aproveite as novas funcionalidades!`,
-      });
+      await upgradePlan(planId);
     }
   };
 

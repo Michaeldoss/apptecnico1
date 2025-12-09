@@ -120,6 +120,7 @@ const SubscriptionPlans: React.FC<SubscriptionPlansProps> = ({
 }) => {
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
   const [isPaymentOpen, setIsPaymentOpen] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const { toast } = useToast();
 
   const handleUpgrade = (planId: string) => {
@@ -129,23 +130,26 @@ const SubscriptionPlans: React.FC<SubscriptionPlansProps> = ({
     setIsPaymentOpen(true);
   };
 
-  const handlePaymentSubmit = (method: string) => {
-    console.log('Processando pagamento:', { plan: selectedPlan, method });
+  const handlePaymentSubmit = async (method: string) => {
+    if (!selectedPlan || !onUpgrade) return;
     
-    // Simular processamento de pagamento
-    setTimeout(() => {
-      toast({
-        title: "Pagamento processado!",
-        description: `Plano ${plans.find(p => p.id === selectedPlan)?.name} ativado com sucesso.`,
-      });
-      
-      if (onUpgrade && selectedPlan) {
-        onUpgrade(selectedPlan);
-      }
-      
+    setIsProcessing(true);
+    
+    try {
+      // Chamar função de upgrade passando o plano e método de pagamento
+      await onUpgrade(selectedPlan);
       setIsPaymentOpen(false);
       setSelectedPlan(null);
-    }, 2000);
+    } catch (error) {
+      console.error('Erro ao processar pagamento:', error);
+      toast({
+        variant: 'destructive',
+        title: 'Erro no pagamento',
+        description: 'Não foi possível processar o pagamento. Tente novamente.'
+      });
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   return (
@@ -247,6 +251,11 @@ const SubscriptionPlans: React.FC<SubscriptionPlansProps> = ({
             </DialogTitle>
           </DialogHeader>
           <PaymentForm onSubmit={handlePaymentSubmit} />
+          {isProcessing && (
+            <div className="absolute inset-0 bg-background/80 flex items-center justify-center rounded-lg">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
     </div>

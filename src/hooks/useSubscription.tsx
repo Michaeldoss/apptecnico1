@@ -1,6 +1,8 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 interface PlanLimits {
   clients: { current: number; max: number };
@@ -15,73 +17,184 @@ interface CommissionData {
   commissionRate: number;
 }
 
+interface Plan {
+  id: string;
+  nome: string;
+  descricao: string;
+  preco_mensal: number;
+  preco_anual: number | null;
+  limite_servicos: number | null;
+  limite_usuarios: number | null;
+  caracteristicas: string[];
+}
+
 interface SubscriptionData {
   planType: 'free' | 'basic' | 'professional' | 'premium';
   planName: string;
+  planId: string | null;
   expiresAt?: string;
   daysRemaining?: number;
   limits: PlanLimits;
   commissions: CommissionData;
 }
 
-const defaultLimits = {
-  free: {
-    clients: { max: 1 },
-    serviceCalls: { max: 5 },
-    equipment: { max: 1 }
-  },
-  basic: {
-    clients: { max: 10 },
-    serviceCalls: { max: 30 },
-    equipment: { max: 10 }
-  },
-  professional: {
-    clients: { max: 20 },
-    serviceCalls: { max: 40 },
-    equipment: { max: 10 }
-  },
-  premium: {
-    clients: { max: -1 }, // ilimitado
-    serviceCalls: { max: -1 },
-    equipment: { max: -1 }
-  }
+const planTypeMapping: Record<string, 'free' | 'basic' | 'professional' | 'premium'> = {
+  'Gratuito': 'free',
+  'Básico': 'basic',
+  'Profissional': 'professional',
+  'Corporativo': 'premium'
 };
 
 const commissionRates = {
-  free: 0.10, // 10%
-  basic: 0.08, // 8%
-  professional: 0.08, // 8%
-  premium: 0.05 // 5%
+  free: 0.10,
+  basic: 0.08,
+  professional: 0.08,
+  premium: 0.05
 };
 
 export const useSubscription = () => {
   const { user } = useAuth();
+  const { toast } = useToast();
   const [subscription, setSubscription] = useState<SubscriptionData | null>(null);
+  const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const fetchPlans = async () => {
+    const { data, error } = await supabase
+      .from('planos')
+      .select('*')
+      .eq('ativo', true)
+      .order('preco_mensal');
+
+    if (error) {
+      console.error('Erro ao buscar planos:', error);
+      return [];
+    }
+
+    return data.map(plan => ({
+      ...plan,
+      caracteristicas: Array.isArray(plan.caracteristicas) ? plan.caracteristicas : []
+    })) as Plan[];
+  };
+
+  const fetchUserSubscription = async (userId: string) => {
+    const { data, error } = await supabase
+      .from('planos_contratados')
+      .select(`
+        *,
+        planos:plano_id (*)
+      `)
+      .eq('usuario_id', userId)
+      .eq('status', 'ativo')
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (error) {
+      console.error('Erro ao buscar assinatura:', error);
+      return null;
+    }
+
+    return data;
+  };
+
+  const fetchUserStats = async (userId: string) => {
+    // Buscar contagem de clientes (ordens de serviço únicas)
+    const { count: clientsCount } = await supabase
+      .from('ordens_servico')
+      .select('cliente_id', { count: 'exact', head: true })
+      .eq('tecnico_id', userId);
+
+    // Buscar contagem de chamados do mês
+    const startOfMonth = new Date();
+    startOfMonth.setDate(1);
+    startOfMonth.setHours(0, 0, 0, 0);
+
+    const { count: serviceCallsCount } = await supabase
+      .from('ordens_servico')
+      .select('*', { count: 'exact', head: true })
+      .eq('tecnico_id', userId)
+      .gte('created_at', startOfMonth.toISOString());
+
+    // Buscar contagem de peças/equipamentos
+    const { count: equipmentCount } = await supabase
+      .from('pecas')
+      .select('*', { count: 'exact', head: true })
+      .eq('tecnico_id', userId);
+
+    return {
+      clients: clientsCount || 0,
+      serviceCalls: serviceCallsCount || 0,
+      equipment: equipmentCount || 0
+    };
+  };
 
   useEffect(() => {
     const loadSubscriptionData = async () => {
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+
       try {
-        // Simular dados de assinatura - em produção, buscar do backend
-        const mockSubscription: SubscriptionData = {
-          planType: 'free',
-          planName: 'Gratuito / Teste',
-          expiresAt: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(), // 3 dias
-          daysRemaining: 3,
+        const [plansData, userSub, stats] = await Promise.all([
+          fetchPlans(),
+          fetchUserSubscription(user.id),
+          fetchUserStats(user.id)
+        ]);
+
+        setPlans(plansData);
+
+        let planType: 'free' | 'basic' | 'professional' | 'premium' = 'free';
+        let planName = 'Gratuito / Teste';
+        let planId: string | null = null;
+        let expiresAt: string | undefined;
+        let daysRemaining: number | undefined;
+        let limiteServicos = 5;
+        let limiteClientes = 1;
+
+        if (userSub && userSub.planos) {
+          const planData = userSub.planos as Plan;
+          planType = planTypeMapping[planData.nome] || 'free';
+          planName = planData.nome;
+          planId = planData.id;
+          limiteServicos = planData.limite_servicos || -1;
+          limiteClientes = planData.limite_usuarios || 1;
+
+          if (userSub.data_fim) {
+            expiresAt = userSub.data_fim;
+            const endDate = new Date(userSub.data_fim);
+            const today = new Date();
+            daysRemaining = Math.ceil((endDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+          }
+        } else {
+          // Plano gratuito padrão (7 dias de teste)
+          const trialEnd = new Date();
+          trialEnd.setDate(trialEnd.getDate() + 7);
+          expiresAt = trialEnd.toISOString();
+          daysRemaining = 7;
+        }
+
+        const subscriptionData: SubscriptionData = {
+          planType,
+          planName,
+          planId,
+          expiresAt,
+          daysRemaining,
           limits: {
-            clients: { current: 1, max: defaultLimits.free.clients.max },
-            serviceCalls: { current: 3, max: defaultLimits.free.serviceCalls.max },
-            equipment: { current: 1, max: defaultLimits.free.equipment.max }
+            clients: { current: stats.clients, max: limiteClientes === -1 ? -1 : limiteClientes * 10 },
+            serviceCalls: { current: stats.serviceCalls, max: limiteServicos },
+            equipment: { current: stats.equipment, max: limiteServicos === -1 ? -1 : 10 }
           },
           commissions: {
-            servicesCompleted: 4500,
-            appCommission: 450,
-            availableBalance: 4050,
-            commissionRate: commissionRates.free
+            servicesCompleted: 0,
+            appCommission: 0,
+            availableBalance: 0,
+            commissionRate: commissionRates[planType]
           }
         };
 
-        setSubscription(mockSubscription);
+        setSubscription(subscriptionData);
       } catch (error) {
         console.error('Erro ao carregar dados de assinatura:', error);
       } finally {
@@ -89,15 +202,13 @@ export const useSubscription = () => {
       }
     };
 
-    if (user) {
-      loadSubscriptionData();
-    }
+    loadSubscriptionData();
   }, [user]);
 
   const checkPermission = (feature: string): boolean => {
     if (!subscription) return false;
 
-    const { planType, limits } = subscription;
+    const { planType } = subscription;
 
     switch (feature) {
       case 'pdf_export':
@@ -154,38 +265,115 @@ export const useSubscription = () => {
     }
   };
 
-  const upgradePlan = (newPlanType: 'basic' | 'professional' | 'premium') => {
-    if (!subscription) return;
+  const upgradePlan = async (planName: string, paymentMethod: string = 'pix') => {
+    if (!user) {
+      toast({
+        variant: 'destructive',
+        title: 'Erro',
+        description: 'Você precisa estar logado para fazer upgrade.'
+      });
+      return false;
+    }
 
-    const planNames = {
-      basic: 'Básico',
-      professional: 'Profissional',
-      premium: 'Premium'
-    };
+    try {
+      // Buscar o plano pelo nome mapeado
+      const planNameMap: Record<string, string> = {
+        'basic': 'Básico',
+        'professional': 'Profissional',
+        'premium': 'Corporativo'
+      };
 
-    const newLimits = defaultLimits[newPlanType];
-    const newCommissionRate = commissionRates[newPlanType];
-    
-    setSubscription({
-      ...subscription,
-      planType: newPlanType,
-      planName: planNames[newPlanType],
-      expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 dias
-      daysRemaining: 30,
-      limits: {
-        clients: { current: subscription.limits.clients.current, max: newLimits.clients.max },
-        serviceCalls: { current: subscription.limits.serviceCalls.current, max: newLimits.serviceCalls.max },
-        equipment: { current: subscription.limits.equipment.current, max: newLimits.equipment.max }
-      },
-      commissions: {
-        ...subscription.commissions,
-        commissionRate: newCommissionRate
+      const targetPlanName = planNameMap[planName] || planName;
+
+      const { data: planData, error: planError } = await supabase
+        .from('planos')
+        .select('*')
+        .eq('nome', targetPlanName)
+        .eq('ativo', true)
+        .single();
+
+      if (planError || !planData) {
+        throw new Error('Plano não encontrado');
       }
-    });
+
+      // Calcular data de fim (30 dias)
+      const dataInicio = new Date();
+      const dataFim = new Date();
+      dataFim.setDate(dataFim.getDate() + 30);
+
+      // Buscar tipo de usuário
+      const { data: userData } = await supabase
+        .from('usuarios')
+        .select('tipo_usuario')
+        .eq('id', user.id)
+        .single();
+
+      // Desativar plano anterior se existir
+      await supabase
+        .from('planos_contratados')
+        .update({ status: 'cancelado' })
+        .eq('usuario_id', user.id)
+        .eq('status', 'ativo');
+
+      // Criar novo plano contratado
+      const { error: insertError } = await supabase
+        .from('planos_contratados')
+        .insert({
+          plano_id: planData.id,
+          usuario_id: user.id,
+          usuario_tipo: userData?.tipo_usuario || 'tecnico',
+          data_inicio: dataInicio.toISOString(),
+          data_fim: dataFim.toISOString(),
+          valor_pago: planData.preco_mensal,
+          forma_pagamento: paymentMethod,
+          status: 'ativo'
+        });
+
+      if (insertError) {
+        throw insertError;
+      }
+
+      // Atualizar estado local
+      const planType = planTypeMapping[planData.nome] || 'free';
+      
+      setSubscription(prev => prev ? {
+        ...prev,
+        planType,
+        planName: planData.nome,
+        planId: planData.id,
+        expiresAt: dataFim.toISOString(),
+        daysRemaining: 30,
+        limits: {
+          ...prev.limits,
+          serviceCalls: { ...prev.limits.serviceCalls, max: planData.limite_servicos || -1 },
+          clients: { ...prev.limits.clients, max: (planData.limite_usuarios || 1) * 10 }
+        },
+        commissions: {
+          ...prev.commissions,
+          commissionRate: commissionRates[planType]
+        }
+      } : null);
+
+      toast({
+        title: 'Upgrade realizado!',
+        description: `Você agora está no plano ${planData.nome}.`
+      });
+
+      return true;
+    } catch (error) {
+      console.error('Erro ao fazer upgrade:', error);
+      toast({
+        variant: 'destructive',
+        title: 'Erro no upgrade',
+        description: 'Não foi possível processar o upgrade. Tente novamente.'
+      });
+      return false;
+    }
   };
 
   return {
     subscription,
+    plans,
     loading,
     checkPermission,
     checkLimit,
