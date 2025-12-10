@@ -272,23 +272,48 @@ const Features = () => {
           
           {/* Links de Comunidade */}
           <div className="flex flex-wrap justify-center gap-instalei-sm">
-            <a href="#" className="bg-instalei-orange-500 hover:bg-instalei-orange-600 text-white px-instalei-md py-instalei-sm rounded-instalei flex items-center gap-2 transition-all duration-200 hover:scale-105 hover:shadow-lg">
+            <a 
+              href="https://wa.me/5511999999999" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="bg-instalei-orange-500 hover:bg-instalei-orange-600 text-white px-instalei-md py-instalei-sm rounded-instalei flex items-center gap-2 transition-all duration-200 hover:scale-105 hover:shadow-lg"
+            >
               <MessageCircle className="h-5 w-5" />
               WhatsApp
             </a>
-            <a href="#" className="bg-instalei-navy-600 hover:bg-instalei-navy-700 text-white px-instalei-md py-instalei-sm rounded-instalei flex items-center gap-2 transition-all duration-200 hover:scale-105 hover:shadow-lg">
+            <a 
+              href="https://t.me/instalei_comunidade" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="bg-instalei-navy-600 hover:bg-instalei-navy-700 text-white px-instalei-md py-instalei-sm rounded-instalei flex items-center gap-2 transition-all duration-200 hover:scale-105 hover:shadow-lg"
+            >
               <Send className="h-5 w-5" />
               Telegram
             </a>
-            <a href="#" className="bg-instalei-orange-600 hover:bg-instalei-orange-700 text-white px-instalei-md py-instalei-sm rounded-instalei flex items-center gap-2 transition-all duration-200 hover:scale-105 hover:shadow-lg">
+            <a 
+              href="https://youtube.com/@instalei" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="bg-instalei-orange-600 hover:bg-instalei-orange-700 text-white px-instalei-md py-instalei-sm rounded-instalei flex items-center gap-2 transition-all duration-200 hover:scale-105 hover:shadow-lg"
+            >
               <Youtube className="h-5 w-5" />
               YouTube
             </a>
-            <a href="#" className="bg-instalei-navy-700 hover:bg-instalei-navy-800 text-white px-instalei-md py-instalei-sm rounded-instalei flex items-center gap-2 transition-all duration-200 hover:scale-105 hover:shadow-lg">
+            <a 
+              href="https://facebook.com/instalei.oficial" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="bg-instalei-navy-700 hover:bg-instalei-navy-800 text-white px-instalei-md py-instalei-sm rounded-instalei flex items-center gap-2 transition-all duration-200 hover:scale-105 hover:shadow-lg"
+            >
               <Facebook className="h-5 w-5" />
               Facebook
             </a>
-            <a href="#" className="bg-instalei-orange-400 hover:bg-instalei-orange-500 text-white px-instalei-md py-instalei-sm rounded-instalei flex items-center gap-2 transition-all duration-200 hover:scale-105 hover:shadow-lg">
+            <a 
+              href="https://instagram.com/instalei.oficial" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="bg-instalei-orange-400 hover:bg-instalei-orange-500 text-white px-instalei-md py-instalei-sm rounded-instalei flex items-center gap-2 transition-all duration-200 hover:scale-105 hover:shadow-lg"
+            >
               <Instagram className="h-5 w-5" />
               Instagram
             </a>
