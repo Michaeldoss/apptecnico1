@@ -30,8 +30,8 @@ const Benefits = () => {
     },
     {
       icon: <CheckCircle2 className="h-12 w-12 text-white" />,
-      title: "Garantia Total",
-      description: "Todos os serviços contam com garantia e suporte pós-venda",
+      title: "Suporte & Mediação",
+      description: "Intermediamos qualquer problema para garantir satisfação de ambas as partes",
       color: "bg-gradient-to-br from-instalei-navy-500 via-instalei-navy-600 to-instalei-orange-500"
     },
     {
