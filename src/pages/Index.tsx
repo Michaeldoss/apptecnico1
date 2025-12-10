@@ -3,7 +3,6 @@ import React from "react";
 import Navbar from "@/components/layout/Navbar";
 import Hero from "@/components/home/Hero";
 import HomeHighlights from "@/components/home/HomeHighlights";
-import HowItWorks from "@/components/home/HowItWorks";
 import Benefits from "@/components/home/Benefits";
 import Features from "@/components/home/Features";
 import Testimonials from "@/components/home/Testimonials";
@@ -18,7 +17,6 @@ const Index = () => {
       <Navbar />
       <Hero />
       <HomeHighlights />
-      <HowItWorks />
       <Benefits />
       <Features />
       <Testimonials />
