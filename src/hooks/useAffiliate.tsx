@@ -36,7 +36,7 @@ export const useAffiliate = () => {
         .from('lojas')
         .select('nome_empresa, nome_contato')
         .eq('id', user.id)
-        .single();
+        .maybeSingle();
 
       if (lojaError) {
         console.error('Erro ao buscar dados da loja:', lojaError);
@@ -46,9 +46,9 @@ export const useAffiliate = () => {
         .from('affiliate_profiles')
         .select('*')
         .eq('user_id', user.id)
-        .single();
+        .maybeSingle();
 
-      if (error && error.code !== 'PGRST116') {
+      if (error) {
         console.error('Erro ao buscar perfil de afiliado:', error);
         setIsLoading(false);
         return;

@@ -95,7 +95,7 @@ const CustomerAffiliates = () => {
 
           <TabsContent value="overview" className="bg-white/10 backdrop-blur-xl rounded-lg border border-white/20 p-6">
             <AffiliateOverview 
-              stats={stats!} 
+              stats={stats} 
               affiliateSlug={profile.affiliate_slug}
             />
           </TabsContent>
@@ -116,7 +116,7 @@ const CustomerAffiliates = () => {
               <TabsContent value="withdrawals" className="bg-white/10 backdrop-blur-xl rounded-lg border border-white/20 p-6">
                 <AffiliateWithdrawals 
                   withdrawals={withdrawals}
-                  stats={stats!}
+                  stats={stats}
                   onRequestWithdrawal={requestWithdrawal}
                 />
               </TabsContent>
@@ -154,7 +154,7 @@ const CustomerAffiliates = () => {
                   <TabsContent value="withdrawals">
                     <AffiliateWithdrawals 
                       withdrawals={withdrawals}
-                      stats={stats!}
+                      stats={stats}
                       onRequestWithdrawal={requestWithdrawal}
                     />
                   </TabsContent>

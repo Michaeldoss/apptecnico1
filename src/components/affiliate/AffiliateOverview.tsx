@@ -16,11 +16,20 @@ import {
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 
 interface AffiliateOverviewProps {
-  stats: AffiliateStats;
+  stats: AffiliateStats | null;
   affiliateSlug: string;
 }
 
 export const AffiliateOverview: React.FC<AffiliateOverviewProps> = ({ stats, affiliateSlug }) => {
+  // Default stats quando null
+  const safeStats = stats || {
+    totalSales: 0,
+    totalCommission: 0,
+    pendingCommission: 0,
+    paidCommission: 0,
+    salesCount: 0,
+    conversionRate: 0
+  };
   // Mock data para gráficos (substitua por dados reais)
   const salesData = [
     { name: 'Jan', vendas: 4000, comissao: 400 },
@@ -45,7 +54,7 @@ export const AffiliateOverview: React.FC<AffiliateOverviewProps> = ({ stats, aff
     return { level: 'Bronze', icon: Target, color: 'text-orange-500' };
   };
 
-  const level = getAffiliateLevel(stats.totalSales);
+  const level = getAffiliateLevel(safeStats.totalSales);
   const LevelIcon = level.icon;
 
   return (
@@ -77,7 +86,7 @@ export const AffiliateOverview: React.FC<AffiliateOverviewProps> = ({ stats, aff
             <DollarSign className="h-4 w-4 text-emerald-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">R$ {stats.totalSales.toLocaleString()}</div>
+            <div className="text-2xl font-bold">R$ {safeStats.totalSales.toLocaleString()}</div>
             <p className="text-xs text-emerald-300">
               +20.1% em relação ao mês passado
             </p>
@@ -90,9 +99,9 @@ export const AffiliateOverview: React.FC<AffiliateOverviewProps> = ({ stats, aff
             <TrendingUp className="h-4 w-4 text-instalei-orange-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">R$ {stats.totalCommission.toLocaleString()}</div>
+            <div className="text-2xl font-bold">R$ {safeStats.totalCommission.toLocaleString()}</div>
             <div className="text-xs text-instalei-orange-300">
-              Pendente: R$ {stats.pendingCommission.toLocaleString()}
+              Pendente: R$ {safeStats.pendingCommission.toLocaleString()}
             </div>
           </CardContent>
         </Card>
@@ -103,8 +112,8 @@ export const AffiliateOverview: React.FC<AffiliateOverviewProps> = ({ stats, aff
             <Target className="h-4 w-4 text-blue-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.conversionRate.toFixed(1)}%</div>
-            <Progress value={stats.conversionRate} className="mt-2" />
+            <div className="text-2xl font-bold">{safeStats.conversionRate.toFixed(1)}%</div>
+            <Progress value={safeStats.conversionRate} className="mt-2" />
           </CardContent>
         </Card>
 
@@ -114,7 +123,7 @@ export const AffiliateOverview: React.FC<AffiliateOverviewProps> = ({ stats, aff
             <Users className="h-4 w-4 text-rose-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.salesCount}</div>
+            <div className="text-2xl font-bold">{safeStats.salesCount}</div>
             <p className="text-xs text-rose-300">
               +12% esta semana
             </p>
@@ -210,10 +219,10 @@ export const AffiliateOverview: React.FC<AffiliateOverviewProps> = ({ stats, aff
             <div>
               <div className="flex justify-between text-sm mb-2">
                 <span>Progresso atual</span>
-                <span>R$ {stats.totalSales.toLocaleString()} / R$ {level.level === 'Bronze' ? '5.000' : level.level === 'Silver' ? '10.000' : level.level === 'Gold' ? '25.000' : '50.000'}</span>
+                <span>R$ {safeStats.totalSales.toLocaleString()} / R$ {level.level === 'Bronze' ? '5.000' : level.level === 'Silver' ? '10.000' : level.level === 'Gold' ? '25.000' : '50.000'}</span>
               </div>
               <Progress 
-                value={(stats.totalSales / (level.level === 'Bronze' ? 5000 : level.level === 'Silver' ? 10000 : level.level === 'Gold' ? 25000 : 50000)) * 100} 
+                value={(safeStats.totalSales / (level.level === 'Bronze' ? 5000 : level.level === 'Silver' ? 10000 : level.level === 'Gold' ? 25000 : 50000)) * 100} 
                 className="h-3"
               />
             </div>
