@@ -117,22 +117,22 @@ export const AffiliateWithdrawals: React.FC<AffiliateWithdrawalsProps> = ({
     <div className="space-y-6">
       {/* Cards de Resumo Financeiro */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 border-green-300/30 text-white">
+        <Card className="bg-gradient-to-r from-emerald-500/20 to-green-600/20 border-emerald-400/30 text-white">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-green-100">💰 Saldo Disponível</p>
+                <p className="text-sm text-emerald-100">💰 Saldo Disponível</p>
                 <p className="text-2xl font-bold">R$ {availableBalance.toLocaleString()}</p>
-                <p className="text-xs text-green-200 mt-1">
+                <p className="text-xs text-emerald-200 mt-1">
                   Mín. saque: R$ {minimumWithdraw}
                 </p>
               </div>
-              <PiggyBank className="h-8 w-8 text-green-300" />
+              <PiggyBank className="h-8 w-8 text-emerald-300" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border-blue-300/30 text-white">
+        <Card className="bg-gradient-to-r from-instalei-navy-500/20 to-blue-600/20 border-instalei-navy-400/30 text-white">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
@@ -147,19 +147,19 @@ export const AffiliateWithdrawals: React.FC<AffiliateWithdrawalsProps> = ({
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 border-purple-300/30 text-white">
+        <Card className="bg-gradient-to-r from-instalei-orange-500/20 to-amber-500/20 border-instalei-orange-400/30 text-white">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-purple-100">🔄 Em Processamento</p>
+                <p className="text-sm text-instalei-orange-100">🔄 Em Processamento</p>
                 <p className="text-2xl font-bold">
                   {withdrawals.filter(w => w.status === 'processando').length}
                 </p>
-                <p className="text-xs text-purple-200 mt-1">
+                <p className="text-xs text-instalei-orange-200 mt-1">
                   Saques pendentes
                 </p>
               </div>
-              <Clock className="h-8 w-8 text-purple-300" />
+              <Clock className="h-8 w-8 text-instalei-orange-300" />
             </div>
           </CardContent>
         </Card>
@@ -167,23 +167,23 @@ export const AffiliateWithdrawals: React.FC<AffiliateWithdrawalsProps> = ({
 
       {/* Botão de Saque e Informações */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card className="bg-white/10 border-white/20 text-white">
+        <Card className="bg-instalei-navy-800/40 border-instalei-orange-500/20 text-white">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               💳 Solicitar Saque
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="bg-gradient-to-r from-green-500/10 to-blue-500/10 rounded-lg p-4">
-              <h4 className="font-semibold text-green-300 mb-2">✨ Saque Instantâneo via PIX</h4>
+            <div className="bg-gradient-to-r from-emerald-500/10 to-instalei-navy-500/10 rounded-lg p-4">
+              <h4 className="font-semibold text-emerald-300 mb-2">✨ Saque Instantâneo via PIX</h4>
               <p className="text-sm text-white/80 mb-3">
                 Receba suas comissões em até 30 minutos, 24h por dia!
               </p>
-              <div className="flex items-center gap-2 text-sm text-green-300">
+              <div className="flex items-center gap-2 text-sm text-emerald-300">
                 <CheckCircle className="h-4 w-4" />
                 <span>Sem taxas</span>
               </div>
-              <div className="flex items-center gap-2 text-sm text-green-300">
+              <div className="flex items-center gap-2 text-sm text-emerald-300">
                 <CheckCircle className="h-4 w-4" />
                 <span>Processamento automático</span>
               </div>
@@ -192,14 +192,14 @@ export const AffiliateWithdrawals: React.FC<AffiliateWithdrawalsProps> = ({
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
                 <Button 
-                  className="w-full bg-green-500 hover:bg-green-600 text-white"
+                  className="w-full bg-emerald-500 hover:bg-emerald-600 text-white"
                   disabled={availableBalance < minimumWithdraw}
                 >
                   <Wallet className="h-4 w-4 mr-2" />
                   Sacar R$ {availableBalance.toLocaleString()}
                 </Button>
               </DialogTrigger>
-              <DialogContent className="bg-gray-900 border-gray-700 text-white">
+              <DialogContent className="bg-instalei-navy-900 border-instalei-orange-500/30 text-white">
                 <DialogHeader>
                   <DialogTitle className="flex items-center gap-2">
                     💳 Solicitar Saque via PIX
@@ -213,7 +213,7 @@ export const AffiliateWithdrawals: React.FC<AffiliateWithdrawalsProps> = ({
                       placeholder={`Mínimo: R$ ${minimumWithdraw}`}
                       value={withdrawAmount}
                       onChange={(e) => setWithdrawAmount(e.target.value)}
-                      className="bg-white/10 border-white/20 text-white"
+                      className="bg-instalei-navy-800/50 border-instalei-orange-500/30 text-white"
                       max={availableBalance}
                     />
                     <p className="text-xs text-white/60 mt-1">
@@ -227,12 +227,12 @@ export const AffiliateWithdrawals: React.FC<AffiliateWithdrawalsProps> = ({
                       placeholder="Digite sua chave PIX (CPF, email, celular ou aleatória)"
                       value={pixKey}
                       onChange={(e) => setPixKey(e.target.value)}
-                      className="bg-white/10 border-white/20 text-white"
+                      className="bg-instalei-navy-800/50 border-instalei-orange-500/30 text-white"
                     />
                   </div>
 
-                  <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-3">
-                    <h4 className="font-semibold text-blue-300 mb-1">ℹ️ Informações importantes:</h4>
+                  <div className="bg-instalei-navy-500/20 border border-instalei-orange-500/20 rounded-lg p-3">
+                    <h4 className="font-semibold text-instalei-orange-300 mb-1">ℹ️ Informações importantes:</h4>
                     <ul className="text-sm text-white/80 space-y-1">
                       <li>• Saques são processados em até 30 minutos</li>
                       <li>• Não cobramos taxas para saques via PIX</li>
@@ -243,7 +243,7 @@ export const AffiliateWithdrawals: React.FC<AffiliateWithdrawalsProps> = ({
                   <Button 
                     onClick={handleWithdrawRequest}
                     disabled={isLoading}
-                    className="w-full bg-green-500 hover:bg-green-600"
+                    className="w-full bg-emerald-500 hover:bg-emerald-600"
                   >
                     {isLoading ? (
                       <Clock className="h-4 w-4 mr-2 animate-spin" />
@@ -257,14 +257,14 @@ export const AffiliateWithdrawals: React.FC<AffiliateWithdrawalsProps> = ({
             </Dialog>
 
             {availableBalance < minimumWithdraw && (
-              <p className="text-sm text-yellow-300 text-center">
+              <p className="text-sm text-instalei-orange-300 text-center">
                 Você precisa de mais R$ {(minimumWithdraw - availableBalance).toLocaleString()} para solicitar um saque.
               </p>
             )}
           </CardContent>
         </Card>
 
-        <Card className="bg-white/10 border-white/20 text-white">
+        <Card className="bg-instalei-navy-800/40 border-instalei-orange-500/20 text-white">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               📊 Resumo Mensal
@@ -272,26 +272,26 @@ export const AffiliateWithdrawals: React.FC<AffiliateWithdrawalsProps> = ({
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="flex justify-between items-center p-3 bg-black/20 rounded-lg">
+              <div className="flex justify-between items-center p-3 bg-instalei-navy-900/40 rounded-lg">
                 <div>
                   <p className="text-sm text-white/60">Janeiro 2024</p>
                   <p className="font-semibold">R$ 1.250,00</p>
                 </div>
-                <Badge className="bg-green-500/20 text-green-300">Pago</Badge>
+                <Badge className="bg-emerald-500/20 text-emerald-300">Pago</Badge>
               </div>
-              <div className="flex justify-between items-center p-3 bg-black/20 rounded-lg">
+              <div className="flex justify-between items-center p-3 bg-instalei-navy-900/40 rounded-lg">
                 <div>
                   <p className="text-sm text-white/60">Fevereiro 2024</p>
                   <p className="font-semibold">R$ 890,00</p>
                 </div>
-                <Badge className="bg-green-500/20 text-green-300">Pago</Badge>
+                <Badge className="bg-emerald-500/20 text-emerald-300">Pago</Badge>
               </div>
-              <div className="flex justify-between items-center p-3 bg-black/20 rounded-lg">
+              <div className="flex justify-between items-center p-3 bg-instalei-navy-900/40 rounded-lg">
                 <div>
                   <p className="text-sm text-white/60">Março 2024</p>
                   <p className="font-semibold">R$ {availableBalance.toLocaleString()}</p>
                 </div>
-                <Badge className="bg-yellow-500/20 text-yellow-300">Disponível</Badge>
+                <Badge className="bg-instalei-orange-500/20 text-instalei-orange-300">Disponível</Badge>
               </div>
             </div>
           </CardContent>
@@ -299,11 +299,11 @@ export const AffiliateWithdrawals: React.FC<AffiliateWithdrawalsProps> = ({
       </div>
 
       {/* Histórico de Saques */}
-      <Card className="bg-white/10 border-white/20 text-white">
+      <Card className="bg-instalei-navy-800/40 border-instalei-orange-500/20 text-white">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             📋 Histórico de Saques
-            <Badge variant="secondary" className="bg-blue-500/20 text-blue-300">
+            <Badge variant="secondary" className="bg-instalei-orange-500/20 text-instalei-orange-300">
               {withdrawals.length} saques
             </Badge>
           </CardTitle>
@@ -321,7 +321,7 @@ export const AffiliateWithdrawals: React.FC<AffiliateWithdrawalsProps> = ({
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
-                  <TableRow className="border-white/20">
+                  <TableRow className="border-instalei-orange-500/20">
                     <TableHead className="text-white/80">Valor</TableHead>
                     <TableHead className="text-white/80">Método</TableHead>
                     <TableHead className="text-white/80">Status</TableHead>
@@ -331,7 +331,7 @@ export const AffiliateWithdrawals: React.FC<AffiliateWithdrawalsProps> = ({
                 </TableHeader>
                 <TableBody>
                   {withdrawals.map((withdrawal) => (
-                    <TableRow key={withdrawal.id} className="border-white/20">
+                    <TableRow key={withdrawal.id} className="border-instalei-orange-500/20">
                       <TableCell>
                         <div className="font-semibold">R$ {withdrawal.amount.toLocaleString()}</div>
                       </TableCell>

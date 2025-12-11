@@ -51,53 +51,53 @@ export const AffiliateOverview: React.FC<AffiliateOverviewProps> = ({ stats, aff
   return (
     <div className="space-y-6">
       {/* Header com nível do afiliado */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-6 text-white">
+      <div className="bg-gradient-to-r from-instalei-orange-500 via-instalei-orange-600 to-instalei-navy-600 rounded-xl p-6 text-white shadow-lg">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-bold mb-2">🎯 Bem-vindo, Afiliado!</h2>
-            <p className="text-blue-100">Continue assim e alcance novos patamares!</p>
+            <p className="text-orange-100">Continue assim e alcance novos patamares!</p>
           </div>
           <div className="text-center">
             <div className="flex items-center gap-2 mb-2">
               <LevelIcon className={`h-8 w-8 ${level.color}`} />
-              <Badge variant="secondary" className="text-lg px-4 py-2">
+              <Badge variant="secondary" className="text-lg px-4 py-2 bg-white/20 text-white">
                 {level.level}
               </Badge>
             </div>
-            <p className="text-sm text-blue-100">Seu nível atual</p>
+            <p className="text-sm text-orange-100">Seu nível atual</p>
           </div>
         </div>
       </div>
 
       {/* Cards de estatísticas principais */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="bg-white/10 border-white/20 text-white">
+        <Card className="bg-gradient-to-br from-emerald-500/20 to-green-600/20 border-emerald-400/30 text-white">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">💰 Total de Vendas</CardTitle>
-            <DollarSign className="h-4 w-4 text-green-400" />
+            <DollarSign className="h-4 w-4 text-emerald-400" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">R$ {stats.totalSales.toLocaleString()}</div>
-            <p className="text-xs text-green-400">
+            <p className="text-xs text-emerald-300">
               +20.1% em relação ao mês passado
             </p>
           </CardContent>
         </Card>
 
-        <Card className="bg-white/10 border-white/20 text-white">
+        <Card className="bg-gradient-to-br from-instalei-orange-500/20 to-amber-600/20 border-instalei-orange-400/30 text-white">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">🏆 Comissões</CardTitle>
-            <TrendingUp className="h-4 w-4 text-yellow-400" />
+            <TrendingUp className="h-4 w-4 text-instalei-orange-400" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">R$ {stats.totalCommission.toLocaleString()}</div>
-            <div className="text-xs text-yellow-400">
+            <div className="text-xs text-instalei-orange-300">
               Pendente: R$ {stats.pendingCommission.toLocaleString()}
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-white/10 border-white/20 text-white">
+        <Card className="bg-gradient-to-br from-instalei-navy-500/20 to-blue-600/20 border-instalei-navy-400/30 text-white">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">📊 Conversão</CardTitle>
             <Target className="h-4 w-4 text-blue-400" />
@@ -108,14 +108,14 @@ export const AffiliateOverview: React.FC<AffiliateOverviewProps> = ({ stats, aff
           </CardContent>
         </Card>
 
-        <Card className="bg-white/10 border-white/20 text-white">
+        <Card className="bg-gradient-to-br from-rose-500/20 to-pink-600/20 border-rose-400/30 text-white">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">🔥 Vendas</CardTitle>
-            <Users className="h-4 w-4 text-red-400" />
+            <Users className="h-4 w-4 text-rose-400" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.salesCount}</div>
-            <p className="text-xs text-red-400">
+            <p className="text-xs text-rose-300">
               +12% esta semana
             </p>
           </CardContent>
@@ -124,7 +124,7 @@ export const AffiliateOverview: React.FC<AffiliateOverviewProps> = ({ stats, aff
 
       {/* Gráficos */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="bg-white/10 border-white/20 text-white">
+        <Card className="bg-instalei-navy-800/40 border-instalei-orange-500/20 text-white">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               📈 Evolução das Vendas
@@ -138,8 +138,9 @@ export const AffiliateOverview: React.FC<AffiliateOverviewProps> = ({ stats, aff
                 <YAxis stroke="rgba(255,255,255,0.7)" />
                 <Tooltip 
                   contentStyle={{ 
-                    backgroundColor: 'rgba(0,0,0,0.8)', 
-                    border: '1px solid rgba(255,255,255,0.2)' 
+                    backgroundColor: 'rgba(30, 41, 59, 0.95)', 
+                    border: '1px solid rgba(249, 115, 22, 0.3)',
+                    borderRadius: '8px'
                   }} 
                 />
                 <Line 
@@ -152,16 +153,16 @@ export const AffiliateOverview: React.FC<AffiliateOverviewProps> = ({ stats, aff
                 <Line 
                   type="monotone" 
                   dataKey="comissao" 
-                  stroke="#f59e0b" 
+                  stroke="#f97316" 
                   strokeWidth={3}
-                  dot={{ fill: '#f59e0b', strokeWidth: 2, r: 6 }}
+                  dot={{ fill: '#f97316', strokeWidth: 2, r: 6 }}
                 />
               </LineChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
 
-        <Card className="bg-white/10 border-white/20 text-white">
+        <Card className="bg-instalei-navy-800/40 border-instalei-orange-500/20 text-white">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               🎯 Performance do Funil
@@ -175,8 +176,9 @@ export const AffiliateOverview: React.FC<AffiliateOverviewProps> = ({ stats, aff
                 <YAxis stroke="rgba(255,255,255,0.7)" />
                 <Tooltip 
                   contentStyle={{ 
-                    backgroundColor: 'rgba(0,0,0,0.8)', 
-                    border: '1px solid rgba(255,255,255,0.2)' 
+                    backgroundColor: 'rgba(30, 41, 59, 0.95)', 
+                    border: '1px solid rgba(249, 115, 22, 0.3)',
+                    borderRadius: '8px'
                   }} 
                 />
                 <Bar 
@@ -186,8 +188,8 @@ export const AffiliateOverview: React.FC<AffiliateOverviewProps> = ({ stats, aff
                 />
                 <defs>
                   <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.9}/>
-                    <stop offset="95%" stopColor="#06b6d4" stopOpacity={0.9}/>
+                    <stop offset="5%" stopColor="#f97316" stopOpacity={0.9}/>
+                    <stop offset="95%" stopColor="#1e3a5f" stopOpacity={0.9}/>
                   </linearGradient>
                 </defs>
               </BarChart>
@@ -197,7 +199,7 @@ export const AffiliateOverview: React.FC<AffiliateOverviewProps> = ({ stats, aff
       </div>
 
       {/* Próximo nível */}
-      <Card className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 border-purple-300/30 text-white">
+      <Card className="bg-gradient-to-r from-instalei-orange-500/20 via-amber-500/20 to-instalei-navy-600/20 border-instalei-orange-400/30 text-white">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             🚀 Próximo Nível: {level.level === 'Bronze' ? 'Silver' : level.level === 'Silver' ? 'Gold' : level.level === 'Gold' ? 'Platinum' : 'Diamond'}
@@ -216,15 +218,15 @@ export const AffiliateOverview: React.FC<AffiliateOverviewProps> = ({ stats, aff
               />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-              <div className="bg-white/10 rounded-lg p-3">
+              <div className="bg-instalei-orange-500/20 rounded-lg p-3 border border-instalei-orange-500/30">
                 <div className="text-2xl">🎁</div>
                 <div className="text-sm">Bônus de nível</div>
               </div>
-              <div className="bg-white/10 rounded-lg p-3">
+              <div className="bg-instalei-navy-500/20 rounded-lg p-3 border border-instalei-navy-500/30">
                 <div className="text-2xl">📊</div>
                 <div className="text-sm">Relatórios avançados</div>
               </div>
-              <div className="bg-white/10 rounded-lg p-3">
+              <div className="bg-emerald-500/20 rounded-lg p-3 border border-emerald-500/30">
                 <div className="text-2xl">🤝</div>
                 <div className="text-sm">Suporte prioritário</div>
               </div>

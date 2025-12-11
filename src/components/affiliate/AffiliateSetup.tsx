@@ -34,29 +34,29 @@ export const AffiliateSetup: React.FC<AffiliateSetupProps> = ({
       icon: DollarSign,
       title: 'Ganhe Comissão',
       description: 'Receba até 15% de comissão em cada venda realizada através do seu link',
-      color: 'text-green-600',
-      bgColor: 'bg-green-50'
+      color: 'text-emerald-600',
+      bgColor: 'bg-emerald-50'
     },
     {
       icon: Users,
       title: 'Rede de Indicações',
       description: 'Construa uma rede sólida de clientes e gere renda passiva',
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-50'
+      color: 'text-instalei-navy-600',
+      bgColor: 'bg-instalei-navy-50'
     },
     {
       icon: TrendingUp,
       title: 'Crescimento Escalável',
       description: 'Quanto mais você divulga, maior é o seu potencial de ganhos',
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-50'
+      color: 'text-instalei-orange-600',
+      bgColor: 'bg-instalei-orange-50'
     },
     {
       icon: Star,
       title: 'Ferramentas Completas',
       description: 'Links personalizados, QR codes e materiais de divulgação',
-      color: 'text-yellow-600',
-      bgColor: 'bg-yellow-50'
+      color: 'text-amber-600',
+      bgColor: 'bg-amber-50'
     }
   ];
 
@@ -93,7 +93,7 @@ export const AffiliateSetup: React.FC<AffiliateSetupProps> = ({
           Transforme suas indicações em renda! Como {getUserTypeText()}, você pode 
           ganhar comissão compartilhando nossos produtos.
         </p>
-        <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+        <Badge variant="secondary" className="bg-instalei-orange-100 text-instalei-orange-800">
           Ativação Gratuita
         </Badge>
       </div>
@@ -106,7 +106,7 @@ export const AffiliateSetup: React.FC<AffiliateSetupProps> = ({
         {benefits.map((benefit, index) => {
           const Icon = benefit.icon;
           return (
-            <Card key={index} className="border-0 shadow-sm">
+            <Card key={index} className="border border-instalei-orange-100 shadow-sm hover:shadow-md transition-shadow">
               <CardContent className="p-6">
                 <div className="flex items-start gap-4">
                   <div className={cn("p-3 rounded-lg", benefit.bgColor)}>
@@ -129,9 +129,9 @@ export const AffiliateSetup: React.FC<AffiliateSetupProps> = ({
       </div>
 
       {/* Formulário de Cadastro */}
-      <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
+      <Card className="bg-gradient-to-r from-instalei-orange-50 to-instalei-navy-50 border-instalei-orange-200">
         <CardHeader>
-          <CardTitle className="text-center text-blue-900">
+          <CardTitle className="text-center text-instalei-navy-800">
             Ative seu Perfil de Afiliado
           </CardTitle>
         </CardHeader>
@@ -153,7 +153,7 @@ export const AffiliateSetup: React.FC<AffiliateSetupProps> = ({
 
             <Button 
               type="submit" 
-              className="w-full bg-blue-600 hover:bg-blue-700"
+              className="w-full bg-instalei-orange-500 hover:bg-instalei-orange-600"
               disabled={isLoading || !name.trim()}
             >
               {isLoading ? (
@@ -180,8 +180,8 @@ export const AffiliateSetup: React.FC<AffiliateSetupProps> = ({
             isMobile ? "grid-cols-1" : "grid-cols-3"
           )}>
             <div className="text-center space-y-2">
-              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
-                <span className="text-blue-600 font-bold">1</span>
+              <div className="w-12 h-12 bg-instalei-orange-100 rounded-full flex items-center justify-center mx-auto">
+                <span className="text-instalei-orange-600 font-bold">1</span>
               </div>
               <h4 className="font-semibold">Compartilhe</h4>
               <p className={cn(
@@ -193,8 +193,8 @@ export const AffiliateSetup: React.FC<AffiliateSetupProps> = ({
             </div>
             
             <div className="text-center space-y-2">
-              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto">
-                <span className="text-green-600 font-bold">2</span>
+              <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center mx-auto">
+                <span className="text-emerald-600 font-bold">2</span>
               </div>
               <h4 className="font-semibold">Cliente Compra</h4>
               <p className={cn(
@@ -206,8 +206,8 @@ export const AffiliateSetup: React.FC<AffiliateSetupProps> = ({
             </div>
             
             <div className="text-center space-y-2">
-              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto">
-                <span className="text-purple-600 font-bold">3</span>
+              <div className="w-12 h-12 bg-instalei-navy-100 rounded-full flex items-center justify-center mx-auto">
+                <span className="text-instalei-navy-600 font-bold">3</span>
               </div>
               <h4 className="font-semibold">Receba Comissão</h4>
               <p className={cn(

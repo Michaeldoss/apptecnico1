@@ -62,31 +62,31 @@ export const AffiliateSales: React.FC<AffiliateSalesProps> = ({ sales }) => {
     <div className="space-y-6">
       {/* Resumo das Vendas */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 border-green-300/30 text-white">
+        <Card className="bg-gradient-to-r from-emerald-500/20 to-green-600/20 border-emerald-400/30 text-white">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-green-100">💰 Total Ganho</p>
+                <p className="text-sm text-emerald-100">💰 Total Ganho</p>
                 <p className="text-2xl font-bold">R$ {totalEarned.toLocaleString()}</p>
               </div>
-              <DollarSign className="h-8 w-8 text-green-300" />
+              <DollarSign className="h-8 w-8 text-emerald-300" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border-yellow-300/30 text-white">
+        <Card className="bg-gradient-to-r from-instalei-orange-500/20 to-amber-500/20 border-instalei-orange-400/30 text-white">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-yellow-100">⏳ Pendente</p>
+                <p className="text-sm text-instalei-orange-100">⏳ Pendente</p>
                 <p className="text-2xl font-bold">R$ {pendingEarnings.toLocaleString()}</p>
               </div>
-              <Clock className="h-8 w-8 text-yellow-300" />
+              <Clock className="h-8 w-8 text-instalei-orange-300" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 border-blue-300/30 text-white">
+        <Card className="bg-gradient-to-r from-instalei-navy-500/20 to-blue-600/20 border-instalei-navy-400/30 text-white">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
@@ -100,21 +100,21 @@ export const AffiliateSales: React.FC<AffiliateSalesProps> = ({ sales }) => {
       </div>
 
       {/* Tabela de Vendas */}
-      <Card className="bg-white/10 border-white/20 text-white">
+      <Card className="bg-instalei-navy-800/40 border-instalei-orange-500/20 text-white">
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2">
               📋 Histórico de Vendas
-              <Badge variant="secondary" className="bg-blue-500/20 text-blue-300">
+              <Badge variant="secondary" className="bg-instalei-orange-500/20 text-instalei-orange-300">
                 {sales.length} vendas
               </Badge>
             </CardTitle>
             <div className="flex gap-2">
-              <Button size="sm" variant="outline" className="text-white border-white/20">
+              <Button size="sm" variant="outline" className="text-white border-instalei-orange-500/30 hover:bg-instalei-orange-500/20">
                 <Filter className="h-4 w-4 mr-2" />
                 Filtros
               </Button>
-              <Button size="sm" variant="outline" className="text-white border-white/20">
+              <Button size="sm" variant="outline" className="text-white border-instalei-orange-500/30 hover:bg-instalei-orange-500/20">
                 <Calendar className="h-4 w-4 mr-2" />
                 Período
               </Button>
@@ -129,7 +129,7 @@ export const AffiliateSales: React.FC<AffiliateSalesProps> = ({ sales }) => {
               <p className="text-white/60">
                 Compartilhe seus links de afiliado para começar a vender!
               </p>
-              <Button className="mt-4 bg-blue-500 hover:bg-blue-600">
+              <Button className="mt-4 bg-instalei-orange-500 hover:bg-instalei-orange-600">
                 Ver Materiais de Divulgação
               </Button>
             </div>
@@ -137,7 +137,7 @@ export const AffiliateSales: React.FC<AffiliateSalesProps> = ({ sales }) => {
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
-                  <TableRow className="border-white/20">
+                  <TableRow className="border-instalei-orange-500/20">
                     <TableHead className="text-white/80">Produto</TableHead>
                     <TableHead className="text-white/80">Valor</TableHead>
                     <TableHead className="text-white/80">Comissão</TableHead>
@@ -148,7 +148,7 @@ export const AffiliateSales: React.FC<AffiliateSalesProps> = ({ sales }) => {
                 </TableHeader>
                 <TableBody>
                   {sales.map((sale) => (
-                    <TableRow key={sale.id} className="border-white/20">
+                    <TableRow key={sale.id} className="border-instalei-orange-500/20">
                       <TableCell>
                         <div>
                           <div className="font-medium">{sale.product_name}</div>
@@ -160,7 +160,7 @@ export const AffiliateSales: React.FC<AffiliateSalesProps> = ({ sales }) => {
                       </TableCell>
                       <TableCell>
                         <div>
-                          <div className="font-semibold text-green-300">
+                          <div className="font-semibold text-emerald-300">
                             R$ {sale.commission_value.toLocaleString()}
                           </div>
                           <div className="text-sm text-white/60">
@@ -185,7 +185,7 @@ export const AffiliateSales: React.FC<AffiliateSalesProps> = ({ sales }) => {
                         </div>
                       </TableCell>
                       <TableCell>
-                        <Button size="sm" variant="outline" className="text-white border-white/20">
+                        <Button size="sm" variant="outline" className="text-white border-instalei-orange-500/30 hover:bg-instalei-orange-500/20">
                           <Eye className="h-4 w-4" />
                         </Button>
                       </TableCell>
@@ -199,7 +199,7 @@ export const AffiliateSales: React.FC<AffiliateSalesProps> = ({ sales }) => {
       </Card>
 
       {/* Dicas para Aumentar Vendas */}
-      <Card className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 border-purple-300/30 text-white">
+      <Card className="bg-gradient-to-r from-instalei-orange-500/20 via-amber-500/20 to-instalei-navy-600/20 border-instalei-orange-400/30 text-white">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             💡 Dicas para Aumentar suas Vendas
@@ -209,7 +209,7 @@ export const AffiliateSales: React.FC<AffiliateSalesProps> = ({ sales }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-3">
               <div className="flex items-start gap-3">
-                <div className="bg-blue-500 rounded-full p-1 mt-1">
+                <div className="bg-instalei-orange-500 rounded-full p-1 mt-1">
                   <span className="text-xs">1</span>
                 </div>
                 <div>
@@ -218,7 +218,7 @@ export const AffiliateSales: React.FC<AffiliateSalesProps> = ({ sales }) => {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="bg-green-500 rounded-full p-1 mt-1">
+                <div className="bg-emerald-500 rounded-full p-1 mt-1">
                   <span className="text-xs">2</span>
                 </div>
                 <div>
@@ -229,7 +229,7 @@ export const AffiliateSales: React.FC<AffiliateSalesProps> = ({ sales }) => {
             </div>
             <div className="space-y-3">
               <div className="flex items-start gap-3">
-                <div className="bg-yellow-500 rounded-full p-1 mt-1">
+                <div className="bg-amber-500 rounded-full p-1 mt-1">
                   <span className="text-xs">3</span>
                 </div>
                 <div>
@@ -238,7 +238,7 @@ export const AffiliateSales: React.FC<AffiliateSalesProps> = ({ sales }) => {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="bg-red-500 rounded-full p-1 mt-1">
+                <div className="bg-instalei-navy-500 rounded-full p-1 mt-1">
                   <span className="text-xs">4</span>
                 </div>
                 <div>
