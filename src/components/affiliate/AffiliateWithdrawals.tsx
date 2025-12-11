@@ -24,7 +24,7 @@ import { toast } from '@/hooks/use-toast';
 
 interface AffiliateWithdrawalsProps {
   withdrawals: AffiliateWithdrawal[];
-  stats: AffiliateStats;
+  stats: AffiliateStats | null;
   onRequestWithdrawal: (amount: number, paymentDetails: any) => Promise<boolean>;
 }
 
@@ -39,7 +39,7 @@ export const AffiliateWithdrawals: React.FC<AffiliateWithdrawalsProps> = ({
   const [isLoading, setIsLoading] = useState(false);
 
   const minimumWithdraw = 50;
-  const availableBalance = stats.pendingCommission;
+  const availableBalance = stats?.pendingCommission || 0;
 
   const handleWithdrawRequest = async () => {
     const amount = parseFloat(withdrawAmount);
