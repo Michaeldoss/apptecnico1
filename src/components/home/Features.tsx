@@ -97,38 +97,34 @@ const Features = () => {
           {steps.map((step, index) => (
             <Card 
               key={index} 
-              className="group border-0 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 bg-white overflow-hidden"
+              className="group card-modern border border-border/50 overflow-hidden"
             >
               <CardContent className="p-0">
-                {/* Header com gradiente */}
                 <div className={`bg-gradient-to-r ${step.color} p-instalei-md relative overflow-hidden`}>
-                  <div className="absolute top-2 right-2 text-white/20 text-6xl font-black">
+                  <div className="absolute inset-0 bg-grid-dark opacity-20" />
+                  <div className="absolute top-2 right-2 text-white/20 text-6xl font-display font-black">
                     {step.number}
                   </div>
-                  <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                  <div className="w-16 h-16 glass-dark rounded-2xl flex items-center justify-center relative z-10 shadow-glow-accent">
                     {step.icon}
                   </div>
                 </div>
-                
-                {/* Conteúdo */}
                 <div className="p-instalei-md">
                   <div className="flex items-center gap-2 mb-3">
-                    <span className="bg-instalei-orange-500 text-white text-xs font-bold px-2 py-1 rounded">
+                    <span className="bg-accent/10 text-accent text-xs font-bold px-2 py-1 rounded border border-accent/20">
                       ETAPA {step.number}
                     </span>
                   </div>
-                  <h3 className="text-xl font-bold mb-3 text-primary group-hover:text-instalei-orange-500 transition-colors">
+                  <h3 className="text-xl font-display font-bold mb-3 text-foreground group-hover:text-accent transition-colors">
                     {step.title}
                   </h3>
                   <p className="text-muted-foreground font-medium text-sm leading-relaxed mb-4">
                     {step.description}
                   </p>
-                  
-                  {/* Lista de detalhes */}
                   <ul className="space-y-2">
                     {step.details.map((detail, idx) => (
                       <li key={idx} className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <CheckCircle2 className="h-4 w-4 text-instalei-orange-500 flex-shrink-0" />
+                        <CheckCircle2 className="h-4 w-4 text-accent flex-shrink-0" />
                         <span>{detail}</span>
                       </li>
                     ))}
@@ -167,8 +163,8 @@ const Features = () => {
 
         {/* Por que escolher */}
         <div className="text-center mb-instalei-xl">
-          <h2 className="text-4xl md:text-5xl font-bold text-primary mb-instalei-lg">
-            Por que escolher a Instalei?
+          <h2 className="text-4xl md:text-5xl font-display font-bold mb-instalei-lg">
+            Por que escolher a <span className="text-gradient">Instalei?</span>
           </h2>
         </div>
 
@@ -199,12 +195,12 @@ const Features = () => {
               color: "bg-gradient-to-br from-instalei-orange-600 to-instalei-orange-700"
             }
           ].map((feature, index) => (
-            <Card key={index} className="card-instalei text-center group">
+            <Card key={index} className="card-modern text-center group border border-border/50">
               <CardContent className="p-instalei-md">
-                <div className={`${feature.color} w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-instalei-md shadow-lg group-hover:scale-110 transition-transform duration-200`}>
+                <div className={`${feature.color} w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-instalei-md shadow-glow-accent group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}>
                   {feature.icon}
                 </div>
-                <h3 className="text-xl font-bold mb-instalei-sm text-primary">{feature.title}</h3>
+                <h3 className="text-xl font-display font-bold mb-instalei-sm text-foreground group-hover:text-accent transition-colors">{feature.title}</h3>
                 <p className="text-muted-foreground font-medium">{feature.description}</p>
               </CardContent>
             </Card>

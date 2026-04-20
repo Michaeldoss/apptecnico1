@@ -14,13 +14,14 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-gradient-to-r from-instalei-gray-50 to-white border-t border-instalei-gray-200">
+    <footer className="relative bg-mesh-dark text-foreground border-t border-white/10 overflow-hidden">
+      <div className="absolute inset-0 bg-grid-dark opacity-40 pointer-events-none" />
       {/* Footer principal */}
-      <div className="py-16">
+      <div className="py-16 relative z-10">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
             <div>
-              <h3 className="font-bold text-xl mb-6 text-primary font-inter">Principais Cidades</h3>
+              <h3 className="font-display font-bold text-xl mb-6 text-white">Principais Cidades</h3>
               <div className="grid grid-cols-1 gap-1 text-sm">
                 {cities.map((city, index) => (
                   <Link
