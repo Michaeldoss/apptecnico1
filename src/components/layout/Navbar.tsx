@@ -61,8 +61,8 @@ const Navbar = () => {
   }];
 
   // Estilos profissionais para o navbar
-  const navbarClasses = "bg-[#13294b] w-full sticky top-0 z-50 shadow-sm";
-  const linkClasses = "text-white hover:opacity-80 transition-opacity duration-200 font-medium text-base px-3 py-2";
+  const navbarClasses = "glass-dark bg-primary-dark/80 w-full sticky top-0 z-50 border-b border-white/10 backdrop-blur-xl";
+  const linkClasses = "text-white/90 hover:text-accent transition-all duration-300 font-medium text-base px-3 py-2 relative after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-0.5 after:bg-accent after:transition-all after:duration-300 hover:after:w-full";
   return <nav className={navbarClasses} style={{ fontFamily: 'system-ui, -apple-system, Inter, sans-serif' }}>
       <div className="mx-auto max-w-7xl px-6">
         <div className="flex items-center justify-between h-16">
