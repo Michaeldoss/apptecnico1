@@ -423,33 +423,230 @@
   }
 }
 
-/* Efeitos de transição para páginas */
-.page-transition-enter {
-  opacity: 0;
-  transform: scale(0.98);
-}
+/* ========== SISTEMA FUTURISTA MODERNO ========== */
+@layer utilities {
+  /* Gradient text - títulos modernos */
+  .text-gradient {
+    background: var(--gradient-accent);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
 
-.page-transition-enter-active {
-  opacity: 1;
-  transform: scale(1);
-  transition: opacity 300ms, transform 300ms;
-}
+  .text-gradient-primary {
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary-glow)) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
 
-.page-transition-exit {
-  opacity: 1;
-  transform: scale(1);
-}
+  /* Glassmorphism */
+  .glass {
+    background: hsl(0 0% 100% / 0.7);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid hsl(0 0% 100% / 0.3);
+  }
 
-.page-transition-exit-active {
-  opacity: 0;
-  transform: scale(0.98);
-  transition: opacity 300ms, transform 300ms;
-}
+  .glass-dark {
+    background: hsl(222 47% 11% / 0.6);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid hsl(0 0% 100% / 0.1);
+  }
 
-/* Scrollbar customizada com cores da home */
-.scroll-container {
-  overflow-y: auto;
-  scroll-behavior: smooth;
+  /* Mesh background futurista */
+  .bg-mesh {
+    background-image: var(--gradient-mesh);
+  }
+
+  .bg-mesh-dark {
+    background-color: hsl(var(--primary-dark));
+    background-image:
+      radial-gradient(at 20% 30%, hsl(221 83% 53% / 0.35) 0px, transparent 50%),
+      radial-gradient(at 80% 20%, hsl(18 100% 58% / 0.25) 0px, transparent 50%),
+      radial-gradient(at 50% 80%, hsl(340 82% 60% / 0.2) 0px, transparent 50%);
+  }
+
+  /* Grid pattern futurista */
+  .bg-grid {
+    background-image:
+      linear-gradient(hsl(var(--border) / 0.3) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--border) / 0.3) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .bg-grid-dark {
+    background-image:
+      linear-gradient(hsl(0 0% 100% / 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(0 0% 100% / 0.05) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  /* Shadows futuristas */
+  .shadow-glow-primary { box-shadow: var(--shadow-glow-primary); }
+  .shadow-glow-accent { box-shadow: var(--shadow-glow-accent); }
+  .shadow-neon { box-shadow: var(--shadow-neon); }
+  .shadow-elegant { box-shadow: var(--shadow-lg); }
+
+  /* Card moderno futurista */
+  .card-modern {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.4s var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-modern::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 0%, hsl(var(--accent) / 0.03) 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+
+  .card-modern:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg), 0 0 40px hsl(var(--accent) / 0.08);
+    border-color: hsl(var(--accent) / 0.3);
+  }
+
+  .card-modern:hover::before {
+    opacity: 1;
+  }
+
+  /* Card com glow */
+  .card-glow {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    position: relative;
+    transition: all 0.4s var(--transition-smooth);
+  }
+
+  .card-glow::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: var(--radius);
+    padding: 1px;
+    background: var(--gradient-accent);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .card-glow:hover::after {
+    opacity: 1;
+  }
+
+  .card-glow:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px -12px hsl(var(--accent) / 0.25);
+  }
+
+  /* Botão futurista com glow */
+  .btn-futuristic {
+    position: relative;
+    background: var(--gradient-accent);
+    color: hsl(var(--accent-foreground));
+    font-weight: 600;
+    padding: 14px 32px;
+    border-radius: var(--radius);
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.4s var(--transition-smooth);
+    box-shadow: var(--shadow-glow-accent);
+  }
+
+  .btn-futuristic::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, hsl(0 0% 100% / 0.3), transparent);
+    transition: left 0.6s ease;
+  }
+
+  .btn-futuristic:hover::before {
+    left: 100%;
+  }
+
+  .btn-futuristic:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 0 60px hsl(var(--accent) / 0.6), 0 12px 40px hsl(var(--accent) / 0.3);
+  }
+
+  /* Animated border */
+  .border-animated {
+    position: relative;
+    background: hsl(var(--card));
+    border-radius: var(--radius);
+  }
+
+  .border-animated::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    background: conic-gradient(from 0deg, hsl(var(--accent)), hsl(var(--primary-glow)), hsl(var(--accent)));
+    z-index: -1;
+    animation: spin-border 4s linear infinite;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .border-animated:hover::before {
+    opacity: 1;
+  }
+
+  @keyframes spin-border {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Noise texture overlay */
+  .bg-noise {
+    position: relative;
+  }
+
+  .bg-noise::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+    opacity: 0.03;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+  }
+
+  /* Floating blobs animados */
+  @keyframes blob-float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -40px) scale(1.1); }
+    66% { transform: translate(-20px, 30px) scale(0.9); }
+  }
+
+  .animate-blob {
+    animation: blob-float 20s ease-in-out infinite;
+  }
+
+  /* Font display futurista */
+  .font-display {
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    letter-spacing: -0.04em;
+  }
 }
 
 .scroll-container::-webkit-scrollbar {
