@@ -43,25 +43,29 @@ const Benefits = () => {
   ];
 
   return (
-    <section className="section-padding bg-gray-50">
-      <div className="container-instalei">
+    <section className="section-padding relative overflow-hidden bg-mesh">
+      <div className="absolute inset-0 bg-grid opacity-40 pointer-events-none" />
+      <div className="container-instalei relative z-10">
         <div className="text-center mb-instalei-2xl">
-          <h2 className="text-4xl md:text-5xl font-black text-primary mb-instalei-lg">
-            Por que escolher a Instalei?
+          <span className="inline-block glass px-4 py-2 rounded-full text-sm font-semibold text-accent mb-4 font-display tracking-wide">
+            VANTAGENS EXCLUSIVAS
+          </span>
+          <h2 className="text-4xl md:text-5xl font-display font-bold mb-instalei-lg">
+            Por que escolher a <span className="text-gradient">Instalei?</span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-4xl mx-auto font-semibold leading-relaxed">
+          <p className="text-xl text-muted-foreground max-w-4xl mx-auto font-medium leading-relaxed">
             Conectamos você com os melhores técnicos do mercado com total segurança e praticidade
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-instalei-lg">
           {benefits.map((benefit, index) => (
-            <Card key={index} className="group border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 bg-white">
-              <CardContent className="p-instalei-lg text-center">
-                <div className={`${benefit.color} w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-instalei-lg shadow-2xl group-hover:scale-110 transition-transform duration-300`}>
+            <Card key={index} className="group card-modern border border-border/50 backdrop-blur-xl">
+              <CardContent className="p-instalei-lg text-center relative z-10">
+                <div className={`${benefit.color} w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-instalei-lg shadow-glow-accent group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}>
                   {benefit.icon}
                 </div>
-                <h3 className="text-xl font-bold mb-instalei-md text-primary">{benefit.title}</h3>
+                <h3 className="text-xl font-display font-bold mb-instalei-md text-foreground group-hover:text-accent transition-colors">{benefit.title}</h3>
                 <p className="text-muted-foreground font-medium leading-relaxed">{benefit.description}</p>
               </CardContent>
             </Card>

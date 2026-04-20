@@ -76,15 +76,16 @@ const Features = () => {
   ];
 
   return (
-    <section className="section-padding bg-muted/30">
-      <div className="container-instalei">
+    <section className="section-padding relative overflow-hidden bg-mesh">
+      <div className="absolute inset-0 bg-grid opacity-30 pointer-events-none" />
+      <div className="container-instalei relative z-10">
         {/* Como Funciona - Seção Principal Elaborada */}
         <div className="text-center mb-instalei-2xl">
-          <span className="inline-block bg-instalei-orange-100 text-instalei-orange-600 px-4 py-2 rounded-full text-sm font-semibold mb-4">
-            Processo Simples e Seguro
+          <span className="inline-block glass px-4 py-2 rounded-full text-sm font-semibold text-accent mb-4 font-display tracking-wide">
+            PROCESSO SIMPLES E SEGURO
           </span>
-          <h2 className="text-4xl md:text-5xl font-black text-primary mb-instalei-md">
-            Como funciona a Instalei
+          <h2 className="text-4xl md:text-5xl font-display font-bold mb-instalei-md">
+            Como funciona a <span className="text-gradient">Instalei</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto font-medium leading-relaxed">
             Em 6 etapas simples, você encontra o técnico ideal e tem todo o suporte necessário do início ao fim
