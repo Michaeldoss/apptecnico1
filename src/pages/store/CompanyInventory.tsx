@@ -1,24 +1,21 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import StoreLayout from '@/components/layout/StoreLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import Navbar from '@/components/layout/Navbar';
-import Footer from '@/components/layout/Footer';
-import { 
-  Package, 
-  ArrowLeft,
-  Search,
+import {
   AlertTriangle,
-  Plus,
-  Minus,
+  Download,
   Edit,
+  Minus,
+  Package,
+  Plus,
+  RefreshCw,
+  Search,
   TrendingDown,
   TrendingUp,
-  RefreshCw,
-  Download
 } from 'lucide-react';
 
 const mockInventory = [
@@ -33,14 +30,9 @@ const mockInventory = [
     lastRestock: '2024-03-01',
     supplier: 'Fornecedor A',
     location: 'A1-02',
-    costPrice: 120.00,
-    sellPrice: 155.00,
+    costPrice: 120.0,
+    sellPrice: 155.0,
     status: 'ok',
-    movements: [
-      { date: '2024-03-15', type: 'sale', quantity: -2, description: 'Venda ORD-2024-001' },
-      { date: '2024-03-14', type: 'sale', quantity: -1, description: 'Venda ORD-2024-002' },
-      { date: '2024-03-01', type: 'restock', quantity: +20, description: 'Reposição estoque' }
-    ]
   },
   {
     id: '8007',
@@ -53,13 +45,9 @@ const mockInventory = [
     lastRestock: '2024-02-15',
     supplier: 'Fornecedor B',
     location: 'B2-05',
-    costPrice: 250.00,
-    sellPrice: 320.00,
+    costPrice: 250.0,
+    sellPrice: 320.0,
     status: 'ok',
-    movements: [
-      { date: '2024-03-12', type: 'sale', quantity: -1, description: 'Venda ORD-2024-004' },
-      { date: '2024-02-28', type: 'sale', quantity: -2, description: 'Venda ORD-2024-015' }
-    ]
   },
   {
     id: '8008',
@@ -72,13 +60,9 @@ const mockInventory = [
     lastRestock: '2024-01-20',
     supplier: 'Fornecedor C',
     location: 'C1-08',
-    costPrice: 65.00,
-    sellPrice: 89.90,
+    costPrice: 65.0,
+    sellPrice: 89.9,
     status: 'low',
-    movements: [
-      { date: '2024-03-14', type: 'sale', quantity: -2, description: 'Venda ORD-2024-002' },
-      { date: '2024-03-10', type: 'sale', quantity: -3, description: 'Venda ORD-2024-012' }
-    ]
   },
   {
     id: '8009',
@@ -91,13 +75,9 @@ const mockInventory = [
     lastRestock: '2024-02-01',
     supplier: 'Fornecedor D',
     location: 'D3-01',
-    costPrice: 180.00,
-    sellPrice: 210.00,
+    costPrice: 180.0,
+    sellPrice: 210.0,
     status: 'out',
-    movements: [
-      { date: '2024-03-13', type: 'sale', quantity: -1, description: 'Venda ORD-2024-002' },
-      { date: '2024-03-08', type: 'sale', quantity: -2, description: 'Venda ORD-2024-009' }
-    ]
   },
   {
     id: '8010',
@@ -110,15 +90,17 @@ const mockInventory = [
     lastRestock: '2024-03-10',
     supplier: 'Fornecedor E',
     location: 'E1-12',
-    costPrice: 380.00,
-    sellPrice: 450.00,
+    costPrice: 380.0,
+    sellPrice: 450.0,
     status: 'ok',
-    movements: [
-      { date: '2024-03-15', type: 'sale', quantity: -1, description: 'Venda ORD-2024-001' },
-      { date: '2024-03-10', type: 'restock', quantity: +15, description: 'Reposição estoque' }
-    ]
-  }
+  },
 ];
+
+const formatCurrency = (value: number) =>
+  new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  }).format(value);
 
 const CompanyInventory = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -126,282 +108,322 @@ const CompanyInventory = () => {
   const [selectedStatus, setSelectedStatus] = useState('all');
 
   const categories = ['all', 'Peças', 'Componentes', 'Sensores', 'Motores'];
+
   const statusOptions = [
-    { value: 'all', label: 'Todos os Status' },
-    { value: 'ok', label: 'Estoque Normal' },
-    { value: 'low', label: 'Estoque Baixo' },
-    { value: 'out', label: 'Sem Estoque' }
+    { value: 'all', label: 'Todos os status' },
+    { value: 'ok', label: 'Estoque normal' },
+    { value: 'low', label: 'Estoque baixo' },
+    { value: 'out', label: 'Sem estoque' },
   ];
 
-  const filteredInventory = mockInventory.filter(item => {
-    const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         item.id.includes(searchTerm);
+  const filteredInventory = mockInventory.filter((item) => {
+    const matchesSearch =
+      item.name.toLowerCase().includes(searchTerm.toLowerCase()) || item.id.includes(searchTerm);
+
     const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
     const matchesStatus = selectedStatus === 'all' || item.status === selectedStatus;
+
     return matchesSearch && matchesCategory && matchesStatus;
   });
 
+  const totalItems = mockInventory.length;
+
+  const lowStockItems = mockInventory.filter(
+    (item) => item.currentStock <= item.minStock && item.currentStock > 0
+  ).length;
+
+  const outOfStockItems = mockInventory.filter((item) => item.currentStock === 0).length;
+
+  const totalValue = mockInventory.reduce((sum, item) => {
+    return sum + item.currentStock * item.costPrice;
+  }, 0);
+
   const getStatusBadge = (status: string, currentStock: number, minStock: number) => {
     if (status === 'out' || currentStock === 0) {
-      return <Badge variant="destructive" className="bg-red-100 text-red-800">Sem Estoque</Badge>;
+      return (
+        <Badge className="border-red-200 bg-red-50 text-red-700 hover:bg-red-50">
+          Sem estoque
+        </Badge>
+      );
     }
+
     if (status === 'low' || currentStock <= minStock) {
-      return <Badge variant="outline" className="bg-yellow-100 text-yellow-800 border-yellow-300">Estoque Baixo</Badge>;
+      return (
+        <Badge className="border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-50">
+          Estoque baixo
+        </Badge>
+      );
     }
-    return <Badge variant="outline" className="bg-green-100 text-green-800 border-green-300">Normal</Badge>;
+
+    return (
+      <Badge className="border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-50">
+        Normal
+      </Badge>
+    );
   };
 
   const getStockLevel = (current: number, min: number, max: number) => {
-    const percentage = (current / max) * 100;
-    let color = 'bg-green-500';
-    
-    if (current === 0) color = 'bg-red-500';
-    else if (current <= min) color = 'bg-yellow-500';
-    else if (percentage > 80) color = 'bg-blue-500';
-    
+    const percentage = Math.min((current / max) * 100, 100);
+    const color =
+      current === 0 ? 'bg-red-500' : current <= min ? 'bg-amber-500' : 'bg-emerald-500';
+
     return (
-      <div className="w-full bg-gray-200 rounded-full h-2">
-        <div 
-          className={`h-2 rounded-full ${color}`} 
-          style={{ width: `${Math.min(percentage, 100)}%` }}
-        ></div>
+      <div className="h-2 w-full rounded-full bg-slate-100">
+        <div className={`h-2 rounded-full ${color}`} style={{ width: `${percentage}%` }} />
       </div>
     );
   };
 
-  const totalItems = mockInventory.length;
-  const lowStockItems = mockInventory.filter(item => item.currentStock <= item.minStock).length;
-  const outOfStockItems = mockInventory.filter(item => item.currentStock === 0).length;
-  const totalValue = mockInventory.reduce((sum, item) => sum + (item.currentStock * item.costPrice), 0);
+  const metricCards = [
+    {
+      label: 'Total de itens',
+      value: totalItems,
+      icon: Package,
+      description: 'Produtos monitorados',
+    },
+    {
+      label: 'Estoque baixo',
+      value: lowStockItems,
+      icon: AlertTriangle,
+      description: 'Abaixo do mínimo',
+    },
+    {
+      label: 'Sem estoque',
+      value: outOfStockItems,
+      icon: TrendingDown,
+      description: 'Reposição urgente',
+    },
+    {
+      label: 'Valor em estoque',
+      value: formatCurrency(totalValue),
+      icon: TrendingUp,
+      description: 'Custo estimado atual',
+    },
+  ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar />
-      
-      {/* Header */}
-      <div className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-16 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex items-center mb-6">
-            <Link to="/loja/dashboard" className="mr-4 p-2 hover:bg-white/10 rounded-lg transition-colors">
-              <ArrowLeft className="h-6 w-6" />
-            </Link>
-            <div className="flex items-center">
-              <Package className="h-10 w-10 text-yellow-300 mr-4" />
-              <div>
-                <h1 className="text-4xl font-black text-white">Controle de Estoque</h1>
-                <p className="text-blue-100 text-lg">Gerencie seus níveis de estoque</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Métricas de estoque */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="bg-white/20 backdrop-blur-xl rounded-xl p-4 border border-white/30">
-              <div className="flex items-center gap-2 mb-2">
-                <Package className="h-5 w-5 text-blue-300" />
-                <div className="text-2xl font-bold text-white">{totalItems}</div>
-              </div>
-              <div className="text-blue-100 text-sm">Total de Itens</div>
-            </div>
-
-            <div className="bg-white/20 backdrop-blur-xl rounded-xl p-4 border border-white/30">
-              <div className="flex items-center gap-2 mb-2">
-                <AlertTriangle className="h-5 w-5 text-yellow-300" />
-                <div className="text-2xl font-bold text-white">{lowStockItems}</div>
-              </div>
-              <div className="text-blue-100 text-sm">Estoque Baixo</div>
-            </div>
-
-            <div className="bg-white/20 backdrop-blur-xl rounded-xl p-4 border border-white/30">
-              <div className="flex items-center gap-2 mb-2">
-                <TrendingDown className="h-5 w-5 text-red-300" />
-                <div className="text-2xl font-bold text-white">{outOfStockItems}</div>
-              </div>
-              <div className="text-blue-100 text-sm">Sem Estoque</div>
-            </div>
-
-            <div className="bg-white/20 backdrop-blur-xl rounded-xl p-4 border border-white/30">
-              <div className="flex items-center gap-2 mb-2">
-                <TrendingUp className="h-5 w-5 text-green-300" />
-                <div className="text-2xl font-bold text-white">R$ {totalValue.toLocaleString('pt-BR')}</div>
-              </div>
-              <div className="text-blue-100 text-sm">Valor Total Estoque</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Content */}
-      <main className="max-w-6xl mx-auto px-4 py-8">
-        {/* Filtros */}
-        <div className="flex flex-col md:flex-row gap-4 mb-8">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-            <Input
-              placeholder="Buscar por nome ou código..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
-            />
-          </div>
-          
-          <select
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+    <StoreLayout
+      title="Controle de Estoque"
+      subtitle="Monitore níveis de estoque, reposições, alertas e valor total dos produtos da loja."
+      action={
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <Button
+            variant="outline"
+            className="border-white/25 bg-white/10 text-white hover:bg-white/20 hover:text-white"
           >
-            {categories.map(cat => (
-              <option key={cat} value={cat}>
-                {cat === 'all' ? 'Todas as Categorias' : cat}
-              </option>
-            ))}
-          </select>
-
-          <select
-            value={selectedStatus}
-            onChange={(e) => setSelectedStatus(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          >
-            {statusOptions.map(option => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-
-          <Button variant="outline">
             <Download className="mr-2 h-4 w-4" />
             Exportar
           </Button>
+
+          <Button className="bg-white text-violet-950 hover:bg-violet-100">
+            <RefreshCw className="mr-2 h-4 w-4" />
+            Atualizar
+          </Button>
+        </div>
+      }
+    >
+      <div className="space-y-6">
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {metricCards.map((metric) => {
+            const Icon = metric.icon;
+
+            return (
+              <Card key={metric.label} className="border-slate-200 bg-white shadow-sm">
+                <CardContent className="p-6">
+                  <div className="mb-5 flex items-center justify-between">
+                    <div className="rounded-2xl bg-violet-50 p-3 text-violet-700">
+                      <Icon className="h-6 w-6" />
+                    </div>
+                  </div>
+
+                  <p className="text-sm font-bold text-slate-500">{metric.label}</p>
+                  <p className="mt-2 text-3xl font-black text-slate-950">{metric.value}</p>
+                  <p className="mt-2 text-sm text-slate-500">{metric.description}</p>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
 
-        {/* Alertas de estoque */}
         {(lowStockItems > 0 || outOfStockItems > 0) && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+          <div className="grid gap-4 md:grid-cols-2">
             {outOfStockItems > 0 && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <AlertTriangle className="h-5 w-5 text-red-600" />
-                  <span className="font-semibold text-red-900">Produtos Sem Estoque</span>
-                </div>
-                <p className="text-red-700 text-sm">
-                  {outOfStockItems} produto(s) estão sem estoque e precisam de reposição urgente.
-                </p>
-              </div>
+              <Card className="border-red-200 bg-red-50">
+                <CardContent className="flex gap-3 p-5">
+                  <AlertTriangle className="mt-0.5 h-5 w-5 text-red-700" />
+                  <div>
+                    <p className="font-black text-red-950">Produtos sem estoque</p>
+                    <p className="text-sm text-red-800">
+                      {outOfStockItems} produto(s) precisam de reposição urgente.
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
             )}
-            
+
             {lowStockItems > 0 && (
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <AlertTriangle className="h-5 w-5 text-yellow-600" />
-                  <span className="font-semibold text-yellow-900">Estoque Baixo</span>
-                </div>
-                <p className="text-yellow-700 text-sm">
-                  {lowStockItems} produto(s) estão com estoque abaixo do mínimo recomendado.
-                </p>
-              </div>
+              <Card className="border-amber-200 bg-amber-50">
+                <CardContent className="flex gap-3 p-5">
+                  <AlertTriangle className="mt-0.5 h-5 w-5 text-amber-700" />
+                  <div>
+                    <p className="font-black text-amber-950">Estoque baixo</p>
+                    <p className="text-sm text-amber-800">
+                      {lowStockItems} produto(s) estão abaixo do mínimo recomendado.
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
             )}
           </div>
         )}
 
-        {/* Tabela de estoque */}
-        <Card>
+        <Card className="border-slate-200 bg-white shadow-sm">
           <CardHeader>
-            <CardTitle className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Package className="h-5 w-5" />
-                Controle de Estoque
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <CardTitle className="text-slate-950">Itens em estoque</CardTitle>
+                <CardDescription>
+                  Visualize produtos, localização, nível de estoque e status de reposição.
+                </CardDescription>
               </div>
-              <Button>
-                <RefreshCw className="mr-2 h-4 w-4" />
-                Atualizar
-              </Button>
-            </CardTitle>
-            <CardDescription>
-              Visualize e gerencie os níveis de estoque de todos os produtos
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Produto</TableHead>
-                  <TableHead>Localização</TableHead>
-                  <TableHead>Estoque Atual</TableHead>
-                  <TableHead>Nível</TableHead>
-                  <TableHead>Min/Max</TableHead>
-                  <TableHead>Vendas/Mês</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Ações</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredInventory.map((item) => (
-                  <TableRow key={item.id} className="hover:bg-gray-50">
-                    <TableCell>
-                      <div>
-                        <div className="font-medium">{item.name}</div>
-                        <div className="text-sm text-gray-600">#{item.id} • {item.category}</div>
-                      </div>
-                    </TableCell>
-                    <TableCell>{item.location}</TableCell>
-                    <TableCell>
-                      <div className="font-semibold">{item.currentStock} un.</div>
-                      <div className="text-sm text-gray-600">
-                        Última reposição: {new Date(item.lastRestock).toLocaleDateString('pt-BR')}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="w-20">
-                        {getStockLevel(item.currentStock, item.minStock, item.maxStock)}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="text-sm">
-                        <div>Min: {item.minStock}</div>
-                        <div>Max: {item.maxStock}</div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-1">
-                        <TrendingDown className="h-4 w-4 text-red-500" />
-                        <span>{item.avgSales}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      {getStatusBadge(item.status, item.currentStock, item.minStock)}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex gap-1">
-                        <Button variant="outline" size="sm">
-                          <Plus className="h-4 w-4" />
-                        </Button>
-                        <Button variant="outline" size="sm">
-                          <Minus className="h-4 w-4" />
-                        </Button>
-                        <Button variant="outline" size="sm">
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
 
-            {filteredInventory.length === 0 && (
-              <div className="text-center py-12">
-                <Package className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Nenhum item encontrado</h3>
-                <p className="text-gray-600">Tente ajustar os filtros de busca.</p>
+              <Button className="bg-violet-700 text-white hover:bg-violet-800">
+                <Plus className="mr-2 h-4 w-4" />
+                Nova movimentação
+              </Button>
+            </div>
+          </CardHeader>
+
+          <CardContent className="space-y-5">
+            <div className="grid gap-3 lg:grid-cols-[1fr_220px_220px]">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                <Input
+                  placeholder="Buscar por nome ou código..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="h-11 border-slate-200 bg-white pl-10"
+                />
               </div>
-            )}
+
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="h-11 rounded-md border border-slate-200 bg-white px-3 text-sm text-slate-700 outline-none focus:ring-2 focus:ring-violet-200"
+              >
+                {categories.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat === 'all' ? 'Todas as categorias' : cat}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                value={selectedStatus}
+                onChange={(e) => setSelectedStatus(e.target.value)}
+                className="h-11 rounded-md border border-slate-200 bg-white px-3 text-sm text-slate-700 outline-none focus:ring-2 focus:ring-violet-200"
+              >
+                {statusOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="overflow-hidden rounded-2xl border border-slate-200">
+              <Table>
+                <TableHeader className="bg-slate-50">
+                  <TableRow>
+                    <TableHead className="font-bold text-slate-700">Produto</TableHead>
+                    <TableHead className="font-bold text-slate-700">Localização</TableHead>
+                    <TableHead className="font-bold text-slate-700">Estoque atual</TableHead>
+                    <TableHead className="font-bold text-slate-700">Nível</TableHead>
+                    <TableHead className="font-bold text-slate-700">Min/Max</TableHead>
+                    <TableHead className="font-bold text-slate-700">Vendas/mês</TableHead>
+                    <TableHead className="font-bold text-slate-700">Status</TableHead>
+                    <TableHead className="font-bold text-slate-700">Ações</TableHead>
+                  </TableRow>
+                </TableHeader>
+
+                <TableBody>
+                  {filteredInventory.map((item) => (
+                    <TableRow key={item.id} className="hover:bg-violet-50/40">
+                      <TableCell>
+                        <div>
+                          <div className="font-bold text-slate-950">{item.name}</div>
+                          <div className="text-sm text-slate-500">
+                            #{item.id} • {item.category}
+                          </div>
+                        </div>
+                      </TableCell>
+
+                      <TableCell className="text-slate-700">{item.location}</TableCell>
+
+                      <TableCell>
+                        <div className="font-bold text-slate-950">{item.currentStock} un.</div>
+                        <div className="text-xs text-slate-500">
+                          Última reposição:{' '}
+                          {new Date(item.lastRestock).toLocaleDateString('pt-BR')}
+                        </div>
+                      </TableCell>
+
+                      <TableCell>
+                        <div className="w-24">
+                          {getStockLevel(item.currentStock, item.minStock, item.maxStock)}
+                        </div>
+                      </TableCell>
+
+                      <TableCell>
+                        <div className="text-sm text-slate-600">
+                          <div>Min: {item.minStock}</div>
+                          <div>Max: {item.maxStock}</div>
+                        </div>
+                      </TableCell>
+
+                      <TableCell>
+                        <div className="flex items-center gap-1 text-slate-700">
+                          <TrendingDown className="h-4 w-4 text-red-500" />
+                          <span>{item.avgSales}</span>
+                        </div>
+                      </TableCell>
+
+                      <TableCell>
+                        {getStatusBadge(item.status, item.currentStock, item.minStock)}
+                      </TableCell>
+
+                      <TableCell>
+                        <div className="flex gap-1">
+                          <Button variant="outline" size="sm" className="border-slate-200">
+                            <Plus className="h-4 w-4" />
+                          </Button>
+
+                          <Button variant="outline" size="sm" className="border-slate-200">
+                            <Minus className="h-4 w-4" />
+                          </Button>
+
+                          <Button variant="outline" size="sm" className="border-slate-200">
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+
+              {filteredInventory.length === 0 && (
+                <div className="py-12 text-center">
+                  <Package className="mx-auto mb-4 h-14 w-14 text-slate-300" />
+                  <h3 className="text-lg font-bold text-slate-950">Nenhum item encontrado</h3>
+                  <p className="text-sm text-slate-500">Tente ajustar os filtros de busca.</p>
+                </div>
+              )}
+            </div>
           </CardContent>
         </Card>
-      </main>
-      
-      <Footer />
-    </div>
+      </div>
+    </StoreLayout>
   );
 };
 
