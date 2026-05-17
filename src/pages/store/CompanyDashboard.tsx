@@ -1,38 +1,73 @@
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '@/context/AuthContext';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Navigate, Link } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  LayoutDashboard, 
-  Package, 
-  ShoppingBag, 
-  BarChart3, 
-  Settings, 
-  Plus, 
-  Store, 
+import {
   AlertTriangle,
-  Building,
-  UserRound,
   ArrowRight,
-  Shield,
-  Lock,
-  Star,
-  Eye,
-  TrendingUp,
+  BarChart3,
+  Building,
+  CheckCircle2,
+  Clock,
   DollarSign,
+  Eye,
+  LayoutDashboard,
+  Package,
+  Plus,
+  Settings,
+  ShieldCheck,
+  ShoppingBag,
+  Star,
+  Store,
+  TrendingUp,
+  UserRound,
+  Wallet,
 } from 'lucide-react';
 import DashboardChart from '@/components/store/DashboardChart';
 import OrdersList from '@/components/store/OrdersList';
+
+type OrderStatus = 'completed' | 'processing' | 'pending' | 'cancelled';
+
+interface StoreOrder {
+  id: string;
+  customer: string;
+  date: string;
+  total: number;
+  status: OrderStatus;
+  items: number;
+  paymentMethod: string;
+}
+
+interface QuickMenuItem {
+  icon: React.ElementType;
+  title: string;
+  href: string;
+  description: string;
+  badge?: string;
+}
+
+const formatCurrency = (value: number) => {
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  }).format(value);
+};
 
 const CompanyDashboard = () => {
   const { isAuthenticated, userType, user } = useAuth();
   const [isNewUser, setIsNewUser] = useState(false);
 
-  // Verificar se é um usuário novo (sem dados)
   useEffect(() => {
     if (user) {
       const newUserEmails = ['comercial@dossgroup.com.br', 'dossgroupequipa@gmail.com'];
@@ -40,7 +75,16 @@ const CompanyDashboard = () => {
     }
   }, [user]);
 
-  // Dados vazios para usuários novos
+  const storeName = useMemo(() => {
+    return (
+      user?.user_metadata?.nome_empresa ||
+      user?.user_metadata?.company_name ||
+      user?.user_metadata?.name ||
+      user?.email?.split('@')[0] ||
+      'Loja parceira'
+    );
+  }, [user]);
+
   const emptySalesData = [
     { name: 'Jan', vendas: 0, receita: 0 },
     { name: 'Fev', vendas: 0, receita: 0 },
@@ -48,187 +92,260 @@ const CompanyDashboard = () => {
     { name: 'Abr', vendas: 0, receita: 0 },
     { name: 'Mai', vendas: 0, receita: 0 },
     { name: 'Jun', vendas: 0, receita: 0 },
-    { name: 'Jul', vendas: 0, receita: 0 }
+    { name: 'Jul', vendas: 0, receita: 0 },
   ];
 
-  const emptyCategoryData = [
-    { name: 'Impressoras', valor: 0 },
-    { name: 'Peças', valor: 0 },
-    { name: 'Suprimentos', valor: 0 },
-    { name: 'Manutenção', valor: 0 },
-    { name: 'Outros', valor: 0 }
-  ];
-
-  const emptyOrders: any[] = [];
-
-  // Dados com conteúdo para usuários existentes
   const salesData = [
-    { name: 'Jan', vendas: 4000, receita: 2400 },
-    { name: 'Fev', vendas: 3000, receita: 1398 },
-    { name: 'Mar', vendas: 2000, receita: 9800 },
-    { name: 'Abr', vendas: 2780, receita: 3908 },
-    { name: 'Mai', vendas: 1890, receita: 4800 },
-    { name: 'Jun', vendas: 2390, receita: 3800 },
-    { name: 'Jul', vendas: 3490, receita: 4300 }
+    { name: 'Jan', vendas: 18, receita: 8400 },
+    { name: 'Fev', vendas: 22, receita: 11250 },
+    { name: 'Mar', vendas: 16, receita: 9700 },
+    { name: 'Abr', vendas: 28, receita: 15480 },
+    { name: 'Mai', vendas: 31, receita: 18100 },
+    { name: 'Jun', vendas: 26, receita: 16240 },
+    { name: 'Jul', vendas: 34, receita: 22450 },
   ];
 
-  const categoryData = [
-    { name: 'Impressoras', valor: 4000 },
-    { name: 'Peças', valor: 3000 },
-    { name: 'Suprimentos', valor: 2000 },
-    { name: 'Manutenção', valor: 2780 },
-    { name: 'Outros', valor: 1890 }
+  const sampleOrders: StoreOrder[] = [
+    {
+      id: '1001',
+      customer: 'João Silva',
+      date: '14/04/2026',
+      total: 1250.0,
+      status: 'completed',
+      items: 3,
+      paymentMethod: 'Cartão de Crédito',
+    },
+    {
+      id: '1002',
+      customer: 'Maria Oliveira',
+      date: '13/04/2026',
+      total: 450.9,
+      status: 'processing',
+      items: 2,
+      paymentMethod: 'Pix',
+    },
   ];
 
-const sampleOrders = [
-  {
-    id: '1001',
-    customer: 'João Silva',
-    date: '14/04/2023',
-    total: 1250.00,
-    status: 'completed' as const,
-    items: 3,
-    paymentMethod: 'Cartão de Crédito'
-  },
-  {
-    id: '1002',
-    customer: 'Maria Oliveira',
-    date: '13/04/2023',
-    total: 450.90,
-    status: 'processing' as const,
-    items: 2,
-    paymentMethod: 'Pix'
-  },
-];
-
-  // Escolher dados baseado se é usuário novo ou não
   const currentSalesData = isNewUser ? emptySalesData : salesData;
-  const currentCategoryData = isNewUser ? emptyCategoryData : categoryData;
-  const currentOrders = isNewUser ? emptyOrders : sampleOrders;
+  const currentOrders = isNewUser ? [] : sampleOrders;
+
+  const metrics = {
+    products: isNewUser ? 0 : 87,
+    orders: isNewUser ? 0 : 23,
+    revenue: isNewUser ? 0 : 12450,
+    rating: isNewUser ? 0 : 4.8,
+    pendingOrders: isNewUser ? 0 : 5,
+    lowStock: isNewUser ? 0 : 3,
+  };
+
+  const menuItems: QuickMenuItem[] = [
+    {
+      icon: LayoutDashboard,
+      title: 'Dashboard',
+      href: '/loja/dashboard',
+      description: 'Visão geral da operação',
+    },
+    {
+      icon: Package,
+      title: 'Produtos',
+      href: '/loja/products',
+      description: 'Gerenciar catálogo',
+      badge: `${metrics.products}`,
+    },
+    {
+      icon: ShoppingBag,
+      title: 'Pedidos',
+      href: '/loja/orders',
+      description: 'Acompanhar vendas',
+      badge: `${metrics.orders}`,
+    },
+    {
+      icon: BarChart3,
+      title: 'Financeiro',
+      href: '/loja/financeiro',
+      description: 'Receitas e repasses',
+    },
+    {
+      icon: Star,
+      title: 'Avaliações',
+      href: '/loja/avaliacoes',
+      description: 'Feedback dos clientes',
+    },
+    {
+      icon: Package,
+      title: 'Estoque',
+      href: '/loja/estoque',
+      description: 'Controle de inventário',
+      badge: metrics.lowStock > 0 ? `${metrics.lowStock}` : undefined,
+    },
+    {
+      icon: DollarSign,
+      title: 'Afiliados',
+      href: '/loja/afiliados',
+      description: 'Programa de indicação',
+    },
+    {
+      icon: Settings,
+      title: 'Configurações',
+      href: '/loja/configuracoes',
+      description: 'Dados e preferências',
+    },
+  ];
 
   if (!isAuthenticated || userType !== 'company') {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" replace />;
   }
 
-  const menuItems = [
-    { icon: LayoutDashboard, title: 'Dashboard', href: '/loja/dashboard', description: 'Visão geral dos negócios' },
-    { icon: Package, title: 'Produtos', href: '/loja/products', description: 'Gerenciar catálogo' },
-    { icon: ShoppingBag, title: 'Pedidos', href: '/loja/orders', description: 'Acompanhar vendas' },
-    { icon: BarChart3, title: 'Financeiro', href: '/loja/financeiro', description: 'Relatórios e receitas' },
-    { icon: Star, title: 'Avaliações', href: '/loja/avaliacoes', description: 'Feedback dos clientes' },
-    { icon: Package, title: 'Estoque', href: '/loja/estoque', description: 'Controle de inventário' },
-    { icon: DollarSign, title: 'Afiliados', href: '/loja/afiliados', description: 'Programa de afiliados' },
-    { icon: Settings, title: 'Configurações', href: '/loja/configuracoes', description: 'Ajustes da conta' },
-  ];
-
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-slate-50">
       <Navbar />
+
       <main className="flex-grow">
-        {/* Hero Section similar to home page */}
-        <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-24 px-4 relative overflow-hidden">
-          {/* Elementos decorativos de fundo */}
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-transparent to-purple-600/20"></div>
-          <div className="absolute top-20 left-20 w-72 h-72 bg-white/5 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-20 right-20 w-96 h-96 bg-yellow-300/10 rounded-full blur-3xl"></div>
-          
-          <div className="max-w-6xl mx-auto relative z-10">
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center">
-                <Building className="h-12 w-12 text-yellow-300 mr-4 drop-shadow-lg" />
+        <section className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-indigo-950 to-violet-900 text-white">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(168,85,247,0.35),transparent_35%),radial-gradient(circle_at_bottom_right,rgba(79,70,229,0.35),transparent_35%)]" />
+          <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-violet-500/20 blur-3xl" />
+          <div className="absolute -bottom-28 -left-20 h-80 w-80 rounded-full bg-indigo-500/20 blur-3xl" />
+
+          <div className="relative z-10 mx-auto max-w-7xl px-4 py-10 md:py-14">
+            <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+              <div className="flex items-start gap-4">
+                <div className="rounded-2xl bg-white/10 p-4 ring-1 ring-white/20 backdrop-blur">
+                  <Store className="h-9 w-9 text-violet-200" />
+                </div>
+
                 <div>
-                  <h1 className="text-4xl md:text-5xl font-black text-white drop-shadow-lg">
-                    Portal do Fornecedor
+                  <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-violet-100 ring-1 ring-white/15">
+                    <ShieldCheck className="h-3.5 w-3.5" />
+                    Portal da Loja
+                  </div>
+
+                  <h1 className="text-3xl font-black tracking-tight md:text-5xl">
+                    Painel do Fornecedor
                   </h1>
-                  <p className="text-xl text-blue-100 mt-2 drop-shadow-lg">
-                    Bem-vindo, Doss Group!
+
+                  <p className="mt-2 max-w-2xl text-sm text-violet-100 md:text-base">
+                    Bem-vindo, <span className="font-semibold text-white">{storeName}</span>. Gerencie
+                    produtos, pedidos, estoque, financeiro e reputação da sua loja em um só lugar.
+                  </p>
+
+                  <p className="mt-1 text-xs text-violet-200">
+                    Conta conectada: {user?.email || 'email não identificado'}
                   </p>
                 </div>
               </div>
-              <div className="hidden md:flex gap-3">
+
+              <div className="flex flex-col gap-3 sm:flex-row">
                 <Link to="/loja/profile">
-                  <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20 backdrop-blur-sm">
+                  <Button
+                    variant="outline"
+                    className="w-full border-white/25 bg-white/10 text-white hover:bg-white/20 hover:text-white sm:w-auto"
+                  >
                     <UserRound className="mr-2 h-4 w-4" />
                     Meu Perfil
                   </Button>
                 </Link>
-                <Link to="/loja/settings">
-                  <Button className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900">
+
+                <Link to="/loja/configuracoes">
+                  <Button className="w-full bg-white text-indigo-950 hover:bg-violet-100 sm:w-auto">
                     <Settings className="mr-2 h-4 w-4" />
                     Configurações
                   </Button>
                 </Link>
               </div>
             </div>
-            
-            {/* Cards de métricas */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+
+            <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
               <Link to="/loja/products" className="group">
-                <div className="bg-white/20 backdrop-blur-xl rounded-2xl p-6 border border-white/30 shadow-xl hover:bg-white/25 transition-all duration-300 hover:scale-105 cursor-pointer">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="text-sm font-semibold text-blue-100">Produtos</div>
-                    <Package className="h-6 w-6 text-yellow-300 group-hover:scale-110 transition-transform" />
+                <div className="rounded-2xl border border-white/15 bg-white/10 p-5 shadow-xl backdrop-blur transition hover:-translate-y-1 hover:bg-white/15">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-semibold text-violet-100">Produtos ativos</p>
+                    <Package className="h-6 w-6 text-violet-200 transition group-hover:scale-110" />
                   </div>
-                  <div className="text-3xl font-black text-white">87</div>
-                  <div className="text-xs text-blue-200 mt-2">Clique para gerenciar</div>
+                  <p className="mt-3 text-3xl font-black">{metrics.products}</p>
+                  <p className="mt-1 text-xs text-violet-200">Gerencie seu catálogo</p>
                 </div>
               </Link>
-              
+
               <Link to="/loja/orders" className="group">
-                <div className="bg-white/20 backdrop-blur-xl rounded-2xl p-6 border border-white/30 shadow-xl hover:bg-white/25 transition-all duration-300 hover:scale-105 cursor-pointer">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="text-sm font-semibold text-blue-100">Vendas (Mês)</div>
-                    <ShoppingBag className="h-6 w-6 text-green-300 group-hover:scale-110 transition-transform" />
+                <div className="rounded-2xl border border-white/15 bg-white/10 p-5 shadow-xl backdrop-blur transition hover:-translate-y-1 hover:bg-white/15">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-semibold text-violet-100">Pedidos no mês</p>
+                    <ShoppingBag className="h-6 w-6 text-violet-200 transition group-hover:scale-110" />
                   </div>
-                  <div className="text-3xl font-black text-white">23</div>
-                  <div className="text-xs text-blue-200 mt-2">Ver pedidos</div>
+                  <p className="mt-3 text-3xl font-black">{metrics.orders}</p>
+                  <p className="mt-1 text-xs text-violet-200">Acompanhe suas vendas</p>
                 </div>
               </Link>
-              
+
               <Link to="/loja/financeiro" className="group">
-                <div className="bg-white/20 backdrop-blur-xl rounded-2xl p-6 border border-white/30 shadow-xl hover:bg-white/25 transition-all duration-300 hover:scale-105 cursor-pointer">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="text-sm font-semibold text-blue-100 flex items-center gap-1">
-                      <Lock className="h-4 w-4" />
-                      Faturamento
-                    </div>
-                    <BarChart3 className="h-6 w-6 text-yellow-300 group-hover:scale-110 transition-transform" />
+                <div className="rounded-2xl border border-white/15 bg-white/10 p-5 shadow-xl backdrop-blur transition hover:-translate-y-1 hover:bg-white/15">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-semibold text-violet-100">Faturamento</p>
+                    <Wallet className="h-6 w-6 text-violet-200 transition group-hover:scale-110" />
                   </div>
-                  <div className="text-3xl font-black text-white">R$ 12.450,00</div>
-                  <div className="text-xs text-green-300 mt-2 font-semibold">
-                    Pagamento Protegido
-                  </div>
+                  <p className="mt-3 text-2xl font-black">{formatCurrency(metrics.revenue)}</p>
+                  <p className="mt-1 text-xs text-emerald-200">Pagamento protegido</p>
                 </div>
               </Link>
-              
+
               <Link to="/loja/avaliacoes" className="group">
-                <div className="bg-white/20 backdrop-blur-xl rounded-2xl p-6 border border-white/30 shadow-xl hover:bg-white/25 transition-all duration-300 hover:scale-105 cursor-pointer">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="text-sm font-semibold text-blue-100">Avaliação</div>
-                    <Star className="h-6 w-6 text-yellow-300 group-hover:scale-110 transition-transform" />
+                <div className="rounded-2xl border border-white/15 bg-white/10 p-5 shadow-xl backdrop-blur transition hover:-translate-y-1 hover:bg-white/15">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-semibold text-violet-100">Avaliação média</p>
+                    <Star className="h-6 w-6 text-violet-200 transition group-hover:scale-110" />
                   </div>
-                  <div className="text-3xl font-black text-white">4.8 ★</div>
-                  <div className="text-xs text-blue-200 mt-2">Ver avaliações</div>
+                  <p className="mt-3 text-3xl font-black">
+                    {metrics.rating > 0 ? `${metrics.rating} ★` : '—'}
+                  </p>
+                  <p className="mt-1 text-xs text-violet-200">Reputação da loja</p>
                 </div>
               </Link>
             </div>
           </div>
         </section>
-        
-        {/* Quick Actions Grid */}
-        <section className="py-12 bg-white">
-          <div className="container mx-auto px-4">
-            <h2 className="text-2xl font-bold mb-8 text-center text-gray-900">Acesso Rápido</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {menuItems.map((item, index) => {
+
+        <section className="border-b bg-white py-8">
+          <div className="mx-auto max-w-7xl px-4">
+            <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <h2 className="text-2xl font-bold text-slate-950">Acesso rápido</h2>
+                <p className="text-sm text-slate-500">
+                  Principais áreas para operar sua loja sem perder tempo.
+                </p>
+              </div>
+
+              <Link to="/loja/products/create">
+                <Button className="bg-indigo-700 text-white hover:bg-indigo-800">
+                  <Plus className="mr-2 h-4 w-4" />
+                  Novo produto
+                </Button>
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+              {menuItems.map((item) => {
                 const Icon = item.icon;
+
                 return (
-                  <Link key={index} to={item.href}>
-                    <Card className="hover:shadow-md transition-shadow cursor-pointer group">
-                      <CardContent className="p-6 text-center">
-                        <Icon className="h-8 w-8 mx-auto mb-4 text-blue-600 group-hover:text-blue-700" />
-                        <h3 className="font-semibold text-gray-900 mb-2">{item.title}</h3>
-                        <p className="text-xs text-gray-600">{item.description}</p>
+                  <Link key={item.href} to={item.href} className="group">
+                    <Card className="h-full border-slate-200 transition hover:-translate-y-1 hover:border-indigo-200 hover:shadow-lg">
+                      <CardContent className="p-5">
+                        <div className="mb-4 flex items-center justify-between">
+                          <div className="rounded-xl bg-indigo-50 p-3 text-indigo-700 transition group-hover:bg-indigo-700 group-hover:text-white">
+                            <Icon className="h-5 w-5" />
+                          </div>
+
+                          {item.badge && (
+                            <span className="rounded-full bg-violet-100 px-2.5 py-1 text-xs font-bold text-violet-800">
+                              {item.badge}
+                            </span>
+                          )}
+                        </div>
+
+                        <h3 className="font-bold text-slate-950">{item.title}</h3>
+                        <p className="mt-1 text-xs leading-relaxed text-slate-500">
+                          {item.description}
+                        </p>
                       </CardContent>
                     </Card>
                   </Link>
@@ -237,162 +354,256 @@ const sampleOrders = [
             </div>
           </div>
         </section>
-        
-        {/* Main Dashboard Content */}
-        <main className="bg-white py-8">
-          <div className="container mx-auto px-4">
-            <div className="max-w-6xl mx-auto">
-              
-            <Tabs defaultValue="overview">
-              <div className="border-b border-gray-200 mb-6">
-                <TabsList className="w-full flex justify-start h-auto p-0 bg-transparent">
-                  <TabsTrigger value="overview" className="py-3 px-4 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 rounded-none bg-transparent text-gray-700 font-medium">
-                    <LayoutDashboard className="mr-2 h-4 w-4 text-blue-600" />
+
+        <section className="bg-slate-50 py-8">
+          <div className="mx-auto max-w-7xl px-4">
+            {isNewUser && (
+              <Card className="mb-6 border-indigo-200 bg-indigo-50">
+                <CardContent className="flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex gap-3">
+                    <CheckCircle2 className="mt-0.5 h-5 w-5 text-indigo-700" />
+                    <div>
+                      <p className="font-bold text-indigo-950">Sua loja está pronta para configurar</p>
+                      <p className="text-sm text-indigo-800">
+                        Cadastre produtos, complete o perfil e configure suas informações comerciais.
+                      </p>
+                    </div>
+                  </div>
+
+                  <Link to="/loja/profile">
+                    <Button className="bg-indigo-700 text-white hover:bg-indigo-800">
+                      Completar perfil
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            )}
+
+            <Tabs defaultValue="overview" className="space-y-6">
+              <div className="rounded-2xl border border-slate-200 bg-white p-2 shadow-sm">
+                <TabsList className="grid h-auto w-full grid-cols-3 bg-transparent p-0">
+                  <TabsTrigger
+                    value="overview"
+                    className="rounded-xl py-3 text-slate-600 data-[state=active]:bg-indigo-700 data-[state=active]:text-white"
+                  >
+                    <LayoutDashboard className="mr-2 h-4 w-4" />
                     Visão Geral
                   </TabsTrigger>
-                  <TabsTrigger value="products" className="py-3 px-4 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 rounded-none bg-transparent text-gray-700 font-medium">
-                    <Package className="mr-2 h-4 w-4 text-blue-600" />
+
+                  <TabsTrigger
+                    value="products"
+                    className="rounded-xl py-3 text-slate-600 data-[state=active]:bg-indigo-700 data-[state=active]:text-white"
+                  >
+                    <Package className="mr-2 h-4 w-4" />
                     Produtos
                   </TabsTrigger>
-                  <TabsTrigger value="orders" className="py-3 px-4 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 rounded-none bg-transparent text-gray-700 font-medium">
-                    <ShoppingBag className="mr-2 h-4 w-4 text-blue-600" />
+
+                  <TabsTrigger
+                    value="orders"
+                    className="rounded-xl py-3 text-slate-600 data-[state=active]:bg-indigo-700 data-[state=active]:text-white"
+                  >
+                    <ShoppingBag className="mr-2 h-4 w-4" />
                     Pedidos
                   </TabsTrigger>
                 </TabsList>
               </div>
-              
-              <TabsContent value="overview">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <Card className="md:col-span-2">
+
+              <TabsContent value="overview" className="space-y-6">
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+                  <Card className="border-slate-200 lg:col-span-2">
                     <CardHeader>
-                      <CardTitle className="text-gray-900">Desempenho Recente</CardTitle>
-                      <CardDescription className="text-gray-600">
-                        Visualização dos últimos 30 dias de atividade da sua loja
-                      </CardDescription>
+                      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                        <div>
+                          <CardTitle className="text-slate-950">Desempenho recente</CardTitle>
+                          <CardDescription>
+                            Vendas e receita dos últimos meses da sua loja.
+                          </CardDescription>
+                        </div>
+
+                        <div className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
+                          <TrendingUp className="mr-1 inline h-3.5 w-3.5" />
+                          Operação monitorada
+                        </div>
+                      </div>
                     </CardHeader>
+
                     <CardContent>
-                      <DashboardChart 
-                        data={currentSalesData} 
-                        type="area" 
+                      <DashboardChart
+                        data={currentSalesData}
+                        type="area"
                         dataKeys={['vendas', 'receita']}
                         height={300}
                       />
                     </CardContent>
                   </Card>
-                  
-                  <Card>
+
+                  <Card className="border-slate-200">
                     <CardHeader>
-                      <CardTitle className="text-gray-900">Atenção Necessária</CardTitle>
-                      <CardDescription className="text-gray-600">
-                        Itens que precisam da sua atenção
+                      <CardTitle className="text-slate-950">Atenção necessária</CardTitle>
+                      <CardDescription>
+                        Itens que merecem ação rápida para não travar a operação.
                       </CardDescription>
                     </CardHeader>
-                    <CardContent>
-                      <div className="space-y-4">
-                        <Link to="/loja/estoque" className="block">
-                          <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 p-3 rounded-md flex items-start hover:bg-yellow-100 transition-colors cursor-pointer group">
-                            <AlertTriangle className="h-5 w-5 mr-2 flex-shrink-0 text-yellow-600 group-hover:scale-110 transition-transform" />
-                            <div>
-                              <p className="font-semibold text-yellow-900">Estoque Baixo</p>
-                              <p className="text-sm text-yellow-700">3 produtos estão com estoque abaixo do mínimo</p>
-                            </div>
-                            <Eye className="h-4 w-4 ml-auto text-yellow-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+
+                    <CardContent className="space-y-3">
+                      <Link to="/loja/estoque" className="block">
+                        <div className="group flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4 transition hover:bg-amber-100">
+                          <AlertTriangle className="mt-0.5 h-5 w-5 text-amber-700 transition group-hover:scale-110" />
+                          <div className="flex-1">
+                            <p className="font-bold text-amber-950">Estoque baixo</p>
+                            <p className="text-sm text-amber-800">
+                              {metrics.lowStock} produtos estão abaixo do mínimo.
+                            </p>
                           </div>
-                        </Link>
-                        
-                        <Link to="/loja/orders" className="block">
-                          <div className="bg-blue-50 border border-blue-200 text-blue-800 p-3 rounded-md flex items-start hover:bg-blue-100 transition-colors cursor-pointer group">
-                            <AlertTriangle className="h-5 w-5 mr-2 flex-shrink-0 text-blue-600 group-hover:scale-110 transition-transform" />
-                            <div>
-                              <p className="font-semibold text-blue-900">Pedidos Pendentes</p>
-                              <p className="text-sm text-blue-700">5 pedidos aguardando processamento</p>
-                            </div>
-                            <Eye className="h-4 w-4 ml-auto text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+                          <Eye className="h-4 w-4 text-amber-700 opacity-60" />
+                        </div>
+                      </Link>
+
+                      <Link to="/loja/orders" className="block">
+                        <div className="group flex items-start gap-3 rounded-xl border border-indigo-200 bg-indigo-50 p-4 transition hover:bg-indigo-100">
+                          <Clock className="mt-0.5 h-5 w-5 text-indigo-700 transition group-hover:scale-110" />
+                          <div className="flex-1">
+                            <p className="font-bold text-indigo-950">Pedidos pendentes</p>
+                            <p className="text-sm text-indigo-800">
+                              {metrics.pendingOrders} pedidos aguardando processamento.
+                            </p>
                           </div>
-                        </Link>
-                      </div>
+                          <Eye className="h-4 w-4 text-indigo-700 opacity-60" />
+                        </div>
+                      </Link>
+
+                      <Link to="/loja/configuracoes" className="block">
+                        <div className="group flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 transition hover:bg-slate-100">
+                          <Settings className="mt-0.5 h-5 w-5 text-slate-700 transition group-hover:scale-110" />
+                          <div className="flex-1">
+                            <p className="font-bold text-slate-950">Configurações da loja</p>
+                            <p className="text-sm text-slate-600">
+                              Revise dados comerciais e preferências.
+                            </p>
+                          </div>
+                          <ArrowRight className="h-4 w-4 text-slate-500" />
+                        </div>
+                      </Link>
                     </CardContent>
                   </Card>
                 </div>
               </TabsContent>
-              
+
               <TabsContent value="products">
-                <Card>
-                  <CardHeader className="flex-row items-center justify-between">
+                <Card className="border-slate-200">
+                  <CardHeader className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
-                      <CardTitle>Produtos</CardTitle>
+                      <CardTitle className="text-slate-950">Produtos</CardTitle>
                       <CardDescription>
-                        Gerencie o catálogo de produtos da sua loja
+                        Gerencie o catálogo de produtos da sua loja.
                       </CardDescription>
                     </div>
-                    <Link to="/loja/products">
-                      <Button className="group">
-                        <Plus className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform" />
-                        Adicionar Produto
-                        <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+
+                    <Link to="/loja/products/create">
+                      <Button className="bg-indigo-700 text-white hover:bg-indigo-800">
+                        <Plus className="mr-2 h-4 w-4" />
+                        Adicionar produto
                       </Button>
                     </Link>
                   </CardHeader>
+
                   <CardContent>
-                    <div className="border rounded-md">
-                      <div className="grid grid-cols-12 bg-gray-50 p-3 text-sm font-medium border-b">
-                        <div className="col-span-1">#</div>
-                        <div className="col-span-5">Nome</div>
+                    <div className="overflow-hidden rounded-xl border border-slate-200">
+                      <div className="grid grid-cols-12 bg-slate-100 p-3 text-xs font-bold uppercase tracking-wide text-slate-600">
+                        <div className="col-span-2 md:col-span-1">Código</div>
+                        <div className="col-span-5 md:col-span-5">Produto</div>
                         <div className="col-span-2 text-right">Estoque</div>
-                        <div className="col-span-2 text-right">Preço</div>
-                        <div className="col-span-2 text-right">Status</div>
+                        <div className="col-span-3 md:col-span-2 text-right">Preço</div>
+                        <div className="hidden md:block md:col-span-2 text-right">Status</div>
                       </div>
-                      
-                      <div className="divide-y">
+
+                      {isNewUser ? (
+                        <div className="p-6 text-center">
+                          <Package className="mx-auto mb-3 h-10 w-10 text-slate-300" />
+                          <p className="font-bold text-slate-900">Nenhum produto cadastrado</p>
+                          <p className="mt-1 text-sm text-slate-500">
+                            Comece adicionando o primeiro produto da sua loja.
+                          </p>
+                        </div>
+                      ) : (
                         <Link to="/loja/products/8006" className="block group">
-                          <div className="grid grid-cols-12 p-3 items-center hover:bg-gray-50 transition-colors">
-                            <div className="col-span-1 text-gray-500">8006</div>
-                            <div className="col-span-5 font-medium group-hover:text-blue-600 transition-colors">BOMBA DE TINTA 100/200ML</div>
-                            <div className="col-span-2 text-right">14</div>
-                            <div className="col-span-2 text-right">R$ 155,00</div>
-                            <div className="col-span-2 text-right flex items-center justify-end gap-2">
-                              <span className="inline-block px-2 py-1 rounded-full bg-green-100 text-green-800 text-xs">Ativo</span>
-                              <Eye className="h-4 w-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                          <div className="grid grid-cols-12 items-center p-3 text-sm transition hover:bg-indigo-50">
+                            <div className="col-span-2 text-slate-500 md:col-span-1">8006</div>
+                            <div className="col-span-5 font-semibold text-slate-950 transition group-hover:text-indigo-700">
+                              BOMBA DE TINTA 100/200ML
+                            </div>
+                            <div className="col-span-2 text-right text-slate-700">14</div>
+                            <div className="col-span-3 text-right font-semibold text-slate-900 md:col-span-2">
+                              R$ 155,00
+                            </div>
+                            <div className="hidden items-center justify-end gap-2 md:col-span-2 md:flex">
+                              <span className="rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-bold text-emerald-800">
+                                Ativo
+                              </span>
+                              <Eye className="h-4 w-4 text-slate-400 opacity-0 transition group-hover:opacity-100" />
                             </div>
                           </div>
                         </Link>
-                      </div>
+                      )}
                     </div>
                   </CardContent>
-                  <CardFooter className="justify-between">
-                    <p className="text-sm text-gray-500">
-                      Mostrando produtos disponíveis
+
+                  <CardFooter className="flex flex-col gap-3 sm:flex-row sm:justify-between">
+                    <p className="text-sm text-slate-500">
+                      {isNewUser
+                        ? 'Cadastre produtos para começar a vender.'
+                        : 'Mostrando produtos principais da loja.'}
                     </p>
+
                     <Link to="/loja/products">
-                      <Button variant="outline" size="sm" className="flex items-center gap-1 group">
+                      <Button variant="outline" size="sm" className="group">
                         Ver todos os produtos
-                        <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                        <ArrowRight className="ml-2 h-4 w-4 transition group-hover:translate-x-1" />
                       </Button>
                     </Link>
                   </CardFooter>
                 </Card>
               </TabsContent>
-              
+
               <TabsContent value="orders">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Pedidos</CardTitle>
-                    <CardDescription>
-                      Gerencie os pedidos recebidos
-                    </CardDescription>
+                <Card className="border-slate-200">
+                  <CardHeader className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <CardTitle className="text-slate-950">Pedidos</CardTitle>
+                      <CardDescription>
+                        Acompanhe pedidos recebidos, pagamentos e situação operacional.
+                      </CardDescription>
+                    </div>
+
+                    <Link to="/loja/orders">
+                      <Button className="bg-indigo-700 text-white hover:bg-indigo-800">
+                        Ver central de pedidos
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    </Link>
                   </CardHeader>
+
                   <CardContent>
-                    <OrdersList orders={currentOrders} />
+                    {isNewUser || currentOrders.length === 0 ? (
+                      <div className="rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center">
+                        <ShoppingBag className="mx-auto mb-3 h-10 w-10 text-slate-300" />
+                        <p className="font-bold text-slate-950">Nenhum pedido recebido ainda</p>
+                        <p className="mt-1 text-sm text-slate-500">
+                          Quando sua loja receber pedidos, eles aparecerão aqui.
+                        </p>
+                      </div>
+                    ) : (
+                      <OrdersList orders={currentOrders} />
+                    )}
                   </CardContent>
                 </Card>
               </TabsContent>
             </Tabs>
-            </div>
           </div>
-        </main>
-        
-        <Footer />
+        </section>
       </main>
+
+      <Footer />
     </div>
   );
 };
