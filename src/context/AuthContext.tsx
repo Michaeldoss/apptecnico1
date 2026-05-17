@@ -36,8 +36,6 @@ const AUTH_REDIRECT_PATHS: Record<ResolvedUserType, string> = {
   admin: '/admin/dashboard',
 };
 
-/** ---------- Helpers para inferir tipo de usuário ---------- */
-
 const normalizeText = (value?: unknown): string => {
   if (typeof value !== 'string') return '';
   return value
@@ -51,12 +49,42 @@ const normalizeText = (value?: unknown): string => {
 
 const USER_TYPE_ALIASES: Record<ResolvedUserType, string[]> = {
   technician: [
-    'tecnico', 'tecnica', 'tecnico parceiro', 'tecnico credenciado', 'tecnico instalador',
-    'tecnico assistencia', 'tecnico campo', 'tecnico externo', 'tecnico especialista',
-    'tecnic', 'instalador', 'especialista', 'profissional tecnico', 'suporte tecnico'
+    'tecnico',
+    'tecnica',
+    'tecnico parceiro',
+    'tecnico credenciado',
+    'tecnico instalador',
+    'tecnico assistencia',
+    'tecnico campo',
+    'tecnico externo',
+    'tecnico especialista',
+    'tecnic',
+    'instalador',
+    'especialista',
+    'profissional tecnico',
+    'suporte tecnico',
   ],
-  customer: ['cliente', 'client', 'customer', 'contratante', 'solicitante', 'demandante', 'usuario final'],
-  company: ['loja', 'company', 'store', 'empresa', 'lojista', 'revenda', 'parceiro', 'fornecedor', 'seller', 'comercial'],
+  customer: [
+    'cliente',
+    'client',
+    'customer',
+    'contratante',
+    'solicitante',
+    'demandante',
+    'usuario final',
+  ],
+  company: [
+    'loja',
+    'company',
+    'store',
+    'empresa',
+    'lojista',
+    'revenda',
+    'parceiro',
+    'fornecedor',
+    'seller',
+    'comercial',
+  ],
   admin: ['admin', 'administrador', 'gestor', 'suporte'],
 };
 
@@ -67,7 +95,10 @@ const resolveUserTypeAlias = (rawValue?: unknown): ResolvedUserType | null => {
   const searchTargets = new Set(normalized.split(' '));
   searchTargets.add(normalized);
 
-  for (const [userType, aliases] of Object.entries(USER_TYPE_ALIASES) as [ResolvedUserType, string[]][]) {
+  for (const [userType, aliases] of Object.entries(USER_TYPE_ALIASES) as [
+    ResolvedUserType,
+    string[],
+  ][]) {
     for (const alias of aliases) {
       const a = normalizeText(alias);
       if (!a) continue;
@@ -77,7 +108,10 @@ const resolveUserTypeAlias = (rawValue?: unknown): ResolvedUserType | null => {
 
   if (normalized.includes('tec')) return 'technician';
   if (normalized.includes('client')) return 'customer';
-  if (normalized.includes('loj') || normalized.includes('empres') || normalized.includes('store')) return 'company';
+  if (normalized.includes('loj') || normalized.includes('empres') || normalized.includes('store')) {
+    return 'company';
+  }
+  if (normalized.includes('admin') || normalized.includes('gestor')) return 'admin';
 
   return null;
 };
@@ -90,25 +124,24 @@ const extractUserTypeFromMetadata = (user: User | null): ResolvedUserType | null
     (user as any)?.user_metadata?.tipo_usuario,
     (user as any)?.user_metadata?.perfil,
     (user as any)?.user_metadata?.role,
+    (user as any)?.user_metadata?.type,
     (user as any)?.app_metadata?.user_type,
     (user as any)?.app_metadata?.tipo_usuario,
     (user as any)?.app_metadata?.perfil,
     (user as any)?.app_metadata?.role,
+    (user as any)?.app_metadata?.type,
   ];
 
   for (const c of candidates) {
     const r = resolveUserTypeAlias(c);
     if (r) return r;
   }
+
   return null;
 };
 
-/** ---------- Rate limiters ---------- */
-
 const loginLimiter = createRateLimiter(5, 15 * 60 * 1000);
 const signupLimiter = createRateLimiter(3, 60 * 60 * 1000);
-
-/** ---------- Contexto ---------- */
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -125,59 +158,171 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Verifica tipo com prioridade por tabelas e aceita “dica” por metadados
+  const safeMaybeSingle = async (
+    tableName: string,
+    columnName: string,
+    userId: string,
+    selectFields = 'id'
+  ) => {
+    try {
+      const { data, error } = await supabase
+        .from(tableName as any)
+        .select(selectFields)
+        .eq(columnName, userId)
+        .maybeSingle();
+
+      if (error) {
+        console.warn(`⚠️ Falha ao consultar ${tableName}.${columnName}:`, error.message);
+        return null;
+      }
+
+      return data;
+    } catch (error) {
+      console.warn(`⚠️ Erro inesperado ao consultar ${tableName}.${columnName}:`, error);
+      return null;
+    }
+  };
+
+  const findProfileInTable = async (tableName: string, userId: string) => {
+    const possibleColumns = ['id', 'user_id', 'usuario_id', 'auth_id', 'profile_id'];
+
+    for (const columnName of possibleColumns) {
+      const result = await safeMaybeSingle(tableName, columnName, userId);
+      if (result) {
+        console.log(`✅ Perfil encontrado em ${tableName}.${columnName}`);
+        return result;
+      }
+    }
+
+    return null;
+  };
+
+  const findUserTypeInUsuarios = async (userId: string): Promise<UserType> => {
+    const possibleColumns = ['id', 'user_id', 'usuario_id', 'auth_id', 'profile_id'];
+
+    for (const columnName of possibleColumns) {
+      try {
+        const { data, error } = await supabase
+          .from('usuarios' as any)
+          .select('tipo_usuario, perfil, perfil_tipo, categoria, segmento, role, type')
+          .eq(columnName, userId)
+          .maybeSingle();
+
+        if (error) {
+          console.warn(`⚠️ Falha ao consultar usuarios.${columnName}:`, error.message);
+          continue;
+        }
+
+        if (data) {
+          const hint =
+            resolveUserTypeAlias((data as any)?.tipo_usuario) ||
+            resolveUserTypeAlias((data as any)?.perfil) ||
+            resolveUserTypeAlias((data as any)?.perfil_tipo) ||
+            resolveUserTypeAlias((data as any)?.categoria) ||
+            resolveUserTypeAlias((data as any)?.segmento) ||
+            resolveUserTypeAlias((data as any)?.role) ||
+            resolveUserTypeAlias((data as any)?.type);
+
+          if (hint) {
+            console.log(`✅ Tipo encontrado em usuarios.${columnName}:`, hint);
+            return hint;
+          }
+        }
+      } catch (error) {
+        console.warn(`⚠️ Erro inesperado ao consultar usuarios.${columnName}:`, error);
+      }
+    }
+
+    return null;
+  };
+
+  const checkAdminRole = async (userId: string): Promise<boolean> => {
+    try {
+      const { data, error } = await supabase
+        .from('user_roles' as any)
+        .select('role')
+        .eq('user_id', userId)
+        .eq('role', 'admin')
+        .maybeSingle();
+
+      if (error) {
+        console.warn('⚠️ Falha ao consultar user_roles:', error.message);
+        return false;
+      }
+
+      return !!data;
+    } catch (error) {
+      console.warn('⚠️ Erro inesperado ao consultar user_roles:', error);
+      return false;
+    }
+  };
+
+  const checkUserTypeByRpc = async (): Promise<UserType> => {
+    try {
+      const { data, error } = await supabase.rpc('get_current_user_type');
+
+      if (error) {
+        console.warn('⚠️ RPC get_current_user_type falhou:', error.message);
+        return null;
+      }
+
+      const rpcHint = resolveUserTypeAlias(data as any);
+      if (rpcHint) {
+        console.log('✅ Tipo encontrado via RPC:', rpcHint);
+        return rpcHint;
+      }
+
+      return null;
+    } catch (error) {
+      console.warn('⚠️ Erro inesperado na RPC get_current_user_type:', error);
+      return null;
+    }
+  };
+
   const checkUserTypeInTables = async (
     userId: string,
     metadataHint?: ResolvedUserType | null
   ): Promise<UserType> => {
     console.log('🔍 Identificando tipo de usuário para:', userId, metadataHint);
-    if (metadataHint) return metadataHint;
 
-    try {
-      const [{ data: adminRole }, { data: tech }, { data: store }, { data: customer }] = await Promise.all([
-        supabase.from('user_roles').select('role').eq('user_id', userId).eq('role', 'admin').maybeSingle(),
-        supabase.from('tecnicos').select('id').eq('id', userId).maybeSingle(),
-        supabase.from('lojas').select('id').eq('id', userId).maybeSingle(),
-        supabase.from('clientes').select('id').eq('id', userId).maybeSingle(),
-      ]);
-
-      if (adminRole) return 'admin';
-      if (tech) return 'technician';
-      if (store) return 'company';
-      if (customer) return 'customer';
-
-      const { data: usuario } = await supabase
-        .from('usuarios')
-        .select('tipo_usuario, perfil, perfil_tipo, categoria, segmento')
-        .eq('id', userId)
-        .maybeSingle();
-
-      if (usuario) {
-        const hint =
-          resolveUserTypeAlias((usuario as any)?.tipo_usuario) ||
-          resolveUserTypeAlias((usuario as any)?.perfil) ||
-          resolveUserTypeAlias((usuario as any)?.perfil_tipo) ||
-          resolveUserTypeAlias((usuario as any)?.categoria) ||
-          resolveUserTypeAlias((usuario as any)?.segmento);
-        if (hint) return hint;
-      }
-
-      const { data: rpcType } = await supabase.rpc('get_current_user_type');
-      if (rpcType) {
-        const rpcHint = resolveUserTypeAlias(rpcType as any);
-        if (rpcHint) return rpcHint;
-      }
-
-      console.log('❌ Tipo não identificado');
-      return null;
-    } catch (e) {
-      console.error('💥 Erro ao identificar tipo de usuário:', e);
-      return null;
+    if (metadataHint) {
+      console.log('✅ Tipo identificado por metadata:', metadataHint);
+      return metadataHint;
     }
+
+    const isAdmin = await checkAdminRole(userId);
+    if (isAdmin) return 'admin';
+
+    const [tech, store, customer] = await Promise.all([
+      findProfileInTable('tecnicos', userId),
+      findProfileInTable('lojas', userId),
+      findProfileInTable('clientes', userId),
+    ]);
+
+    if (tech) return 'technician';
+    if (store) return 'company';
+    if (customer) return 'customer';
+
+    const usuarioType = await findUserTypeInUsuarios(userId);
+    if (usuarioType) return usuarioType;
+
+    const rpcType = await checkUserTypeByRpc();
+    if (rpcType) return rpcType;
+
+    console.log('❌ Tipo não identificado para o usuário:', userId);
+    return null;
+  };
+
+  const resetAuthState = () => {
+    setUser(null);
+    setSession(null);
+    setUserType(null);
+    setIsAuthenticated(false);
   };
 
   const login = async (email: string, password: string): Promise<AuthActionResult> => {
     const validationResult = loginSchema.safeParse({ email, password });
+
     if (!validationResult.success) {
       const message = validationResult.error.errors[0].message;
       toast({ variant: 'destructive', title: 'Erro de validação', description: message });
@@ -185,60 +330,116 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const normalizedEmail = validationResult.data.email.trim().toLowerCase();
+
     const rateLimit = loginLimiter.attempt(normalizedEmail);
+
     if (!rateLimit.allowed) {
       const retryAfterSeconds = Math.max(1, Math.ceil(rateLimit.retryAfter / 1000));
       const minutes = Math.ceil(retryAfterSeconds / 60);
       const waitMessage = minutes > 1 ? `${minutes} minutos` : `${retryAfterSeconds} segundos`;
-      toast({ variant: 'destructive', title: 'Muitas tentativas', description: `Detectamos várias tentativas de login. Aguarde ${waitMessage} antes de tentar novamente.` });
-      return { success: false, error: 'Limite de tentativas de login atingido', errorCode: 'rate_limit', retryAfterSeconds };
+
+      toast({
+        variant: 'destructive',
+        title: 'Muitas tentativas',
+        description: `Detectamos várias tentativas de login. Aguarde ${waitMessage} antes de tentar novamente.`,
+      });
+
+      return {
+        success: false,
+        error: 'Limite de tentativas de login atingido',
+        errorCode: 'rate_limit',
+        retryAfterSeconds,
+      };
     }
 
     console.log('🔐 Tentando login para:', normalizedEmail);
-    const { data, error } = await supabase.auth.signInWithPassword({ email: normalizedEmail, password });
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: normalizedEmail,
+      password,
+    });
 
     if (error) {
       console.error('❌ Erro no login:', error);
+
       let errorMessage = 'Erro ao fazer login. Tente novamente.';
       let requiresConfirmation = false;
 
-      if (error.message.includes('Invalid login credentials')) errorMessage = 'Email ou senha incorretos. Verifique suas credenciais.';
-      else if (error.message.includes('Email not confirmed')) { errorMessage = 'Email não confirmado. Verifique sua caixa de entrada.'; requiresConfirmation = true; }
+      if (error.message.includes('Invalid login credentials')) {
+        errorMessage = 'Email ou senha incorretos. Verifique suas credenciais.';
+      } else if (error.message.includes('Email not confirmed')) {
+        errorMessage = 'Email não confirmado. Verifique sua caixa de entrada.';
+        requiresConfirmation = true;
+      }
 
-      toast({ variant: 'destructive', title: 'Falha no login', description: errorMessage });
-      return { success: false, error: errorMessage, errorCode: 'auth', requiresConfirmation };
+      toast({
+        variant: 'destructive',
+        title: 'Falha no login',
+        description: errorMessage,
+      });
+
+      return {
+        success: false,
+        error: errorMessage,
+        errorCode: 'auth',
+        requiresConfirmation,
+      };
     }
 
     if (data?.user && data?.session) {
-      console.log('✅ Login bem-sucedido:', data.user.id);
+      console.log('✅ Login autenticado no Supabase:', data.user.id);
+
       setUser(data.user);
       setSession(data.session);
       setIsAuthenticated(true);
 
       const metadataUserType =
-        extractUserTypeFromMetadata(data.user) ||
-        extractUserTypeFromMetadata(data.session.user);
+        extractUserTypeFromMetadata(data.user) || extractUserTypeFromMetadata(data.session.user);
 
       const detectedUserType = await checkUserTypeInTables(data.user.id, metadataUserType);
+
       setUserType(detectedUserType);
-      console.log('👤 Tipo de usuário:', detectedUserType);
+      console.log('👤 Tipo de usuário identificado no login:', detectedUserType);
 
       if (detectedUserType) {
         loginLimiter.reset(normalizedEmail);
+
         const redirectPath = AUTH_REDIRECT_PATHS[detectedUserType];
-        toast({ title: 'Login realizado com sucesso!', description: 'Bem-vindo de volta! Redirecionando para seu painel...' });
-        return { success: true, userType: detectedUserType, redirectPath };
+
+        toast({
+          title: 'Login realizado com sucesso!',
+          description: 'Bem-vindo de volta! Redirecionando para seu painel...',
+        });
+
+        return {
+          success: true,
+          userType: detectedUserType,
+          redirectPath,
+        };
       }
 
-      toast({ variant: 'destructive', title: 'Erro', description: 'Perfil de usuário não encontrado. Entre em contato com o suporte.' });
+      toast({
+        variant: 'destructive',
+        title: 'Perfil não encontrado',
+        description:
+          'Seu login foi aceito, mas seu cadastro não foi encontrado como cliente, técnico, loja ou administrador.',
+      });
+
       await supabase.auth.signOut();
-      setIsAuthenticated(false);
-      setUser(null);
-      setSession(null);
-      return { success: false, error: 'Perfil de usuário não encontrado', errorCode: 'profile_missing' };
+      resetAuthState();
+
+      return {
+        success: false,
+        error: 'Perfil de usuário não encontrado',
+        errorCode: 'profile_missing',
+      };
     }
 
-    return { success: false, error: 'Sessão não foi criada.', errorCode: 'auth' };
+    return {
+      success: false,
+      error: 'Sessão não foi criada.',
+      errorCode: 'auth',
+    };
   };
 
   const signup = async (email: string, password: string, userData: any): Promise<AuthActionResult> => {
@@ -252,93 +453,191 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     if (!validationResult.success) {
       const message = validationResult.error.errors[0].message;
-      toast({ variant: 'destructive', title: 'Erro', description: message });
-      return { success: false, error: message, errorCode: 'validation' };
+
+      toast({
+        variant: 'destructive',
+        title: 'Erro',
+        description: message,
+      });
+
+      return {
+        success: false,
+        error: message,
+        errorCode: 'validation',
+      };
     }
 
     const normalizedEmail = validationResult.data.email.trim().toLowerCase();
+
     const rateLimit = signupLimiter.attempt(normalizedEmail);
+
     if (!rateLimit.allowed) {
       const retryAfterSeconds = Math.max(1, Math.ceil(rateLimit.retryAfter / 1000));
       const minutes = Math.ceil(retryAfterSeconds / 60);
       const waitMessage = minutes > 1 ? `${minutes} minutos` : `${retryAfterSeconds} segundos`;
-      toast({ variant: 'destructive', title: 'Muitas tentativas', description: `Detectamos várias tentativas de cadastro. Aguarde ${waitMessage} antes de tentar novamente.` });
-      return { success: false, error: 'Limite de tentativas de cadastro atingido', errorCode: 'rate_limit', retryAfterSeconds };
-    }
 
-    // Validação extra via RPC (se existir)
-    try {
-      const { data: securityCheck, error: securityError } = await supabase.rpc('secure_user_registration', {
-        p_email: normalizedEmail,
-        p_password: validationResult.data.password,
-        p_user_type: userData.type,
-        p_user_data: userData
+      toast({
+        variant: 'destructive',
+        title: 'Muitas tentativas',
+        description: `Detectamos várias tentativas de cadastro. Aguarde ${waitMessage} antes de tentar novamente.`,
       });
 
+      return {
+        success: false,
+        error: 'Limite de tentativas de cadastro atingido',
+        errorCode: 'rate_limit',
+        retryAfterSeconds,
+      };
+    }
+
+    try {
+      const { data: securityCheck, error: securityError } = await supabase.rpc(
+        'secure_user_registration',
+        {
+          p_email: normalizedEmail,
+          p_password: validationResult.data.password,
+          p_user_type: userData.type,
+          p_user_data: userData,
+        }
+      );
+
       const securityResponse = securityCheck as { success?: boolean; message?: string } | null;
+
       if (securityError) {
         const msg = securityError.message?.toLowerCase?.() ?? '';
-        const isMissingRpc = msg.includes('secure_user_registration') && (msg.includes('not found') || msg.includes('does not exist'));
+        const isMissingRpc =
+          msg.includes('secure_user_registration') &&
+          (msg.includes('not found') || msg.includes('does not exist'));
+
         if (!isMissingRpc) {
           const message = securityError.message || 'Falha na validação de segurança';
-          toast({ variant: 'destructive', title: 'Erro de Segurança', description: message });
-          return { success: false, error: message, errorCode: 'security' };
+
+          toast({
+            variant: 'destructive',
+            title: 'Erro de Segurança',
+            description: message,
+          });
+
+          return {
+            success: false,
+            error: message,
+            errorCode: 'security',
+          };
         }
       } else if (securityResponse && securityResponse.success === false) {
         const message = securityResponse.message || 'Falha na validação de segurança';
-        toast({ variant: 'destructive', title: 'Erro de Segurança', description: message });
-        return { success: false, error: message, errorCode: 'security' };
+
+        toast({
+          variant: 'destructive',
+          title: 'Erro de Segurança',
+          description: message,
+        });
+
+        return {
+          success: false,
+          error: message,
+          errorCode: 'security',
+        };
       }
     } catch (securityError: any) {
       const msg = securityError?.message?.toLowerCase?.() ?? '';
-      const isMissingRpc = msg.includes('secure_user_registration') && (msg.includes('not found') || msg.includes('does not exist'));
+      const isMissingRpc =
+        msg.includes('secure_user_registration') &&
+        (msg.includes('not found') || msg.includes('does not exist'));
+
       if (!isMissingRpc) {
         console.error('Security validation failed:', securityError);
+
         const message = securityError?.message || 'Falha na validação de segurança';
-        toast({ variant: 'destructive', title: 'Erro de Segurança', description: message });
-        return { success: false, error: message, errorCode: 'security' };
+
+        toast({
+          variant: 'destructive',
+          title: 'Erro de Segurança',
+          description: message,
+        });
+
+        return {
+          success: false,
+          error: message,
+          errorCode: 'security',
+        };
       }
     }
 
-    console.log('🔐 Iniciando signup...', { email: normalizedEmail, userType: userData.type });
+    console.log('🔐 Iniciando signup...', {
+      email: normalizedEmail,
+      userType: userData.type,
+    });
+
     const { data, error } = await supabase.auth.signUp({
       email: normalizedEmail,
       password: validationResult.data.password,
       options: {
         emailRedirectTo: `${window.location.origin}/login?confirmed=true`,
-        data: { user_type: userData.type, name: userData.nome, ...userData },
+        data: {
+          user_type: userData.type,
+          name: userData.nome,
+          ...userData,
+        },
       },
     });
 
-    console.log('🔐 Resultado do signUp:', { id: data?.user?.id, error });
+    console.log('🔐 Resultado do signUp:', {
+      id: data?.user?.id,
+      error,
+    });
 
     if (error || !data.user) {
       const message = error?.message || 'Erro desconhecido';
-      toast({ variant: 'destructive', title: 'Erro no cadastro', description: message });
-      return { success: false, error: message, errorCode: 'auth' };
+
+      toast({
+        variant: 'destructive',
+        title: 'Erro no cadastro',
+        description: message,
+      });
+
+      return {
+        success: false,
+        error: message,
+        errorCode: 'auth',
+      };
     }
 
-    // Caso precise confirmar email
     if (!data.session && data.user && !data.user.email_confirmed_at) {
-      toast({ title: 'Cadastro realizado com sucesso!', description: 'Verifique seu email e confirme a conta antes de fazer login.' });
+      toast({
+        title: 'Cadastro realizado com sucesso!',
+        description: 'Verifique seu email e confirme a conta antes de fazer login.',
+      });
+
       signupLimiter.reset(normalizedEmail);
-      setTimeout(() => { window.location.href = '/login?message=confirm_email'; }, 2000);
-      return { success: true, requiresConfirmation: true, redirectPath: '/login' };
+
+      setTimeout(() => {
+        window.location.href = '/login?message=confirm_email';
+      }, 2000);
+
+      return {
+        success: true,
+        requiresConfirmation: true,
+        redirectPath: '/login',
+      };
     }
 
     const userId = data.user.id;
 
-    // Tenta criar perfil via RPC (caso exista)
     try {
-      const { data: profileResult, error: profileError } = await supabase.rpc('create_user_profile', {
-        p_user_type: userData.type,
-        p_user_data: userData
-      });
+      const { data: profileResult, error: profileError } = await supabase.rpc(
+        'create_user_profile',
+        {
+          p_user_type: userData.type,
+          p_user_data: userData,
+        }
+      );
+
       if (profileError || !(profileResult as any)?.success) {
         console.warn('⚠️ Profile creation may have failed, but continuing...', profileError);
       }
-    } catch (e) {
-      console.warn('⚠️ Profile creation error (may be handled by trigger):', e);
+    } catch (error) {
+      console.warn('⚠️ Profile creation error may be handled by trigger:', error);
     }
 
     signupLimiter.reset(normalizedEmail);
@@ -354,135 +653,228 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         resolveUserTypeAlias(userData?.type);
 
       const detectedUserType = await checkUserTypeInTables(userId, metadataUserType);
+
       setUserType(detectedUserType);
 
       if (detectedUserType) {
         const redirectPath = AUTH_REDIRECT_PATHS[detectedUserType];
-        toast({ title: 'Cadastro realizado', description: 'Bem-vindo! Redirecionando para seu dashboard...' });
-        setTimeout(() => { window.location.href = redirectPath; }, 1000);
-        return { success: true, userType: detectedUserType, redirectPath };
+
+        toast({
+          title: 'Cadastro realizado',
+          description: 'Bem-vindo! Redirecionando para seu dashboard...',
+        });
+
+        setTimeout(() => {
+          window.location.href = redirectPath;
+        }, 1000);
+
+        return {
+          success: true,
+          userType: detectedUserType,
+          redirectPath,
+        };
       }
 
       toast({
         variant: 'destructive',
         title: 'Erro no redirecionamento',
-        description: 'Conta criada, mas não foi possível identificar o tipo de usuário. Tente fazer login.'
+        description:
+          'Conta criada, mas não foi possível identificar o tipo de usuário. Tente fazer login.',
       });
-      return { success: false, error: 'Tipo de usuário não identificado após cadastro', errorCode: 'profile_missing' };
+
+      return {
+        success: false,
+        error: 'Tipo de usuário não identificado após cadastro',
+        errorCode: 'profile_missing',
+      };
     }
 
-    toast({ title: 'Cadastro realizado', description: 'Verifique seu email para confirmar a conta e fazer login.' });
-    setTimeout(() => { window.location.href = '/login'; }, 2000);
-    return { success: true, requiresConfirmation: true, redirectPath: '/login' };
+    toast({
+      title: 'Cadastro realizado',
+      description: 'Verifique seu email para confirmar a conta e fazer login.',
+    });
+
+    setTimeout(() => {
+      window.location.href = '/login';
+    }, 2000);
+
+    return {
+      success: true,
+      requiresConfirmation: true,
+      redirectPath: '/login',
+    };
   };
 
   const logout = async () => {
     console.log('🚪 Iniciando logout completo...');
+
     try {
-      setUser(null);
-      setSession(null);
-      setUserType(null);
-      setIsAuthenticated(false);
+      resetAuthState();
       localStorage.clear();
       sessionStorage.clear();
 
       try {
         const { error } = await supabase.auth.signOut();
-        if (error) console.warn('⚠️ Aviso no signOut do Supabase:', error.message);
-      } catch (e) {
-        console.warn('⚠️ Erro no signOut do Supabase (ignorado):', e);
+        if (error) {
+          console.warn('⚠️ Aviso no signOut do Supabase:', error.message);
+        }
+      } catch (error) {
+        console.warn('⚠️ Erro no signOut do Supabase ignorado:', error);
       }
 
-      toast({ title: 'Logout realizado', description: 'Sessão encerrada com sucesso!' });
-      setTimeout(() => { window.location.href = '/'; }, 500);
-    } catch (e) {
-      console.error('💥 Erro crítico no logout:', e);
-      setUser(null);
-      setSession(null);
-      setUserType(null);
-      setIsAuthenticated(false);
+      toast({
+        title: 'Logout realizado',
+        description: 'Sessão encerrada com sucesso!',
+      });
+
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 500);
+    } catch (error) {
+      console.error('💥 Erro crítico no logout:', error);
+
+      resetAuthState();
       localStorage.clear();
       sessionStorage.clear();
-      toast({ title: 'Logout forçado', description: 'Sessão encerrada (com limpeza forçada).' });
-      setTimeout(() => { window.location.href = '/'; }, 500);
+
+      toast({
+        title: 'Logout forçado',
+        description: 'Sessão encerrada com limpeza forçada.',
+      });
+
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 500);
     }
   };
 
   const hardReset = async () => {
     console.log('🔄 Executando hard reset do sistema de autenticação...');
-    setUser(null);
-    setSession(null);
-    setUserType(null);
-    setIsAuthenticated(false);
+
+    resetAuthState();
     localStorage.clear();
     sessionStorage.clear();
-    try { await supabase.auth.signOut(); } catch (e) { console.warn('Erro no signOut durante hard reset:', e); }
+
+    try {
+      await supabase.auth.signOut();
+    } catch (error) {
+      console.warn('Erro no signOut durante hard reset:', error);
+    }
+
     console.log('✅ Hard reset concluído');
   };
 
   useEffect(() => {
     const shouldReset = localStorage.getItem('force_auth_reset');
+
     if (shouldReset) {
       localStorage.removeItem('force_auth_reset');
       hardReset();
     }
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, s) => {
-      console.log('🔄 Auth state change:', event, s?.user?.email);
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event, currentSession) => {
+      console.log('🔄 Auth state change:', event, currentSession?.user?.email);
 
       if (event === 'SIGNED_OUT') {
-        setSession(null);
-        setUser(null);
-        setUserType(null);
-        setIsAuthenticated(false);
+        resetAuthState();
         setIsLoading(false);
         return;
       }
 
-      setSession(s);
-      setUser(s?.user ?? null);
-      setIsAuthenticated(!!s?.user);
+      setSession(currentSession);
+      setUser(currentSession?.user ?? null);
+      setIsAuthenticated(!!currentSession?.user);
 
-      if (s?.user) {
+      if (currentSession?.user) {
         setTimeout(async () => {
           try {
-            console.log('🔍 Buscando tipo de usuário para:', s.user.id);
+            console.log('🔍 Buscando tipo de usuário para:', currentSession.user.id);
 
             const pendingUserType = sessionStorage.getItem('pending_google_user_type');
+
             if (pendingUserType && event === 'SIGNED_IN') {
               sessionStorage.removeItem('pending_google_user_type');
+
               const selectedType = pendingUserType as 'customer' | 'technician' | 'company';
-              const fullName = s.user.user_metadata?.name || s.user.email?.split('@')[0] || 'Usuário';
+              const fullName =
+                currentSession.user.user_metadata?.name ||
+                currentSession.user.email?.split('@')[0] ||
+                'Usuário';
+
               let tableName = 'clientes';
-              let insertPayload: any = { id: s.user.id, email: s.user.email };
+              let insertPayload: any = {
+                id: currentSession.user.id,
+                user_id: currentSession.user.id,
+                email: currentSession.user.email,
+              };
 
               if (selectedType === 'customer') {
-                tableName = 'clientes'; insertPayload = { ...insertPayload, nome: fullName };
+                tableName = 'clientes';
+                insertPayload = {
+                  ...insertPayload,
+                  nome: fullName,
+                };
               } else if (selectedType === 'technician') {
-                tableName = 'tecnicos'; insertPayload = { ...insertPayload, nome: fullName };
+                tableName = 'tecnicos';
+                insertPayload = {
+                  ...insertPayload,
+                  nome: fullName,
+                };
               } else {
                 tableName = 'lojas';
-                insertPayload = { ...insertPayload, nome_contato: fullName, nome_empresa: fullName };
+                insertPayload = {
+                  ...insertPayload,
+                  nome_contato: fullName,
+                  nome_empresa: fullName,
+                };
               }
 
-              const { error: insertError } = await supabase.from(tableName as any).insert(insertPayload);
-              if (insertError) console.error('❌ Erro ao criar perfil:', insertError);
-              else setUserType(selectedType);
+              try {
+                const { error: insertError } = await supabase
+                  .from(tableName as any)
+                  .insert(insertPayload);
+
+                if (insertError) {
+                  console.error('❌ Erro ao criar perfil Google:', insertError);
+                } else {
+                  console.log('✅ Perfil Google criado:', selectedType);
+                  setUserType(selectedType);
+                }
+              } catch (insertException) {
+                console.error('❌ Erro inesperado ao criar perfil Google:', insertException);
+              }
             }
 
-            const t = await checkUserTypeInTables(s.user.id);
-            setUserType(t);
+            const metadataUserType = extractUserTypeFromMetadata(currentSession.user);
+            const detectedType = await checkUserTypeInTables(
+              currentSession.user.id,
+              metadataUserType
+            );
 
-            if (!t) {
-              toast({ variant: 'destructive', title: 'Erro de Configuração', description: 'Perfil não encontrado. Por favor, complete seu cadastro.' });
+            setUserType(detectedType);
+
+            if (!detectedType) {
+              toast({
+                variant: 'destructive',
+                title: 'Erro de Configuração',
+                description:
+                  'Perfil não encontrado. Faça o cadastro completo ou entre em contato com o suporte.',
+              });
+
               await supabase.auth.signOut();
+              resetAuthState();
             } else {
-              console.log('✅ Tipo de usuário identificado:', t);
+              console.log('✅ Tipo de usuário identificado:', detectedType);
             }
-          } catch (e) {
-            console.error('💥 Erro crítico ao buscar dados do usuário:', e);
+          } catch (error) {
+            console.error('💥 Erro crítico ao buscar dados do usuário:', error);
+
             setUserType(null);
+
             await supabase.auth.signOut();
+            resetAuthState();
           }
         }, 0);
       } else {
@@ -492,12 +884,38 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setIsLoading(false);
     });
 
-    supabase.auth.getSession().then(({ data: { session } }) => setSession(session));
-    return () => subscription.unsubscribe();
+    supabase.auth.getSession().then(({ data }) => {
+      const currentSession = data.session;
+
+      setSession(currentSession);
+      setUser(currentSession?.user ?? null);
+      setIsAuthenticated(!!currentSession?.user);
+
+      if (!currentSession?.user) {
+        setUserType(null);
+      }
+
+      setIsLoading(false);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, userType, user, session, login, signup, logout, isLoading }}>
+    <AuthContext.Provider
+      value={{
+        isAuthenticated,
+        userType,
+        user,
+        session,
+        login,
+        signup,
+        logout,
+        isLoading,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
