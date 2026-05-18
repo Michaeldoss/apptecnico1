@@ -1,13 +1,14 @@
 import React, { ReactNode, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import Navbar from './Navbar';
 import { useNotifications } from '@/hooks/useNotifications';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/context/AuthContext';
 import { useIsMobile } from '@/hooks/use-mobile';
 import {
+  Bell,
   Calendar,
+  ChevronDown,
   ChevronRight,
   CreditCard,
   Crown,
@@ -17,6 +18,7 @@ import {
   Menu,
   MessageSquare,
   Package,
+  Search,
   User,
   Wrench,
   X,
@@ -126,19 +128,66 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({
 
   return (
     <div className="min-h-screen bg-[#F3F7F6] text-slate-950">
-      <Navbar />
+      <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur">
+        <div className="mx-auto flex h-16 max-w-[1440px] items-center gap-4 px-4">
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="rounded-xl border border-slate-200 bg-white p-2 text-slate-700 md:hidden"
+          >
+            {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
 
-      {isMobile && (
-        <button
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="fixed left-4 top-20 z-40 rounded-xl bg-emerald-700 p-3 text-white shadow-lg transition hover:bg-emerald-800 md:hidden"
-        >
-          {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
-        </button>
-      )}
+          <Link to="/tecnico/dashboard" className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-700 text-white">
+              <Wrench className="h-5 w-5" />
+            </div>
+            <div className="hidden sm:block">
+              <p className="text-base font-black leading-none text-slate-950">Instalei</p>
+              <p className="mt-1 text-xs font-bold text-emerald-700">Central Técnica</p>
+            </div>
+          </Link>
+
+          <div className="hidden max-w-xl flex-1 md:block">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+              <input
+                type="text"
+                placeholder="Buscar chamado, cliente, cidade ou peça..."
+                className="h-10 w-full rounded-2xl border border-slate-200 bg-slate-50 pl-10 pr-4 text-sm font-medium text-slate-700 outline-none transition focus:border-emerald-300 focus:bg-white focus:ring-2 focus:ring-emerald-100"
+              />
+            </div>
+          </div>
+
+          <div className="ml-auto flex items-center gap-2">
+            <Link
+              to="/tecnico/servicos"
+              className="hidden rounded-2xl bg-emerald-700 px-4 py-2 text-sm font-black text-white transition hover:bg-emerald-800 md:inline-flex"
+            >
+              Pegar chamado
+            </Link>
+
+            <button className="relative rounded-2xl border border-slate-200 bg-white p-2.5 text-slate-700 transition hover:bg-slate-50">
+              <Bell className="h-5 w-5" />
+              {unreadCount > 0 && (
+                <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-xs font-black text-white">
+                  {unreadCount}
+                </span>
+              )}
+            </button>
+
+            <button className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-3 py-2 text-sm font-black text-slate-800 transition hover:bg-slate-50">
+              <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
+                <User className="h-4 w-4" />
+              </div>
+              <span className="hidden sm:inline">Minha Conta</span>
+              <ChevronDown className="h-4 w-4 text-slate-400" />
+            </button>
+          </div>
+        </div>
+      </header>
 
       {isMobile && isMenuOpen && (
-        <div className="fixed inset-0 z-20 bg-black/50 md:hidden" onClick={closeMenu} />
+        <div className="fixed inset-0 z-30 bg-black/50 md:hidden" onClick={closeMenu} />
       )}
 
       <div className="mx-auto flex max-w-[1440px] gap-5 px-4 py-5">
@@ -146,8 +195,11 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({
           className={cn(
             'shrink-0 transition-all duration-300',
             isMobile
-              ? 'fixed bottom-0 left-0 top-16 z-30 w-80 overflow-y-auto bg-white p-4 pt-16 shadow-xl'
-              : 'sticky top-5 hidden h-[calc(100vh-40px)] w-72 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm md:block'
+              ? cn(
+                  'fixed bottom-0 left-0 top-16 z-40 w-80 overflow-y-auto bg-white p-4 shadow-xl',
+                  isMenuOpen ? 'translate-x-0' : '-translate-x-full'
+                )
+              : 'sticky top-20 hidden h-[calc(100vh-96px)] w-72 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm md:block'
           )}
         >
           <div className="mb-4 rounded-3xl bg-gradient-to-br from-emerald-700 to-teal-600 p-4 text-white">
@@ -254,34 +306,6 @@ const TechnicianLayout: React.FC<TechnicianLayoutProps> = ({
               {action && <div className="flex shrink-0">{action}</div>}
             </div>
           </div>
-
-          {isMobile && (
-            <div className="mb-5 overflow-x-auto">
-              <div className="flex min-w-max gap-2">
-                {sidebarItems.map((item) => {
-                  const Icon = item.icon;
-                  const active = isActive(item.match);
-
-                  return (
-                    <Link
-                      key={item.href}
-                      to={item.href}
-                      onClick={closeMenu}
-                      className={cn(
-                        'inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-bold transition',
-                        active
-                          ? 'border-emerald-700 bg-emerald-700 text-white'
-                          : 'border-slate-200 bg-white text-slate-700'
-                      )}
-                    >
-                      <Icon className="h-4 w-4" />
-                      {item.label}
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
-          )}
 
           {children}
         </main>
