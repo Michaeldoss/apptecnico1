@@ -2,11 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import TechnicianLayout from '@/components/layout/TechnicianLayout';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import {
   AlertTriangle,
-  ArrowRight,
   Calendar,
   CheckCircle2,
   Clock,
@@ -100,30 +98,34 @@ const TechnicianDashboard = () => {
     },
   ];
 
-  const metrics = [
+  const summaryCards = [
     {
       label: 'Hoje previsto',
       value: money(620),
       detail: '3 atendimentos',
       icon: Calendar,
+      className: 'from-emerald-600 to-emerald-500',
     },
     {
       label: 'Semana',
       value: money(2450),
-      detail: '+18% vs semana anterior',
+      detail: '+18% vs anterior',
       icon: Wallet,
+      className: 'from-blue-600 to-cyan-500',
     },
     {
       label: 'Disponíveis',
-      value: '3',
-      detail: 'R$ 2.030 em oportunidades',
+      value: '3 chamados',
+      detail: 'R$ 2.030 em aberto',
       icon: Wrench,
+      className: 'from-violet-600 to-fuchsia-500',
     },
     {
       label: 'Ranking',
       value: '4.9 ★',
-      detail: 'Técnico bem avaliado',
+      detail: 'Alta prioridade',
       icon: Star,
+      className: 'from-amber-500 to-orange-500',
     },
   ];
 
@@ -172,7 +174,7 @@ const TechnicianDashboard = () => {
   return (
     <TechnicianLayout
       title="Central do Técnico"
-      subtitle="Controle seus chamados, ganhos, agenda e reputação em uma tela rápida de trabalho."
+      subtitle="Escolha chamados, organize sua agenda e acompanhe seus ganhos em uma tela prática."
       action={
         <div className="flex flex-col gap-2 sm:flex-row">
           <Link to="/tecnico/servicos">
@@ -195,235 +197,243 @@ const TechnicianDashboard = () => {
       }
     >
       <div className="space-y-5">
+        <div className="rounded-3xl bg-slate-950 p-4 text-white shadow-sm">
+          <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+            <div>
+              <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-bold text-emerald-100">
+                <TrendingUp className="h-3.5 w-3.5" />
+                Painel de trabalho
+              </div>
+              <h2 className="text-2xl font-black md:text-3xl">Hoje você tem R$ 620,00 previstos</h2>
+              <p className="mt-1 text-sm text-slate-300">
+                3 atendimentos na agenda, 3 chamados disponíveis e R$ 2.030 em oportunidades abertas.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2 md:grid-cols-5 lg:grid-cols-2">
+              {actions.map((action) => {
+                const Icon = action.icon;
+
+                return (
+                  <Link key={action.title} to={action.href}>
+                    <button className="flex w-full items-center gap-2 rounded-2xl bg-white/10 px-3 py-3 text-left text-sm font-bold text-white transition hover:bg-white/20">
+                      <Icon className="h-4 w-4 text-emerald-200" />
+                      {action.title}
+                    </button>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-          {metrics.map((metric) => {
-            const Icon = metric.icon;
+          {summaryCards.map((card) => {
+            const Icon = card.icon;
 
             return (
-              <Card key={metric.label} className="border-slate-200 bg-white shadow-sm">
-                <CardContent className="p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="rounded-xl bg-emerald-50 p-3 text-emerald-700">
-                      <Icon className="h-5 w-5" />
-                    </div>
-
-                    <div className="min-w-0">
-                      <p className="text-xs font-black uppercase tracking-wide text-slate-500">
-                        {metric.label}
-                      </p>
-                      <p className="text-xl font-black text-slate-950">{metric.value}</p>
-                      <p className="text-xs text-slate-500">{metric.detail}</p>
-                    </div>
+              <div
+                key={card.label}
+                className={`rounded-2xl bg-gradient-to-br ${card.className} p-4 text-white shadow-sm`}
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-xs font-black uppercase tracking-wide text-white/80">
+                      {card.label}
+                    </p>
+                    <p className="mt-1 text-2xl font-black">{card.value}</p>
+                    <p className="mt-1 text-sm text-white/80">{card.detail}</p>
                   </div>
-                </CardContent>
-              </Card>
+
+                  <div className="rounded-2xl bg-white/20 p-3">
+                    <Icon className="h-5 w-5" />
+                  </div>
+                </div>
+              </div>
             );
           })}
         </div>
 
-        <div className="grid gap-5 xl:grid-cols-[1.25fr_0.75fr]">
-          <Card className="overflow-hidden border-slate-200 bg-white shadow-sm">
-            <CardHeader className="border-b border-slate-100 bg-slate-50/70 pb-4">
-              <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                <div>
-                  <CardTitle className="text-slate-950">Chamados recomendados</CardTitle>
-                  <CardDescription>
-                    Serviços com melhor combinação de valor, distância e encaixe de rota.
-                  </CardDescription>
-                </div>
+        <div className="grid gap-5 xl:grid-cols-[1.35fr_0.65fr]">
+          <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+            <div className="flex flex-col gap-3 border-b border-slate-100 bg-slate-50 px-5 py-4 md:flex-row md:items-center md:justify-between">
+              <div>
+                <h3 className="text-xl font-black text-slate-950">Chamados recomendados</h3>
+                <p className="text-sm text-slate-500">
+                  Lista compacta com valor, distância, tipo e tempo estimado.
+                </p>
+              </div>
 
-                <Link to="/tecnico/servicos">
+              <Link to="/tecnico/servicos">
+                <Button className="bg-emerald-700 text-white hover:bg-emerald-800">
+                  Ver todos
+                </Button>
+              </Link>
+            </div>
+
+            <div className="divide-y divide-slate-100">
+              {opportunities.map((item) => (
+                <div key={item.id} className="grid gap-3 px-5 py-4 transition hover:bg-emerald-50/40 lg:grid-cols-[1fr_130px_120px] lg:items-center">
+                  <div className="min-w-0">
+                    <div className="mb-2 flex flex-wrap items-center gap-2">
+                      <Badge className="border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-50">
+                        {item.type}
+                      </Badge>
+
+                      <Badge
+                        className={
+                          item.urgency === 'Urgente'
+                            ? 'border-red-200 bg-red-50 text-red-700 hover:bg-red-50'
+                            : 'border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-50'
+                        }
+                      >
+                        {item.urgency}
+                      </Badge>
+
+                      <Badge className="border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-50">
+                        {item.difficulty}
+                      </Badge>
+                    </div>
+
+                    <p className="font-black text-slate-950">{item.title}</p>
+
+                    <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-500">
+                      <span className="inline-flex items-center gap-1">
+                        <MapPin className="h-4 w-4" />
+                        {item.city}
+                      </span>
+                      <span>{item.distance}</span>
+                      <span>{item.client}</span>
+                      <span className="inline-flex items-center gap-1">
+                        <Clock className="h-4 w-4" />
+                        {item.duration}
+                      </span>
+                      <span className="inline-flex items-center gap-1">
+                        <Route className="h-4 w-4" />
+                        {item.route}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="lg:text-right">
+                    <p className="text-xs font-bold text-slate-500">Valor previsto</p>
+                    <p className="text-2xl font-black text-emerald-700">{money(item.value)}</p>
+                    <p className="text-xs text-slate-400">{item.id}</p>
+                  </div>
+
                   <Button className="bg-emerald-700 text-white hover:bg-emerald-800">
-                    Ver todos
-                    <ArrowRight className="ml-2 h-4 w-4" />
+                    Aceitar
                   </Button>
-                </Link>
-              </div>
-            </CardHeader>
+                </div>
+              ))}
+            </div>
+          </div>
 
-            <CardContent className="p-0">
-              <div className="divide-y divide-slate-100">
-                {opportunities.map((item) => (
-                  <div key={item.id} className="p-4 transition hover:bg-emerald-50/40">
-                    <div className="grid gap-4 lg:grid-cols-[1fr_150px] lg:items-center">
-                      <div className="flex gap-3">
-                        <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
-                          <Wrench className="h-5 w-5" />
-                        </div>
+          <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+            <div className="border-b border-slate-100 bg-slate-50 px-5 py-4">
+              <h3 className="text-xl font-black text-slate-950">Agenda de hoje</h3>
+              <p className="text-sm text-slate-500">3 serviços • {money(620)} previstos</p>
+            </div>
 
-                        <div className="min-w-0 flex-1">
-                          <div className="mb-2 flex flex-wrap items-center gap-2">
-                            <Badge className="border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-50">
-                              {item.type}
-                            </Badge>
+            <div className="divide-y divide-slate-100">
+              {todayServices.map((service) => (
+                <div key={`${service.time}-${service.title}`} className="px-5 py-4 hover:bg-slate-50">
+                  <div className="flex items-start gap-3">
+                    <div className="rounded-xl bg-slate-100 px-3 py-2 text-sm font-black text-slate-700">
+                      {service.time}
+                    </div>
 
-                            <Badge
-                              className={
-                                item.urgency === 'Urgente'
-                                  ? 'border-red-200 bg-red-50 text-red-700 hover:bg-red-50'
-                                  : 'border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-50'
-                              }
-                            >
-                              {item.urgency}
-                            </Badge>
+                    <div className="min-w-0 flex-1">
+                      <p className="font-black text-slate-950">{service.title}</p>
+                      <p className="mt-1 text-sm text-slate-500">{service.customer}</p>
+                      <p className="text-xs text-slate-400">{service.city}</p>
 
-                            <Badge className="border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-50">
-                              {item.difficulty}
-                            </Badge>
-                          </div>
+                      <div className="mt-3 flex items-center justify-between gap-2">
+                        <Badge
+                          className={
+                            service.status === 'Confirmado'
+                              ? 'border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-50'
+                              : service.status === 'Pendente'
+                                ? 'border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-50'
+                                : 'border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-50'
+                          }
+                        >
+                          {service.status}
+                        </Badge>
 
-                          <p className="font-black text-slate-950">{item.title}</p>
-
-                          <div className="mt-2 grid gap-x-4 gap-y-1 text-sm text-slate-500 md:grid-cols-3">
-                            <span className="inline-flex items-center gap-1">
-                              <MapPin className="h-4 w-4" />
-                              {item.city}
-                            </span>
-                            <span>{item.distance}</span>
-                            <span>{item.client}</span>
-                            <span className="inline-flex items-center gap-1">
-                              <Clock className="h-4 w-4" />
-                              {item.duration}
-                            </span>
-                            <span className="inline-flex items-center gap-1">
-                              <Route className="h-4 w-4" />
-                              {item.route}
-                            </span>
-                            <span>{item.id}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center justify-between gap-3 lg:flex-col lg:items-end">
-                        <div className="text-right">
-                          <p className="text-xs font-bold text-slate-500">Valor</p>
-                          <p className="text-2xl font-black text-emerald-700">
-                            {money(item.value)}
-                          </p>
-                        </div>
-
-                        <Button className="bg-emerald-700 text-white hover:bg-emerald-800">
-                          Aceitar
-                        </Button>
+                        <span className="font-black text-emerald-700">
+                          {money(service.value)}
+                        </span>
                       </div>
                     </div>
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+                </div>
+              ))}
+            </div>
 
-          <Card className="overflow-hidden border-slate-200 bg-white shadow-sm">
-            <CardHeader className="border-b border-slate-100 bg-slate-50/70 pb-4">
-              <CardTitle className="text-slate-950">Agenda de hoje</CardTitle>
-              <CardDescription>3 serviços • {money(620)} previstos</CardDescription>
-            </CardHeader>
-
-            <CardContent className="p-0">
-              <div className="divide-y divide-slate-100">
-                {todayServices.map((service) => (
-                  <div key={`${service.time}-${service.title}`} className="p-4 hover:bg-slate-50">
-                    <div className="flex items-start gap-3">
-                      <div className="rounded-xl bg-slate-100 px-3 py-2 text-sm font-black text-slate-700">
-                        {service.time}
-                      </div>
-
-                      <div className="min-w-0 flex-1">
-                        <p className="font-black text-slate-950">{service.title}</p>
-                        <p className="mt-1 text-sm text-slate-500">{service.customer}</p>
-                        <p className="text-xs text-slate-400">{service.city}</p>
-
-                        <div className="mt-3 flex items-center justify-between gap-2">
-                          <Badge
-                            className={
-                              service.status === 'Confirmado'
-                                ? 'border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-50'
-                                : service.status === 'Pendente'
-                                  ? 'border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-50'
-                                  : 'border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-50'
-                            }
-                          >
-                            {service.status}
-                          </Badge>
-
-                          <span className="font-black text-emerald-700">
-                            {money(service.value)}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="border-t border-slate-100 p-4">
-                <Link to="/tecnico/agenda">
-                  <Button variant="outline" className="w-full border-slate-200">
-                    Ver agenda completa
-                  </Button>
-                </Link>
-              </div>
-            </CardContent>
-          </Card>
+            <div className="border-t border-slate-100 p-4">
+              <Link to="/tecnico/agenda">
+                <Button variant="outline" className="w-full border-slate-200">
+                  Ver agenda completa
+                </Button>
+              </Link>
+            </div>
+          </div>
         </div>
 
         <div className="grid gap-5 xl:grid-cols-[0.8fr_1.2fr]">
-          <Card className="overflow-hidden border-slate-200 bg-white shadow-sm">
-            <CardHeader className="border-b border-slate-100 bg-slate-50/70 pb-4">
-              <CardTitle className="text-slate-950">Atenção</CardTitle>
-              <CardDescription>Itens que impactam seus chamados.</CardDescription>
-            </CardHeader>
+          <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+            <div className="border-b border-slate-100 bg-slate-50 px-5 py-4">
+              <h3 className="text-xl font-black text-slate-950">Atenção</h3>
+              <p className="text-sm text-slate-500">Itens que afetam prioridade e recebimentos.</p>
+            </div>
 
-            <CardContent className="p-0">
-              <div className="divide-y divide-slate-100">
-                {alerts.map((alert) => {
-                  const Icon = alert.icon;
+            <div className="divide-y divide-slate-100">
+              {alerts.map((alert) => {
+                const Icon = alert.icon;
 
-                  const color =
-                    alert.color === 'red'
-                      ? 'bg-red-50 text-red-700'
-                      : alert.color === 'amber'
-                        ? 'bg-amber-50 text-amber-700'
-                        : 'bg-emerald-50 text-emerald-700';
+                const color =
+                  alert.color === 'red'
+                    ? 'bg-red-50 text-red-700'
+                    : alert.color === 'amber'
+                      ? 'bg-amber-50 text-amber-700'
+                      : 'bg-emerald-50 text-emerald-700';
 
-                  return (
-                    <Link key={alert.title} to={alert.href} className="block">
-                      <div className="grid gap-3 p-4 transition hover:bg-slate-50 md:grid-cols-[42px_1fr_82px] md:items-center">
-                        <div className={`rounded-xl p-2 ${color}`}>
-                          <Icon className="h-5 w-5" />
-                        </div>
-
-                        <div>
-                          <p className="font-black text-slate-950">{alert.title}</p>
-                          <p className="text-sm text-slate-500">{alert.description}</p>
-                        </div>
-
-                        <span className="text-sm font-black text-emerald-700">
-                          {alert.action}
-                        </span>
+                return (
+                  <Link key={alert.title} to={alert.href} className="block">
+                    <div className="grid gap-3 px-5 py-4 transition hover:bg-slate-50 md:grid-cols-[42px_1fr_82px] md:items-center">
+                      <div className={`rounded-xl p-2 ${color}`}>
+                        <Icon className="h-5 w-5" />
                       </div>
-                    </Link>
-                  );
-                })}
+
+                      <div>
+                        <p className="font-black text-slate-950">{alert.title}</p>
+                        <p className="text-sm text-slate-500">{alert.description}</p>
+                      </div>
+
+                      <span className="text-sm font-black text-emerald-700">
+                        {alert.action}
+                      </span>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+            <div className="flex flex-col gap-3 border-b border-slate-100 bg-slate-50 px-5 py-4 md:flex-row md:items-center md:justify-between">
+              <div>
+                <h3 className="text-xl font-black text-slate-950">Performance técnica</h3>
+                <p className="text-sm text-slate-500">Indicadores que aumentam prioridade.</p>
               </div>
-            </CardContent>
-          </Card>
 
-          <Card className="overflow-hidden border-slate-200 bg-white shadow-sm">
-            <CardHeader className="border-b border-slate-100 bg-slate-50/70 pb-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle className="text-slate-950">Performance técnica</CardTitle>
-                  <CardDescription>Indicadores que melhoram sua prioridade.</CardDescription>
-                </div>
+              <Badge className="w-fit border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-50">
+                Ranking ativo
+              </Badge>
+            </div>
 
-                <Badge className="border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-50">
-                  Ranking ativo
-                </Badge>
-              </div>
-            </CardHeader>
-
-            <CardContent className="p-4">
+            <div className="p-5">
               <div className="grid gap-3 md:grid-cols-2">
                 {performance.map((item) => (
                   <div key={item.label} className="rounded-2xl border border-slate-200 p-4">
@@ -456,30 +466,12 @@ const TechnicianDashboard = () => {
                   </div>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
 
-        <div className="grid gap-3 md:grid-cols-5">
-          {actions.map((action) => {
-            const Icon = action.icon;
-
-            return (
-              <Link key={action.title} to={action.href}>
-                <button className="flex w-full items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-4 text-left shadow-sm transition hover:-translate-y-1 hover:border-emerald-200 hover:bg-emerald-50 hover:shadow-md">
-                  <div className="rounded-xl bg-emerald-50 p-2 text-emerald-700">
-                    <Icon className="h-5 w-5" />
-                  </div>
-
-                  <span className="font-black text-slate-950">{action.title}</span>
-                </button>
-              </Link>
-            );
-          })}
-        </div>
-
-        <Card className="border-emerald-200 bg-emerald-50 shadow-sm">
-          <CardContent className="flex flex-col gap-4 p-5 md:flex-row md:items-center md:justify-between">
+        <div className="rounded-3xl border border-emerald-200 bg-emerald-50 p-5">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div className="flex gap-3">
               <div className="rounded-2xl bg-emerald-700 p-3 text-white">
                 <CheckCircle2 className="h-6 w-6" />
@@ -490,7 +482,7 @@ const TechnicianDashboard = () => {
                   Para ganhar mais: aceite rápido, seja pontual e mantenha o perfil completo.
                 </p>
                 <p className="text-sm text-emerald-800">
-                  O painel deve ajudar o técnico a decidir rápido qual chamado vale a pena pegar.
+                  O painel precisa ajudar o técnico a escolher rápido qual chamado vale a pena.
                 </p>
               </div>
             </div>
@@ -500,8 +492,8 @@ const TechnicianDashboard = () => {
                 Melhorar perfil
               </Button>
             </Link>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     </TechnicianLayout>
   );
