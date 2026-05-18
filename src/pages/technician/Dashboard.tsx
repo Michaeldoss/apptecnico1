@@ -14,6 +14,7 @@ import {
   MapPin,
   MessageSquare,
   Package,
+  Route,
   ShieldCheck,
   Star,
   Target,
@@ -40,20 +41,22 @@ const TechnicianDashboard = () => {
       urgency: 'Hoje',
       type: 'Instalação',
       duration: '3h',
-      route: 'Baixo deslocamento',
-      chance: 'Alta chance',
+      route: 'Rota curta',
+      client: 'Confecção têxtil',
+      difficulty: 'Média',
     },
     {
       id: 'CH-1049',
-      title: 'Manutenção preventiva UV',
+      title: 'Preventiva UV DTF',
       city: 'Araquari/SC',
       distance: '22 km',
       value: 480,
       urgency: 'Amanhã',
       type: 'Preventiva',
       duration: '2h',
-      route: 'Pode encaixar rota',
-      chance: 'Boa chance',
+      route: 'Encaixe bom',
+      client: 'Comunicação visual',
+      difficulty: 'Baixa',
     },
     {
       id: 'CH-1050',
@@ -64,8 +67,9 @@ const TechnicianDashboard = () => {
       urgency: 'Urgente',
       type: 'Corretiva',
       duration: '4h',
-      route: 'Exige planejamento',
-      chance: 'Alto valor',
+      route: 'Planejar viagem',
+      client: 'Estamparia',
+      difficulty: 'Alta',
     },
   ];
 
@@ -98,104 +102,77 @@ const TechnicianDashboard = () => {
 
   const metrics = [
     {
-      label: 'Ganhos da semana',
+      label: 'Hoje previsto',
+      value: money(620),
+      detail: '3 atendimentos',
+      icon: Calendar,
+    },
+    {
+      label: 'Semana',
       value: money(2450),
-      description: '+18% comparado à semana anterior',
+      detail: '+18% vs semana anterior',
       icon: Wallet,
-      tone: 'emerald',
     },
     {
       label: 'Disponíveis',
-      value: opportunities.length,
-      description: 'Chamados próximos ou com bom valor',
+      value: '3',
+      detail: 'R$ 2.030 em oportunidades',
       icon: Wrench,
-      tone: 'blue',
     },
     {
-      label: 'Agenda de hoje',
-      value: todayServices.length,
-      description: `${money(620)} previstos para hoje`,
-      icon: Calendar,
-      tone: 'amber',
-    },
-    {
-      label: 'Avaliação',
+      label: 'Ranking',
       value: '4.9 ★',
-      description: 'Você está acima da média',
+      detail: 'Técnico bem avaliado',
       icon: Star,
-      tone: 'violet',
-    },
-  ];
-
-  const actionButtons = [
-    {
-      title: 'Aceitar chamado',
-      description: 'Ver serviços disponíveis',
-      icon: Wrench,
-      href: '/tecnico/servicos',
-      className: 'bg-emerald-700 text-white hover:bg-emerald-800',
-    },
-    {
-      title: 'Ver agenda',
-      description: 'Rotas e horários',
-      icon: Calendar,
-      href: '/tecnico/agenda',
-      className: 'bg-slate-950 text-white hover:bg-slate-800',
-    },
-    {
-      title: 'Recebimentos',
-      description: 'Pagamentos e repasses',
-      icon: CreditCard,
-      href: '/tecnico/pagamentos',
-      className: 'bg-white text-slate-950 border border-slate-200 hover:bg-slate-50',
-    },
-    {
-      title: 'Vender peças',
-      description: 'Estoque e oportunidades',
-      icon: Package,
-      href: '/tecnico/pecas',
-      className: 'bg-white text-slate-950 border border-slate-200 hover:bg-slate-50',
     },
   ];
 
   const alerts = [
     {
-      title: 'Perfil 82% completo',
-      description: 'Adicione documentos e regiões atendidas para receber mais chamados.',
+      title: 'Perfil 82%',
+      description: 'Complete documentos e regiões.',
       href: '/tecnico/perfil',
       icon: ShieldCheck,
-      tone: 'emerald',
+      color: 'emerald',
       action: 'Completar',
     },
     {
-      title: '2 confirmações pendentes',
-      description: 'Confirme presença para não perder prioridade no ranking.',
+      title: '2 confirmações',
+      description: 'Confirme serviços de hoje.',
       href: '/tecnico/agenda',
       icon: Clock,
-      tone: 'amber',
+      color: 'amber',
       action: 'Confirmar',
     },
     {
-      title: 'Estoque de peças baixo',
-      description: 'Você pode perder venda adicional durante atendimento.',
+      title: 'Peças baixas',
+      description: 'Atualize estoque para vender mais.',
       href: '/tecnico/pecas',
       icon: Package,
-      tone: 'red',
-      action: 'Repor',
+      color: 'red',
+      action: 'Ver peças',
     },
   ];
 
-  const rankingItems = [
-    { label: 'Taxa de aceite', value: '86%', status: 'Bom' },
-    { label: 'Pontualidade', value: '94%', status: 'Excelente' },
-    { label: 'Retorno técnico', value: '6%', status: 'Controlado' },
-    { label: 'Resposta média', value: '12 min', status: 'Rápido' },
+  const performance = [
+    { label: 'Aceite', value: '86%', width: '86%' },
+    { label: 'Pontualidade', value: '94%', width: '94%' },
+    { label: 'Resposta', value: '12 min', width: '78%' },
+    { label: 'Retorno', value: '6%', width: '20%' },
+  ];
+
+  const actions = [
+    { title: 'Chamados', href: '/tecnico/servicos', icon: Wrench },
+    { title: 'Agenda', href: '/tecnico/agenda', icon: Calendar },
+    { title: 'Ganhos', href: '/tecnico/pagamentos', icon: CreditCard },
+    { title: 'Peças', href: '/tecnico/pecas', icon: Package },
+    { title: 'Chat', href: '/tecnico/chat', icon: MessageSquare },
   ];
 
   return (
     <TechnicianLayout
       title="Central do Técnico"
-      subtitle="Painel de oportunidades, agenda, ganhos e reputação para transformar atendimento técnico em receita."
+      subtitle="Controle seus chamados, ganhos, agenda e reputação em uma tela rápida de trabalho."
       action={
         <div className="flex flex-col gap-2 sm:flex-row">
           <Link to="/tecnico/servicos">
@@ -218,50 +195,40 @@ const TechnicianDashboard = () => {
       }
     >
       <div className="space-y-5">
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
           {metrics.map((metric) => {
             const Icon = metric.icon;
 
-            const iconClass =
-              metric.tone === 'emerald'
-                ? 'bg-emerald-50 text-emerald-700'
-                : metric.tone === 'amber'
-                  ? 'bg-amber-50 text-amber-700'
-                  : metric.tone === 'violet'
-                    ? 'bg-violet-50 text-violet-700'
-                    : 'bg-blue-50 text-blue-700';
-
             return (
               <Card key={metric.label} className="border-slate-200 bg-white shadow-sm">
-                <CardContent className="p-5">
-                  <div className="mb-3 flex items-start justify-between">
-                    <div className={`rounded-2xl p-3 ${iconClass}`}>
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="rounded-xl bg-emerald-50 p-3 text-emerald-700">
                       <Icon className="h-5 w-5" />
                     </div>
-                    <TrendingUp className="h-4 w-4 text-emerald-600" />
-                  </div>
 
-                  <p className="text-xs font-black uppercase tracking-wide text-slate-500">
-                    {metric.label}
-                  </p>
-                  <p className="mt-1 text-2xl font-black text-slate-950">{metric.value}</p>
-                  <p className="mt-1 text-sm leading-relaxed text-slate-500">
-                    {metric.description}
-                  </p>
+                    <div className="min-w-0">
+                      <p className="text-xs font-black uppercase tracking-wide text-slate-500">
+                        {metric.label}
+                      </p>
+                      <p className="text-xl font-black text-slate-950">{metric.value}</p>
+                      <p className="text-xs text-slate-500">{metric.detail}</p>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             );
           })}
         </div>
 
-        <div className="grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
-          <Card className="border-emerald-200 bg-emerald-50 shadow-sm">
-            <CardHeader className="pb-3">
+        <div className="grid gap-5 xl:grid-cols-[1.25fr_0.75fr]">
+          <Card className="overflow-hidden border-slate-200 bg-white shadow-sm">
+            <CardHeader className="border-b border-slate-100 bg-slate-50/70 pb-4">
               <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                 <div>
-                  <CardTitle className="text-emerald-950">Melhores chamados para aceitar</CardTitle>
-                  <CardDescription className="text-emerald-800">
-                    Ordenados por valor, urgência e facilidade de encaixe na sua rota.
+                  <CardTitle className="text-slate-950">Chamados recomendados</CardTitle>
+                  <CardDescription>
+                    Serviços com melhor combinação de valor, distância e encaixe de rota.
                   </CardDescription>
                 </div>
 
@@ -274,203 +241,202 @@ const TechnicianDashboard = () => {
               </div>
             </CardHeader>
 
-            <CardContent className="space-y-3">
-              {opportunities.map((opportunity) => (
-                <div
-                  key={opportunity.id}
-                  className="rounded-2xl border border-emerald-200 bg-white p-4 shadow-sm"
-                >
-                  <div className="grid gap-4 lg:grid-cols-[1fr_170px] lg:items-center">
-                    <div className="flex gap-3">
-                      <div className="flex w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700">
-                        <Wrench className="h-5 w-5" />
-                      </div>
-
-                      <div className="min-w-0 flex-1">
-                        <div className="mb-2 flex flex-wrap items-center gap-2">
-                          <Badge className="border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-50">
-                            {opportunity.type}
-                          </Badge>
-
-                          <Badge
-                            className={
-                              opportunity.urgency === 'Urgente'
-                                ? 'border-red-200 bg-red-50 text-red-700 hover:bg-red-50'
-                                : 'border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-50'
-                            }
-                          >
-                            {opportunity.urgency}
-                          </Badge>
-
-                          <Badge className="border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-50">
-                            {opportunity.chance}
-                          </Badge>
+            <CardContent className="p-0">
+              <div className="divide-y divide-slate-100">
+                {opportunities.map((item) => (
+                  <div key={item.id} className="p-4 transition hover:bg-emerald-50/40">
+                    <div className="grid gap-4 lg:grid-cols-[1fr_150px] lg:items-center">
+                      <div className="flex gap-3">
+                        <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
+                          <Wrench className="h-5 w-5" />
                         </div>
 
-                        <p className="text-base font-black text-slate-950">{opportunity.title}</p>
+                        <div className="min-w-0 flex-1">
+                          <div className="mb-2 flex flex-wrap items-center gap-2">
+                            <Badge className="border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-50">
+                              {item.type}
+                            </Badge>
 
-                        <div className="mt-2 grid gap-1 text-sm text-slate-500 md:grid-cols-2">
-                          <span className="inline-flex items-center gap-1">
-                            <MapPin className="h-4 w-4" />
-                            {opportunity.city} • {opportunity.distance}
-                          </span>
-                          <span>
-                            Duração estimada: <strong>{opportunity.duration}</strong>
-                          </span>
-                          <span>{opportunity.route}</span>
-                          <span>{opportunity.id}</span>
+                            <Badge
+                              className={
+                                item.urgency === 'Urgente'
+                                  ? 'border-red-200 bg-red-50 text-red-700 hover:bg-red-50'
+                                  : 'border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-50'
+                              }
+                            >
+                              {item.urgency}
+                            </Badge>
+
+                            <Badge className="border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-50">
+                              {item.difficulty}
+                            </Badge>
+                          </div>
+
+                          <p className="font-black text-slate-950">{item.title}</p>
+
+                          <div className="mt-2 grid gap-x-4 gap-y-1 text-sm text-slate-500 md:grid-cols-3">
+                            <span className="inline-flex items-center gap-1">
+                              <MapPin className="h-4 w-4" />
+                              {item.city}
+                            </span>
+                            <span>{item.distance}</span>
+                            <span>{item.client}</span>
+                            <span className="inline-flex items-center gap-1">
+                              <Clock className="h-4 w-4" />
+                              {item.duration}
+                            </span>
+                            <span className="inline-flex items-center gap-1">
+                              <Route className="h-4 w-4" />
+                              {item.route}
+                            </span>
+                            <span>{item.id}</span>
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    <div className="flex items-center justify-between gap-3 lg:flex-col lg:items-end">
-                      <div className="text-right">
-                        <p className="text-xs font-bold text-slate-500">Valor previsto</p>
-                        <p className="text-2xl font-black text-emerald-700">
-                          {money(opportunity.value)}
-                        </p>
+                      <div className="flex items-center justify-between gap-3 lg:flex-col lg:items-end">
+                        <div className="text-right">
+                          <p className="text-xs font-bold text-slate-500">Valor</p>
+                          <p className="text-2xl font-black text-emerald-700">
+                            {money(item.value)}
+                          </p>
+                        </div>
+
+                        <Button className="bg-emerald-700 text-white hover:bg-emerald-800">
+                          Aceitar
+                        </Button>
                       </div>
-
-                      <Button className="bg-emerald-700 text-white hover:bg-emerald-800">
-                        Aceitar chamado
-                      </Button>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </CardContent>
           </Card>
 
-          <Card className="border-slate-200 bg-white shadow-sm">
-            <CardHeader className="pb-3">
+          <Card className="overflow-hidden border-slate-200 bg-white shadow-sm">
+            <CardHeader className="border-b border-slate-100 bg-slate-50/70 pb-4">
               <CardTitle className="text-slate-950">Agenda de hoje</CardTitle>
-              <CardDescription>
-                {todayServices.length} atendimentos com previsão de {money(620)}.
-              </CardDescription>
+              <CardDescription>3 serviços • {money(620)} previstos</CardDescription>
             </CardHeader>
 
-            <CardContent className="space-y-3">
-              {todayServices.map((service) => (
-                <div
-                  key={`${service.time}-${service.title}`}
-                  className="rounded-2xl border border-slate-200 bg-white p-4 transition hover:border-emerald-200 hover:bg-emerald-50/40"
-                >
-                  <div className="flex items-start gap-3">
-                    <div className="rounded-2xl bg-slate-100 px-3 py-2 text-sm font-black text-slate-700">
-                      {service.time}
-                    </div>
+            <CardContent className="p-0">
+              <div className="divide-y divide-slate-100">
+                {todayServices.map((service) => (
+                  <div key={`${service.time}-${service.title}`} className="p-4 hover:bg-slate-50">
+                    <div className="flex items-start gap-3">
+                      <div className="rounded-xl bg-slate-100 px-3 py-2 text-sm font-black text-slate-700">
+                        {service.time}
+                      </div>
 
-                    <div className="min-w-0 flex-1">
-                      <p className="font-black text-slate-950">{service.title}</p>
-                      <p className="mt-1 text-sm text-slate-500">{service.customer}</p>
-                      <p className="mt-1 text-xs font-medium text-slate-400">{service.city}</p>
+                      <div className="min-w-0 flex-1">
+                        <p className="font-black text-slate-950">{service.title}</p>
+                        <p className="mt-1 text-sm text-slate-500">{service.customer}</p>
+                        <p className="text-xs text-slate-400">{service.city}</p>
 
-                      <div className="mt-3 flex items-center justify-between gap-2">
-                        <Badge
-                          className={
-                            service.status === 'Confirmado'
-                              ? 'border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-50'
-                              : service.status === 'Pendente'
-                                ? 'border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-50'
-                                : 'border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-50'
-                          }
-                        >
-                          {service.status}
-                        </Badge>
+                        <div className="mt-3 flex items-center justify-between gap-2">
+                          <Badge
+                            className={
+                              service.status === 'Confirmado'
+                                ? 'border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-50'
+                                : service.status === 'Pendente'
+                                  ? 'border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-50'
+                                  : 'border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-50'
+                            }
+                          >
+                            {service.status}
+                          </Badge>
 
-                        <span className="font-black text-emerald-700">
-                          {money(service.value)}
-                        </span>
+                          <span className="font-black text-emerald-700">
+                            {money(service.value)}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
 
-              <Link to="/tecnico/agenda">
-                <Button variant="outline" className="w-full border-slate-200">
-                  Ver agenda completa
-                </Button>
-              </Link>
+              <div className="border-t border-slate-100 p-4">
+                <Link to="/tecnico/agenda">
+                  <Button variant="outline" className="w-full border-slate-200">
+                    Ver agenda completa
+                  </Button>
+                </Link>
+              </div>
             </CardContent>
           </Card>
         </div>
 
-        <div className="grid gap-4 xl:grid-cols-[0.85fr_1.15fr]">
-          <Card className="border-slate-200 bg-white shadow-sm">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-slate-950">Atenção operacional</CardTitle>
-              <CardDescription>
-                Corrija estes pontos para receber mais chamados.
-              </CardDescription>
+        <div className="grid gap-5 xl:grid-cols-[0.8fr_1.2fr]">
+          <Card className="overflow-hidden border-slate-200 bg-white shadow-sm">
+            <CardHeader className="border-b border-slate-100 bg-slate-50/70 pb-4">
+              <CardTitle className="text-slate-950">Atenção</CardTitle>
+              <CardDescription>Itens que impactam seus chamados.</CardDescription>
             </CardHeader>
 
-            <CardContent className="space-y-3">
-              {alerts.map((alert) => {
-                const Icon = alert.icon;
+            <CardContent className="p-0">
+              <div className="divide-y divide-slate-100">
+                {alerts.map((alert) => {
+                  const Icon = alert.icon;
 
-                const toneClass =
-                  alert.tone === 'red'
-                    ? 'border-red-200 bg-red-50 text-red-700'
-                    : alert.tone === 'amber'
-                      ? 'border-amber-200 bg-amber-50 text-amber-700'
-                      : 'border-emerald-200 bg-emerald-50 text-emerald-700';
+                  const color =
+                    alert.color === 'red'
+                      ? 'bg-red-50 text-red-700'
+                      : alert.color === 'amber'
+                        ? 'bg-amber-50 text-amber-700'
+                        : 'bg-emerald-50 text-emerald-700';
 
-                return (
-                  <Link key={alert.title} to={alert.href} className="group block">
-                    <div className="grid gap-3 rounded-2xl border border-slate-200 bg-white p-4 transition hover:border-emerald-200 hover:bg-emerald-50/40 md:grid-cols-[44px_1fr_86px] md:items-center">
-                      <div className={`rounded-xl border p-2 ${toneClass}`}>
-                        <Icon className="h-5 w-5" />
+                  return (
+                    <Link key={alert.title} to={alert.href} className="block">
+                      <div className="grid gap-3 p-4 transition hover:bg-slate-50 md:grid-cols-[42px_1fr_82px] md:items-center">
+                        <div className={`rounded-xl p-2 ${color}`}>
+                          <Icon className="h-5 w-5" />
+                        </div>
+
+                        <div>
+                          <p className="font-black text-slate-950">{alert.title}</p>
+                          <p className="text-sm text-slate-500">{alert.description}</p>
+                        </div>
+
+                        <span className="text-sm font-black text-emerald-700">
+                          {alert.action}
+                        </span>
                       </div>
-
-                      <div>
-                        <p className="font-black text-slate-950">{alert.title}</p>
-                        <p className="mt-1 text-sm leading-relaxed text-slate-500">
-                          {alert.description}
-                        </p>
-                      </div>
-
-                      <span className="text-sm font-black text-emerald-700">
-                        {alert.action}
-                      </span>
-                    </div>
-                  </Link>
-                );
-              })}
+                    </Link>
+                  );
+                })}
+              </div>
             </CardContent>
           </Card>
 
-          <Card className="border-slate-200 bg-white shadow-sm">
-            <CardHeader className="pb-3">
-              <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <Card className="overflow-hidden border-slate-200 bg-white shadow-sm">
+            <CardHeader className="border-b border-slate-100 bg-slate-50/70 pb-4">
+              <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle className="text-slate-950">Painel de performance</CardTitle>
-                  <CardDescription>
-                    Indicadores que aumentam prioridade nos chamados.
-                  </CardDescription>
+                  <CardTitle className="text-slate-950">Performance técnica</CardTitle>
+                  <CardDescription>Indicadores que melhoram sua prioridade.</CardDescription>
                 </div>
 
-                <Badge className="w-fit border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-50">
-                  Ranking técnico
+                <Badge className="border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-50">
+                  Ranking ativo
                 </Badge>
               </div>
             </CardHeader>
 
-            <CardContent>
+            <CardContent className="p-4">
               <div className="grid gap-3 md:grid-cols-2">
-                {rankingItems.map((item) => (
+                {performance.map((item) => (
                   <div key={item.label} className="rounded-2xl border border-slate-200 p-4">
                     <div className="flex items-center justify-between">
                       <p className="text-sm font-bold text-slate-500">{item.label}</p>
-                      <Badge className="border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-50">
-                        {item.status}
-                      </Badge>
+                      <p className="font-black text-slate-950">{item.value}</p>
                     </div>
 
-                    <p className="mt-3 text-2xl font-black text-slate-950">{item.value}</p>
-
                     <div className="mt-3 h-2 rounded-full bg-slate-100">
-                      <div className="h-2 w-[82%] rounded-full bg-emerald-700" />
+                      <div
+                        className="h-2 rounded-full bg-emerald-700"
+                        style={{ width: item.width }}
+                      />
                     </div>
                   </div>
                 ))}
@@ -478,14 +444,14 @@ const TechnicianDashboard = () => {
 
               <div className="mt-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
                 <div className="flex gap-3">
-                  <div className="rounded-2xl bg-emerald-700 p-3 text-white">
+                  <div className="rounded-xl bg-emerald-700 p-3 text-white">
                     <Target className="h-5 w-5" />
                   </div>
 
                   <div>
                     <p className="font-black text-emerald-950">Meta da semana</p>
-                    <p className="mt-1 text-sm text-emerald-800">
-                      Falta {money(1550)} para bater a meta de {money(4000)} em serviços.
+                    <p className="text-sm text-emerald-800">
+                      Falta {money(1550)} para bater {money(4000)} em serviços.
                     </p>
                   </div>
                 </div>
@@ -494,23 +460,18 @@ const TechnicianDashboard = () => {
           </Card>
         </div>
 
-        <div className="grid gap-3 md:grid-cols-4">
-          {actionButtons.map((action) => {
+        <div className="grid gap-3 md:grid-cols-5">
+          {actions.map((action) => {
             const Icon = action.icon;
 
             return (
               <Link key={action.title} to={action.href}>
-                <button
-                  className={`flex h-full w-full items-center gap-3 rounded-2xl px-4 py-4 text-left shadow-sm transition hover:-translate-y-1 hover:shadow-md ${action.className}`}
-                >
-                  <div className="rounded-xl bg-white/20 p-2">
+                <button className="flex w-full items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-4 text-left shadow-sm transition hover:-translate-y-1 hover:border-emerald-200 hover:bg-emerald-50 hover:shadow-md">
+                  <div className="rounded-xl bg-emerald-50 p-2 text-emerald-700">
                     <Icon className="h-5 w-5" />
                   </div>
 
-                  <div>
-                    <p className="font-black">{action.title}</p>
-                    <p className="text-xs opacity-80">{action.description}</p>
-                  </div>
+                  <span className="font-black text-slate-950">{action.title}</span>
                 </button>
               </Link>
             );
@@ -526,17 +487,17 @@ const TechnicianDashboard = () => {
 
               <div>
                 <p className="font-black text-emerald-950">
-                  A regra é simples: perfil completo, resposta rápida e agenda organizada recebem mais chamados.
+                  Para ganhar mais: aceite rápido, seja pontual e mantenha o perfil completo.
                 </p>
-                <p className="mt-1 text-sm text-emerald-800">
-                  Esse painel deve ser seu ponto de partida diário para escolher serviços e aumentar seus ganhos.
+                <p className="text-sm text-emerald-800">
+                  O painel deve ajudar o técnico a decidir rápido qual chamado vale a pena pegar.
                 </p>
               </div>
             </div>
 
             <Link to="/tecnico/perfil">
               <Button className="bg-emerald-700 text-white hover:bg-emerald-800">
-                Melhorar meu perfil
+                Melhorar perfil
               </Button>
             </Link>
           </CardContent>
