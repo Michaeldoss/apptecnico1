@@ -16,9 +16,11 @@ import {
   Package,
   ShieldCheck,
   Star,
+  Target,
   TrendingUp,
   Wallet,
   Wrench,
+  Zap,
 } from 'lucide-react';
 
 const money = (value: number) =>
@@ -37,6 +39,9 @@ const TechnicianDashboard = () => {
       value: 650,
       urgency: 'Hoje',
       type: 'Instalação',
+      duration: '3h',
+      route: 'Baixo deslocamento',
+      chance: 'Alta chance',
     },
     {
       id: 'CH-1049',
@@ -46,6 +51,9 @@ const TechnicianDashboard = () => {
       value: 480,
       urgency: 'Amanhã',
       type: 'Preventiva',
+      duration: '2h',
+      route: 'Pode encaixar rota',
+      chance: 'Boa chance',
     },
     {
       id: 'CH-1050',
@@ -55,6 +63,9 @@ const TechnicianDashboard = () => {
       value: 900,
       urgency: 'Urgente',
       type: 'Corretiva',
+      duration: '4h',
+      route: 'Exige planejamento',
+      chance: 'Alto valor',
     },
   ];
 
@@ -63,13 +74,25 @@ const TechnicianDashboard = () => {
       time: '09:00',
       title: 'Diagnóstico DTF',
       customer: 'Cliente industrial',
+      city: 'Joinville/SC',
+      value: 280,
       status: 'Confirmado',
     },
     {
       time: '14:30',
       title: 'Troca de filtro UV',
       customer: 'Comunicação visual',
+      city: 'Araquari/SC',
+      value: 220,
       status: 'Pendente',
+    },
+    {
+      time: '17:00',
+      title: 'Suporte remoto',
+      customer: 'Estamparia',
+      city: 'Online',
+      value: 120,
+      status: 'Aguardando',
     },
   ];
 
@@ -77,94 +100,108 @@ const TechnicianDashboard = () => {
     {
       label: 'Ganhos da semana',
       value: money(2450),
-      description: 'Serviços concluídos e previstos',
+      description: '+18% comparado à semana anterior',
       icon: Wallet,
+      tone: 'emerald',
     },
     {
-      label: 'Chamados disponíveis',
+      label: 'Disponíveis',
       value: opportunities.length,
-      description: 'Na sua região ou rota',
+      description: 'Chamados próximos ou com bom valor',
       icon: Wrench,
+      tone: 'blue',
     },
     {
       label: 'Agenda de hoje',
       value: todayServices.length,
-      description: 'Serviços programados',
+      description: `${money(620)} previstos para hoje`,
       icon: Calendar,
+      tone: 'amber',
     },
     {
       label: 'Avaliação',
       value: '4.9 ★',
-      description: 'Reputação técnica',
+      description: 'Você está acima da média',
       icon: Star,
+      tone: 'violet',
     },
   ];
 
-  const quickActions = [
+  const actionButtons = [
     {
-      title: 'Ver chamados',
-      description: 'Escolher serviços disponíveis para aceitar.',
+      title: 'Aceitar chamado',
+      description: 'Ver serviços disponíveis',
       icon: Wrench,
       href: '/tecnico/servicos',
-      primary: true,
+      className: 'bg-emerald-700 text-white hover:bg-emerald-800',
     },
     {
-      title: 'Minha agenda',
-      description: 'Organizar atendimentos e rotas.',
+      title: 'Ver agenda',
+      description: 'Rotas e horários',
       icon: Calendar,
       href: '/tecnico/agenda',
-      primary: false,
+      className: 'bg-slate-950 text-white hover:bg-slate-800',
     },
     {
-      title: 'Meus ganhos',
-      description: 'Acompanhar pagamentos e repasses.',
+      title: 'Recebimentos',
+      description: 'Pagamentos e repasses',
       icon: CreditCard,
       href: '/tecnico/pagamentos',
-      primary: false,
+      className: 'bg-white text-slate-950 border border-slate-200 hover:bg-slate-50',
     },
     {
-      title: 'Mensagens',
-      description: 'Conversar com clientes e suporte.',
-      icon: MessageSquare,
-      href: '/tecnico/chat',
-      primary: false,
+      title: 'Vender peças',
+      description: 'Estoque e oportunidades',
+      icon: Package,
+      href: '/tecnico/pecas',
+      className: 'bg-white text-slate-950 border border-slate-200 hover:bg-slate-50',
     },
   ];
 
   const alerts = [
     {
-      title: 'Complete seu perfil técnico',
-      description: 'Técnicos com perfil completo recebem mais chamados.',
+      title: 'Perfil 82% completo',
+      description: 'Adicione documentos e regiões atendidas para receber mais chamados.',
       href: '/tecnico/perfil',
       icon: ShieldCheck,
       tone: 'emerald',
+      action: 'Completar',
     },
     {
-      title: '2 serviços aguardando confirmação',
-      description: 'Confirme presença para evitar perda de reputação.',
+      title: '2 confirmações pendentes',
+      description: 'Confirme presença para não perder prioridade no ranking.',
       href: '/tecnico/agenda',
       icon: Clock,
       tone: 'amber',
+      action: 'Confirmar',
     },
     {
-      title: 'Peças com estoque baixo',
-      description: 'Atualize peças disponíveis para vender durante os atendimentos.',
+      title: 'Estoque de peças baixo',
+      description: 'Você pode perder venda adicional durante atendimento.',
       href: '/tecnico/pecas',
       icon: Package,
       tone: 'red',
+      action: 'Repor',
     },
+  ];
+
+  const rankingItems = [
+    { label: 'Taxa de aceite', value: '86%', status: 'Bom' },
+    { label: 'Pontualidade', value: '94%', status: 'Excelente' },
+    { label: 'Retorno técnico', value: '6%', status: 'Controlado' },
+    { label: 'Resposta média', value: '12 min', status: 'Rápido' },
   ];
 
   return (
     <TechnicianLayout
       title="Central do Técnico"
-      subtitle="Ganhe mais aceitando chamados, organizando sua agenda, vendendo peças e mantendo uma boa reputação."
+      subtitle="Painel de oportunidades, agenda, ganhos e reputação para transformar atendimento técnico em receita."
       action={
         <div className="flex flex-col gap-2 sm:flex-row">
           <Link to="/tecnico/servicos">
             <Button className="bg-white text-emerald-950 hover:bg-emerald-100">
-              <Wrench className="mr-2 h-4 w-4" />
-              Ver chamados
+              <Zap className="mr-2 h-4 w-4" />
+              Pegar chamado
             </Button>
           </Link>
 
@@ -174,43 +211,57 @@ const TechnicianDashboard = () => {
               className="border-white/25 bg-white/10 text-white hover:bg-white/20 hover:text-white"
             >
               <Calendar className="mr-2 h-4 w-4" />
-              Minha agenda
+              Agenda
             </Button>
           </Link>
         </div>
       }
     >
-      <div className="space-y-6">
+      <div className="space-y-5">
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {metrics.map((metric) => {
             const Icon = metric.icon;
 
+            const iconClass =
+              metric.tone === 'emerald'
+                ? 'bg-emerald-50 text-emerald-700'
+                : metric.tone === 'amber'
+                  ? 'bg-amber-50 text-amber-700'
+                  : metric.tone === 'violet'
+                    ? 'bg-violet-50 text-violet-700'
+                    : 'bg-blue-50 text-blue-700';
+
             return (
               <Card key={metric.label} className="border-slate-200 bg-white shadow-sm">
-                <CardContent className="p-6">
-                  <div className="mb-5 flex items-center justify-between">
-                    <div className="rounded-2xl bg-emerald-50 p-3 text-emerald-700">
-                      <Icon className="h-6 w-6" />
+                <CardContent className="p-5">
+                  <div className="mb-3 flex items-start justify-between">
+                    <div className={`rounded-2xl p-3 ${iconClass}`}>
+                      <Icon className="h-5 w-5" />
                     </div>
+                    <TrendingUp className="h-4 w-4 text-emerald-600" />
                   </div>
 
-                  <p className="text-sm font-bold text-slate-500">{metric.label}</p>
-                  <p className="mt-2 text-2xl font-black text-slate-950">{metric.value}</p>
-                  <p className="mt-2 text-sm text-slate-500">{metric.description}</p>
+                  <p className="text-xs font-black uppercase tracking-wide text-slate-500">
+                    {metric.label}
+                  </p>
+                  <p className="mt-1 text-2xl font-black text-slate-950">{metric.value}</p>
+                  <p className="mt-1 text-sm leading-relaxed text-slate-500">
+                    {metric.description}
+                  </p>
                 </CardContent>
               </Card>
             );
           })}
         </div>
 
-        <div className="grid gap-6 xl:grid-cols-[1.4fr_0.9fr]">
+        <div className="grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
           <Card className="border-emerald-200 bg-emerald-50 shadow-sm">
-            <CardHeader>
+            <CardHeader className="pb-3">
               <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                 <div>
-                  <CardTitle className="text-emerald-950">Chamados disponíveis</CardTitle>
+                  <CardTitle className="text-emerald-950">Melhores chamados para aceitar</CardTitle>
                   <CardDescription className="text-emerald-800">
-                    Oportunidades próximas para gerar receita.
+                    Ordenados por valor, urgência e facilidade de encaixe na sua rota.
                   </CardDescription>
                 </div>
 
@@ -229,13 +280,13 @@ const TechnicianDashboard = () => {
                   key={opportunity.id}
                   className="rounded-2xl border border-emerald-200 bg-white p-4 shadow-sm"
                 >
-                  <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                  <div className="grid gap-4 lg:grid-cols-[1fr_170px] lg:items-center">
                     <div className="flex gap-3">
-                      <div className="rounded-2xl bg-emerald-50 p-3 text-emerald-700">
+                      <div className="flex w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700">
                         <Wrench className="h-5 w-5" />
                       </div>
 
-                      <div>
+                      <div className="min-w-0 flex-1">
                         <div className="mb-2 flex flex-wrap items-center gap-2">
                           <Badge className="border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-50">
                             {opportunity.type}
@@ -250,28 +301,38 @@ const TechnicianDashboard = () => {
                           >
                             {opportunity.urgency}
                           </Badge>
+
+                          <Badge className="border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-50">
+                            {opportunity.chance}
+                          </Badge>
                         </div>
 
-                        <p className="font-black text-slate-950">{opportunity.title}</p>
+                        <p className="text-base font-black text-slate-950">{opportunity.title}</p>
 
-                        <div className="mt-1 flex flex-wrap gap-3 text-sm text-slate-500">
+                        <div className="mt-2 grid gap-1 text-sm text-slate-500 md:grid-cols-2">
                           <span className="inline-flex items-center gap-1">
                             <MapPin className="h-4 w-4" />
-                            {opportunity.city}
+                            {opportunity.city} • {opportunity.distance}
                           </span>
-                          <span>{opportunity.distance}</span>
+                          <span>
+                            Duração estimada: <strong>{opportunity.duration}</strong>
+                          </span>
+                          <span>{opportunity.route}</span>
                           <span>{opportunity.id}</span>
                         </div>
                       </div>
                     </div>
 
-                    <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-                      <p className="text-xl font-black text-emerald-700">
-                        {money(opportunity.value)}
-                      </p>
+                    <div className="flex items-center justify-between gap-3 lg:flex-col lg:items-end">
+                      <div className="text-right">
+                        <p className="text-xs font-bold text-slate-500">Valor previsto</p>
+                        <p className="text-2xl font-black text-emerald-700">
+                          {money(opportunity.value)}
+                        </p>
+                      </div>
 
                       <Button className="bg-emerald-700 text-white hover:bg-emerald-800">
-                        Aceitar
+                        Aceitar chamado
                       </Button>
                     </div>
                   </div>
@@ -281,9 +342,11 @@ const TechnicianDashboard = () => {
           </Card>
 
           <Card className="border-slate-200 bg-white shadow-sm">
-            <CardHeader>
+            <CardHeader className="pb-3">
               <CardTitle className="text-slate-950">Agenda de hoje</CardTitle>
-              <CardDescription>Serviços programados e compromissos do dia.</CardDescription>
+              <CardDescription>
+                {todayServices.length} atendimentos com previsão de {money(620)}.
+              </CardDescription>
             </CardHeader>
 
             <CardContent className="space-y-3">
@@ -297,27 +360,27 @@ const TechnicianDashboard = () => {
                       {service.time}
                     </div>
 
-                    <div className="flex-1">
+                    <div className="min-w-0 flex-1">
                       <p className="font-black text-slate-950">{service.title}</p>
                       <p className="mt-1 text-sm text-slate-500">{service.customer}</p>
+                      <p className="mt-1 text-xs font-medium text-slate-400">{service.city}</p>
 
-                      <div className="mt-3 flex items-center justify-between">
+                      <div className="mt-3 flex items-center justify-between gap-2">
                         <Badge
                           className={
                             service.status === 'Confirmado'
                               ? 'border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-50'
-                              : 'border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-50'
+                              : service.status === 'Pendente'
+                                ? 'border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-50'
+                                : 'border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-50'
                           }
                         >
                           {service.status}
                         </Badge>
 
-                        <Link
-                          to="/tecnico/agenda"
-                          className="text-sm font-bold text-emerald-700"
-                        >
-                          Abrir
-                        </Link>
+                        <span className="font-black text-emerald-700">
+                          {money(service.value)}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -333,11 +396,13 @@ const TechnicianDashboard = () => {
           </Card>
         </div>
 
-        <div className="grid gap-6 xl:grid-cols-[0.9fr_1.4fr]">
+        <div className="grid gap-4 xl:grid-cols-[0.85fr_1.15fr]">
           <Card className="border-slate-200 bg-white shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-slate-950">Atenção</CardTitle>
-              <CardDescription>Pontos que influenciam chamados e reputação.</CardDescription>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-slate-950">Atenção operacional</CardTitle>
+              <CardDescription>
+                Corrija estes pontos para receber mais chamados.
+              </CardDescription>
             </CardHeader>
 
             <CardContent className="space-y-3">
@@ -353,19 +418,21 @@ const TechnicianDashboard = () => {
 
                 return (
                   <Link key={alert.title} to={alert.href} className="group block">
-                    <div className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-4 transition hover:border-emerald-200 hover:bg-emerald-50/40">
+                    <div className="grid gap-3 rounded-2xl border border-slate-200 bg-white p-4 transition hover:border-emerald-200 hover:bg-emerald-50/40 md:grid-cols-[44px_1fr_86px] md:items-center">
                       <div className={`rounded-xl border p-2 ${toneClass}`}>
                         <Icon className="h-5 w-5" />
                       </div>
 
-                      <div className="flex-1">
+                      <div>
                         <p className="font-black text-slate-950">{alert.title}</p>
                         <p className="mt-1 text-sm leading-relaxed text-slate-500">
                           {alert.description}
                         </p>
                       </div>
 
-                      <ArrowRight className="mt-1 h-4 w-4 text-slate-300 transition group-hover:translate-x-1 group-hover:text-emerald-700" />
+                      <span className="text-sm font-black text-emerald-700">
+                        {alert.action}
+                      </span>
                     </div>
                   </Link>
                 );
@@ -374,74 +441,95 @@ const TechnicianDashboard = () => {
           </Card>
 
           <Card className="border-slate-200 bg-white shadow-sm">
-            <CardHeader>
+            <CardHeader className="pb-3">
               <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                 <div>
-                  <CardTitle className="text-slate-950">Ações rápidas</CardTitle>
-                  <CardDescription>Atalhos para o técnico trabalhar melhor.</CardDescription>
+                  <CardTitle className="text-slate-950">Painel de performance</CardTitle>
+                  <CardDescription>
+                    Indicadores que aumentam prioridade nos chamados.
+                  </CardDescription>
                 </div>
 
                 <Badge className="w-fit border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-50">
-                  Central técnica
+                  Ranking técnico
                 </Badge>
               </div>
             </CardHeader>
 
             <CardContent>
-              <div className="grid gap-4 md:grid-cols-2">
-                {quickActions.map((action) => {
-                  const Icon = action.icon;
+              <div className="grid gap-3 md:grid-cols-2">
+                {rankingItems.map((item) => (
+                  <div key={item.label} className="rounded-2xl border border-slate-200 p-4">
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm font-bold text-slate-500">{item.label}</p>
+                      <Badge className="border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-50">
+                        {item.status}
+                      </Badge>
+                    </div>
 
-                  return (
-                    <Link key={action.title} to={action.href} className="group">
-                      <div
-                        className={`flex h-full items-start gap-4 rounded-2xl border p-5 transition hover:-translate-y-1 hover:shadow-md ${
-                          action.primary
-                            ? 'border-emerald-200 bg-emerald-50'
-                            : 'border-slate-200 bg-white hover:border-emerald-200'
-                        }`}
-                      >
-                        <div
-                          className={`rounded-2xl p-3 ${
-                            action.primary
-                              ? 'bg-emerald-700 text-white'
-                              : 'bg-slate-100 text-slate-700 group-hover:bg-emerald-700 group-hover:text-white'
-                          }`}
-                        >
-                          <Icon className="h-5 w-5" />
-                        </div>
+                    <p className="mt-3 text-2xl font-black text-slate-950">{item.value}</p>
 
-                        <div className="min-w-0 flex-1">
-                          <p className="font-black text-slate-950">{action.title}</p>
-                          <p className="mt-1 text-sm leading-relaxed text-slate-500">
-                            {action.description}
-                          </p>
+                    <div className="mt-3 h-2 rounded-full bg-slate-100">
+                      <div className="h-2 w-[82%] rounded-full bg-emerald-700" />
+                    </div>
+                  </div>
+                ))}
+              </div>
 
-                          <p className="mt-4 inline-flex items-center text-sm font-bold text-emerald-700">
-                            Acessar
-                            <ArrowRight className="ml-1 h-4 w-4 transition group-hover:translate-x-1" />
-                          </p>
-                        </div>
-                      </div>
-                    </Link>
-                  );
-                })}
+              <div className="mt-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
+                <div className="flex gap-3">
+                  <div className="rounded-2xl bg-emerald-700 p-3 text-white">
+                    <Target className="h-5 w-5" />
+                  </div>
+
+                  <div>
+                    <p className="font-black text-emerald-950">Meta da semana</p>
+                    <p className="mt-1 text-sm text-emerald-800">
+                      Falta {money(1550)} para bater a meta de {money(4000)} em serviços.
+                    </p>
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>
         </div>
 
+        <div className="grid gap-3 md:grid-cols-4">
+          {actionButtons.map((action) => {
+            const Icon = action.icon;
+
+            return (
+              <Link key={action.title} to={action.href}>
+                <button
+                  className={`flex h-full w-full items-center gap-3 rounded-2xl px-4 py-4 text-left shadow-sm transition hover:-translate-y-1 hover:shadow-md ${action.className}`}
+                >
+                  <div className="rounded-xl bg-white/20 p-2">
+                    <Icon className="h-5 w-5" />
+                  </div>
+
+                  <div>
+                    <p className="font-black">{action.title}</p>
+                    <p className="text-xs opacity-80">{action.description}</p>
+                  </div>
+                </button>
+              </Link>
+            );
+          })}
+        </div>
+
         <Card className="border-emerald-200 bg-emerald-50 shadow-sm">
-          <CardContent className="flex flex-col gap-4 p-6 md:flex-row md:items-center md:justify-between">
+          <CardContent className="flex flex-col gap-4 p-5 md:flex-row md:items-center md:justify-between">
             <div className="flex gap-3">
               <div className="rounded-2xl bg-emerald-700 p-3 text-white">
-                <TrendingUp className="h-6 w-6" />
+                <CheckCircle2 className="h-6 w-6" />
               </div>
 
               <div>
-                <p className="font-black text-emerald-950">Quanto melhor seu perfil, mais chamados você recebe.</p>
+                <p className="font-black text-emerald-950">
+                  A regra é simples: perfil completo, resposta rápida e agenda organizada recebem mais chamados.
+                </p>
                 <p className="mt-1 text-sm text-emerald-800">
-                  Complete especialidades, regiões atendidas, documentos e disponibilidade para aumentar sua chance de contratação.
+                  Esse painel deve ser seu ponto de partida diário para escolher serviços e aumentar seus ganhos.
                 </p>
               </div>
             </div>
