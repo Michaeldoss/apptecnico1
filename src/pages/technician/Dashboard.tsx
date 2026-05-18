@@ -8,18 +8,20 @@ import { useAuth } from '@/context/AuthContext';
 import { useIsMobile } from '@/hooks/use-mobile';
 import {
   Calendar,
-  ChevronRight,
+  CheckCircle2,
+  Clock,
   CreditCard,
-  Crown,
-  FileText,
-  LayoutDashboard,
-  LogOut,
-  Menu,
+  MapPin,
   MessageSquare,
   Package,
-  User,
+  Route,
+  ShieldCheck,
+  Star,
+  Target,
+  TrendingUp,
+  Wallet,
   Wrench,
-  X,
+  Zap,
 } from 'lucide-react';
 
 type TechnicianLayoutProps = {
